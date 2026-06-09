@@ -738,8 +738,8 @@
               <div class="w-14 h-14 rounded-2xl bg-white border border-sublynk-border/60 shadow-sm flex items-center justify-center mx-auto mb-3 group-hover:shadow-lg group-hover:border-sublynk-orange/30 group-hover:-translate-y-1 transition-all duration-300">
                 <svg class="w-7 h-7 text-sublynk-blue" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
               </div>
-              <p class="text-sm font-semibold text-sublynk-navy">B2B & B2C Reviews</p>
-              <p class="text-xs text-gray-400 mt-1">Verified ratings</p>
+              <p class="text-sm font-semibold text-sublynk-navy">Insurance & COI</p>
+              <p class="text-xs text-gray-400 mt-1">Broker-verified</p>
             </div>
             <div class="spoke-col spoke-item group text-center p-4 pt-8" style="transition-delay: 0.3s">
               <div class="w-14 h-14 rounded-2xl bg-white border border-sublynk-border/60 shadow-sm flex items-center justify-center mx-auto mb-3 group-hover:shadow-lg group-hover:border-sublynk-orange/30 group-hover:-translate-y-1 transition-all duration-300">
@@ -2756,7 +2756,7 @@ createApp({
       'howto-pricing': {
         title: 'Sublynk Pricing',
         intro: 'Transparent pricing for contractor credentialing, background checks, and multi-location management.',
-        quickAnswer: 'Essential Package: $25/month for your first credentialed network, or $35/month for unlimited networks. Multi-location: $10/month per additional location (same tax ID). Background checks start at $35-$55 per check depending on the package tier, with average return under 1 business day.',
+        quickAnswer: 'Contractor profiles start at $100/year and include a verified profile that works across every network on Sublynk. For contractors who need active compliance management across managed repair programs, the Essential Package is $25/month (first network) or $35/month (unlimited networks). Multi-location: $10/month per additional location (same tax ID). Background checks are $35-$55 per check depending on the package tier, with average return under 1 business day.',
         helpUrl: 'https://help.sublynk.com/article/76-sublynk-pricing',
         steps: [
           { title: 'Choose your plan', desc: 'Essential ($25/month for first network) or Unlimited ($35/month for unlimited networks). Both include AI-powered credential verification, automated COI requests, and real-time compliance tracking.' },
@@ -2826,16 +2826,16 @@ createApp({
       },
       contractors: {
         title: 'Contractor Flow',
-        subtitle: 'Credential your subs. Get on repair networks.',
+        subtitle: 'One profile. Every network and GC you work with.',
         iconBg: 'bg-sublynk-blue/10',
-        icon: '<svg viewBox="0 0 24 24" fill="none" stroke="#008EFF" stroke-width="2"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg>',
+        icon: '<svg viewBox="0 0 24 24" fill="none" stroke="#008EFF" stroke-width="2"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg>',
         steps: [
-          { title: 'Invite your subcontractors', desc: 'Send self-serve onboarding links to your sub base. They complete everything on their phone. No chasing paperwork or scanning documents yourself.', tags: ['Bulk invite', 'Self-serve', 'Mobile-friendly'] },
-          { title: 'Sublynk verifies your crew', desc: 'AI checks every sub\'s insurance coverage limits, license status against state databases, and runs background checks. You see real-time compliance status for every sub in your dashboard.', tags: ['Insurance verified', 'Licenses checked', 'BGC cleared'] },
-          { title: 'Get credentialed by repair networks', desc: 'Networks like AccuServe, CORE, and Sedgwick see your compliant sub roster. You meet their vendor requirements faster and start receiving job assignments.', tags: ['AccuServe', 'CORE', 'Sedgwick', 'DKI'] },
+          { title: 'Create your profile', desc: 'Sign up on your phone in under 5 minutes. Add your company info, trade skills, and service area. Works for HVAC, plumbing, electrical, roofing, general contracting, and every other trade.', tags: ['Any trade', 'Mobile-friendly', '5 minutes'] },
+          { title: 'Upload your credentials once', desc: 'Add your insurance certificate, license, and background check consent. Sublynk AI reads and validates everything. Your broker sends the official COI directly.', tags: ['COI verified', 'License checked', 'BGC cleared'] },
+          { title: 'Use it everywhere you work', desc: 'Your verified profile works across every network, GC, and property manager on Sublynk. Join new networks in seconds. Your credentials stay current automatically.', tags: ['Multi-network', 'Auto-renewals', 'Always current'] },
         ],
-        result: 'Your subs are compliant. Networks trust you. Jobs flow in.',
-        resultSub: 'Stop chasing COIs. Start dispatching verified crews to network jobs.',
+        result: 'One profile. Every network. Stop re-uploading the same docs.',
+        resultSub: 'Your credentials follow you. Join a new network without starting over.',
       },
       networks: {
         title: 'Network / GC Flow',
@@ -3219,7 +3219,7 @@ createApp({
         name: 'Rytech Franchise',
         summary: 'Rytech is a water damage and mold restoration franchise with locations across the US. Sublynk helps Rytech franchisees credential their subcontractors quickly -- ensuring every technician meets brand compliance standards through AI-powered verification.',
         description: 'Rytech is a national franchise specializing in water damage restoration and mold remediation. With franchise locations across the United States, Rytech maintains strict brand standards for both franchisees and their subcontractor workforce. Compliance includes insurance verification, IICRC certifications, and safety training -- all critical for maintaining Rytech brand integrity and carrier relationships.',
-        helpUrl: 'https://help.sublynk.com/category/16-accuserve',
+        helpUrl: 'https://help.sublynk.com',
         stats: { onboarding: 'Same Day', compliance: '100%', verification: 'AI-Powered', tracking: 'Real-time' },
         steps: [
           { title: 'Franchisee sends invite', desc: 'Your local Rytech franchise sends a Sublynk onboarding link to subcontractors and technicians.' },
@@ -3246,7 +3246,7 @@ createApp({
         name: 'ATI Restoration',
         summary: 'ATI Restoration is a national restoration contractor handling large-loss and catastrophe response. Sublynk helps ATI credential subcontractors across their national footprint -- verifying insurance, licenses, and certifications through AI so crews can deploy faster.',
         description: 'ATI Restoration is a leading national restoration contractor specializing in large-loss property damage, catastrophe response, and commercial restoration. Operating across the United States, ATI manages a network of subcontractors who must meet rigorous compliance standards before being deployed to job sites. Speed of onboarding directly impacts ATI\'s ability to respond to disasters.',
-        helpUrl: 'https://help.sublynk.com/category/16-accuserve',
+        helpUrl: 'https://help.sublynk.com',
         stats: { onboarding: '1 Day', compliance: '100%', verification: 'AI-Powered', tracking: 'Real-time' },
         steps: [
           { title: 'ATI sends onboarding invite', desc: 'When ATI needs subcontractors in a region, they send Sublynk onboarding links to local contractors.' },
@@ -3424,10 +3424,10 @@ createApp({
         valueCards: [
           { title: 'One profile, every network', desc: 'Create your verified profile once. Use it to join any network on Sublynk. No more filling out the same forms for every GC.', iconBg: 'bg-sublynk-orange/10', icon: '<svg class="w-6 h-6 text-sublynk-orange" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="5" width="20" height="14" rx="2"/><path d="M2 10h20"/></svg>' },
           { title: 'Insurance verified automatically', desc: 'We verify your COI directly with your broker. When it renews, we update it. No more uploading PDFs every time a network asks.', iconBg: 'bg-sublynk-green-light', icon: '<svg class="w-6 h-6 text-sublynk-green" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"/><path d="M12 22s4-2.5 4-6v-3l-4-1.5L8 13v3c0 3.5 4 6 4 6z"/></svg>' },
-          { title: 'Free leads from your networks', desc: 'No pay-per-lead fees. No bidding wars. Networks send you jobs directly through Sublynk because you\'re already verified and ready.', iconBg: 'bg-blue-50', icon: '<svg class="w-6 h-6 text-sublynk-blue" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>' },
+          { title: 'Stay dispatch-ready, always', desc: 'Your credentials are always current and visible to every network you join. When they need to dispatch, you are already verified and ready to go.', iconBg: 'bg-blue-50', icon: '<svg class="w-6 h-6 text-sublynk-blue" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>' },
         ],
         faqs: [
-          { q: 'How much does Sublynk cost for subs?', a: '$100 per year. No hidden fees, no per-lead charges, no bidding costs. One water mitigation job from a network pays for 25+ years of Sublynk.' },
+          { q: 'How much does Sublynk cost for subs?', a: '$100 per year. No hidden fees, no per-lead charges, no bidding costs. Your profile stays current across every network you join.' },
           { q: 'Can I do this on my phone?', a: 'Yes. The entire signup and profile creation process is built for mobile. Most subs complete it in under 5 minutes between jobs.' },
           { q: 'What if I\'m already on Profile Gorilla?', a: 'You can be on both. Many subs use Sublynk alongside other platforms. The difference is Sublynk gives you one profile that works across every network, with automated insurance verification so you never upload another PDF.' },
           { q: 'Why does the sub pay instead of the GC?', a: 'Your Sublynk profile belongs to you, not a network. You build it once and use it to join any network on the platform. You\'re in control of your credentials.' },
@@ -3451,12 +3451,12 @@ createApp({
         valueCards: [
           { title: 'Stop filling out the same forms', desc: 'Every GC and property manager wants the same things: license, insurance, background check. Do it once on Sublynk, use it everywhere.', iconBg: 'bg-sublynk-orange/10', icon: '<svg class="w-6 h-6 text-sublynk-orange" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="5" width="20" height="14" rx="2"/><path d="M2 10h20"/></svg>' },
           { title: 'Your insurance stays current', desc: 'We pull your COI from your broker and update it when it renews. No more emergency calls from a GC saying your cert expired.', iconBg: 'bg-sublynk-green-light', icon: '<svg class="w-6 h-6 text-sublynk-green" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="M9 12l2 2 4-4"/></svg>' },
-          { title: 'Get found by people who hire', desc: 'Property managers, GCs, and franchise networks search Sublynk for verified contractors. Your profile puts you in front of them.', iconBg: 'bg-blue-50', icon: '<svg class="w-6 h-6 text-sublynk-blue" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>' },
+          { title: 'Always dispatch-ready', desc: 'Your credentials stay current and visible to every network and GC you work with. When they need a verified contractor, you are already compliant and ready.', iconBg: 'bg-blue-50', icon: '<svg class="w-6 h-6 text-sublynk-blue" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>' },
         ],
         faqs: [
           { q: 'I\'m not in restoration. Is Sublynk for me?', a: 'Yes. Sublynk works for any trade that needs to be credentialed: HVAC, plumbing, electrical, roofing, general contracting, cleaning, landscaping. If someone needs to see your license and insurance before hiring you, Sublynk is for you.' },
           { q: 'What\'s the difference between a sub and a contractor on Sublynk?', a: 'Same platform, same profile. "Sub" is restoration industry language. If you call yourself a contractor, vendor, or service provider, it all works the same way.' },
-          { q: 'How do I get jobs through Sublynk?', a: 'Networks, GCs, and property managers on the platform can find you, verify you\'re compliant, and dispatch work directly. No bidding, no lead fees.' },
+          { q: 'Does Sublynk get me jobs?', a: 'Sublynk does not assign jobs or guarantee work. It keeps your credentials verified and visible to the networks and GCs you work with. When they need to dispatch, your profile is always compliant and ready.' },
           { q: 'Can I use Sublynk if I\'m a sole proprietor?', a: 'Absolutely. Sublynk works for one-person shops and 50-person crews equally.' },
         ],
         ctaBg: 'bg-sublynk-orange/5 border border-sublynk-orange/15',
@@ -3485,8 +3485,8 @@ createApp({
           { title: 'Background checks', desc: 'Completed in 3 days or less. Results stored securely on the contractor\'s profile.', iconBg: 'bg-blue-50', icon: '<svg class="w-6 h-6 text-sublynk-blue" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="M9 12l2 2 4-4"/></svg>' },
         ],
         faqs: [
-          { q: 'How much does it cost for networks?', a: 'Free to start. Premium tiers at $25/mo per active sub or $35/mo flat for unlimited. Your subs pay $100/yr for their own profiles.' },
-          { q: 'Do my subs have to pay?', a: 'Yes, subs pay $100/yr for their profile. This means the profile belongs to them and works across every network, not just yours. It also means your cost is zero to start.' },
+          { q: 'How much does it cost for networks?', a: 'Free to start. Your contractors pay for their own profiles ($100/yr), so your cost to onboard them is zero. For advanced network management features, contact us for pricing.' },
+          { q: 'Do my subs have to pay?', a: 'Yes, contractors pay $100/yr for their profile. This means the profile belongs to them and works across every network, not just yours. It also means your onboarding cost is zero.' },
           { q: 'How do subs get onboarded?', a: 'You send an invite. They create their account, add their info, and we verify everything in the background. Self-serve, no hand-holding.' },
           { q: 'What if a sub\'s insurance expires?', a: 'We monitor it 24/7. You get an alert before it lapses. We pull the updated cert from their broker automatically when it renews.' },
         ],
@@ -3535,9 +3535,9 @@ createApp({
         ctaSub: 'Custom pricing for franchise networks.',
         dashTitle: 'Franchise HQ Dashboard', dashCount: '340', dashLabel: 'Contractors',
         dashSubs: [
-          { initials: 'SE', name: 'ServiceMaster - East', type: '23 contractors', color: 'bg-purple-50 text-purple-500', verified: true },
-          { initials: 'SW', name: 'ServiceMaster - West', type: '18 contractors', color: 'bg-sublynk-orange/10 text-sublynk-orange', verified: true },
-          { initials: 'SN', name: 'ServiceMaster - North', type: '14 contractors', color: 'bg-sublynk-green/10 text-sublynk-green', verified: false },
+          { initials: 'RE', name: 'Region East', type: '23 contractors', color: 'bg-purple-50 text-purple-500', verified: true },
+          { initials: 'RW', name: 'Region West', type: '18 contractors', color: 'bg-sublynk-orange/10 text-sublynk-orange', verified: true },
+          { initials: 'RN', name: 'Region North', type: '14 contractors', color: 'bg-sublynk-green/10 text-sublynk-green', verified: false },
         ],
         calcTitle: 'Brand risk calculator',
         calcSubtitle: 'See how much time your team wastes on manual compliance across locations.',
@@ -3622,7 +3622,7 @@ createApp({
 
     // Compare data
     const compareData = ref([
-      { feature: 'Built for restoration', sublynk: true, pg: 'Insurance focus', vf: 'Oil & gas focus', manual: false },
+      { feature: 'Built for construction & restoration', sublynk: true, pg: 'Insurance focus', vf: 'Oil & gas focus', manual: false },
       { feature: 'One profile, all networks', sublynk: true, pg: false, vf: false, manual: false },
       { feature: 'Automated COI verification', sublynk: true, pg: 'Manual upload', vf: true, manual: false },
       { feature: 'License monitoring', sublynk: true, pg: true, vf: true, manual: false },
@@ -3646,14 +3646,14 @@ createApp({
       { feature: 'Self-serve onboarding', sublynk: true, pg: false },
       { feature: 'Sub setup time', sublynk: '5 minutes', pg: 'Days' },
       { feature: 'Transparent pricing', sublynk: '$100/yr', pg: 'Not listed' },
-      { feature: 'Built for restoration', sublynk: true, pg: 'Insurance focus' },
+      { feature: 'Built for construction & restoration', sublynk: true, pg: 'Insurance focus' },
       { feature: 'Franchise support', sublynk: true, pg: false },
       { feature: 'Property manager tools', sublynk: true, pg: false },
     ]);
 
     // Veriforce comparison
     const vfCompareData = ref([
-      { feature: 'Industry focus', sublynk: 'Restoration & construction', vf: 'Oil & gas' },
+      { feature: 'Industry focus', sublynk: 'Construction & restoration', vf: 'Oil & gas' },
       { feature: 'One profile, all networks', sublynk: true, vf: false },
       { feature: 'Automated COI verification', sublynk: true, vf: true },
       { feature: 'License monitoring', sublynk: true, vf: true },
@@ -3702,15 +3702,15 @@ createApp({
       { cat: 'subs', q: 'Why does the contractor pay instead of the GC?', a: 'Your Sublynk profile belongs to you, not a network. You build it once and use it to join any network on the platform. You\'re in control of your credentials.' },
       { cat: 'subs', q: 'How is my insurance verified?', a: 'We verify your Certificate of Insurance directly with your broker. When your policy renews, we update it automatically. You never have to upload a PDF again.' },
       { cat: 'subs', q: 'What trades does Sublynk support?', a: 'All of them. Restoration, reconstruction, HVAC, plumbing, electrical, roofing, general contracting, cleaning, landscaping. If someone needs to see your license and insurance before hiring you, Sublynk works for your trade.' },
-      { cat: 'subs', q: 'How do I get jobs through Sublynk?', a: 'Networks, GCs, and property managers on the platform can find you, verify you\'re compliant, and dispatch work directly. No bidding, no lead fees. You get jobs because you\'re verified and ready.' },
+      { cat: 'subs', q: 'Does Sublynk get me jobs?', a: 'Sublynk does not assign jobs or guarantee work. What it does is keep your credentials verified and visible to every network you join. When networks need to dispatch compliant contractors, your profile is always ready. No bidding, no lead fees, no chasing expired certs.' },
       { cat: 'networks', q: 'How much does it cost for networks?', a: 'Free to start. Premium tiers at $25/mo per active contractor or $35/mo flat for unlimited. Your contractors pay $100/yr for their own profiles.' },
       { cat: 'networks', q: 'Do my subs have to pay?', a: 'Yes, contractors pay $100/yr for their profile. This means the profile belongs to them and works across every network, not just yours. It also means your cost is zero to start.' },
       { cat: 'networks', q: 'How do subs get onboarded?', a: 'You send an invite. They create their account, add their info, and we verify everything in the background. Self-serve, no hand-holding required.' },
       { cat: 'networks', q: 'What if a sub\'s insurance expires?', a: 'We monitor it 24/7. You get an alert before it lapses. We pull the updated cert from their broker automatically when it renews.' },
       { cat: 'networks', q: 'Can I set custom credentialing requirements?', a: 'Yes. You can set required credential types, insurance minimums, trade certifications, and background check rules. Sublynk enforces your requirements automatically.' },
       { cat: 'pricing', q: 'Is there a free trial?', a: 'Networks start free with no credit card required. Contractors pay $100/yr with no contracts and cancel anytime.' },
-      { cat: 'pricing', q: 'How does Sublynk compare to pay-per-lead platforms?', a: 'Pay-per-lead platforms charge $50-$200 per lead and force you to bid against competitors. Sublynk costs $100/yr total and connects you directly with networks who send you jobs without bidding.' },
-      { cat: 'pricing', q: 'What\'s included in the $100/yr?', a: 'Everything. Verified professional profile, automated COI verification, license monitoring, background check on file, direct job leads from networks, mobile dashboard. No per-lead fees ever.' },
+      { cat: 'pricing', q: 'What is the difference between $100/yr and the monthly plans?', a: 'The $100/yr plan is for individual contractors and subcontractors who want a verified profile that works across every network. The monthly plans ($25/mo for one network, $35/mo for unlimited) are for contractors who need active compliance management, automated COI requests from brokers, and real-time monitoring across multiple managed repair programs. Background checks are separate at $35-$55 per check.' },
+      { cat: 'pricing', q: 'What\'s included in the $100/yr?', a: 'Verified professional profile, automated COI verification, license monitoring, background check on file, mobile dashboard, and the ability to join any network on the platform. No per-lead fees, no bidding costs.' },
       { cat: 'security', q: 'Is Sublynk SOC 2 certified?', a: 'Yes. Sublynk achieved SOC 2 Type II certification. Your data is encrypted with 256-bit encryption and stored securely.' },
       { cat: 'security', q: 'Who can see my credentials?', a: 'Only the networks you choose to join. Your profile data is never sold or shared with third parties. You control who sees your credentials.' },
       { cat: 'security', q: 'How is my data protected?', a: '256-bit encryption, SOC 2 Type II compliance, 99.9% uptime SLA. Your credentials are more secure on Sublynk than in your email inbox.' },
