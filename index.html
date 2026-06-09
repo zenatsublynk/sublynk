@@ -1081,6 +1081,16 @@
         </div>
       </section>
 
+      <!-- Final CTA -->
+      <div class="text-center py-14 rounded-2xl my-8" :class="currentWedge.ctaBg">
+        <h2 class="text-3xl font-bold" :class="currentWedge.ctaHeadColor">{{ currentWedge.ctaFinal }}</h2>
+        <p class="mt-2" :class="currentWedge.ctaSubColor">{{ currentWedge.ctaFinalSub }}</p>
+        <a href="https://cal.com/zen-at-sublynk/15min" target="_blank" class="mt-6 bg-sublynk-orange hover:bg-sublynk-orange-hover text-white px-10 py-4 rounded-xl text-lg font-semibold shadow-lg transition inline-flex items-center gap-2">
+          <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="8.5" cy="7" r="4"/><line x1="20" y1="8" x2="20" y2="14"/><line x1="23" y1="11" x2="17" y2="11"/></svg>
+          {{ currentWedge.cta }}
+        </a>
+      </div>
+
       <!-- FAQ -->
       <section class="py-12 max-w-3xl mx-auto">
         <h2 class="text-3xl font-bold text-center text-sublynk-navy">Common questions</h2>
@@ -1094,16 +1104,6 @@
           </details>
         </div>
       </section>
-
-      <!-- Final CTA -->
-      <div class="text-center py-14 rounded-2xl my-8" :class="currentWedge.ctaBg">
-        <h2 class="text-3xl font-bold" :class="currentWedge.ctaHeadColor">{{ currentWedge.ctaFinal }}</h2>
-        <p class="mt-2" :class="currentWedge.ctaSubColor">{{ currentWedge.ctaFinalSub }}</p>
-        <a href="https://cal.com/zen-at-sublynk/15min" target="_blank" class="mt-6 bg-sublynk-orange hover:bg-sublynk-orange-hover text-white px-10 py-4 rounded-xl text-lg font-semibold shadow-lg transition flex items-center gap-2 mx-auto">
-          <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="8.5" cy="7" r="4"/><line x1="20" y1="8" x2="20" y2="14"/><line x1="23" y1="11" x2="17" y2="11"/></svg>
-          {{ currentWedge.cta }}
-        </a>
-      </div>
     </template>
 
     <!-- ============================================ -->
