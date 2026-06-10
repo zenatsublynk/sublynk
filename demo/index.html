@@ -785,24 +785,309 @@
         title: "Let every stakeholder see themselves in the same diagram.",
         copy: "Same operating model — network, GC, and sub lenses."
       },
-      proof: {
-        kicker: "07 · What the audience should remember",
-        title: "Three outcomes. <span class=\"soft\">No technical explanation required.</span>",
-        copy: "Three outcomes your partners feel in the field — not feature lists.",
+      programReqs: {
+        kicker: “07 · Sub requirements”,
+        title: “See exactly what each sub is missing — <span class=\”soft\”>before dispatch.</span>”,
+        copy: “Every program has different credentialing requirements. Sublynk shows you which subs are incomplete and why, so nothing stalls a job assignment.”,
         cards: [
-          { h: "Faster recruiting conversion", p: "Subs are most motivated right after yes. A cleaner path protects momentum." },
-          { h: "Cleaner dispatch decisions", p: "One answer: green, red, or fix these items." },
-          { h: "Lower operational drag", p: "You stop chasing expiring documents; Sublynk runs renewals and broker loops." }
+          {
+            title: “Sub dashboard”,
+            desc: “Each sub on your bench has a program dashboard. Click into any sub to see their full status -- overview, details, and what they see on their side.”,
+            details: [
+              “Overview tab shows all incomplete requirements at a glance”,
+              “Details tab shows what the sub has submitted vs what is still missing”,
+              “You see the exact same dashboard the sub does -- one source of truth”
+            ]
+          },
+          {
+            title: “Dynamic requirement tracking”,
+            desc: “Requirements are calculated from program details -- status, selected services, and states. When a sub changes their selections, the checklist updates in real time on your side too.”,
+            details: [
+              “Requirements vary by program, service selection, and state”,
+              “An IICRC WRT cert may be required for one program but not another”,
+              “Adding a state surfaces new license requirements automatically”
+            ]
+          },
+          {
+            title: “Common missing items you will see”,
+            desc: “Sublynk flags exactly what is outstanding for each sub so you can follow up or let Sublynk handle it. Everything from insurance to background checks to state licenses.”,
+            details: [
+              “Updated insurance and COI from the sub's broker”,
+              “State-specific contractor or home improvement licenses”,
+              “Background checks for personnel with policyholder access”,
+              “Program-specific certifications (e.g. RRP, Lead, IICRC)”
+            ]
+          },
+          {
+            title: “Shared visibility with your subs”,
+            desc: “Your subs see the same incomplete requirements, program details, insurance info, and credentials you do. No surprises -- everyone works from one source of truth.”,
+            details: [
+              “Contracts, W-9s, insurance docs, and credentials all accessible”,
+              “Detailed views show who requires what, for which services, in which states”,
+              “Once a requirement is met, the incomplete flag clears automatically”
+            ]
+          }
+        ]
+      },
+      joinNetwork: {
+        kicker: “08 · Adding subs to your bench”,
+        title: “Invite a sub, set the path, <span class=\”soft\”>track credentialing.</span>”,
+        copy: “You define the program requirements. Sublynk builds the guided onboarding path for each sub you invite to the bench.”,
+        steps: [
+          {
+            title: “Invite and onboard subs”,
+            desc: “Send a program-specific invite to any sub you want on your bench. They receive a guided path with your exact requirements -- not a generic document dump.”,
+            details: [
+              “One invite per sub per program -- requirements pre-loaded”,
+              “Sub sees only what your program requires”,
+              “Recruiting teams get status visibility from day one”,
+              “Some programs limit by trade (e.g. roofing, exteriors, emergency services)”
+            ]
+          },
+          {
+            title: “Define services and coverage”,
+            desc: “Choose which services each sub is qualified to perform. Each service may trigger different insurance, license, and certification requirements. The system calculates everything in real time.”,
+            details: [
+              “Pre-select services when inviting a sub”,
+              “Sub can request additional available services”,
+              “Service selections directly impact credentialing requirements”,
+              “Adding water mitigation, for example, requires pollution coverage”
+            ]
+          },
+          {
+            title: “Set requirements”,
+            desc: “Requirements are set by you and include general experience, insurance minimums, licenses, and certifications. Everything is surfaced to the sub upfront so there are no surprises mid-onboarding.”,
+            details: [
+              “Insurance requirements adjust based on selected services”,
+              “Workers comp exemption available for zero W-2 employee orgs”,
+              “License and certification requirements vary by state”,
+              “Company legal name is critical for licensing and insurance matching”
+            ]
+          },
+          {
+            title: “Contracts and authorizations”,
+            desc: “Contracts are a mix of agreements between you and the sub, plus Sublynk documents. Everything is signed digitally and stored permanently.”,
+            details: [
+              “Third-party insurance authorization lets Sublynk contact the sub's broker”,
+              “W-9 pre-populated with validated IRS information”,
+              “Background check attestation for policyholder access”,
+              “Workers comp attestation for eligible exemptions”
+            ]
+          }
+        ],
+        pricing: {
+          title: “Pricing”,
+          copy: “Subs pay $100/year. No cost to you for the credentialing layer.”
+        },
+        nextStep: {
+          title: “After the sub signs up”,
+          copy: “Their organization is ready to move into credentialing. Requirements are pre-loaded and their fix list is live on your dashboard.”
+        }
+      },
+      coiManagement: {
+        kicker: “09 · COI verification”,
+        title: “Sublynk contacts the broker. <span class=\”soft\”>You get the verified COI.</span>”,
+        copy: “Every sub on your bench needs a Certificate of Insurance that meets your program specs. Sublynk handles the broker outreach, follow-up, and approval -- you see the result.”,
+        cards: [
+          {
+            title: “Automated broker outreach”,
+            desc: “When a sub signs the third-party insurance authorization, Sublynk emails their broker directly with a professional COI request built to your program specs. The sub is copied so they can nudge their broker.”,
+            details: [
+              “Broker receives the full request -- no forwarding or middleman”,
+              “Sub is CC'd and asked to reply to speed delivery”,
+              “Certificate holder, additional insured, and description of operations pre-filled”,
+              “Sample Accord form and 3rd-party authorization attached”
+            ]
+          },
+          {
+            title: “Your coverage requirements”,
+            desc: “You define the minimums. Sublynk builds the request automatically based on your program. A typical request includes:”,
+            details: [
+              “Commercial General Liability: $2M aggregate / $1M per occurrence”,
+              “Auto Liability: $1M combined single limit”,
+              “Workers Comp: $1M employer's liability ($500K for exteriors)”,
+              “Pollution Liability: $1M per occurrence (water mitigation services)”,
+              “Bailees: $250K (packout contents work only)”
+            ]
+          },
+          {
+            title: “Endorsements and exclusions”,
+            desc: “The request specifies exactly which endorsements must be attached and which exclusions are not allowed -- so the broker gets it right the first time.”,
+            details: [
+              “Primary & Non-Contributory (CG2010 or equivalent)”,
+              “Completed Operations (CG2037 or equivalent)”,
+              “Waiver of Subrogation (CG2404 or equivalent)”,
+              “No exclusions for residential, remodeling, or subcontractor work”,
+              “Stop Gap Employers Liability required in ND, OH, WA, and WY”
+            ]
+          },
+          {
+            title: “Tracking and renewals”,
+            desc: “See exactly where every sub's COI stands. Once approved, the insurance requirement clears from their dashboard and yours. Sublynk monitors expiration dates and follows up before lapse.”,
+            details: [
+              “Status updates from request to broker response to approval”,
+              “Rejected COIs include a clear reason and what to fix”,
+              “Expiration monitoring with renewal reminders before lapse”,
+              “One sub's COI can satisfy requirements across multiple programs”
+            ]
+          }
+        ]
+      },
+      credentials: {
+        kicker: “10 · Sub credentials”,
+        title: “Licenses and certifications <span class=\”soft\”>verified against the source.</span>”,
+        copy: “Sublynk connects directly to governing body databases to validate your subs' credentials in real time. They enter it once, the system tracks it against your program requirements.”,
+        cards: [
+          {
+            title: “Sub personnel certifications”,
+            desc: “Each sub adds certifications for their personnel (WRT, AMRT, ACAC, and more). Certifications are tied to individuals, not companies -- so you know exactly who on the crew is qualified.”,
+            details: [
+              “Search from an extensive list of industry certifications”,
+              “Each certification tied to specific personnel”,
+              “Add or remove as many licenses or certifications as needed”,
+              “IICRC and C-SERV holders will eventually require background checks”
+            ]
+          },
+          {
+            title: “Automatic validation”,
+            desc: “Sublynk connects directly to governing body databases to validate credentials automatically. No manual review delays for supported credential types.”,
+            details: [
+              “Real-time validation against governing body databases”,
+              “Works for IICRC and expanding to more credential types”,
+              “Certification numbers must be entered accurately”,
+              “Invalid or expired credentials flagged immediately”
+            ]
+          },
+          {
+            title: “Your program requirement tracking”,
+            desc: “Certifications required by your program appear on a dedicated tab for each sub. Once a credential satisfies a requirement, the incomplete flag is removed from your dashboard.”,
+            details: [
+              “Required credentials surfaced per program and service selection”,
+              “Incomplete flags clear automatically when requirements are met”,
+              “Submitted credentials move to pending review (yellow status)”,
+              “Real-time visibility into review status on your dashboard”
+            ]
+          }
+        ]
+      },
+      contractSigning: {
+        kicker: “11 · Sub contracts”,
+        title: “Contracts, W-9s, and authorizations <span class=\”soft\”>signed before work starts.</span>”,
+        copy: “When a sub joins your bench, Sublynk walks them through every document that needs a signature. You define the contracts. They sign digitally. Everything is stored and versioned.”,
+        cards: [
+          {
+            title: “Your subcontractor agreement”,
+            desc: “The agreement between you and the sub. Contract contents change based on the types of work the sub performs.”,
+            details: [
+              “Contract contents change based on the types of work performed”,
+              “Each article requires the sub's initials before they can proceed”,
+              “If you update terms, existing subs are prompted to re-sign”,
+              “Sublynk always keeps the latest version on file”
+            ],
+            img: “demo-screenshots/contracts-subcontractor-agreement.png”
+          },
+          {
+            title: “W-9 tax form”,
+            desc: “A W-9 is collected every time a new connection is made between you and a sub. Pre-filled with their business information.”,
+            details: [
+              “Pre-populated with the sub's company name, address, and EIN”,
+              “Federal tax classification auto-selected based on entity type”,
+              “Signed and dated electronically -- no printing or scanning”,
+              “Collected fresh for every new bench connection”
+            ],
+            img: “demo-screenshots/contracts-w9-form.png”
+          },
+          {
+            title: “3rd-party insurance authorization”,
+            desc: “This form gives Sublynk the authority to request a Certificate of Insurance on the sub's behalf directly from their broker.”,
+            details: [
+              “Authorizes Sublynk to contact the sub's broker for COI requests”,
+              “Eliminates back-and-forth between you, the sub, and their broker”,
+              “The broker receives the full requirements in one professional email”,
+              “Sub is CC'd on all correspondence”
+            ],
+            img: “demo-screenshots/contracts-insurance-auth.png”
+          },
+          {
+            title: “Background check attestation”,
+            desc: “An attestation that the sub will conduct background checks every 3 years on every employee or subcontractor with policyholder access.”,
+            details: [
+              “Covers anyone with access to policyholder homes or data”,
+              “Checks must include SSN trace, county criminal, federal criminal, sex offender, and OFAC”,
+              “Results must not include felonies, active warrants, or OFAC listings”,
+              “You can authorize Sublynk to perform independent verification”
+            ],
+            img: “demo-screenshots/contracts-bg-attestation.png”
+          }
+        ],
+        faq: [
+          {
+            q: “What happens when I update my contract terms?”,
+            a: “Every sub currently on your bench will be prompted to re-sign with the updated terms. Sublynk tracks which version each sub has signed.”
+          },
+          {
+            q: “Can I use my own contract templates?”,
+            a: “Yes. Work with your Sublynk account manager to upload your contract templates. They will be integrated into the signing flow for new subs joining your bench.”
+          }
+        ]
+      },
+      bgChecks: {
+        kicker: “12 · Sub background checks”,
+        title: “Verify your subs' people <span class=\”soft\”>before they touch a job site.</span>”,
+        copy: “Most programs require background checks for anyone with policyholder access. Sublynk handles both paths -- subs upload their own or order through Sublynk.”,
+        paths: [
+          {
+            title: “Sub uploads an existing check”,
+            desc: “Sublynk accepts checks from any provider as long as they meet your program requirements. The sub ties it to specific personnel, uploads the file, and Sublynk validates it against your standards.”,
+            details: [
+              “Works with any background check provider”,
+              “Tied to specific personnel (new or existing)”,
+              “Sublynk team validates against your program standards”,
+              “Rejected checks include a clear reason why”
+            ]
+          },
+          {
+            title: “Sub orders through Sublynk”,
+            desc: “Powered by Checkr for fast turnaround. Two packages available depending on your program requirements.”,
+            details: [
+              “Gold package: covers almost all repair programs”,
+              “Alacrity package: adds county and civil checks (non-owners)”,
+              “Technician checks: fast turnaround; Alacrity checks: ~1 week”,
+              “Sub's personnel receives an email to complete the process”
+            ]
+          }
+        ],
+        requirements: {
+          title: “What gets checked”,
+          items: [“SSN trace”, “County & federal criminal search”, “Watch list”, “Sex offender search”, “Motor vehicle check”, “Civil check (Alacrity only)”]
+        },
+        pricing: {
+          title: “Pass-through fees”,
+          copy: “Variable fees from the state or county where the check runs. These are straight pass-through with no Sublynk markup. Two charges: the package fee upfront, then pass-through fees on the first of the following month.”
+        },
+        compliance: {
+          title: “Once approved”,
+          copy: “Background checks automatically move into compliance status on the sub's program dashboard. The missing-check banner disappears on your side and theirs. Personnel, certifications, and checks all live in one table.”
+        }
+      },
+      proof: {
+        kicker: “13 · What the audience should remember”,
+        title: “Three outcomes. <span class=\”soft\”>No technical explanation required.</span>”,
+        copy: “Three outcomes your partners feel in the field — not feature lists.”,
+        cards: [
+          { h: “Faster recruiting conversion”, p: “Subs are most motivated right after yes. A cleaner path protects momentum.” },
+          { h: “Cleaner dispatch decisions”, p: “One answer: green, red, or fix these items.” },
+          { h: “Lower operational drag”, p: “You stop chasing expiring documents; Sublynk runs renewals and broker loops.” }
         ]
       },
       close: {
-        eyebrow: "Closing slide",
-        title: "Don't sell a portal.<br />Sell the moment a sub becomes <span>job-ready.</span>",
-        oldQuote: "“Go upload documents and wait.”",
-        newQuote: "“You are wanted, guided, verified, monitored, and ready for dispatch.”",
-        backops: "<strong style=\"color: var(--slynk-orange);\">Sublynk</strong> is the backops layer that keeps your sub network moving — from recruit, to compliant, to dispatched."
+        eyebrow: “Closing slide”,
+        title: “Don't sell a portal.<br />Sell the moment a sub becomes <span>job-ready.</span>”,
+        oldQuote: “”Go upload documents and wait.””,
+        newQuote: “”You are wanted, guided, verified, monitored, and ready for dispatch.””,
+        backops: “<strong style=\”color: var(--slynk-orange);\”>Sublynk</strong> is the backops layer that keeps your sub network moving — from recruit, to compliant, to dispatched.”
       },
-      meddpiccIntro: "Discovery for <strong>GC bench managers</strong> and partners. Mic, Polish, or Stop & fill fields after the call.",
+      meddpiccIntro: “Discovery for <strong>GC bench managers</strong> and partners. Mic, Polish, or Stop & fill fields after the call.”,
       personas: [
         {
           id: "network",
