@@ -5,6 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
   <title>Sublynk — Credentialing Demo Deck</title>
   <link rel="preconnect" href="https://cdn.prod.website-files.com" crossorigin />
+  <link rel="preconnect" href="https://rsms.me" crossorigin />
+  <link rel="stylesheet" href="https://rsms.me/inter/inter.css" />
   <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
   <script>
 /**
@@ -74,7 +76,7 @@
   const VIEW_META = {
     network: { id: "network", menuLabel: "Network", badge: "Network ops" },
     sub: { id: "sub", menuLabel: "Sub / Contractor", badge: "Contractor education" },
-    gc: { id: "gc", menuLabel: "GC", badge: "GC bench manager" }
+    gc: { id: "gc", menuLabel: "Restoration franchise", badge: "Restoration 1 · Huntington Beach" }
   };
 
   const SURFACE_OPTIONS = {
@@ -180,10 +182,10 @@
       },
       close: {
         eyebrow: "Closing slide",
-        title: "Don't sell a portal.<br />Sell <span>GC-ready bench quality.</span>",
+        title: "Every tech credentialed.<br />Every carrier <span>audit-ready.</span>",
         oldQuote: "“Go use Profile Gorilla and wait.”",
         newQuote: "“You’re wanted, guided, verified, and ready for the GC’s program.”",
-        backops: "<strong style=\"color: var(--slynk-teal);\">Sublynk</strong> is the backops layer between your network and every GC program — recruit, compliant, dispatched, without recruiting becoming compliance."
+        backops: "<strong style=\"color: var(--slynk-orange);\">Sublynk</strong> is the backops layer between your network and every GC program — recruit, compliant, dispatched, without recruiting becoming compliance."
       },
       meddpiccIntro: "Discovery tuned for <strong>managed repair / restoration networks</strong> and their GC partners. Mic, Polish, or Stop & fill fields after the call.",
       personas: [
@@ -347,7 +349,7 @@
         title: "You're not buying software.<br />You're buying <span>peace of mind with your GC.</span>",
         oldQuote: "“Figure out Profile Gorilla yourself.”",
         newQuote: "“You're guided, respected, verified, and ready when the GC dispatches.”",
-        backops: "<strong style=\"color: var(--slynk-teal);\">Sublynk</strong> works with your GC and network so you can focus on the trade — compliance runs in the background with people when you need them."
+        backops: "<strong style=\"color: var(--slynk-orange);\">Sublynk</strong> works with your GC and network so you can focus on the trade — compliance runs in the background with people when you need them."
       },
       meddpiccIntro: "Education & discovery for <strong>subs and franchise owners</strong> working with a GC. Capture their words — Mic, Polish, or Stop & fill fields.",
       personas: [
@@ -420,149 +422,149 @@
     gc: {
       ...VIEW_META.gc,
       hero: {
-        eyebrow: "GC bench manager · contractor network",
-        titleLead: "Build your bench with",
-        titleGrad: "fully vetted subs.",
-        sub: "Sublynk turns onboarding and credentialing from <b>months to days</b> — same-day vetting, clear requirements, and a live readiness signal for dispatch.",
+        eyebrow: "Restoration 1 of Huntington Beach · Joseph Sarofim",
+        titleLead: "Every tech credentialed.",
+        titleGrad: "Every carrier audit ready.",
+        sub: "You run ops, dispatch, and carrier relationships. Sublynk handles <b>IICRC tracking, COI verification, and carrier audit prep</b> so your team stays on job sites, not in spreadsheets.",
         metrics: [
-          { strong: "Recruit", span: "You pick the partners you want on the bench." },
-          { strong: "Invite", span: "Sublynk turns intent into a guided onboarding path." },
-          { strong: "Verify", span: "Automation plus human QA on the hard parts." },
-          { strong: "Dispatch", span: "Only job-ready subs move forward." }
+          { strong: "IICRC", span: "WRT, ASD, AMRT, FSRT tracked and monitored for every tech." },
+          { strong: "Carrier programs", span: "Contractor Connection, Sedgwick, Alacrity, Crawford requirements mapped." },
+          { strong: "Subs verified", span: "Plumbers, electricians, mold crews, content vendors. COI-current before they step on site." },
+          { strong: "Audit ready", span: "Green means compliant. No scramble when a carrier calls." }
         ]
       },
       oldNew: {
         kicker: "01 · Old World vs New World",
-        title: "The old world asks people to chase paper.",
-        titleSoft: "The new world gives dispatch a live trust signal.",
-        copy: "The old model turns GCs into the compliance department. The new model keeps the relationship on your side and puts trust on autopilot.",
-        oldSummary: "You recruit a sub, then accidentally become the compliance department. Everyone waits, nobody knows exactly why, and dispatch has to guess.",
-        newSummary: "You keep the relationship. Sublynk runs the trust engine: collect, verify, broker-check, QA, monitor, renew, and feed the green light back to dispatch.",
-        oldImpact: "good subs stall before they ever become job-ready.",
-        newImpact: "wanted → verified → assignable, without the paper chase.",
+        title: "The old world is spreadsheets and scramble.",
+        titleSoft: "The new world is one dashboard, always current.",
+        copy: "You are too small to hire a compliance person and too busy to be one. Sublynk handles the credentialing layer so you can focus on jobs.",
+        oldSummary: "You hire a tech or bring on a sub, then spend the next week chasing IICRC certs, COIs, and carrier-specific paperwork. When audit time comes, you scramble.",
+        newSummary: "Sublynk collects, verifies, and monitors everything. IICRC expirations, carrier requirements, sub COIs. You see green or red with the reason why.",
+        oldImpact: "techs sit idle while paperwork catches up, or worse, you find out mid-job.",
+        newImpact: "hired, credentialed, and carrier-audit-ready without the admin overhead.",
         oldWorld: [
-          { icon: "1", title: "Recruit the sub", copy: "You find the right partner and send them into a separate process." },
-          { icon: "2", title: "Send portal links", copy: "Generic checklist, old PDFs, unclear next steps." },
-          { icon: "3", title: "Chase documents", copy: "Ops follows up through email, phone, and broker back-and-forth." },
-          { icon: "4", title: "Wait on mystery flags", copy: "Red status without a clear reason or owner." },
-          { icon: "5", title: "Dispatch takes risk", copy: "Job held, guessed, or assigned before truth is current." }
+          { icon: "1", title: "Hire a tech", copy: "You find a good WRT-certified tech, then start the paperwork chase." },
+          { icon: "2", title: "Track certs in spreadsheets", copy: "IICRC expirations across WRT, ASD, AMRT, FSRT. Dates everywhere, nothing connected." },
+          { icon: "3", title: "Chase COIs from subs", copy: "Plumber needs updated insurance. Electrician's license expired. You find out by email or you don't." },
+          { icon: "4", title: "Carrier audit hits", copy: "Contractor Connection or Sedgwick asks for proof. You spend a day pulling files together." },
+          { icon: "5", title: "Dispatch risk", copy: "Send a tech to a loss site hoping everything is current. Sometimes it is not." }
         ],
         newWorld: [
-          { title: "Invite into a guided path", copy: "Requirements matched to program, location, and work type." },
-          { title: "Sublynk runs the messy middle", copy: "Docs, rules, broker COI, human QA behind the scenes." },
-          { title: "Everyone sees the fix list", copy: "Missing items stated plainly — for you and the sub." },
-          { title: "Status stays live", copy: "Monitoring and renewals keep the signal current." },
-          { title: "Dispatch gets a clean answer", copy: "Green means ready; red means do not assign yet." }
+          { title: "One onboarding path per role", copy: "Requirements mapped to carrier program, certification type, and work category." },
+          { title: "Sublynk tracks every expiration", copy: "IICRC certs, COIs, licenses, background checks. Monitored and flagged before they lapse." },
+          { title: "Carrier audit prep is automatic", copy: "Contractor Connection, Sedgwick, Alacrity, Crawford. Requirements pre-mapped, always current." },
+          { title: "Subs verified before they step on site", copy: "Plumbers, electricians, mold crews. COI and license checked before dispatch." },
+          { title: "One dashboard, one truth", copy: "Green means compliant across every carrier. Red tells you exactly what is missing." }
         ]
       },
       oneLine: {
-        kicker: "02 · The line that lands",
-        lead: "You define quality on the bench.",
-        grad: "Sublynk makes sure the sub crosses the line compliant — and stays that way.",
-        sub: "You already found the contractor you want. Sublynk handles the messy middle — insurance, licenses, broker COIs, renewals — so your team gets <strong>one answer: ready or not ready, with the reason why.</strong>"
+        kicker: "02 · The core idea",
+        lead: "You run the restoration jobs.",
+        grad: "Sublynk keeps every tech and sub audit-ready while you do.",
+        sub: "Your techs need current IICRC certs. Your subs need verified COIs. Your carrier programs need proof on demand. Sublynk handles all of that so your team gets <strong>one answer: compliant or here is what is missing.</strong>"
       },
       whoDoesWhat: {
         kicker: "03 · Who does what",
-        title: "Shrink your job from nine moving parts to three clear actions.",
-        copy: "Your team keeps three relationship steps. Sublynk backops runs the six that turn intent into a verified signal.",
-        gcTitle: "GC & Network",
-        gcDesc: "Own the relationship and the work. Not every document chase.",
-        sublynkDesc: "Automation where fast; human QA where judgment matters.",
-        bridgeBefore: "Recruit → chase → email → resend → wait → re-check → hope",
-        bridgeAfter: "Recruit → invite → dispatch when green"
+        title: "Your team runs jobs. Sublynk runs credentialing.",
+        copy: "You keep hiring, dispatching, and carrier relationships. Sublynk handles the six steps between 'hired' and 'audit-ready.'",
+        gcTitle: "Restoration 1 team",
+        gcDesc: "Hire techs, manage subs, dispatch to loss sites, own carrier relationships.",
+        sublynkDesc: "IICRC tracking, COI verification, carrier audit prep, expiration monitoring, renewals.",
+        bridgeBefore: "Hire → spreadsheet → chase certs → chase COIs → scramble for audit → hope",
+        bridgeAfter: "Hire → Sublynk onboards → dispatch when green"
       },
       flow: {
-        kicker: "04 · Demo the operating system",
-        title: "Make the nine-step loop feel simple, not technical.",
-        copy: "Nine steps. One loop. Select any step to see who owns it and the live signal dispatch trusts.",
-        boardTitle: "The continuous credentialing loop",
-        boardSub: "Green is a living status — when documents expire or requirements change, the signal updates."
+        kicker: "04 · The credentialing loop",
+        title: "Nine steps. Your team owns three. Sublynk runs the rest.",
+        copy: "Select any step to see who owns it and what it looks like for a restoration franchise.",
+        boardTitle: "Continuous credentialing for restoration",
+        boardSub: "Green is a living status. When an IICRC cert expires or a carrier requirement changes, the signal updates automatically."
       },
       alwaysOn: {
         kicker: "05 · Always-on monitoring",
-        title: "The wow is not onboarding. <span class=\"soft\">It is staying ready forever.</span>",
-        copy: "Credentialing does not end at onboarding. Sublynk watches expirations so dispatch never discovers a problem at assignment time.",
+        title: "IICRC certs expire. COIs lapse. <span class=\"soft\">Sublynk catches it first.</span>",
+        copy: "Credentialing does not end at hire. Sublynk monitors every expiration date so you never find out mid-job or mid-audit.",
         orbTitle: "Always active",
         orbSub: "Monitor. Flag. Fix. Renew. Repeat.",
         listTitle: "What stays protected",
-        listIntro: "Continuous monitoring removes risks that show up only when a job is about to start.",
+        listIntro: "Continuous monitoring for the things that trip up restoration franchises.",
         items: [
-          { b: "Nothing silently expires.", s: "Dates and status change before they become dispatch surprises." },
-          { b: "Red comes with a reason.", s: "You and the sub see what is missing — not a mystery flag." },
-          { b: "Automation does the speed work.", s: "Matrix matching, status updates, renewal nudges." },
-          { b: "Humans handle judgment.", s: "Broker COIs, endorsements, live chat where mistakes are expensive." }
+          { b: "IICRC certs never silently expire.", s: "WRT, ASD, AMRT, FSRT. Flagged before they lapse, not after a carrier asks." },
+          { b: "Sub COIs stay current.", s: "Your plumbers, electricians, and content vendors. Verified and monitored." },
+          { b: "Carrier requirements pre-mapped.", s: "Contractor Connection, Sedgwick, Alacrity. Always audit-ready." },
+          { b: "Humans handle the hard parts.", s: "Broker COIs, endorsement questions, edge cases where judgment matters." }
         ]
       },
       persona: {
-        kicker: "06 · Persona talk track",
-        title: "Let every stakeholder see themselves in the same diagram.",
-        copy: "Same operating model — network, GC, and contractor lenses."
+        kicker: "06 · Who benefits",
+        title: "Every role in your operation sees the same truth.",
+        copy: "Whether you are managing techs, dispatching to a loss, or prepping for a carrier audit."
       },
       proof: {
-        kicker: "07 · What the audience should remember",
-        title: "Three outcomes. <span class=\"soft\">No technical explanation required.</span>",
-        copy: "Three outcomes your partners feel in the field — not feature lists.",
+        kicker: "07 · Three outcomes",
+        title: "What changes for Restoration 1 <span class=\"soft\">of Huntington Beach.</span>",
+        copy: "Three things your team feels in the first month.",
         cards: [
-          { h: "Faster recruiting conversion", p: "Subs are most motivated right after yes. A cleaner path protects momentum." },
-          { h: "Cleaner dispatch decisions", p: "One answer: green, red, or fix these items." },
-          { h: "Lower operational drag", p: "You stop chasing expiring documents; Sublynk runs renewals and broker loops." }
+          { h: "Techs onboarded in hours, not weeks", p: "New hires go from offer to carrier-compliant the same day. No spreadsheet handoff." },
+          { h: "Carrier audits stop being emergencies", p: "Contractor Connection, Sedgwick, Alacrity. Everything is pre-mapped and current when they ask." },
+          { h: "Admin hours back in your week", p: "You stop tracking IICRC expirations and chasing sub COIs. Sublynk monitors and flags automatically." }
         ]
       },
       close: {
-        eyebrow: "Closing slide",
-        title: "Don't sell a portal.<br />Sell the moment a sub becomes <span>job-ready.</span>",
-        oldQuote: "“Go upload documents and wait.”",
-        newQuote: "“You are wanted, guided, verified, monitored, and ready for dispatch.”",
-        backops: "<strong style=\"color: var(--slynk-teal);\">Sublynk</strong> is the backops layer that keeps your contractor network moving — from recruit, to compliant, to dispatched."
+        eyebrow: "What this means for your franchise",
+        title: "Every tech credentialed. <br />Every carrier <span>audit-ready.</span>",
+        oldQuote: "“Track it in a spreadsheet and hope nothing expires.”",
+        newQuote: "“Every tech and sub is verified, monitored, and ready before you need them.”",
+        backops: "<strong style=\"color: var(--slynk-orange);\">Sublynk</strong> handles credentialing for restoration franchises like yours. From hire, to compliant, to dispatched, to renewed. So you can focus on running jobs."
       },
-      meddpiccIntro: "Discovery for <strong>GC bench managers</strong> and partners. Mic, Polish, or Stop & fill fields after the call.",
+      meddpiccIntro: "Discovery for <strong>Restoration 1 of Huntington Beach</strong>. Notes from the conversation with Joseph.",
       personas: [
         {
           id: "network",
-          kicker: "Network ops",
-          name: "Managed repair network",
-          fear: "Recruits ghost before becoming compliant.",
-          role: "Build bench quality without drowning in COI email.",
-          interrupt: "Credentialing jail kills recruits — not your price.",
-          pointAt: "Steps 1 → 6: recruit through human QA.",
-          why: "Speed protects momentum. Clarity prevents subs giving up.",
-          close: "Network defines quality. Sublynk gets subs across the line motivated."
+          kicker: "Franchise GM",
+          name: "Joseph / General Manager",
+          fear: "Carrier audit hits and you spend a full day pulling files together.",
+          role: "Run ops, dispatch, hiring, and carrier relationships for the franchise.",
+          interrupt: "You are too small for a compliance hire and too busy to be the compliance person.",
+          pointAt: "Steps 3 through 8: everything between hiring a tech and them being audit-ready.",
+          why: "Same-day credentialing means techs work sooner. Auto-monitoring means audits are not emergencies.",
+          close: "Sublynk handles credentialing so the franchise can focus on restoration."
         },
         {
           id: "gc",
-          kicker: "GC ops",
-          name: "GC bench manager",
-          fear: "Sub looks compliant but dispatch finds a problem later.",
-          role: "Keep qualified subs ready and dispatch-unblocked.",
-          interrupt: "Your bench is only as fast as your slowest onboarding.",
-          pointAt: "GC side: recruit, onboard, dispatch. Sublynk runs 3–8.",
-          why: "Own relationship and assignment — not every insurance chase.",
-          close: "One thing to trust: green means ready, red means the fix."
+          kicker: "Carrier programs",
+          name: "Insurance carrier requirements",
+          fear: "Falling out of good standing with Contractor Connection, Sedgwick, or Alacrity.",
+          role: "Each program has its own COI, EMR, and certification requirements.",
+          interrupt: "Carrier requirements change. If you find out late, you lose jobs.",
+          pointAt: "Always-on monitoring and carrier requirement mapping.",
+          why: "Pre-mapped requirements mean you are always ready when they ask.",
+          close: "One dashboard shows compliance status across every carrier program."
         },
         {
           id: "sub",
-          kicker: "Contractor",
-          name: "Sub / franchise owner",
-          fear: "Mystery red flags and lost jobs while waiting.",
-          role: "Get compliant, get work, stay out of admin purgatory.",
-          interrupt: "Red without a reason is not compliance — it is anxiety.",
-          pointAt: "Fix list, monitoring, renewal loop.",
-          why: "Need clarity — what’s missing, who fixes it, when they can work.",
-          close: "Upload, understand, fix, get green, stay green."
+          kicker: "Subcontractors",
+          name: "Plumbers, electricians, mold crews",
+          fear: "Showing up to a loss site without current credentials.",
+          role: "Get verified before stepping on site. Stay verified as jobs keep coming.",
+          interrupt: "A sub with expired insurance on a loss site is a liability, not a helper.",
+          pointAt: "COI verification, license checks, and renewal monitoring.",
+          why: "Subs get a clear path. You get proof before dispatch.",
+          close: "Verified, monitored, and ready. Before the job, not after the problem."
         }
       ],
       gcSteps: [
-        { num: 1, title: "Recruit", copy: "Find the contractor you want in your bench." },
-        { num: 2, title: "Onboard", copy: "Send one guided invite with the right program path." },
-        { num: 9, title: "Dispatch → job", copy: "Assign work only when the contractor is green." }
+        { num: 1, title: "Hire", copy: "Bring on a new tech or sub for your restoration team." },
+        { num: 2, title: "Onboard", copy: "One guided path. Requirements matched to carrier programs and role." },
+        { num: 9, title: "Dispatch to loss site", copy: "Send techs and subs to jobs knowing they are fully credentialed." }
       ],
       sublynkSteps: [
-        { num: 3, title: "Collect docs", copy: "Centralize insurance, licenses, certs, contracts, background." },
-        { num: 4, title: "Verify license / COI", copy: "Program rules, location, work type, dates." },
-        { num: 5, title: "Broker COI check", copy: "Validate through source of truth, not PDF alone." },
-        { num: 6, title: "Human QA", copy: "Endorsements, exceptions, edge cases." },
-        { num: 7, title: "Live monitoring", copy: "Green/red reasons stay current." },
-        { num: 8, title: "Renewal cadence", copy: "Before expiration breaks dispatch." }
+        { num: 3, title: "Collect docs", copy: "IICRC certs, insurance, licenses, background checks. Centralized." },
+        { num: 4, title: "Verify credentials", copy: "WRT, ASD, AMRT, FSRT. Carrier-specific COI and EMR requirements." },
+        { num: 5, title: "Broker COI check", copy: "Validate insurance through the broker, not just a PDF." },
+        { num: 6, title: "Human QA", copy: "Endorsements, exceptions, carrier edge cases." },
+        { num: 7, title: "Live monitoring", copy: "IICRC expirations, COI lapses, carrier changes. Flagged before they matter." },
+        { num: 8, title: "Renewal cadence", copy: "Auto-reminders before anything expires." }
       ],
       stages: null,
       discoveryQuestions: null
@@ -577,30 +579,35 @@
     <style>
     :root {
       --bg: #ffffff;
-      --panel: rgba(0,0,0,.04);
-      --panel-2: rgba(0,0,0,.06);
-      --line: rgba(0,0,0,.1);
-      --line-2: rgba(0,0,0,.16);
-      --text: #0c0a09;
-      --muted: rgba(12,10,9,.62);
-      --faint: rgba(12,10,9,.42);
+      --panel: #f5f5f4;
+      --panel-2: #eeeded;
+      --line: #e7e5e4;
+      --line-2: #d6d3d1;
+      --text: #111827;
+      --text-secondary: #374151;
+      --muted: #6B7280;
+      --faint: #9CA3AF;
       --slynk-teal: #34b4a7;
-      --slynk-blue: #008eff;
-      --slynk-purple: #7878f0;
-      --slynk-orange: #dd6336;
-      --blue: #008eff;
-      --blue-2: #0066cc;
-      --green: #34b4a7;
-      --green-2: #2a9d92;
-      --orange: #ff8b3d;
-      --red: #d13939;
-      --purple: #7878f0;
-      --radius-xl: 34px;
-      --radius-lg: 26px;
-      --radius-md: 18px;
-      --shadow: 0 20px 60px rgba(0,0,0,.08);
-      --glow-blue: 0 0 40px rgba(0,142,255,.1);
-      --glow-green: 0 0 40px rgba(52,180,167,.1);
+      --slynk-blue: #14548C;
+      --slynk-purple: #0C152B;
+      --slynk-orange: #DD6438;
+      --blue: #14548C;
+      --blue-2: #0C152B;
+      --green: #16A34A;
+      --green-2: #15803d;
+      --orange: #DD6438;
+      --orange-light: #FFF3EF;
+      --red: #DC2626;
+      --purple: #0C152B;
+      --navy: #0C152B;
+      --navy-2: #101C3C;
+      --radius-xl: 24px;
+      --radius-lg: 16px;
+      --radius-md: 12px;
+      --shadow: 0 1px 3px rgba(0,0,0,.06), 0 4px 16px rgba(0,0,0,.04);
+      --shadow-lg: 0 4px 24px rgba(0,0,0,.08);
+      --glow-blue: none;
+      --glow-green: none;
     }
 
     * { box-sizing: border-box; }
@@ -621,9 +628,8 @@
       inset: 0;
       z-index: -3;
       background:
-        radial-gradient(circle at 18% 10%, rgba(0,142,255,.06), transparent 26%),
-        radial-gradient(circle at 82% 18%, rgba(52,180,167,.05), transparent 28%),
-        radial-gradient(circle at 50% 86%, rgba(120,120,240,.04), transparent 38%),
+        radial-gradient(circle at 18% 10%, rgba(221,100,56,.03), transparent 26%),
+        radial-gradient(circle at 82% 18%, rgba(221,100,56,.02), transparent 28%),
         var(--bg);
     }
 
@@ -633,12 +639,8 @@
       inset: 0;
       z-index: -2;
       pointer-events: none;
-      opacity: .06;
-      background-image:
-        linear-gradient(rgba(0,0,0,.04) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(0,0,0,.04) 1px, transparent 1px);
-      background-size: 48px 48px;
-      mask-image: radial-gradient(circle at center, black, transparent 78%);
+      opacity: 0;
+      display: none;
     }
 
     a { color: inherit; text-decoration: none; }
@@ -669,6 +671,7 @@
       min-height: 74px;
       padding: 18px 0 10px;
       backdrop-filter: blur(16px);
+      background: rgba(255,255,255,.85);
     }
 
     .topbar-right {
@@ -706,8 +709,8 @@
       width: 40px;
       height: 40px;
       border-radius: 12px;
-      border: 1px solid rgba(255,255,255,.18);
-      background: rgba(255,255,255,.08);
+      border: 1px solid rgba(0,0,0,.1);
+      background: rgba(0,0,0,.03);
       display: inline-flex;
       align-items: center;
       justify-content: center;
@@ -718,8 +721,8 @@
 
     .view-more-btn:hover,
     .view-more-btn.open {
-      background: rgba(52,180,167,.15);
-      border-color: rgba(52,180,167,.45);
+      background: rgba(221,100,56,.06);
+      border-color: rgba(221,100,56,.4);
     }
 
     .view-more-btn svg {
@@ -729,7 +732,7 @@
     }
 
     .view-more-btn svg path {
-      fill: rgba(247,247,247,.9);
+      fill: rgba(12,10,9,.7);
     }
 
     .view-menu {
@@ -739,9 +742,9 @@
       min-width: 200px;
       padding: 8px;
       border-radius: 14px;
-      border: 1px solid rgba(255,255,255,.16);
-      background: rgba(12,12,14,.96);
-      box-shadow: 0 12px 40px rgba(0,0,0,.55);
+      border: 1px solid rgba(0,0,0,.08);
+      background: rgba(255,255,255,.97);
+      box-shadow: 0 12px 40px rgba(0,0,0,.12);
       backdrop-filter: blur(12px);
     }
 
@@ -751,7 +754,7 @@
       font-weight: 700;
       letter-spacing: .08em;
       text-transform: uppercase;
-      color: rgba(247,247,247,.45);
+      color: rgba(12,10,9,.45);
     }
 
     .view-menu button {
@@ -761,7 +764,7 @@
       border: none;
       border-radius: 10px;
       background: transparent;
-      color: #f7f7f7;
+      color: #0c0a09;
       font-size: 14px;
       font-weight: 600;
       cursor: pointer;
@@ -769,12 +772,12 @@
     }
 
     .view-menu button:hover {
-      background: rgba(255,255,255,.08);
+      background: rgba(0,0,0,.05);
     }
 
     .view-menu button.active {
-      background: rgba(52,180,167,.2);
-      color: var(--slynk-teal);
+      background: rgba(221,100,56,.1);
+      color: #DD6438;
     }
 
     .audience-badge {
@@ -787,9 +790,9 @@
       font-size: 11px;
       font-weight: 700;
       letter-spacing: .04em;
-      color: var(--slynk-teal);
-      border: 1px solid rgba(52,180,167,.35);
-      background: rgba(52,180,167,.1);
+      color: var(--slynk-orange);
+      border: 1px solid rgba(221,100,56,.3);
+      background: rgba(221,100,56,.06);
       vertical-align: middle;
     }
 
@@ -804,7 +807,7 @@
       display: inline-flex;
       align-items: center;
       gap: 12px;
-      color: rgba(245,247,251,.84);
+      color: rgba(12,10,9,.84);
       font-size: 14px;
       letter-spacing: .01em;
       font-weight: 620;
@@ -814,10 +817,11 @@
       height: 28px;
       width: auto;
       display: block;
+      filter: invert(1);
     }
 
     .brand-tagline {
-      color: rgba(247,247,247,.72);
+      color: rgba(12,10,9,.62);
       font-size: 13px;
       font-weight: 500;
       letter-spacing: -.01em;
@@ -833,9 +837,9 @@
 
     .nav button,
     .ghost-button {
-      border: 1px solid rgba(255,255,255,.12);
-      color: rgba(245,247,251,.72);
-      background: rgba(255,255,255,.055);
+      border: 1px solid rgba(0,0,0,.1);
+      color: rgba(12,10,9,.65);
+      background: rgba(0,0,0,.03);
       border-radius: 999px;
       padding: 8px 12px;
       font-size: 12px;
@@ -848,10 +852,10 @@
     .nav button:hover,
     .nav button.active,
     .ghost-button:hover {
-      color: white;
-      border-color: rgba(52,180,167,.55);
-      background: rgba(52,180,167,.12);
-      box-shadow: 0 0 30px rgba(52,180,167,.1);
+      color: #DD6438;
+      border-color: rgba(221,100,56,.4);
+      background: rgba(221,100,56,.06);
+      box-shadow: none;
     }
 
     .hero {
@@ -869,11 +873,11 @@
       gap: 8px;
       margin: 0 auto 20px;
       padding: 8px 13px;
-      border: 1px solid rgba(255,255,255,.14);
+      border: 1px solid rgba(0,0,0,.08);
       border-radius: 999px;
-      background: rgba(255,255,255,.06);
+      background: rgba(0,0,0,.03);
       backdrop-filter: blur(18px);
-      color: rgba(245,247,251,.74);
+      color: rgba(12,10,9,.65);
       font-size: 13px;
       font-weight: 680;
     }
@@ -883,7 +887,7 @@
       height: 8px;
       border-radius: 999px;
       background: var(--green);
-      box-shadow: 0 0 22px rgba(93,255,177,.8);
+      box-shadow: none;
     }
 
     h1 {
@@ -896,21 +900,21 @@
     }
 
     .hero-gradient {
-      background: linear-gradient(180deg, #fff 0%, #b8ebe6 38%, var(--slynk-teal) 72%, var(--slynk-blue) 100%);
+      background: linear-gradient(180deg, var(--slynk-orange) 0%, #C94F2B 100%);
       -webkit-background-clip: text;
       background-clip: text;
       color: transparent;
-      filter: drop-shadow(0 0 38px rgba(52,180,167,.2));
+      filter: none;
     }
 
     .hero-gradient-alt {
-      color: var(--slynk-teal);
+      color: var(--slynk-orange);
     }
 
     .hero-sub {
       max-width: 820px;
       margin: 28px auto 0;
-      color: rgba(245,247,251,.72);
+      color: rgba(12,10,9,.62);
       font-size: clamp(20px, 2.6vw, 31px);
       line-height: 1.18;
       letter-spacing: -.035em;
@@ -918,7 +922,7 @@
     }
 
     .hero-sub b {
-      color: white;
+      color: #0c0a09;
       font-weight: 720;
     }
 
@@ -933,20 +937,20 @@
     .primary-button {
       border: 0;
       color: #fff;
-      background: var(--slynk-purple);
-      background-image: radial-gradient(circle at 0 0, var(--slynk-teal), rgba(52,180,167,0) 58%), var(--slynk-purple);
+      background: var(--navy);
       border-radius: 6px;
       padding: 12px 22px;
       font-size: 14px;
       font-weight: 600;
       cursor: pointer;
-      box-shadow: 0 0 0 1px rgba(255,255,255,.12) inset, 0 12px 40px rgba(120,120,240,.25);
+      box-shadow: none;
       transition: .25s ease;
     }
 
     .primary-button:hover {
       transform: translateY(-2px);
-      box-shadow: 0 0 0 1px rgba(255,255,255,.16) inset, 0 16px 48px rgba(52,180,167,.28);
+      background: #1a2744;
+      box-shadow: var(--shadow);
     }
 
     .metric-strip {
@@ -960,12 +964,11 @@
     .metric {
       min-height: 108px;
       padding: 18px;
-      border-radius: 24px;
-      border: 1px solid rgba(255,255,255,.12);
-      background: linear-gradient(180deg, rgba(255,255,255,.09), rgba(255,255,255,.04));
+      border-radius: 16px;
+      border: 1px solid var(--line);
+      background: var(--panel);
       text-align: left;
-      backdrop-filter: blur(18px);
-      box-shadow: var(--shadow);
+      box-shadow: none;
     }
 
     .metric strong {
@@ -992,7 +995,7 @@
     }
 
     .section-kicker {
-      color: var(--slynk-teal);
+      color: var(--slynk-orange);
       font-size: 13px;
       text-transform: uppercase;
       letter-spacing: .16em;
@@ -1010,13 +1013,13 @@
     }
 
     .section-title .soft {
-      color: rgba(245,247,251,.46);
+      color: rgba(12,10,9,.4);
     }
 
     .section-copy {
       max-width: 760px;
       margin: 20px 0 0;
-      color: rgba(245,247,251,.68);
+      color: rgba(12,10,9,.6);
       font-size: clamp(18px, 2vw, 23px);
       line-height: 1.32;
       letter-spacing: -.02em;
@@ -1024,13 +1027,10 @@
     }
 
     .glass {
-      border: 1px solid rgba(255,255,255,.12);
-      background:
-        linear-gradient(180deg, rgba(255,255,255,.09), rgba(255,255,255,.045)),
-        rgba(255,255,255,.035);
+      border: 1px solid var(--line);
+      background: #ffffff;
       border-radius: var(--radius-xl);
       box-shadow: var(--shadow);
-      backdrop-filter: blur(22px);
     }
 
     .compare-grid {
@@ -1048,18 +1048,14 @@
     }
 
     .world-card.old {
-      background:
-        radial-gradient(circle at 35% 0%, rgba(255,107,129,.14), transparent 34%),
-        linear-gradient(180deg, rgba(255,255,255,.07), rgba(255,255,255,.03));
+      background: #FFF5F5;
+      border-color: rgba(220,38,38,.15);
     }
 
     .world-card.new {
-      background:
-        radial-gradient(circle at 45% 0%, rgba(93,255,177,.12), transparent 34%),
-        radial-gradient(circle at 88% 12%, rgba(53,200,255,.18), transparent 30%),
-        linear-gradient(180deg, rgba(255,255,255,.09), rgba(255,255,255,.04));
-      border-color: rgba(53,200,255,.24);
-      box-shadow: var(--shadow), var(--glow-blue);
+      background: #F0FDF4;
+      border-color: rgba(22,163,74,.15);
+      box-shadow: var(--shadow);
     }
 
     .world-label {
@@ -1084,17 +1080,17 @@
       border-radius: 999px;
       font-size: 12px;
       font-weight: 760;
-      border: 1px solid rgba(255,255,255,.12);
-      color: rgba(245,247,251,.75);
-      background: rgba(255,255,255,.05);
+      border: 1px solid rgba(0,0,0,.08);
+      color: rgba(12,10,9,.65);
+      background: rgba(0,0,0,.03);
       white-space: nowrap;
     }
 
-    .world-card.old .world-pill { color: #ffd5dc; border-color: rgba(255,107,129,.28); background: rgba(255,107,129,.11); }
-    .world-card.new .world-pill { color: #d5fff0; border-color: rgba(93,255,177,.28); background: rgba(93,255,177,.09); }
+    .world-card.old .world-pill { color: #991B1B; border-color: rgba(220,38,38,.2); background: rgba(220,38,38,.06); }
+    .world-card.new .world-pill { color: #166534; border-color: rgba(22,163,74,.2); background: rgba(22,163,74,.06); }
 
     .world-summary {
-      color: rgba(245,247,251,.66);
+      color: rgba(12,10,9,.58);
       font-size: 16px;
       line-height: 1.38;
       margin-bottom: 22px;
@@ -1112,8 +1108,8 @@
       align-items: start;
       padding: 15px;
       border-radius: 20px;
-      border: 1px solid rgba(255,255,255,.1);
-      background: rgba(0,0,0,.22);
+      border: 1px solid rgba(0,0,0,.06);
+      background: rgba(0,0,0,.02);
       position: relative;
       overflow: hidden;
     }
@@ -1122,7 +1118,7 @@
       content: "";
       position: absolute;
       inset: 0;
-      background: linear-gradient(90deg, rgba(255,255,255,.06), transparent 35%);
+      background: linear-gradient(90deg, rgba(0,0,0,.03), transparent 35%);
       opacity: 0;
       transition: .25s ease;
     }
@@ -1135,21 +1131,21 @@
       border-radius: 14px;
       display: grid;
       place-items: center;
-      background: rgba(255,255,255,.08);
-      border: 1px solid rgba(255,255,255,.12);
+      background: rgba(0,0,0,.04);
+      border: 1px solid rgba(0,0,0,.08);
     }
 
     .old .step-icon {
-      color: #ffd1da;
-      background: rgba(255,107,129,.12);
-      border-color: rgba(255,107,129,.22);
+      color: #991B1B;
+      background: rgba(220,38,38,.06);
+      border-color: rgba(220,38,38,.15);
     }
 
     .new .step-icon {
-      color: #001c14;
-      background: linear-gradient(135deg, #dcfff2, var(--green));
-      border-color: rgba(93,255,177,.3);
-      box-shadow: var(--glow-green);
+      color: #052e16;
+      background: linear-gradient(135deg, #ECFDF3, var(--green));
+      border-color: rgba(22,163,74,.2);
+      box-shadow: none;
       font-weight: 900;
     }
 
@@ -1162,13 +1158,13 @@
 
     .timeline-step span {
       display: block;
-      color: rgba(245,247,251,.58);
+      color: rgba(12,10,9,.52);
       font-size: 13px;
       line-height: 1.28;
     }
 
-    .old .timeline-step span { color: rgba(245,247,251,.54); }
-    .new .timeline-step span { color: rgba(245,247,251,.68); }
+    .old .timeline-step span { color: rgba(12,10,9,.48); }
+    .new .timeline-step span { color: rgba(12,10,9,.6); }
 
     .impact-line {
       display: flex;
@@ -1177,14 +1173,14 @@
       margin-top: 18px;
       padding: 14px 16px;
       border-radius: 20px;
-      border: 1px solid rgba(255,255,255,.11);
-      background: rgba(255,255,255,.055);
-      color: rgba(245,247,251,.78);
+      border: 1px solid rgba(0,0,0,.06);
+      background: rgba(0,0,0,.02);
+      color: rgba(12,10,9,.7);
       font-size: 14px;
       line-height: 1.25;
     }
 
-    .impact-line strong { color: #fff; }
+    .impact-line strong { color: #0c0a09; }
 
     .the-line {
       display: grid;
@@ -1204,8 +1200,7 @@
       position: absolute;
       inset: -1px;
       background:
-        radial-gradient(circle at 15% 20%, rgba(53,200,255,.24), transparent 30%),
-        radial-gradient(circle at 75% 30%, rgba(93,255,177,.16), transparent 32%);
+        radial-gradient(circle at 15% 20%, rgba(221,100,56,.04), transparent 30%);
       opacity: .9;
       z-index: -1;
     }
@@ -1220,7 +1215,7 @@
     }
 
     .big-quote span {
-      background: linear-gradient(135deg, #fff, #c7f3ff 40%, #61d6ff);
+      background: linear-gradient(135deg, var(--slynk-orange), #C94F2B);
       -webkit-background-clip: text;
       background-clip: text;
       color: transparent;
@@ -1229,7 +1224,7 @@
     .quote-sub {
       max-width: 730px;
       margin: 20px 0 0;
-      color: rgba(245,247,251,.67);
+      color: rgba(12,10,9,.6);
       font-size: 19px;
       line-height: 1.35;
     }
@@ -1249,16 +1244,12 @@
     }
 
     .owner-panel.gc {
-      background:
-        radial-gradient(circle at 40% 0%, rgba(93,255,177,.12), transparent 32%),
-        linear-gradient(180deg, rgba(255,255,255,.08), rgba(255,255,255,.04));
+      background: #F0FDF4;
     }
 
     .owner-panel.sublynk {
-      background:
-        radial-gradient(circle at 70% 0%, rgba(53,200,255,.23), transparent 34%),
-        linear-gradient(180deg, rgba(255,255,255,.1), rgba(255,255,255,.045));
-      border-color: rgba(53,200,255,.24);
+      background: var(--orange-light);
+      border-color: rgba(221,100,56,.15);
     }
 
     .owner-top {
@@ -1277,7 +1268,7 @@
 
     .owner-top p {
       margin: 8px 0 0;
-      color: rgba(245,247,251,.6);
+      color: rgba(12,10,9,.55);
       font-size: 15px;
       line-height: 1.32;
     }
@@ -1289,9 +1280,9 @@
       display: grid;
       place-items: center;
       border-radius: 24px;
-      border: 1px solid rgba(255,255,255,.15);
-      background: rgba(255,255,255,.075);
-      color: white;
+      border: 1px solid rgba(0,0,0,.08);
+      background: rgba(0,0,0,.03);
+      color: #0c0a09;
       font-size: 30px;
       font-weight: 850;
       letter-spacing: -.04em;
@@ -1309,15 +1300,15 @@
       align-items: center;
       padding: 15px;
       border-radius: 22px;
-      border: 1px solid rgba(255,255,255,.1);
-      background: rgba(0,0,0,.24);
+      border: 1px solid rgba(0,0,0,.06);
+      background: rgba(0,0,0,.02);
       transition: .25s ease;
     }
 
     .owner-step:hover {
       transform: translateY(-2px);
-      background: rgba(255,255,255,.075);
-      border-color: rgba(255,255,255,.18);
+      background: rgba(0,0,0,.04);
+      border-color: rgba(0,0,0,.1);
     }
 
     .num {
@@ -1328,20 +1319,20 @@
       place-items: center;
       font-weight: 900;
       letter-spacing: -.035em;
-      background: rgba(255,255,255,.08);
-      border: 1px solid rgba(255,255,255,.12);
+      background: rgba(0,0,0,.04);
+      border: 1px solid rgba(0,0,0,.08);
     }
 
     .gc .num {
       color: #03190f;
       background: linear-gradient(135deg, #e3fff3, var(--green));
-      box-shadow: var(--glow-green);
+      box-shadow: none;
     }
 
     .sublynk .num {
-      color: #00111c;
-      background: linear-gradient(135deg, #effbff, var(--blue));
-      box-shadow: var(--glow-blue);
+      color: #fff;
+      background: linear-gradient(135deg, #FFF3EF, var(--slynk-orange));
+      box-shadow: none;
     }
 
     .owner-step b {
@@ -1353,7 +1344,7 @@
 
     .owner-step span {
       display: block;
-      color: rgba(245,247,251,.58);
+      color: rgba(12,10,9,.52);
       font-size: 13px;
       line-height: 1.27;
     }
@@ -1362,10 +1353,8 @@
       margin-top: 18px;
       padding: 18px;
       border-radius: 24px;
-      background:
-        linear-gradient(90deg, rgba(93,255,177,.1), rgba(53,200,255,.1)),
-        rgba(255,255,255,.045);
-      border: 1px solid rgba(255,255,255,.12);
+      background: var(--panel);
+      border: 1px solid var(--line);
       display: grid;
       grid-template-columns: 1fr auto 1fr;
       gap: 14px;
@@ -1374,14 +1363,14 @@
     }
 
     .bridge-label {
-      color: rgba(245,247,251,.62);
+      color: rgba(12,10,9,.55);
       font-size: 13px;
       line-height: 1.25;
     }
 
     .bridge-label b {
       display: block;
-      color: white;
+      color: var(--text);
       font-size: 16px;
       margin-bottom: 4px;
     }
@@ -1392,9 +1381,9 @@
       border-radius: 999px;
       display: grid;
       place-items: center;
-      color: #00111c;
-      background: linear-gradient(135deg, #fff, var(--blue));
-      box-shadow: var(--glow-blue);
+      color: #fff;
+      background: var(--navy);
+      box-shadow: none;
       font-weight: 900;
     }
 
@@ -1420,7 +1409,7 @@
 
     .flow-head p {
       margin: 8px 0 0;
-      color: rgba(245,247,251,.6);
+      color: rgba(12,10,9,.55);
       max-width: 610px;
       line-height: 1.35;
     }
@@ -1433,9 +1422,9 @@
     }
 
     .flow-controls button {
-      border: 1px solid rgba(255,255,255,.12);
-      background: rgba(255,255,255,.055);
-      color: rgba(245,247,251,.72);
+      border: 1px solid rgba(0,0,0,.1);
+      background: rgba(0,0,0,.03);
+      color: rgba(12,10,9,.65);
       border-radius: 999px;
       padding: 8px 11px;
       cursor: pointer;
@@ -1446,9 +1435,9 @@
 
     .flow-controls button.active,
     .flow-controls button:hover {
-      color: white;
-      border-color: rgba(53,200,255,.48);
-      background: rgba(53,200,255,.14);
+      color: #DD6438;
+      border-color: rgba(221,100,56,.4);
+      background: rgba(221,100,56,.06);
     }
 
     .pipeline {
@@ -1463,8 +1452,8 @@
       width: 10px;
       height: 2px;
       margin-top: 37px;
-      background: linear-gradient(90deg, rgba(52,180,167,.55), rgba(0,142,255,.9), rgba(52,180,167,.5));
-      box-shadow: var(--glow-blue);
+      background: linear-gradient(90deg, rgba(221,100,56,.3), rgba(221,100,56,.5), rgba(221,100,56,.3));
+      box-shadow: none;
       opacity: .85;
       pointer-events: none;
       border-radius: 1px;
@@ -1478,9 +1467,9 @@
       min-height: 148px;
       padding: 14px 10px 12px;
       border-radius: 22px;
-      border: 1px solid rgba(255,255,255,.11);
-      background: #0c0e12;
-      box-shadow: 0 0 0 1px rgba(0,0,0,.4);
+      border: 1px solid rgba(0,0,0,.08);
+      background: #ffffff;
+      box-shadow: 0 0 0 1px rgba(0,0,0,.04);
       cursor: pointer;
       transition: .24s ease;
       display: flex;
@@ -1490,19 +1479,15 @@
 
     .pipe-step.active {
       transform: translateY(-7px);
-      border-color: rgba(53,200,255,.55);
-      background:
-        radial-gradient(circle at 50% 0%, rgba(53,200,255,.18), transparent 42%),
-        #10141c;
-      box-shadow: var(--glow-blue), 0 0 0 1px rgba(0,0,0,.5);
+      border-color: var(--slynk-orange);
+      background: #ffffff;
+      box-shadow: var(--shadow);
     }
 
     .pipe-step.gc-step.active {
-      border-color: rgba(93,255,177,.55);
-      box-shadow: var(--glow-green), 0 0 0 1px rgba(0,0,0,.5);
-      background:
-        radial-gradient(circle at 50% 0%, rgba(93,255,177,.14), transparent 42%),
-        #10141c;
+      border-color: rgba(22,163,74,.4);
+      box-shadow: var(--shadow);
+      background: #ffffff;
     }
 
     .pipe-num {
@@ -1515,19 +1500,19 @@
       margin: 0 auto 10px;
       position: relative;
       z-index: 2;
-      background: linear-gradient(135deg, #e8f6ff, var(--slynk-blue));
-      color: #001a33;
+      background: linear-gradient(135deg, #FFF3EF, var(--slynk-orange));
+      color: #fff;
       font-size: 22px;
       font-weight: 800;
       line-height: 1;
       font-variant-numeric: tabular-nums;
-      box-shadow: 0 0 0 1px rgba(255,255,255,.2) inset, var(--glow-blue);
+      box-shadow: none;
     }
 
     .pipe-step.gc-step .pipe-num {
-      background: linear-gradient(135deg, #e6f7f5, var(--slynk-teal));
+      background: linear-gradient(135deg, #e6f7f5, var(--green));
       color: #03221f;
-      box-shadow: 0 0 0 1px rgba(255,255,255,.2) inset, var(--glow-green);
+      box-shadow: none;
     }
 
     .pipe-step b {
@@ -1537,12 +1522,12 @@
       text-align: center;
       letter-spacing: -.015em;
       margin-bottom: 7px;
-      color: #fff;
+      color: #0c0a09;
     }
 
     .pipe-step span {
       display: block;
-      color: rgba(245,247,251,.52);
+      color: rgba(12,10,9,.48);
       font-size: 11.4px;
       line-height: 1.22;
       text-align: center;
@@ -1558,12 +1543,12 @@
     .stage-copy {
       padding: 24px;
       border-radius: 26px;
-      background: rgba(255,255,255,.055);
-      border: 1px solid rgba(255,255,255,.11);
+      background: rgba(0,0,0,.02);
+      border: 1px solid rgba(0,0,0,.06);
     }
 
     .stage-copy .mini-label {
-      color: var(--blue);
+      color: var(--slynk-orange);
       text-transform: uppercase;
       letter-spacing: .14em;
       font-size: 12px;
@@ -1578,7 +1563,7 @@
 
     .stage-copy p {
       margin: 0;
-      color: rgba(245,247,251,.67);
+      color: rgba(12,10,9,.6);
       font-size: 16px;
       line-height: 1.38;
     }
@@ -1594,7 +1579,7 @@
     .stage-copy li {
       display: flex;
       gap: 9px;
-      color: rgba(245,247,251,.72);
+      color: rgba(12,10,9,.65);
       font-size: 14px;
       line-height: 1.25;
     }
@@ -1608,10 +1593,8 @@
     .mock-dashboard {
       padding: 22px;
       border-radius: 26px;
-      background:
-        radial-gradient(circle at 65% 0%, rgba(53,200,255,.18), transparent 34%),
-        rgba(0,0,0,.38);
-      border: 1px solid rgba(255,255,255,.12);
+      background: rgba(0,0,0,.02);
+      border: 1px solid rgba(0,0,0,.08);
       min-height: 252px;
     }
 
@@ -1624,7 +1607,7 @@
 
     .mock-title {
       font-size: 13px;
-      color: rgba(245,247,251,.58);
+      color: rgba(12,10,9,.52);
       font-weight: 700;
     }
 
@@ -1634,9 +1617,9 @@
       gap: 7px;
       padding: 7px 10px;
       border-radius: 999px;
-      background: rgba(93,255,177,.09);
-      color: #d8ffef;
-      border: 1px solid rgba(93,255,177,.22);
+      background: #ECFDF3;
+      color: #166534;
+      border: 1px solid rgba(22,163,74,.2);
       font-size: 12px;
       font-weight: 820;
     }
@@ -1646,7 +1629,7 @@
       height: 8px;
       border-radius: 999px;
       background: var(--green);
-      box-shadow: 0 0 18px rgba(93,255,177,.85);
+      box-shadow: none;
     }
 
     .mock-bars {
@@ -1657,8 +1640,8 @@
     .bar {
       height: 42px;
       border-radius: 16px;
-      background: rgba(255,255,255,.06);
-      border: 1px solid rgba(255,255,255,.1);
+      background: rgba(0,0,0,.03);
+      border: 1px solid rgba(0,0,0,.06);
       overflow: hidden;
       position: relative;
     }
@@ -1668,7 +1651,7 @@
       position: absolute;
       inset: 0;
       width: var(--w);
-      background: linear-gradient(90deg, rgba(53,200,255,.16), rgba(93,255,177,.2));
+      background: linear-gradient(90deg, rgba(221,100,56,.12), rgba(221,100,56,.18));
       border-radius: 16px;
     }
 
@@ -1680,7 +1663,7 @@
       height: 100%;
       padding: 0 14px;
       font-size: 13px;
-      color: rgba(245,247,251,.74);
+      color: rgba(12,10,9,.65);
       font-weight: 650;
     }
 
@@ -1705,8 +1688,8 @@
       width: min(410px, 80vw);
       height: min(410px, 80vw);
       border-radius: 50%;
-      border: 1px solid rgba(53,200,255,.2);
-      box-shadow: inset 0 0 80px rgba(53,200,255,.04), 0 0 80px rgba(53,200,255,.1);
+      border: 1px solid rgba(221,100,56,.15);
+      box-shadow: none;
       animation: rotate 22s linear infinite;
     }
 
@@ -1716,9 +1699,9 @@
       inset: -1px;
       border-radius: inherit;
       border: 1px solid transparent;
-      border-top-color: rgba(93,255,177,.68);
-      border-right-color: rgba(53,200,255,.55);
-      filter: drop-shadow(0 0 18px rgba(53,200,255,.35));
+      border-top-color: rgba(221,100,56,.5);
+      border-right-color: rgba(221,100,56,.3);
+      filter: none;
     }
 
     @keyframes rotate { to { transform: rotate(360deg); } }
@@ -1731,12 +1714,9 @@
       place-items: center;
       text-align: center;
       padding: 25px;
-      background:
-        radial-gradient(circle at 35% 22%, rgba(255,255,255,.18), transparent 22%),
-        linear-gradient(135deg, rgba(53,200,255,.26), rgba(93,255,177,.11)),
-        rgba(255,255,255,.055);
-      border: 1px solid rgba(255,255,255,.15);
-      box-shadow: var(--glow-blue), var(--shadow);
+      background: #fff;
+      border: 1px solid var(--line);
+      box-shadow: var(--shadow-lg);
     }
 
     .orb-center h3 {
@@ -1748,7 +1728,7 @@
 
     .orb-center p {
       margin: 12px 0 0;
-      color: rgba(245,247,251,.62);
+      color: rgba(12,10,9,.55);
       font-size: 14px;
       line-height: 1.25;
     }
@@ -1758,11 +1738,10 @@
       width: 128px;
       padding: 12px;
       border-radius: 20px;
-      background: rgba(0,0,0,.55);
-      border: 1px solid rgba(255,255,255,.13);
-      backdrop-filter: blur(16px);
+      background: #fff;
+      border: 1px solid var(--line);
       text-align: center;
-      box-shadow: 0 15px 55px rgba(0,0,0,.28);
+      box-shadow: var(--shadow);
     }
 
     .orb-node b {
@@ -1773,7 +1752,7 @@
 
     .orb-node span {
       display: block;
-      color: rgba(245,247,251,.56);
+      color: rgba(12,10,9,.5);
       font-size: 11.5px;
       line-height: 1.2;
     }
@@ -1795,7 +1774,7 @@
     }
 
     .loop-list p {
-      color: rgba(245,247,251,.62);
+      color: rgba(12,10,9,.55);
       margin: 0 0 22px;
       font-size: 17px;
       line-height: 1.36;
@@ -1816,8 +1795,8 @@
       align-items: start;
       padding: 14px;
       border-radius: 20px;
-      background: rgba(255,255,255,.055);
-      border: 1px solid rgba(255,255,255,.1);
+      background: rgba(0,0,0,.02);
+      border: 1px solid rgba(0,0,0,.06);
     }
 
     .loop-list i {
@@ -1826,11 +1805,11 @@
       display: grid;
       place-items: center;
       border-radius: 13px;
-      background: linear-gradient(135deg, #eafaff, var(--blue));
-      color: #00111c;
+      background: linear-gradient(135deg, #FFF3EF, var(--slynk-orange));
+      color: #fff;
       font-style: normal;
       font-weight: 900;
-      box-shadow: var(--glow-blue);
+      box-shadow: none;
     }
 
     .loop-list b {
@@ -1841,7 +1820,7 @@
 
     .loop-list span {
       display: block;
-      color: rgba(245,247,251,.58);
+      color: rgba(12,10,9,.52);
       font-size: 13px;
       line-height: 1.28;
     }
@@ -1863,9 +1842,9 @@
 
     .persona-tab {
       text-align: left;
-      border: 1px solid rgba(255,255,255,.1);
-      background: rgba(255,255,255,.045);
-      color: rgba(245,247,251,.72);
+      border: 1px solid rgba(0,0,0,.06);
+      background: rgba(0,0,0,.02);
+      color: rgba(12,10,9,.65);
       border-radius: 22px;
       padding: 18px;
       cursor: pointer;
@@ -1875,17 +1854,15 @@
     .persona-tab.active,
     .persona-tab:hover {
       transform: translateY(-2px);
-      color: white;
-      border-color: rgba(53,200,255,.45);
-      background:
-        radial-gradient(circle at 100% 0%, rgba(53,200,255,.18), transparent 34%),
-        rgba(255,255,255,.075);
-      box-shadow: var(--glow-blue);
+      color: #0c0a09;
+      border-color: rgba(221,100,56,.35);
+      background: var(--orange-light);
+      box-shadow: none;
     }
 
     .persona-tab small {
       display: block;
-      color: var(--blue);
+      color: var(--slynk-orange);
       font-weight: 850;
       letter-spacing: .12em;
       text-transform: uppercase;
@@ -1902,7 +1879,7 @@
 
     .persona-tab span {
       display: block;
-      color: rgba(245,247,251,.55);
+      color: rgba(12,10,9,.48);
       font-size: 13px;
       line-height: 1.3;
     }
@@ -1921,7 +1898,7 @@
       width: 230px;
       height: 230px;
       border-radius: 50%;
-      background: radial-gradient(circle, rgba(53,200,255,.2), transparent 66%);
+      background: radial-gradient(circle, rgba(221,100,56,.04), transparent 66%);
     }
 
     .persona-detail h3 {
@@ -1933,7 +1910,7 @@
 
     .persona-detail .role {
       margin-top: 10px;
-      color: rgba(245,247,251,.62);
+      color: rgba(12,10,9,.55);
       font-size: 17px;
       line-height: 1.35;
       max-width: 720px;
@@ -1949,15 +1926,15 @@
     .talk-card {
       padding: 18px;
       border-radius: 22px;
-      border: 1px solid rgba(255,255,255,.1);
-      background: rgba(0,0,0,.26);
+      border: 1px solid rgba(0,0,0,.06);
+      background: var(--panel);
     }
 
     .talk-card.full { grid-column: 1 / -1; }
 
     .talk-card .label {
       display: block;
-      color: var(--blue);
+      color: var(--slynk-orange);
       font-size: 11px;
       letter-spacing: .13em;
       text-transform: uppercase;
@@ -1967,13 +1944,13 @@
 
     .talk-card p {
       margin: 0;
-      color: rgba(245,247,251,.74);
+      color: rgba(12,10,9,.65);
       line-height: 1.32;
       font-size: 15px;
     }
 
     .talk-card p strong {
-      color: #fff;
+      color: #0c0a09;
     }
 
     .proof-strip {
@@ -1997,7 +1974,7 @@
       width: 170px;
       height: 170px;
       border-radius: 50%;
-      background: radial-gradient(circle, rgba(53,200,255,.14), transparent 70%);
+      background: radial-gradient(circle, rgba(221,100,56,.04), transparent 70%);
     }
 
     .proof-card h3 {
@@ -2007,14 +1984,14 @@
     }
 
     .proof-card p {
-      color: rgba(245,247,251,.62);
+      color: rgba(12,10,9,.55);
       line-height: 1.32;
       font-size: 15px;
       margin: 12px 0 0;
     }
 
     .proof-card strong {
-      color: #fff;
+      color: #0c0a09;
     }
 
     .closing-section .closing-card {
@@ -2025,17 +2002,15 @@
       max-width: 1050px;
       margin: 0 auto;
       text-align: center;
-      border-color: rgba(53,200,255,.22);
-      box-shadow: var(--shadow), var(--glow-blue);
+      border-color: var(--line);
+      box-shadow: var(--shadow);
     }
 
     .closing-card::before {
       content: "";
       position: absolute;
       inset: -2px;
-      background:
-        radial-gradient(circle at 20% 0%, rgba(53,200,255,.22), transparent 34%),
-        radial-gradient(circle at 85% 10%, rgba(93,255,177,.16), transparent 30%);
+      background: none;
       z-index: -1;
     }
 
@@ -2048,7 +2023,7 @@
     }
 
     .closing-card h2 span {
-      background: linear-gradient(180deg, #fff, #69d9ff);
+      background: linear-gradient(135deg, var(--slynk-orange), #C94F2B);
       -webkit-background-clip: text;
       background-clip: text;
       color: transparent;
@@ -2069,18 +2044,14 @@
     }
 
     .closing-promise.old-promise {
-      border: 1px solid rgba(209,57,57,.28);
-      background:
-        radial-gradient(circle at 0 0, rgba(209,57,57,.12), transparent 40%),
-        rgba(255,255,255,.04);
+      border: 1px solid rgba(220,38,38,.15);
+      background: #FFF5F5;
     }
 
     .closing-promise.new-promise {
-      border: 1px solid rgba(52,180,167,.32);
-      background:
-        radial-gradient(circle at 100% 0, rgba(52,180,167,.14), transparent 38%),
-        rgba(255,255,255,.05);
-      box-shadow: var(--glow-green);
+      border: 1px solid rgba(22,163,74,.15);
+      background: #F0FDF4;
+      box-shadow: none;
     }
 
     .closing-promise-label {
@@ -2097,15 +2068,15 @@
     }
 
     .old-promise .closing-promise-label {
-      color: #ffc9c9;
-      border: 1px solid rgba(209,57,57,.35);
-      background: rgba(209,57,57,.12);
+      color: #991B1B;
+      border: 1px solid rgba(220,38,38,.2);
+      background: rgba(220,38,38,.06);
     }
 
     .new-promise .closing-promise-label {
-      color: #c8f5ef;
-      border: 1px solid rgba(52,180,167,.35);
-      background: rgba(52,180,167,.1);
+      color: #166534;
+      border: 1px solid rgba(22,163,74,.2);
+      background: rgba(22,163,74,.06);
     }
 
     .closing-promise-quote {
@@ -2114,17 +2085,15 @@
       line-height: 1.28;
       letter-spacing: -.03em;
       font-weight: 620;
-      color: rgba(247,247,247,.92);
+      color: rgba(12,10,9,.85);
     }
 
     .closing-backops {
       margin-top: 18px;
       padding: 24px 28px;
       border-radius: var(--radius-lg);
-      border: 1px solid rgba(0,142,255,.28);
-      background:
-        radial-gradient(circle at 50% 0, rgba(120,120,240,.16), transparent 45%),
-        rgba(255,255,255,.05);
+      border: 1px solid rgba(12,21,43,.15);
+      background: rgba(12,21,43,.03);
       text-align: left;
     }
 
@@ -2133,14 +2102,14 @@
       max-width: none;
       font-size: 18px;
       line-height: 1.38;
-      color: rgba(247,247,247,.78);
+      color: rgba(12,10,9,.7);
     }
 
     .discovery-panel {
       margin-top: 28px;
       padding: 22px;
       text-align: left;
-      border-color: rgba(52,180,167,.22);
+      border-color: var(--line);
     }
 
     .discovery-head {
@@ -2156,7 +2125,7 @@
       margin: 0;
       font-size: 15px;
       letter-spacing: -.02em;
-      color: var(--slynk-teal);
+      color: var(--slynk-orange);
       text-transform: uppercase;
       letter-spacing: .1em;
       font-weight: 750;
@@ -2164,7 +2133,7 @@
 
     .discovery-head span {
       font-size: 12px;
-      color: rgba(247,247,247,.5);
+      color: rgba(12,10,9,.45);
     }
 
     .discovery-field {
@@ -2175,7 +2144,7 @@
       display: block;
       font-size: 14px;
       font-weight: 650;
-      color: rgba(247,247,247,.88);
+      color: rgba(12,10,9,.8);
       margin-bottom: 6px;
       line-height: 1.3;
     }
@@ -2183,7 +2152,7 @@
     .discovery-hint {
       margin: 0 0 8px;
       font-size: 12px;
-      color: rgba(247,247,247,.48);
+      color: rgba(12,10,9,.42);
       line-height: 1.25;
     }
 
@@ -2211,7 +2180,7 @@
     .meddpicc-intro {
       max-width: 820px;
       margin-bottom: 32px;
-      color: rgba(247,247,247,.68);
+      color: rgba(12,10,9,.6);
       font-size: 17px;
       line-height: 1.45;
     }
@@ -2226,7 +2195,7 @@
     .meddpicc-pillar {
       padding: 24px 26px;
       text-align: left;
-      border-color: rgba(120,120,240,.22);
+      border-color: var(--line);
     }
 
     .meddpicc-pillar-head {
@@ -2235,7 +2204,7 @@
       gap: 16px;
       margin-bottom: 20px;
       padding-bottom: 16px;
-      border-bottom: 1px solid rgba(255,255,255,.1);
+      border-bottom: 1px solid rgba(0,0,0,.08);
     }
 
     .meddpicc-letter {
@@ -2248,9 +2217,9 @@
       font-size: 18px;
       font-weight: 800;
       letter-spacing: -.04em;
-      background: rgba(120,120,240,.2);
-      border: 1px solid rgba(120,120,240,.45);
-      color: #c5c5ff;
+      background: rgba(12,21,43,.08);
+      border: 1px solid rgba(12,21,43,.2);
+      color: var(--navy);
     }
 
     .meddpicc-pillar-head h3 {
@@ -2262,7 +2231,7 @@
     .meddpicc-pillar-head p {
       margin: 6px 0 0;
       font-size: 14px;
-      color: rgba(247,247,247,.55);
+      color: rgba(12,10,9,.48);
       line-height: 1.35;
       max-width: 640px;
     }
@@ -2283,9 +2252,9 @@
       min-height: 72px;
       resize: vertical;
       border-radius: 14px;
-      border: 1px solid rgba(255,255,255,.14);
-      background: rgba(0,0,0,.35);
-      color: #fff;
+      border: 1px solid rgba(0,0,0,.12);
+      background: #ffffff;
+      color: #0c0a09;
       padding: 12px 14px;
       font-family: inherit;
       font-size: 14px;
@@ -2294,14 +2263,14 @@
 
     .discovery-input-row textarea:focus {
       outline: none;
-      border-color: rgba(52,180,167,.55);
-      box-shadow: 0 0 0 3px rgba(52,180,167,.12);
+      border-color: var(--slynk-orange);
+      box-shadow: 0 0 0 3px rgba(221,100,56,.1);
     }
 
     .mic-btn {
-      border: 1px solid rgba(255,255,255,.14);
-      background: rgba(255,255,255,.06);
-      color: rgba(247,247,247,.75);
+      border: 1px solid rgba(0,0,0,.12);
+      background: rgba(0,0,0,.03);
+      color: rgba(12,10,9,.65);
       border-radius: 14px;
       padding: 10px 12px;
       font-size: 12px;
@@ -2312,9 +2281,9 @@
     }
 
     .polish-btn {
-      border: 1px solid rgba(52,180,167,.28);
-      background: rgba(52,180,167,.1);
-      color: rgba(200,245,238,.9);
+      border: 1px solid rgba(221,100,56,.25);
+      background: rgba(221,100,56,.06);
+      color: #C94F2B;
       border-radius: 14px;
       padding: 10px 12px;
       font-size: 12px;
@@ -2330,16 +2299,16 @@
     }
 
     .polish-btn.busy {
-      color: #03221f;
-      background: rgba(52,180,167,.55);
-      border-color: rgba(52,180,167,.6);
+      color: #fff;
+      background: var(--slynk-orange);
+      border-color: var(--slynk-orange);
     }
 
     .mic-btn.on {
-      color: #03221f;
-      border-color: rgba(52,180,167,.5);
-      background: linear-gradient(135deg, #e6f7f5, var(--slynk-teal));
-      box-shadow: var(--glow-green);
+      color: #fff;
+      border-color: var(--slynk-orange);
+      background: linear-gradient(135deg, #FFF3EF, var(--slynk-orange));
+      box-shadow: none;
     }
 
     .wrapup-grid {
@@ -2366,9 +2335,9 @@
       width: 100%;
       min-height: 240px;
       border-radius: 14px;
-      border: 1px solid rgba(255,255,255,.12);
-      background: rgba(0,0,0,.4);
-      color: rgba(247,247,247,.82);
+      border: 1px solid var(--line);
+      background: var(--panel);
+      color: var(--text);
       padding: 14px;
       font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
       font-size: 12px;
@@ -2393,9 +2362,9 @@
     .wrapup-meta input {
       width: 100%;
       border-radius: 12px;
-      border: 1px solid rgba(255,255,255,.14);
-      background: rgba(0,0,0,.35);
-      color: #fff;
+      border: 1px solid rgba(0,0,0,.12);
+      background: #ffffff;
+      color: #0c0a09;
       padding: 10px 12px;
       font-size: 14px;
       font-family: inherit;
@@ -2412,26 +2381,26 @@
       margin-top: 10px;
       padding: 12px 14px;
       border-radius: 14px;
-      border: 1px solid rgba(120,120,240,.28);
-      background: rgba(120,120,240,.08);
+      border: 1px solid var(--line);
+      background: var(--panel);
       font-size: 12px;
       line-height: 1.35;
-      color: rgba(247,247,247,.65);
+      color: rgba(12,10,9,.58);
     }
 
     .sync-status {
       margin: 10px 0 0;
       font-size: 13px;
       line-height: 1.45;
-      color: rgba(247,247,247,.7);
+      color: rgba(12,10,9,.62);
     }
 
-    .sync-status.ok { color: #6ee7b7; }
-    .sync-status.warn { color: #fcd34d; }
-    .sync-status a { color: var(--slynk-teal); }
+    .sync-status.ok { color: #1a8a6e; }
+    .sync-status.warn { color: #b8860b; }
+    .sync-status a { color: var(--slynk-orange); }
     .sync-status code {
       font-size: 11px;
-      background: rgba(0,0,0,.35);
+      background: rgba(0,0,0,.06);
       padding: 2px 6px;
       border-radius: 6px;
     }
@@ -2443,8 +2412,8 @@
       z-index: 50;
       padding: 12px 16px;
       border-radius: 14px;
-      background: rgba(52,180,167,.92);
-      color: #03221f;
+      background: var(--navy);
+      color: #fff;
       font-size: 13px;
       font-weight: 700;
       box-shadow: var(--shadow);
@@ -2454,7 +2423,7 @@
       margin: 0 0 8px;
       font-size: 12px;
       font-weight: 400;
-      color: rgba(247,247,247,.48);
+      color: rgba(12,10,9,.42);
       line-height: 1.25;
       letter-spacing: normal;
     }
@@ -2463,15 +2432,15 @@
       margin-top: 16px;
       padding: 14px 16px;
       border-radius: 18px;
-      border: 1px solid rgba(52,180,167,.22);
-      background: rgba(52,180,167,.08);
-      color: rgba(247,247,247,.82);
+      border: 1px solid rgba(221,100,56,.2);
+      background: var(--orange-light);
+      color: rgba(12,10,9,.75);
       font-size: 15px;
       line-height: 1.35;
     }
 
     .key-line b {
-      color: var(--slynk-teal);
+      color: var(--slynk-orange);
       font-weight: 700;
     }
 
@@ -2479,28 +2448,28 @@
       margin-top: 26px;
       padding: 18px 20px;
       border-radius: 24px;
-      border: 1px solid rgba(255,255,255,.12);
-      background: rgba(0,0,0,.22);
-      color: rgba(245,247,251,.7);
+      border: 1px solid rgba(0,0,0,.08);
+      background: #f5f5f4;
+      color: rgba(12,10,9,.62);
       font-size: 15px;
       line-height: 1.35;
       text-align: left;
     }
 
     .speaker-note b {
-      color: #fff;
+      color: #0c0a09;
     }
 
     .footer {
       padding: 40px 0 54px;
-      color: rgba(245,247,251,.42);
+      color: rgba(12,10,9,.38);
       font-size: 13px;
       display: flex;
       justify-content: space-between;
       align-items: center;
       gap: 14px;
       flex-wrap: wrap;
-      border-top: 1px solid rgba(255,255,255,.08);
+      border-top: 1px solid rgba(0,0,0,.08);
     }
 
     .reveal {
@@ -3004,7 +2973,7 @@
             · <a :href="notionUrls.detailUrl" target="_blank" rel="noopener">Discovery log</a>
           </p>
           
-          <div v-if="lastCallCapture" class="crm-note" style="margin-top:14px;border-color:rgba(52,180,167,.35)">
+          <div v-if="lastCallCapture" class="crm-note" style="margin-top:14px;border-color:rgba(221,100,56,.25)">
             <strong>Last recording QA</strong> — source: {{ lastCallCapture.source }}
             · {{ lastCallCapture.filledCount }} fields filled
             · live {{ lastCallCapture.liveLength }} chars
@@ -3123,7 +3092,7 @@
     function defaultAudienceForSurface(surface) {
       if (surface === "network") return "network";
       if (surface === "sub") return "sub";
-      return "network";
+      return "gc";
     }
 
     createApp({
@@ -3382,7 +3351,8 @@
           recognition: null,
           stagesBase: stages,
           activeStage: stages[0],
-          activePersona: personas[0]
+          activePersona: personas[0],
+          lastCallCapture: null
         };
       },
 
