@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>You've been invited to join {{network_name}} on Sublynk</title>
+</head>
+<body style="margin:0;padding:0;background:#FAF8F5;font-family:'Inter',-apple-system,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;">
+
+<!-- Preview text -->
+<div style="display:none;max-height:0;overflow:hidden;font-size:1px;color:#FAF8F5;">
+  {{network_name}} invited you to join Sublynk. Takes 5 minutes. Other subs are already doing this.
+</div>
+
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:#FAF8F5;">
+<tr><td align="center" style="padding:24px 16px;">
+
+<!-- Email container -->
+<table role="presentation" width="600" cellpadding="0" cellspacing="0" style="background:#ffffff;border-radius:16px;overflow:hidden;box-shadow:0 1px 3px rgba(0,0,0,.06),0 4px 16px rgba(0,0,0,.04);">
+
+  <!-- Header with network logo -->
+  <tr>
+    <td style="background:#0C152B;padding:24px 40px;">
+      <table role="presentation" width="100%" cellpadding="0" cellspacing="0">
+        <tr>
+          <td>
+            <img src="https://cdn.prod.website-files.com/66b4ce93806f21c9d05dc302/66bf8dfb6b8fef22f0d060ff_Sublynk%20Logo%20Hort%20White%403x.png" alt="Sublynk" width="120" style="display:inline-block;" />
+          </td>
+          <td align="right" style="color:#94a3b8;font-size:12px;font-weight:600;letter-spacing:0.5px;">
+            INVITED BY {{NETWORK_NAME_UPPER}}
+          </td>
+        </tr>
+      </table>
+    </td>
+  </tr>
+
+  <!-- Network badge + headline -->
+  <tr>
+    <td align="center" style="padding:32px 40px 16px;">
+      <!-- Network logo -->
+      <img src="{{network_logo_url}}" alt="{{network_name}}" width="80" style="display:block;margin:0 auto 16px;border-radius:14px;" />
+      <h1 style="margin:0 0 8px;font-size:24px;line-height:1.3;color:#111827;font-weight:800;">
+        {{network_name}} needs you on Sublynk
+      </h1>
+      <p style="margin:0;font-size:16px;color:#6B7280;line-height:1.5;">
+        Create your account in under 5 minutes.<br>Your credentials. Verified. Shareable. Done.
+      </p>
+    </td>
+  </tr>
+
+  <!-- Primary CTA - above the fold -->
+  <tr>
+    <td align="center" style="padding:16px 40px 24px;">
+      <a href="{{signup_url}}" style="display:inline-block;background:#DD6438;color:#ffffff;font-size:16px;font-weight:700;text-decoration:none;padding:16px 48px;border-radius:10px;width:80%;text-align:center;box-sizing:border-box;">
+        Join {{network_name}} →
+      </a>
+      <p style="margin:8px 0 0;font-size:12px;color:#9CA3AF;">
+        Takes less than 5 minutes on your phone
+      </p>
+    </td>
+  </tr>
+
+  <!-- Divider -->
+  <tr>
+    <td style="padding:0 40px;">
+      <div style="border-top:1px solid #e7e5e4;"></div>
+    </td>
+  </tr>
+
+  <!-- What you get - 3 value cards -->
+  <tr>
+    <td style="padding:28px 40px;">
+      <p style="margin:0 0 20px;font-size:13px;font-weight:700;color:#111827;text-transform:uppercase;letter-spacing:1px;">
+        Here's what you get
+      </p>
+
+      <!-- Card 1 - It's easy -->
+      <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="margin-bottom:16px;background:#f0fdf4;border-radius:10px;">
+        <tr>
+          <td style="padding:16px 20px;">
+            <table role="presentation" width="100%" cellpadding="0" cellspacing="0">
+              <tr>
+                <td width="40" valign="top">
+                  <div style="width:32px;height:32px;border-radius:8px;background:#dcfce7;color:#16A34A;font-weight:800;font-size:16px;text-align:center;line-height:32px;">✓</div>
+                </td>
+                <td valign="top" style="padding-left:12px;">
+                  <p style="margin:0 0 2px;font-size:14px;font-weight:700;color:#111827;">We do the hard part for you</p>
+                  <p style="margin:0;font-size:13px;color:#6B7280;line-height:1.4;">We verify your insurance and licenses automatically. AI handles the legwork so you can get credentialed from your phone in minutes.</p>
+                </td>
+              </tr>
+            </table>
+          </td>
+        </tr>
+      </table>
+
+      <!-- Card 2 - Live help -->
+      <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="margin-bottom:16px;background:#fff7ed;border-radius:10px;">
+        <tr>
+          <td style="padding:16px 20px;">
+            <table role="presentation" width="100%" cellpadding="0" cellspacing="0">
+              <tr>
+                <td width="40" valign="top">
+                  <div style="width:32px;height:32px;border-radius:8px;background:#ffedd5;color:#DD6438;font-weight:800;font-size:16px;text-align:center;line-height:32px;">💬</div>
+                </td>
+                <td valign="top" style="padding-left:12px;">
+                  <p style="margin:0 0 2px;font-size:14px;font-weight:700;color:#111827;">Live help if you get stuck</p>
+                  <p style="margin:0;font-size:13px;color:#6B7280;line-height:1.4;">Real people are here to help you through setup. Not a chatbot. Not a help article. Actual customer service whenever you need it.</p>
+                </td>
+              </tr>
+            </table>
+          </td>
+        </tr>
+      </table>
+
+      <!-- Card 3 - Portal to more work -->
+      <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:#eff6ff;border-radius:10px;">
+        <tr>
+          <td style="padding:16px 20px;">
+            <table role="presentation" width="100%" cellpadding="0" cellspacing="0">
+              <tr>
+                <td width="40" valign="top">
+                  <div style="width:32px;height:32px;border-radius:8px;background:#dbeafe;color:#2563eb;font-weight:800;font-size:16px;text-align:center;line-height:32px;">🔗</div>
+                </td>
+                <td valign="top" style="padding-left:12px;">
+                  <p style="margin:0 0 2px;font-size:14px;font-weight:700;color:#111827;">Your GC needs you on here to send you work</p>
+                  <p style="margin:0;font-size:13px;color:#6B7280;line-height:1.4;">{{network_name}} uses Sublynk to credential and dispatch subs. Get verified once and your GC can keep sending you jobs.</p>
+                </td>
+              </tr>
+            </table>
+          </td>
+        </tr>
+      </table>
+
+    </td>
+  </tr>
+
+  <!-- Social proof banner -->
+  <tr>
+    <td style="padding:0 40px;">
+      <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:#0C152B;border-radius:12px;">
+        <tr>
+          <td style="padding:20px 24px;">
+            <p style="margin:0;font-size:15px;font-weight:600;color:#ffffff;line-height:1.4;text-align:center;">
+              Your GC can only dispatch jobs to compliant subs.<br>Get credentialed now so they can keep sending you work.
+            </p>
+          </td>
+        </tr>
+      </table>
+    </td>
+  </tr>
+
+  <!-- Cost + Second CTA -->
+  <tr>
+    <td align="center" style="padding:20px 40px 8px;">
+      <p style="margin:0 0 16px;font-size:15px;color:#374151;line-height:1.5;text-align:center;">
+        <strong>$100/yr.</strong> No contracts. Cancel anytime.
+      </p>
+      <a href="{{signup_url}}" style="display:inline-block;background:#DD6438;color:#ffffff;font-size:16px;font-weight:700;text-decoration:none;padding:16px 48px;border-radius:10px;width:80%;text-align:center;box-sizing:border-box;">
+        Join {{network_name}} Now →
+      </a>
+    </td>
+  </tr>
+
+  <!-- Already have account -->
+  <tr>
+    <td align="center" style="padding:8px 40px 28px;">
+      <a href="https://app.sublynk.com/login" style="font-size:13px;color:#DD6438;text-decoration:none;font-weight:600;">
+        Already have an account? Sign in
+      </a>
+    </td>
+  </tr>
+
+  <!-- PS / urgency -->
+  <tr>
+    <td style="padding:0 40px 28px;">
+      <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:#fef3c7;border-radius:10px;border-left:4px solid #f59e0b;">
+        <tr>
+          <td style="padding:14px 18px;">
+            <p style="margin:0;font-size:13px;color:#92400e;line-height:1.5;">
+              <strong>{{network_name}} is waiting for your profile.</strong> The sooner you complete setup, the sooner your GC can dispatch you.
+            </p>
+          </td>
+        </tr>
+      </table>
+    </td>
+  </tr>
+
+  <!-- Footer -->
+  <tr>
+    <td style="background:#f5f5f4;padding:20px 40px;text-align:center;">
+      <p style="margin:0 0 4px;font-size:13px;color:#9CA3AF;">
+        Questions? Reply to this email or contact <a href="mailto:help@sublynk.com" style="color:#DD6438;text-decoration:none;">help@sublynk.com</a>
+      </p>
+      <p style="margin:0;font-size:12px;color:#d6d3d1;">
+        Sublynk &middot; The bar just moved.
+      </p>
+    </td>
+  </tr>
+
+</table>
+</td></tr>
+</table>
+
+</body>
+</html>

@@ -942,8 +942,8 @@
               </div>
             </div>
             <div class="text-center mt-8 p-5 rounded-xl bg-sublynk-orange/5 border border-sublynk-orange/20">
-              <p class="text-lg font-semibold text-sublynk-navy">One water job pays for <span class="text-sublynk-orange">25+ years</span> of Sublynk.</p>
-              <p class="text-sm text-gray-500 mt-1">No pay-per-lead fees. No bidding. Direct network jobs.</p>
+              <p class="text-lg font-semibold text-sublynk-navy">One job pays for your profile <span class="text-sublynk-orange">many times over.</span></p>
+              <p class="text-sm text-gray-500 mt-1">$100/yr. Stay compliant. Stay on your GC's dispatch list.</p>
             </div>
             <div class="mt-10">
               <p class="text-sm font-semibold text-sublynk-orange uppercase tracking-wide mb-3 text-center">See how networks like AccuServe use Sublynk</p>
@@ -1119,9 +1119,9 @@
           <div class="absolute -top-3 left-6 bg-sublynk-orange text-white text-xs px-3 py-1 rounded-full font-bold">FOR CONTRACTORS & SUBS</div>
           <h3 class="text-xl font-bold text-sublynk-navy mt-2">Professional Profile</h3>
           <div class="mb-6 mt-4"><span class="text-5xl font-bold text-sublynk-navy">$100</span><span class="text-gray-500 text-lg">/year</span></div>
-          <p class="text-gray-500 text-sm mb-6">One profile for every network. One job pays for 25+ years.</p>
+          <p class="text-gray-500 text-sm mb-6">One profile for every network. One job pays for itself many times over.</p>
           <ul class="space-y-3 text-sm">
-            <li v-for="f in ['Verified professional profile','Works across all networks','Automated COI verification','License monitoring','Background check on file','Direct job leads from networks','No per-lead fees ever','Mobile-friendly dashboard']" :key="f" class="flex items-center gap-3 text-gray-700">
+            <li v-for="f in ['Verified professional profile','Works across all networks','Automated COI verification','License monitoring','Background check on file','Live customer service from real people','Mobile-friendly dashboard','No contracts, cancel anytime']" :key="f" class="flex items-center gap-3 text-gray-700">
               <svg class="w-5 h-5 text-sublynk-green flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg> {{ f }}
             </li>
           </ul>
@@ -1152,12 +1152,12 @@
         <h2 class="text-3xl font-bold text-center text-sublynk-navy">Do the math</h2>
         <div class="bg-white rounded-2xl border border-sublynk-border mt-10 overflow-hidden">
           <table class="w-full text-sm">
-            <thead><tr class="bg-sublynk-cream"><th class="text-left p-4 font-semibold text-sublynk-navy">Cost</th><th class="p-4 font-semibold text-gray-500">Pay-per-lead platforms</th><th class="p-4 font-semibold text-sublynk-orange">Sublynk</th></tr></thead>
+            <thead><tr class="bg-sublynk-cream"><th class="text-left p-4 font-semibold text-sublynk-navy">What it costs</th><th class="p-4 font-semibold text-sublynk-orange">Sublynk</th></tr></thead>
             <tbody>
-              <tr class="border-t border-sublynk-border"><td class="p-4 text-gray-700">Cost per lead</td><td class="p-4 text-center text-gray-500">$50 - $200</td><td class="p-4 text-center font-bold text-sublynk-green">$0</td></tr>
-              <tr class="border-t border-sublynk-border"><td class="p-4 text-gray-700">Annual cost (10 leads/mo)</td><td class="p-4 text-center text-gray-500">$6,000 - $24,000</td><td class="p-4 text-center font-bold text-sublynk-green">$100</td></tr>
-              <tr class="border-t border-sublynk-border"><td class="p-4 text-gray-700">Bidding against competitors</td><td class="p-4 text-center text-gray-500">Yes, always</td><td class="p-4 text-center font-bold text-sublynk-green">No</td></tr>
-              <tr class="border-t border-sublynk-border"><td class="p-4 text-gray-700">Direct network relationship</td><td class="p-4 text-center text-gray-500">No</td><td class="p-4 text-center font-bold text-sublynk-green">Yes</td></tr>
+              <tr class="border-t border-sublynk-border"><td class="p-4 text-gray-700">Your annual cost</td><td class="p-4 text-center font-bold text-sublynk-navy">$100/yr</td></tr>
+              <tr class="border-t border-sublynk-border"><td class="p-4 text-gray-700">One water mitigation job</td><td class="p-4 text-center font-bold text-sublynk-green">$2,500 - $3,500</td></tr>
+              <tr class="border-t border-sublynk-border"><td class="p-4 text-gray-700">One fire/rebuild job</td><td class="p-4 text-center font-bold text-sublynk-green">$10,000+</td></tr>
+              <tr class="border-t border-sublynk-border bg-sublynk-cream"><td class="p-4 text-gray-700 font-semibold">One job pays for your profile</td><td class="p-4 text-center font-bold text-sublynk-green text-lg">many times over</td></tr>
             </tbody>
           </table>
         </div>
@@ -2818,7 +2818,7 @@ createApp({
         icon: '<svg viewBox="0 0 24 24" fill="none" stroke="#DD6336" stroke-width="2"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>',
         steps: [
           { title: 'Get your onboarding link', desc: 'Your GC or network sends you a Sublynk invite via text or email. Tap it on your phone -- no app download needed. This is how your GC gets you compliant.', tags: ['Text or email', 'Any device', 'No app required'] },
-          { title: 'Self-onboard in minutes', desc: 'Fill out your profile, snap photos of your insurance certificate, license, and W-9. Sublynk AI reads and validates every document instantly. No more chasing paperwork.', tags: ['COI upload', 'License photo', 'Background check consent'] },
+          { title: 'We handle the hard part', desc: 'Snap photos of your insurance and license. Our AI reads and verifies everything instantly. If you get stuck, real people are here to help -- not a chatbot, not a help article.', tags: ['COI upload', 'License photo', 'Live help available'] },
           { title: 'Stay compliant, stay dispatch-ready', desc: 'Your credentials are verified and stay current automatically. When your GC gets a job, you are compliant and ready to be dispatched. No lapsed certs. No missed jobs.', tags: ['AI-verified', 'Always compliant', 'Dispatch-ready'] },
         ],
         result: 'Your GC wants to send you work. Now they can.',
@@ -3422,9 +3422,9 @@ createApp({
         calcTitle: 'What one job is worth',
         calcSubtitle: 'Your Sublynk profile costs $100/yr. Here\'s what one job from your GC pays.',
         valueCards: [
-          { title: 'Your GC needs you compliant', desc: 'Networks require every sub to be verified before dispatch. If your credentials lapse, your GC has to send the job to someone else. Sublynk keeps you at the front of the line.', iconBg: 'bg-sublynk-orange/10', icon: '<svg class="w-6 h-6 text-sublynk-orange" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>' },
-          { title: 'Insurance stays current automatically', desc: 'We verify your COI directly with your broker. When it renews, we update it. No expired certs, no last-minute scrambles, no missed jobs because your paperwork lapsed.', iconBg: 'bg-sublynk-green-light', icon: '<svg class="w-6 h-6 text-sublynk-green" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"/><path d="M12 22s4-2.5 4-6v-3l-4-1.5L8 13v3c0 3.5 4 6 4 6z"/></svg>' },
-          { title: 'One profile, every network', desc: 'Your GC works with multiple networks. Your Sublynk profile works across all of them. Get verified once, stay compliant everywhere your GC needs you.', iconBg: 'bg-blue-50', icon: '<svg class="w-6 h-6 text-sublynk-blue" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>' },
+          { title: 'We do the hard part for you', desc: 'Insurance verification, license verification, background checks. AI handles the legwork. You snap a photo on your phone and we take it from there. Five minutes and you are compliant.', iconBg: 'bg-sublynk-orange/10', icon: '<svg class="w-6 h-6 text-sublynk-orange" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>' },
+          { title: 'Live help if you get stuck', desc: 'Real customer service from real people. Not a chatbot, not a help article. If you hit a wall during setup, someone is here to walk you through it. Call, text, or chat.', iconBg: 'bg-sublynk-green-light', icon: '<svg class="w-6 h-6 text-sublynk-green" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>' },
+          { title: 'Your GC needs you on here', desc: 'Your GC can only dispatch work to compliant subs. If your credentials lapse, the job goes to someone else. Sublynk keeps you compliant so the work keeps coming.', iconBg: 'bg-blue-50', icon: '<svg class="w-6 h-6 text-sublynk-blue" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>' },
         ],
         faqs: [
           { q: 'How much does Sublynk cost for subs?', a: '$100 per year. No hidden fees. Your profile stays current across every network your GC works with.' },
@@ -3432,7 +3432,7 @@ createApp({
           { q: 'Why do I need to be compliant?', a: 'Your GC can only dispatch work to subs who meet network compliance requirements. If your insurance lapses or your background check expires, your GC has to send the job to someone else. Sublynk keeps everything current so you stay dispatch-ready.' },
           { q: 'Why does the sub pay instead of the GC?', a: 'Your Sublynk profile belongs to you, not a network. You build it once and use it across every GC and network you work with. You own your credentials.' },
           { q: 'How is my insurance verified?', a: 'We verify your Certificate of Insurance directly with your broker. When your policy renews, we update it automatically. You never have to upload a PDF again.' },
-          { q: 'What if I\'m already on Profile Gorilla?', a: 'You can be on both. The difference is Sublynk gives you one profile that works across every network, with automated insurance verification so you never upload another PDF.' },
+          { q: 'What if I\'m already on Profile Gorilla?', a: 'You can be on both. Sublynk verifies your insurance and licenses automatically, and real people are here to help if you get stuck. No scanning, no re-uploading.' },
         ],
         ctaBg: 'bg-sublynk-orange/5 border border-sublynk-orange/15',
         ctaHeadColor: 'text-sublynk-navy', ctaSubColor: 'text-gray-500',
@@ -3697,9 +3697,9 @@ createApp({
     ]);
     const activeFaqCat = ref('all');
     const allFaqs = ref([
-      { cat: 'subs', q: 'How much does Sublynk cost for contractors?', a: '$100 per year. No hidden fees, no per-lead charges, no bidding costs. One water mitigation job from a network pays for 25+ years of Sublynk.' },
+      { cat: 'subs', q: 'How much does Sublynk cost for contractors?', a: '$100 per year. No hidden fees, no per-lead charges, no bidding costs. One job from your GC pays for your profile many times over.' },
       { cat: 'subs', q: 'Can I sign up on my phone?', a: 'Yes. The entire signup and profile creation process is built for mobile. Most contractors complete it in under 5 minutes between jobs.' },
-      { cat: 'subs', q: 'What if I\'m already on Profile Gorilla?', a: 'You can be on both. Many subs use Sublynk alongside other platforms. The difference is Sublynk gives you one profile that works across every network, with automated insurance verification so you never upload another PDF.' },
+      { cat: 'subs', q: 'What if I\'m already on Profile Gorilla?', a: 'You can be on both. Sublynk verifies your insurance and licenses automatically, and real people are here to help if you get stuck. No scanning, no re-uploading.' },
       { cat: 'subs', q: 'Why does the contractor pay instead of the GC?', a: 'Your Sublynk profile belongs to you, not a network. You build it once and use it to join any network on the platform. You\'re in control of your credentials.' },
       { cat: 'subs', q: 'How is my insurance verified?', a: 'We verify your Certificate of Insurance directly with your broker. When your policy renews, we update it automatically. You never have to upload a PDF again.' },
       { cat: 'subs', q: 'What trades does Sublynk support?', a: 'All of them. Restoration, reconstruction, HVAC, plumbing, electrical, roofing, general contracting, cleaning, landscaping. If someone needs to see your license and insurance before hiring you, Sublynk works for your trade.' },
