@@ -392,7 +392,7 @@
       <div class="py-8 border-y border-sublynk-border glass-card rounded-2xl my-4 reveal">
         <div class="flex flex-wrap justify-center gap-8 md:gap-16 stagger-children">
           <div class="text-center">
-            <p class="text-3xl md:text-4xl font-extrabold text-sublynk-navy">6,000+</p>
+            <p class="text-3xl md:text-4xl font-extrabold text-sublynk-navy">1,000+</p>
             <p class="text-sm text-gray-500 mt-1">Credentialed pros</p>
           </div>
           <div class="text-center">
@@ -1485,7 +1485,7 @@
     <template v-if="currentPage === 'vs-pg'">
       <section class="py-14 md:py-20 text-center">
         <h1 class="text-4xl md:text-5xl font-extrabold text-sublynk-navy animate-fade-up">Sublynk vs Profile Gorilla</h1>
-        <p class="text-gray-500 text-lg mt-4 max-w-2xl mx-auto animate-fade-up delay-100">Profile Gorilla is an insurance-industry compliance tool for networks. Sublynk is full credentialing built for restoration, construction, and home services.</p>
+        <p class="text-gray-500 text-lg mt-4 max-w-2xl mx-auto animate-fade-up delay-100">Profile Gorilla focuses on insurance tracking. Sublynk is full credentialing with one portable profile.</p>
       </section>
 
       <div class="bg-white rounded-2xl border border-sublynk-border overflow-hidden max-w-4xl mx-auto">
@@ -1509,34 +1509,30 @@
       </div>
 
       <section class="py-12 max-w-3xl mx-auto">
-        <h2 class="text-2xl font-bold text-sublynk-navy mb-6">Why networks choose Sublynk over Profile Gorilla</h2>
+        <h2 class="text-2xl font-bold text-sublynk-navy mb-6">Why subs switch from Profile Gorilla</h2>
         <div class="space-y-4">
           <div class="bg-white rounded-xl p-6 border border-sublynk-border">
-            <h3 class="font-bold text-sublynk-navy">Built for restoration and construction, not just insurance</h3>
-            <p class="text-gray-500 text-sm mt-2">Profile Gorilla is an insurance-industry specific compliance tool. Sublynk was built for the full credentialing needs of restoration, construction, and home services networks. Licenses, background checks, COI, and more in one place.</p>
+            <h3 class="font-bold text-sublynk-navy">Your profile is yours, not the network's</h3>
+            <p class="text-gray-500 text-sm mt-2">On Profile Gorilla, your credentials are tied to whichever network enrolled you. On Sublynk, you own your profile. Take it to any network. Switch networks without re-credentialing.</p>
           </div>
           <div class="bg-white rounded-xl p-6 border border-sublynk-border">
-            <h3 class="font-bold text-sublynk-navy">Your subs actually complete onboarding</h3>
-            <p class="text-gray-500 text-sm mt-2">Profile Gorilla requires desktop access and manual COI uploads. Sublynk is mobile-first. Your subs snap a photo from their truck and they are compliant in five minutes. Completion rates go through the roof.</p>
+            <h3 class="font-bold text-sublynk-navy">Insurance verified automatically</h3>
+            <p class="text-gray-500 text-sm mt-2">Profile Gorilla requires you to upload COI PDFs manually. Sublynk verifies your insurance directly with your broker and auto-updates when your policy renews. You never touch a PDF again.</p>
           </div>
           <div class="bg-white rounded-xl p-6 border border-sublynk-border">
-            <h3 class="font-bold text-sublynk-navy">One portable profile across every network</h3>
-            <p class="text-gray-500 text-sm mt-2">On Profile Gorilla, credentials are tied to whichever network enrolled the sub. On Sublynk, subs own their profile. They take it to any network. No re-credentialing, no duplicate data entry.</p>
-          </div>
-          <div class="bg-white rounded-xl p-6 border border-sublynk-border">
-            <h3 class="font-bold text-sublynk-navy">Live support your subs can actually reach</h3>
-            <p class="text-gray-500 text-sm mt-2">When a sub gets stuck during onboarding, they talk to a real person. Not a chatbot. Not a help article. That means fewer support tickets landing on your desk and faster compliance across your roster.</p>
+            <h3 class="font-bold text-sublynk-navy">Built for mobile</h3>
+            <p class="text-gray-500 text-sm mt-2">Create your Sublynk profile on your phone between jobs. Profile Gorilla's interface was designed for desktop. You're in the field.</p>
           </div>
         </div>
       </section>
 
       <div class="text-center py-14 rounded-2xl my-8 bg-sublynk-orange/5 border border-sublynk-orange/15">
-        <h2 class="text-3xl font-bold text-sublynk-navy">Ready for full credentialing?</h2>
-        <p class="mt-2 text-gray-500">See how Sublynk handles what Profile Gorilla was never built to do. Free to start for networks.</p>
-        <a href="https://cal.com/zen-at-sublynk/15min" target="_blank" class="mt-6 bg-sublynk-orange hover:bg-sublynk-orange-hover text-white px-10 py-4 rounded-xl text-lg font-semibold shadow-lg transition mx-auto inline-flex items-center gap-2">
-          <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
-          Schedule demo
-        </a>
+        <h2 class="text-3xl font-bold text-sublynk-navy">Ready to switch?</h2>
+        <p class="mt-2 text-gray-500">Create your Sublynk profile in 5 minutes. $100/yr. Your credentials transfer.</p>
+        <button @click="showPage('subs')" class="mt-6 bg-sublynk-orange hover:bg-sublynk-orange-hover text-white px-10 py-4 rounded-xl text-lg font-semibold shadow-lg transition mx-auto flex items-center gap-2">
+          <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="8.5" cy="7" r="4"/><line x1="20" y1="8" x2="20" y2="14"/><line x1="23" y1="11" x2="17" y2="11"/></svg>
+          Join now
+        </button>
       </div>
     </template>
 
@@ -3523,62 +3519,60 @@ createApp({
         badgeBg: 'bg-sublynk-green-light',
         badgeText: 'text-sublynk-green',
         headline: 'Your GC wants to give you work.<br><span class="text-sublynk-orange">They can\'t unless you\'re compliant.</span>',
-        subhead: 'You are loyal to your contractor. But they can only dispatch jobs to subs who are verified and compliant. Sublynk keeps you compliant so the work keeps coming.',
+        subhead: 'Your GC can only dispatch jobs to subs who are verified. Sublynk makes it easy. Five minutes on your phone and you are compliant.',
         cta: 'Get compliant now',
         ctaSub: '$100/yr. Takes 5 minutes on your phone.',
         dashTitle: '', dashCount: '', dashLabel: '', dashSubs: [],
         calcTitle: 'What one job is worth',
-        calcSubtitle: 'Your Sublynk profile costs $100/yr. Here\'s what one job from your GC pays.',
+        calcSubtitle: 'Your Sublynk profile costs $100/yr. Here is what one job from your GC pays.',
         valueCards: [
-          { title: 'We do the hard part for you', desc: 'Insurance verification, license verification, background checks. AI handles the legwork. You snap a photo on your phone and we take it from there. Five minutes and you are compliant.', iconBg: 'bg-sublynk-orange/10', icon: '<svg class="w-6 h-6 text-sublynk-orange" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>' },
-          { title: 'Live help if you get stuck', desc: 'Real customer service from real people. Not a chatbot, not a help article. If you hit a wall during setup, someone is here to walk you through it. Call, text, or chat.', iconBg: 'bg-sublynk-green-light', icon: '<svg class="w-6 h-6 text-sublynk-green" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>' },
-          { title: 'Your GC needs you on here', desc: 'Your GC can only dispatch work to compliant subs. If your credentials lapse, the job goes to someone else. Sublynk keeps you compliant so the work keeps coming.', iconBg: 'bg-blue-50', icon: '<svg class="w-6 h-6 text-sublynk-blue" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>' },
+          { title: 'We do the hard part for you', desc: 'Insurance, license, background check. Snap a photo on your phone. We handle the rest. Five minutes and you are compliant.', iconBg: 'bg-sublynk-orange/10', icon: '<svg class="w-6 h-6 text-sublynk-orange" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>' },
+          { title: 'Live help if you get stuck', desc: 'Real people, not a chatbot. If you hit a wall during setup, call, text, or chat. Someone is here to walk you through it.', iconBg: 'bg-sublynk-green-light', icon: '<svg class="w-6 h-6 text-sublynk-green" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>' },
+          { title: 'Your GC needs you on here', desc: 'No compliance, no dispatch. If your credentials lapse, the job goes to someone else. Sublynk keeps you current so the work keeps coming.', iconBg: 'bg-blue-50', icon: '<svg class="w-6 h-6 text-sublynk-blue" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>' },
         ],
         faqs: [
-          { q: 'How much does Sublynk cost for subs?', a: '$100 per year. No hidden fees. Your profile stays current across every network your GC works with.' },
-          { q: 'Can I do this on my phone?', a: 'Yes. The entire signup and profile creation process is built for mobile. Most subs complete it in under 5 minutes between jobs.' },
-          { q: 'Why do I need to be compliant?', a: 'Your GC can only dispatch work to subs who meet network compliance requirements. If your insurance lapses or your background check expires, your GC has to send the job to someone else. Sublynk keeps everything current so you stay dispatch-ready.' },
-          { q: 'Why does the sub pay instead of the GC?', a: 'Your Sublynk profile belongs to you, not a network. You build it once and use it across every GC and network you work with. You own your credentials.' },
-          { q: 'How is my insurance verified?', a: 'We verify your Certificate of Insurance directly with your broker. When your policy renews, we update it automatically. You never have to upload a PDF again.' },
-          { q: 'What if I\'m already on Profile Gorilla?', a: 'You can be on both. Sublynk verifies your insurance and licenses automatically, and real people are here to help if you get stuck. No scanning, no re-uploading.' },
-          { q: 'What is Sublynk Certified?', a: 'Sublynk Certified is an upgrade from the $100/yr plan. For $25/mo (Essential) or $35/mo (Pro, unlimited networks), you get access to more GCs, more networks, automated broker COI requests, and a portable profile that works everywhere. It is a growth path for subs who want more work.' },
+          { q: 'How much does Sublynk cost for subs?', a: '$100 per year to be on one bench. No hidden fees. Want more work? Upgrade to Sublynk Certified for $25/mo.' },
+          { q: 'Can I do this on my phone?', a: 'Yes. Built for mobile. Most subs finish in under 5 minutes between jobs.' },
+          { q: 'Why do I need to be compliant?', a: 'Your GC can only dispatch work to compliant subs. If your insurance lapses, they send the job to someone else. Sublynk keeps everything current so you stay dispatch-ready.' },
+          { q: 'How do I get help?', a: 'Live customer support in the app. Real people, not chatbots. Call, text, or use the chat bubble. We are here.' },
+          { q: 'What is Sublynk Certified?', a: 'An upgrade from $100/yr. For $25/mo (Essential) or $35/mo (Pro, unlimited networks), you get access to more GCs, more networks, automated broker COI requests, and a portable profile that works everywhere. It is a growth path for subs who want more work.' },
         ],
         ctaBg: 'bg-sublynk-orange/5 border border-sublynk-orange/15',
         ctaHeadColor: 'text-sublynk-navy', ctaSubColor: 'text-gray-500',
         ctaFinal: 'Stay compliant. Stay working.', ctaFinalSub: '5 minutes to set up. $100/yr. Your GC will thank you.',
       },
       contractors: {
-        badge: 'Built for every trade',
+        badge: 'Sublynk Certified',
         badgeBg: 'bg-blue-50',
         badgeText: 'text-sublynk-blue',
-        headline: 'One profile.<br><span class="text-sublynk-orange">Every network you work with.</span>',
-        subhead: 'HVAC, plumbing, electrical, roofing, general contracting. Whatever your trade, create one verified profile and use it to join any network that needs you.',
-        cta: 'Create your profile',
-        ctaSub: '$100/yr. Works across every network on Sublynk.',
+        headline: 'One profile.<br><span class="text-sublynk-orange">Every network. More work.</span>',
+        subhead: 'Get Sublynk Certified. A portable profile that works across every network and GC. Access more jobs, more connections, and automated COI management. Built for contractors who want to grow.',
+        cta: 'Get Certified',
+        ctaSub: 'Essential $25/mo (first network) or Pro $35/mo (unlimited).',
         dashTitle: '', dashCount: '', dashLabel: '', dashSubs: [],
-        calcTitle: 'What one job is worth',
-        calcSubtitle: 'Your Sublynk profile costs $100/yr. Here\'s what one call from a property manager or GC pays.',
+        calcTitle: 'What growth looks like',
+        calcSubtitle: 'Your Sublynk Certified profile opens doors that a $100/yr sub account cannot.',
         valueCards: [
-          { title: 'Stop filling out the same forms', desc: 'Every GC and property manager wants the same things: license, insurance, background check. Do it once on Sublynk, use it everywhere.', iconBg: 'bg-sublynk-orange/10', icon: '<svg class="w-6 h-6 text-sublynk-orange" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="5" width="20" height="14" rx="2"/><path d="M2 10h20"/></svg>' },
-          { title: 'Your insurance stays current', desc: 'We pull your COI from your broker and update it when it renews. No more emergency calls from a GC saying your cert expired.', iconBg: 'bg-sublynk-green-light', icon: '<svg class="w-6 h-6 text-sublynk-green" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="M9 12l2 2 4-4"/></svg>' },
-          { title: 'Always dispatch-ready', desc: 'Your credentials stay current and visible to every network and GC you work with. When they need a verified contractor, you are already compliant and ready.', iconBg: 'bg-blue-50', icon: '<svg class="w-6 h-6 text-sublynk-blue" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>' },
+          { title: 'One profile, every network', desc: 'Build it once. Take it anywhere. Your credentials, insurance, and background check travel with you. No re-entering the same info for every GC.', iconBg: 'bg-sublynk-orange/10', icon: '<svg class="w-6 h-6 text-sublynk-orange" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="5" width="20" height="14" rx="2"/><path d="M2 10h20"/></svg>' },
+          { title: 'Your COI updates itself', desc: 'We pull your insurance from your broker and update it automatically when it renews. No more emergency calls from a GC saying your cert expired.', iconBg: 'bg-sublynk-green-light', icon: '<svg class="w-6 h-6 text-sublynk-green" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="M9 12l2 2 4-4"/></svg>' },
+          { title: 'Access more GCs and networks', desc: 'Sublynk Certified contractors are visible to more GCs and networks looking for verified pros. More visibility, more dispatch, more work.', iconBg: 'bg-blue-50', icon: '<svg class="w-6 h-6 text-sublynk-blue" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>' },
         ],
         faqs: [
-          { q: 'I\'m not in restoration. Is Sublynk for me?', a: 'Yes. Sublynk works for any trade that needs to be credentialed: HVAC, plumbing, electrical, roofing, general contracting, cleaning, landscaping. If someone needs to see your license and insurance before hiring you, Sublynk is for you.' },
-          { q: 'What\'s the difference between a sub and a contractor on Sublynk?', a: 'Same platform, same profile. "Sub" is restoration industry language. If you call yourself a contractor, vendor, or service provider, it all works the same way.' },
-          { q: 'Does Sublynk get me jobs?', a: 'Sublynk does not assign jobs or guarantee work. It keeps your credentials verified and visible to the networks and GCs you work with. When they need to dispatch, your profile is always compliant and ready.' },
-          { q: 'Can I use Sublynk if I\'m a sole proprietor?', a: 'Absolutely. Sublynk works for one-person shops and 50-person crews equally.' },
+          { q: 'How much does Sublynk Certified cost?', a: 'Essential is $25/mo for your first network. Pro is $35/mo for unlimited network access. If you are upgrading from a $100/yr sub account, you get a prorated credit.' },
+          { q: 'What is the difference between a sub and a contractor?', a: 'Subs pay $100/yr for basic compliance with one GC. Contractors upgrade to Sublynk Certified ($25-35/mo) and get a portable profile, access to more networks, automated COI, and the ability to grow their business.' },
+          { q: 'I am not in restoration. Is Sublynk for me?', a: 'Yes. HVAC, plumbing, electrical, roofing, general contracting, cleaning, landscaping. If someone needs to verify your license and insurance, Sublynk works for you.' },
+          { q: 'Can I use Sublynk if I am a sole proprietor?', a: 'Yes. Sublynk works for one-person shops and 50-person crews.' },
         ],
         ctaBg: 'bg-sublynk-orange/5 border border-sublynk-orange/15',
         ctaHeadColor: 'text-sublynk-navy', ctaSubColor: 'text-gray-500',
-        ctaFinal: 'Ready to stop filling out forms?', ctaFinalSub: 'One profile. Every network. $100/yr.',
+        ctaFinal: 'Ready to grow your business?', ctaFinalSub: 'One profile. Every network. Starting at $25/mo.',
       },
       networks: {
         badge: 'Free to start',
         badgeBg: 'bg-sublynk-green-light',
         badgeText: 'text-sublynk-green',
         headline: 'Credential your subs<br><span class="text-sublynk-orange">in days, not months.</span>',
-        subhead: 'Automated license verification, COI monitoring, and background checks. Your subs onboard themselves. You stay compliant.',
+        subhead: 'Send an invite. Your subs onboard themselves on their phone. License, insurance, and background check verified automatically. You pay nothing.',
         cta: 'Schedule demo',
         ctaSub: 'Free to start. Your subs pay for themselves.',
         dashTitle: 'Network Dashboard', dashCount: '47', dashLabel: 'Active subs',
@@ -3590,15 +3584,15 @@ createApp({
         calcTitle: 'How networks use Sublynk',
         calcSubtitle: 'Real results from real networks on the platform.',
         valueCards: [
-          { title: 'License verification', desc: 'Verified against state governing bodies. Auto-monitored for expiration.', iconBg: 'bg-sublynk-orange/10', icon: '<svg class="w-6 h-6 text-sublynk-orange" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="5" width="20" height="14" rx="2"/><path d="M2 10h20"/></svg>' },
-          { title: 'COI monitoring', desc: 'Insurance verified direct from brokers. Auto-updates on renewal. No more chasing PDFs.', iconBg: 'bg-sublynk-green-light', icon: '<svg class="w-6 h-6 text-sublynk-green" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"/><path d="M12 22s4-2.5 4-6v-3l-4-1.5L8 13v3c0 3.5 4 6 4 6z"/></svg>' },
-          { title: 'Background checks', desc: 'Completed in 3 days or less. Results stored securely on the contractor\'s profile.', iconBg: 'bg-blue-50', icon: '<svg class="w-6 h-6 text-sublynk-blue" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="M9 12l2 2 4-4"/></svg>' },
+          { title: 'Subs onboard themselves', desc: 'Send an invite link. They sign up on their phone in 5 minutes. You do not chase paperwork or schedule calls.', iconBg: 'bg-sublynk-orange/10', icon: '<svg class="w-6 h-6 text-sublynk-orange" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="5" width="20" height="14" rx="2"/><path d="M2 10h20"/></svg>' },
+          { title: 'Everything verified automatically', desc: 'License checked against state records. Insurance verified with the broker. Background check completed in days. All automated.', iconBg: 'bg-sublynk-green-light', icon: '<svg class="w-6 h-6 text-sublynk-green" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"/><path d="M12 22s4-2.5 4-6v-3l-4-1.5L8 13v3c0 3.5 4 6 4 6z"/></svg>' },
+          { title: 'Compliance stays current', desc: 'Insurance renews? We update it. License expires? You get an alert. No more spreadsheets, no more chasing.', iconBg: 'bg-blue-50', icon: '<svg class="w-6 h-6 text-sublynk-blue" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="M9 12l2 2 4-4"/></svg>' },
         ],
         faqs: [
-          { q: 'How much does it cost for networks?', a: 'Free to start. Your contractors pay for their own profiles ($100/yr), so your cost to onboard them is zero. For advanced network management features, contact us for pricing.' },
-          { q: 'Do my subs have to pay?', a: 'Yes, contractors pay $100/yr for their profile. This means the profile belongs to them and works across every network, not just yours. It also means your onboarding cost is zero.' },
-          { q: 'How do subs get onboarded?', a: 'You send an invite. They create their account, add their info, and we verify everything in the background. Self-serve, no hand-holding.' },
-          { q: 'What if a sub\'s insurance expires?', a: 'We monitor it 24/7. You get an alert before it lapses. We pull the updated cert from their broker automatically when it renews.' },
+          { q: 'How much does it cost for networks?', a: 'Free to start. Your subs pay $100/yr for their own profiles. Your onboarding cost is zero.' },
+          { q: 'Do my subs have to pay?', a: 'Yes. $100/yr. The profile belongs to them and works across every network, not just yours. That is why you pay nothing.' },
+          { q: 'How do subs get onboarded?', a: 'You send an invite. They sign up on their phone, add their info, and we verify everything. Five minutes. Self-serve.' },
+          { q: 'What if a sub\'s insurance expires?', a: 'We monitor it. You get an alert before it lapses. We pull the updated cert from their broker automatically when it renews.' },
         ],
         ctaBg: 'bg-sublynk-navy',
         ctaHeadColor: 'text-white', ctaSubColor: 'text-white/60',
@@ -3609,7 +3603,7 @@ createApp({
         badgeBg: 'bg-sublynk-green-light',
         badgeText: 'text-sublynk-green',
         headline: 'Know every contractor<br><span class="text-sublynk-orange">before they touch your property.</span>',
-        subhead: 'Licensed. Insured. Background checked. Every contractor who works your properties, verified and monitored automatically. No more binders of expired certs.',
+        subhead: 'Licensed. Insured. Background checked. Every contractor verified and monitored automatically. No more binders. No more expired certs.',
         cta: 'Start vetting contractors',
         ctaSub: 'Free to start. Contractors pay for their own profiles.',
         dashTitle: 'Property Dashboard', dashCount: '124', dashLabel: 'Vendors',
@@ -3640,7 +3634,7 @@ createApp({
         badgeBg: 'bg-purple-50',
         badgeText: 'text-purple-600',
         headline: 'One non-compliant contractor.<br><span class="text-sublynk-orange">Your entire brand at risk.</span>',
-        subhead: 'Credential every contractor across every franchise location. Real-time compliance visibility from HQ. Your franchisees self-manage, you set the standards.',
+        subhead: 'Set the standards at HQ. Your franchisees self-manage. Every contractor across every location, credentialed and monitored in real time.',
         cta: 'Schedule demo',
         ctaSub: 'Custom pricing for franchise networks.',
         dashTitle: 'Franchise HQ Dashboard', dashCount: '340', dashLabel: 'Contractors',
@@ -3671,7 +3665,7 @@ createApp({
         badgeBg: 'bg-yellow-50',
         badgeText: 'text-yellow-600',
         headline: 'Get your crew compliant.<br><span class="text-sublynk-orange">Stop chasing paperwork.</span>',
-        subhead: 'Your franchisor requires credentialed contractors. Your contractors hate paperwork. Sublynk handles it. They self-onboard, you meet corporate standards, everyone gets back to work.',
+        subhead: 'Your franchisor sets the rules. Your contractors sign up on their phone. Sublynk verifies everything. You meet corporate standards without lifting a finger.',
         cta: 'Get your crew on Sublynk',
         ctaSub: 'Free for you. Contractors pay $100/yr.',
         dashTitle: 'Location Dashboard', dashCount: '12', dashLabel: 'Crew members',
