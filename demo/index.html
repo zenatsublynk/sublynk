@@ -3,14 +3,14 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
-  <title>Sublynk — Restoration 1 of Huntington Beach</title>
+  <title>Sublynk — Credentialing Demo Deck</title>
   <link rel="preconnect" href="https://cdn.prod.website-files.com" crossorigin />
   <link rel="preconnect" href="https://rsms.me" crossorigin />
   <link rel="stylesheet" href="https://rsms.me/inter/inter.css" />
   <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
   <script>
 /**
- * Audience-specific demo deck copy — Network, Sub (contractor), GC.
+ * Audience-specific demo deck copy — Network, Sub, GC.
  * Loaded by SublynkDemo.html (file:// or served).
  */
 (function () {
@@ -75,8 +75,8 @@
 
   const VIEW_META = {
     network: { id: "network", menuLabel: "Network", badge: "Network ops" },
-    sub: { id: "sub", menuLabel: "Sub / Contractor", badge: "Contractor education" },
-    gc: { id: "gc", menuLabel: "Restoration franchise", badge: "Restoration 1 · Huntington Beach" }
+    sub: { id: "sub", menuLabel: "Sub", badge: "Sub education" },
+    gc: { id: "gc", menuLabel: "GC", badge: "GC bench manager" }
   };
 
   const SURFACE_OPTIONS = {
@@ -146,7 +146,7 @@
       flow: {
         kicker: "04 · Demo the operating system",
         title: "Show the loop recruiting can explain in regional standups.",
-        copy: "Nine steps. One loop. Every step maps to how your team educates new contractors and keeps GC programs clean.",
+        copy: "Nine steps. One loop. Every step maps to how your team educates new subs and keeps GC programs clean.",
         boardTitle: "The continuous credentialing loop",
         boardSub: "Green is living status across programs — when COI expires or a TPA rule changes, the signal updates before dispatch."
       },
@@ -167,8 +167,8 @@
       },
       persona: {
         kicker: "06 · Persona talk track",
-        title: "One loop — network, GC, and contractor lenses.",
-        copy: "Use the same diagram in recruiting standups, GC partner calls, and contractor education."
+        title: "One loop — network, GC, and sub lenses.",
+        copy: "Use the same diagram in recruiting standups, GC partner calls, and sub education."
       },
       proof: {
         kicker: "07 · What the network should remember",
@@ -182,7 +182,7 @@
       },
       close: {
         eyebrow: "Closing slide",
-        title: "Every tech credentialed.<br />Every carrier <span>audit-ready.</span>",
+        title: "Don't sell a portal.<br />Sell <span>GC-ready bench quality.</span>",
         oldQuote: "“Go use Profile Gorilla and wait.”",
         newQuote: "“You’re wanted, guided, verified, and ready for the GC’s program.”",
         backops: "<strong style=\"color: var(--slynk-orange);\">Sublynk</strong> is the backops layer between your network and every GC program — recruit, compliant, dispatched, without recruiting becoming compliance."
@@ -198,7 +198,7 @@
           interrupt: "Credentialing jail kills recruits — not your value prop to the GC.",
           pointAt: "Steps 1–2 with recruiting; 3–8 as Sublynk; 9 as GC dispatch handoff.",
           why: "Speed protects recruiting momentum. Clarity keeps subs from quitting when requirements feel random.",
-          close: "You define program quality. Sublynk makes contractors cross the line while they still want the work."
+          close: "You define program quality. Sublynk makes subs cross the line while they still want the work."
         },
         {
           id: "gc",
@@ -214,17 +214,17 @@
         {
           id: "sub",
           kicker: "Your bench",
-          name: "Contractor / franchise",
+          name: "Sub / franchise",
           fear: "Mystery red, duplicate uploads, lost jobs while waiting.",
           role: "Get compliant for the GC program your network placed them in.",
           interrupt: "Red without a reason is not compliance — it is anxiety.",
           pointAt: "Fix list, guided upload, renewal loop.",
-          why: "Contractors are not tech people — they need plain English and respect.",
+          why: "Subs are not tech people — they need plain English and respect.",
           close: "Simple path: upload, understand, fix, get green, stay green for the GC."
         }
       ],
       gcSteps: [
-        { num: 1, title: "Recruit", copy: "Regional recruiting selects contractors for the right GC program." },
+        { num: 1, title: "Recruit", copy: "Regional recruiting selects subs for the right GC program." },
         { num: 2, title: "Program join", copy: "One guided invite — requirements for that network × GC path." },
         { num: 9, title: "Dispatch → job", copy: "GC assigns when the network signal is green." }
       ],
@@ -237,7 +237,7 @@
         { num: 8, title: "Renewal cadence", copy: "Before expiry breaks a GC assignment." }
       ],
       stages: stages({
-        1: { title: "Recruit the right contractor", copy: "Network recruiting picks who belongs in the bench for each GC program.", points: ["Regional ownership", "Program + service area defined", "Strike while motivation is high"], signal: "Intent captured", phrase: "You won the recruit — don't lose them to paperwork." },
+        1: { title: "Recruit the right sub", copy: "Network recruiting picks who belongs in the bench for each GC program.", points: ["Regional ownership", "Program + service area defined", "Strike while motivation is high"], signal: "Intent captured", phrase: "You won the recruit — don't lose them to paperwork." },
         2: { title: "Invite once, program-specific", copy: "One path per program — what the GC and TPA actually require.", points: ["Not a generic PG dump", "Recruiting can explain the path", "Clear next steps"], signal: "Path opened", phrase: "This is how recruiting educates subs on day one." },
         9: { title: "Dispatch to GC job", copy: "Network attests readiness; GC assigns with confidence.", points: ["Green for this program", "No last-minute scramble", "Trust preserved with GC partner"], signal: "Ready for job", phrase: "GC dispatch bets on your signal, not a spreadsheet." }
       }),
@@ -256,74 +256,74 @@
     sub: {
       ...VIEW_META.sub,
       hero: {
-        eyebrow: "Subcontractor · working with your GC",
-        titleLead: "Get job-ready for your GC —",
-        titleGrad: "know exactly what’s missing.",
-        sub: "Your general contractor invited you because they want you on the job. Sublynk turns their requirements into a <b>guided path</b> — plain English, fast uploads, and a clear green light when you’re ready for dispatch.",
+        eyebrow: "Sub · credentialing for your network",
+        titleLead: "Autonomous Credentialing",
+        titleGrad: "Network AI",
+        sub: "Your network wants you on the job. Sublynk makes their requirements simple so you get to green and work starts flowing.",
         metrics: [
-          { strong: "Invite", span: "One link from your GC — requirements matched to the job." },
-          { strong: "Upload", span: "Background checks and COI without the Profile Gorilla wait." },
-          { strong: "Fix list", span: "Red always means what to fix — not a mystery flag." },
-          { strong: "Work", span: "Stay green so the GC can assign without last-minute holds." }
+          { strong: "Onboard", span: "One link — requirements matched to the program.", link: "Sublynk/onboarding-guide.html", linkLabel: "View onboarding guide →" },
+          { strong: "Credentialing", span: "Background checks and COI without the Profile Gorilla wait.", link: "https://app.sublynk.com/dashboard/program-invitations/4ef0ac25-845f-4e38-8209-7690bd523f7a?memberOrgId=be8118fc-a32b-46e0-b3c6-7dfc9f40d0a2&programOrgId=c3b19233-1793-4105-bec9-4b37c6fc10db", linkLabel: "See it live →" },
+          { strong: "Fix list", span: "Red always means what to fix — not a mystery flag.", link: "https://app.sublynk.dev/dashboard/my-bench", linkLabel: "View bench →" },
+          { strong: "Work", span: "Stay green so your network can dispatch without last-minute holds.", link: "https://app.sublynk.com/profiles/paul-davis-restoration-of-utah", linkLabel: "View profile →" }
         ]
       },
       oldNew: {
         kicker: "01 · Old World vs New World",
         title: "Stop staring at a loading screen.",
-        titleSoft: "Get a clear path to green for your GC.",
-        copy: "Old portals treat subs like another login to babysit. The new world respects your trade: tell you what the GC needs, help you fix it, keep you ready for the next job.",
-        oldSummary: "The GC sends a Profile Gorilla link. Uploads spin forever, status goes red for no clear reason, and you call the GC panicked while a job waits.",
-        newSummary: "You keep the GC relationship. Sublynk shows every requirement in plain English, speeds uploads, runs broker COI behind the scenes, and tells you and the GC when you’re job-ready.",
+        titleSoft: "Get a clear path to green for your network.",
+        copy: "Old portals treat subs like another login to babysit. The new world respects your trade: tell you what the program needs, help you fix it, keep you ready for dispatch.",
+        oldSummary: "Your network sends a Profile Gorilla link. Uploads spin forever, status goes red for no clear reason, and you are stuck panicking while a job waits.",
+        newSummary: "Sublynk shows every requirement in plain English, speeds uploads, runs broker COI behind the scenes, and tells you and your network when you are job-ready.",
         oldImpact: "you lose jobs while waiting on a portal that feels built for someone else.",
-        newImpact: "guided → fixed → green → dispatched by your GC.",
+        newImpact: "guided → fixed → green → dispatched.",
         oldWorld: [
-          { icon: "1", title: "GC sends PG link", copy: "Another portal password; requirements buried in PDFs." },
+          { icon: "1", title: "Network sends PG link", copy: "Another portal password; requirements buried in PDFs." },
           { icon: "2", title: "Slow uploads", copy: "Background check spinning — time for coffee, job still waiting." },
-          { icon: "3", title: "Mystery red", copy: "Status red with no fix list — you call the GC stressed." },
-          { icon: "4", title: "Double work", copy: "Upload here, re-upload for TPA or GC in another system." },
+          { icon: "3", title: "Mystery red", copy: "Status red with no fix list — you are stuck guessing." },
+          { icon: "4", title: "Double work", copy: "Upload here, re-upload for TPA/MRN in another system." },
           { icon: "5", title: "Job at risk", copy: "Dispatch holds because nobody knows if you’re truly compliant." }
         ],
         newWorld: [
-          { title: "Guided invite from GC", copy: "See only what this GC program requires — explained simply." },
+          { title: "Guided invite from your network", copy: "See only what this program requires — explained simply." },
           { title: "Fast, respectful uploads", copy: "Two clicks for a background check; chat support when something’s odd." },
           { title: "Fix list in plain English", copy: "Red means exactly what to upload or who to call (broker, etc.)." },
           { title: "Stay green", copy: "Renewals and expirations flagged before you lose the next dispatch." },
-          { title: "GC gets one answer", copy: "Ready for work — so your relationship stays strong." }
+          { title: "Network gets one answer", copy: "Ready for work — so dispatch happens without delays." }
         ]
       },
       oneLine: {
         kicker: "02 · The line that lands",
-        lead: "Your GC already chose you for the work.",
+        lead: "Your network already chose you for the work.",
         grad: "Sublynk helps you cross compliance without the runaround.",
-        sub: "You’re not a tech company — you’re the trade. Sublynk documents every step in plain English — what to upload, what happens when you hit submit, when your GC can assign you — so subs never feel talked down to."
+        sub: "You are not a tech company — you are the trade. Sublynk documents every step in plain English — what to upload, what happens when you hit submit, when your network can dispatch you — so subs never feel talked down to."
       },
       whoDoesWhat: {
         kicker: "03 · Who does what",
         title: "You focus on three things. Sublynk handles the compliance heavy lift.",
-        copy: "The GC owns the relationship and the job. You shouldn’t spend your day chasing broker emails and guessing portal flags.",
-        gcTitle: "You & your GC",
+        copy: "Your network owns the program and the dispatch. You should not spend your day chasing broker emails and guessing portal flags.",
+        gcTitle: "You & your network",
         gcDesc: "Accept invite, complete your path, take the work when green.",
-        sublynkDesc: "Collect, verify, broker COI, QA, monitor, renew — with humans when it’s confusing.",
-        bridgeBefore: "PG link → spin → red → call GC → job waits",
-        bridgeAfter: "Invite → fix list → green → GC dispatches"
+        sublynkDesc: "Collect, verify, broker COI, QA, monitor, renew — with humans when it is confusing.",
+        bridgeBefore: "PG link → spin → red → panic → job waits",
+        bridgeAfter: "Invite → fix list → green → dispatched"
       },
       flow: {
         kicker: "04 · Walk through your path",
-        title: "Nine steps — same loop your GC trusts.",
-        copy: "Tap any step to see what happens on your side vs what Sublynk runs for the GC.",
+        title: "Nine steps — same loop your network trusts.",
+        copy: "Tap any step to see what happens on your side vs what Sublynk runs for the program.",
         boardTitle: "Your credentialing path",
         boardSub: "Green is not one-and-done. When insurance or licenses change, you see what to fix before you lose the next job."
       },
       alwaysOn: {
         kicker: "05 · Stay ready between jobs",
         title: "Staying green matters <span class=\"soft\">as much as getting green.</span>",
-        copy: "COI and licenses expire. Sublynk nudges you before the GC finds out at dispatch time.",
+        copy: "COI and licenses expire. Sublynk nudges you before your network finds out at dispatch time.",
         orbTitle: "Always on your side",
         orbSub: "Remind. Fix. Renew. Keep working.",
         listTitle: "What you avoid",
-        listIntro: "The problems that cost subs jobs with their GC.",
+        listIntro: "The problems that cost subs jobs with their network.",
         items: [
-          { b: "No silent expiry.", s: "Renewal reminders before the GC puts you on hold." },
+          { b: "No silent expiry.", s: "Renewal reminders before your network puts you on hold." },
           { b: "Red = actionable.", s: "You see what’s missing — not a generic error." },
           { b: "Support when it’s scary.", s: "Background check questions? Talk to a human — not a ticket black hole." },
           { b: "Respect for your time.", s: "Uploads that finish while you’re still at the desk." }
@@ -331,240 +331,525 @@
       },
       persona: {
         kicker: "06 · How this feels",
-        title: "Same system — your lens, your GC’s lens, the network’s lens.",
-        copy: "When educating subs, stay on their outcome; reference the GC only as the reason the path exists."
+        title: "Same system — your lens, your network’s lens, the program’s lens.",
+        copy: "Stay on the sub’s outcome; the network and program are why the path exists."
+      },
+      programReqs: {
+        kicker: "07 · Program requirements",
+        title: "See exactly what’s missing — <span class=\"soft\">fix it before anyone asks.</span>",
+        copy: "Every network has different credentialing requirements. Sublynk shows you what’s incomplete for each program so nothing stalls your onboarding.",
+        cards: [
+          {
+            title: "Program dashboard",
+            desc: "Active programs appear in your My Programs section. Click into any program to see its full dashboard — overview, details, and what the network sees.",
+            details: [
+              "Overview tab shows all incomplete requirements at a glance",
+              "Details tab shows information shared with the network",
+              "The network sees the exact same dashboard you do"
+            ]
+          },
+          {
+            title: "Dynamic requirement tracking",
+            desc: "Incomplete requirements are calculated from your program details — status, selected programs, and states. Change your selections and the checklist updates in real time.",
+            details: [
+              "Requirements vary by network, program, and state",
+              "An IICRC WRT cert may be required for one network but not another",
+              "Add a state and new license requirements surface automatically"
+            ]
+          },
+          {
+            title: "Common missing items",
+            desc: "Sublynk flags exactly what’s outstanding so you can act — not guess. Everything from insurance to background checks to state licenses.",
+            details: [
+              "Updated insurance and COI from agent or broker",
+              "State-specific contractor or home improvement licenses",
+              "Background checks for personnel with policyholder access",
+              "Program-specific certifications (e.g. RRP, Lead, IICRC)"
+            ]
+          },
+          {
+            title: "Shared visibility",
+            desc: "Your network partner sees the same incomplete requirements, program details, insurance info, and credentials you do. No surprises — everyone works from one source of truth.",
+            details: [
+              "Contracts, W-9s, insurance docs, and credentials all accessible",
+              "Detailed views show who requires what, for which services, in which states",
+              "Once a requirement is met, the incomplete flag clears automatically"
+            ]
+          }
+        ]
+      },
+      joinNetwork: {
+        kicker: "08 · Joining a network",
+        title: "Find a program, request access, <span class=\"soft\">start credentialing.</span>",
+        copy: "Programs are managed repair networks and TPAs that Sublynk works with. Your dashboard shows invited programs and others you can request to join.",
+        steps: [
+          {
+            title: "Find and request programs",
+            desc: "Your dashboard shows programs you have been invited to and additional programs available to join. Some programs have specific limitations on contractor types they accept.",
+            details: [
+              "See invited programs and available programs on your dashboard",
+              "Request to join by agreeing to share organization data",
+              "Network recruiting teams get notified and reach out",
+              "Some programs limit by trade (e.g. roofing, exteriors, emergency services)"
+            ]
+          },
+          {
+            title: "Select your services",
+            desc: "Choose the services you are qualified to perform. Each service may have different insurance, license, and certification requirements. The system calculates everything in real time.",
+            details: [
+              "Pre-selected services appear if the recruiter chose them",
+              "View additional available services to add",
+              "Service selections directly impact credentialing requirements",
+              "Adding water mitigation, for example, requires pollution coverage"
+            ]
+          },
+          {
+            title: "Review requirements",
+            desc: "Requirements are set by the network and include general experience, insurance minimums, licenses, and certifications. Everything is surfaced upfront so there are no surprises mid-onboarding.",
+            details: [
+              "Company legal name is critical for licensing and insurance",
+              "Insurance requirements adjust based on selected services",
+              "Workers comp exemption available for zero W-2 employee orgs",
+              "License and certification requirements vary by state"
+            ]
+          },
+          {
+            title: "Sign contracts and authorize",
+            desc: "Contracts are a mix of agreements between you and the network, plus Sublynk documents. Everything is signed digitally and stored permanently.",
+            details: [
+              "Third-party insurance authorization (mandatory) lets Sublynk contact your broker",
+              "W-9 pre-populated with validated IRS information",
+              "Background check attestation for policyholder access",
+              "Workers comp attestation for eligible exemptions"
+            ]
+          }
+        ],
+        pricing: {
+          title: "Pricing",
+          copy: "$25/month subscription. $10 for every additional network joined. No hidden fees."
+        },
+        nextStep: {
+          title: "After signup",
+          copy: "Your organization is ready to move into credentialing. Requirements are pre-loaded and your fix list is live."
+        }
+      },
+      coiManagement: {
+        kicker: "09 · COI management",
+        title: "Your broker handles the COI. <span class=\"soft\">Sublynk handles the follow-up.</span>",
+        copy: "Every network requires a Certificate of Insurance. Sublynk contacts your broker directly, requests the COI to the network’s exact specs, and tracks it through approval.",
+        cards: [
+          {
+            title: "Automated broker outreach",
+            desc: "When you sign the third-party insurance authorization, Sublynk emails your broker directly with a professional COI request. You are copied so you can reply and nudge your broker to respond quickly.",
+            details: [
+              "Broker receives the full request — no forwarding or middleman",
+              "You are CC’d and asked to reply to speed delivery",
+              "Certificate holder, additional insured, and description of operations pre-filled",
+              "Sample Accord form and 3rd-party authorization attached"
+            ]
+          },
+          {
+            title: "Coverage requirements by program",
+            desc: "Each network has different minimums. Sublynk builds the request automatically based on your program. A typical request includes:",
+            details: [
+              "Commercial General Liability: $2M aggregate / $1M per occurrence",
+              "Auto Liability: $1M combined single limit",
+              "Workers Comp: $1M employer’s liability ($500K for exteriors)",
+              "Pollution Liability: $1M per occurrence (water mitigation services)",
+              "Bailees: $250K (packout contents work only)"
+            ]
+          },
+          {
+            title: "Endorsements and exclusions",
+            desc: "The request specifies exactly which endorsements must be attached to the COI and which exclusions are not allowed — so your broker gets it right the first time.",
+            details: [
+              "Primary & Non-Contributory (CG2010 or equivalent)",
+              "Completed Operations (CG2037 or equivalent)",
+              "Waiver of Subrogation (CG2404 or equivalent)",
+              "No exclusions for residential, remodeling, or subcontractor work",
+              "Stop Gap Employers Liability required in ND, OH, WA, and WY"
+            ]
+          },
+          {
+            title: "Tracking and renewals",
+            desc: "See exactly where your COI stands. Once approved, the insurance requirement clears from your dashboard. Sublynk monitors expiration dates and follows up before lapse.",
+            details: [
+              "Status updates from request to broker response to approval",
+              "Rejected COIs include a clear reason and what to fix",
+              "Expiration monitoring with renewal reminders before lapse",
+              "One COI can satisfy requirements across multiple networks"
+            ]
+          }
+        ]
+      },
+      credentials: {
+        kicker: "10 · Managing credentials",
+        title: "Licenses and certifications <span class=\"soft\">validated automatically.</span>",
+        copy: "Sublynk connects directly to governing body databases to validate credentials in real time. Enter it once, and the system tracks it against every program requirement.",
+        cards: [
+          {
+            title: "Enter certifications for personnel",
+            desc: "Select a person, search from a comprehensive list of certifications (WRT, AMRT, ACAC, and more), and add as many as needed. Certifications are tied to individuals, not companies.",
+            details: [
+              "Search from an extensive list of industry certifications",
+              "Tie each certification to specific personnel",
+              "Add or remove as many licenses or certifications as needed",
+              "IICRC and C-SERV holders will eventually require background checks"
+            ]
+          },
+          {
+            title: "Automatic validation",
+            desc: "Sublynk connects directly to governing body databases to validate credentials automatically. This works for IICRC certifications and many other types.",
+            details: [
+              "Real-time validation against governing body databases",
+              "Works for IICRC and expanding to more credential types",
+              "Certification numbers must be entered accurately",
+              "No manual review delays for supported credentials"
+            ]
+          },
+          {
+            title: "Program requirement tracking",
+            desc: "Certifications required by networks appear on a dedicated tab. Once a credential satisfies a program requirement, the incomplete flag is removed from your dashboard.",
+            details: [
+              "Required credentials surfaced per program and service selection",
+              "Incomplete flags clear automatically when requirements are met",
+              "Submitted credentials move to pending review (yellow status)",
+              "Real-time visibility into review status on your dashboard"
+            ]
+          }
+        ]
+      },
+      contractSigning: {
+        kicker: "11 · Contract signing",
+        title: "Sign contracts, W-9s, and authorizations <span class=\"soft\">in one guided flow.</span>",
+        copy: "When you join a network's bench, Sublynk walks you through every document that needs a signature. Contracts, tax forms, insurance authorizations, and background check attestations — combined into one streamlined signing experience.",
+        cards: [
+          {
+            title: "Corporate contract",
+            desc: "The agreement between you and the organization whose bench you are joining — such as a managed repair network or franchise.",
+            details: [
+              "Contract contents change based on the types of work you perform",
+              "Each article requires your initials before you can proceed",
+              "If you already have a contract in place, you may still be asked to re-sign if the bench owner updated terms",
+              "Sublynk always keeps the latest version on file"
+            ],
+            img: "demo-screenshots/contracts-subcontractor-agreement.png"
+          },
+          {
+            title: "W-9 tax form",
+            desc: "A W-9 is collected every time a new connection is made between you and the company whose bench you are joining. Pre-filled with your business information.",
+            details: [
+              "Pre-populated with your company name, address, and EIN",
+              "Federal tax classification auto-selected based on your entity type",
+              "Signed and dated electronically — no printing or scanning",
+              "Collected fresh for every new bench connection"
+            ],
+            img: "demo-screenshots/contracts-w9-form.png"
+          },
+          {
+            title: "3rd-party insurance authorization",
+            desc: "This form gives Sublynk the authority to request a Certificate of Insurance on your behalf directly from your broker or agent.",
+            details: [
+              "Authorizes Sublynk to contact your broker for COI requests",
+              "Eliminates the back-and-forth between you, your broker, and the network",
+              "Your broker receives the full requirements in one professional email",
+              "You are CC'd on all correspondence"
+            ],
+            img: "demo-screenshots/contracts-insurance-auth.png"
+          },
+          {
+            title: "Background check attestation",
+            desc: "An attestation that you will conduct background checks every 3 years on every employee or subcontractor with policyholder access.",
+            details: [
+              "Covers anyone with access to policyholder homes or data",
+              "Checks must include SSN trace, county criminal, federal criminal, sex offender, and OFAC",
+              "Results must not include felonies, active warrants, or OFAC listings",
+              "Client authorizes Sublynk to perform independent verification"
+            ],
+            img: "demo-screenshots/contracts-bg-attestation.png"
+          }
+        ],
+        faq: [
+          {
+            q: "Why am I signing contracts I already have with this network?",
+            a: "If you have never joined a bench owner's bench in Sublynk, you will always be required to sign contracts again. This ensures we have the latest version on file. It is also possible the bench owner updated their contract and requires a re-sign."
+          },
+          {
+            q: "The wrong person is listed as the signatory. How do I fix this?",
+            a: "The person whose email received the network invitation is pre-populated as the signatory. To change it, add the correct person under User Management in your Sublynk account, then contact support@sublynk.com to update the account owner and regenerate contracts."
+          }
+        ]
+      },
+      bgChecks: {
+        kicker: "12 · Background checks",
+        title: "Upload yours or order through <span class=\"soft\">Sublynk. Either way, tracked.</span>",
+        copy: "Most managed repair networks require background checks for anyone with policyholder access. Sublynk handles both paths.",
+        paths: [
+          {
+            title: "Upload an existing background check",
+            desc: "Sublynk accepts checks from any provider as long as they meet network requirements. Tie it to specific personnel, upload the file, and the team validates it against program standards.",
+            details: [
+              "Works with any background check provider",
+              "Tie check to specific personnel (new or existing)",
+              "Sublynk team validates against network standards",
+              "Rejected checks include a clear reason why"
+            ]
+          },
+          {
+            title: "Order through Sublynk",
+            desc: "Powered by Checkr for fast turnaround. Two packages available depending on your network requirements.",
+            details: [
+              "Gold package: covers almost all repair networks",
+              "Alacrity package: adds county and civil checks (non-owners)",
+              "Technician checks: fast turnaround; Alacrity checks: ~1 week",
+              "Personnel receives an email to complete the process"
+            ]
+          }
+        ],
+        requirements: {
+          title: "What gets checked",
+          items: ["SSN trace", "County & federal criminal search", "Watch list", "Sex offender search", "Motor vehicle check", "Civil check (Alacrity only)"]
+        },
+        pricing: {
+          title: "Pass-through fees",
+          copy: "Variable fees from the state or county where the check runs. These are straight pass-through with no Sublynk markup. Two charges: the package fee upfront, then pass-through fees on the first of the following month."
+        },
+        compliance: {
+          title: "Once approved",
+          copy: "Background checks automatically move into compliance status on your program dashboard. The missing-check banner disappears. Personnel, certifications, and checks all live in one table."
+        }
       },
       proof: {
-        kicker: "07 · What you should feel",
-        title: "Three promises <span class=\"soft\">to you and your GC.</span>",
+        kicker: "13 · What you should feel",
+        title: "Three promises <span class=\"soft\">to you and your network.</span>",
         copy: "Not feature slides — what changes in your week.",
         cards: [
-          { h: "Faster time to green", p: "Background checks in two clicks — not Profile Gorilla’s “make coffee while it spins” wait. Your GC gets you on the job sooner." },
+          { h: "Faster time to green", p: "Background checks in two clicks — not Profile Gorilla’s “make coffee while it spins” wait. Your network gets you on the job sooner." },
           { h: "Clarity over anxiety", p: "Every red state comes with what to fix. Chat/call a human when something personal (e.g. an old record) needs context — white-glove, not a ticket black hole." },
-          { h: "One place", p: "Stop dual-stacking the same doc in Profile Gorilla, Alacrity, and your GC’s system. One path your GC and network trust." }
+          { h: "One place", p: "Stop dual-stacking the same doc in Profile Gorilla, Alacrity, and your network’s system. One path every program trusts." }
         ]
       },
       close: {
         eyebrow: "Closing slide",
-        title: "You're not buying software.<br />You're buying <span>peace of mind with your GC.</span>",
+        title: "You're not buying software.<br />You're buying <span>peace of mind with your network.</span>",
         oldQuote: "“Figure out Profile Gorilla yourself.”",
-        newQuote: "“You're guided, respected, verified, and ready when the GC dispatches.”",
-        backops: "<strong style=\"color: var(--slynk-orange);\">Sublynk</strong> works with your GC and network so you can focus on the trade — compliance runs in the background with people when you need them."
+        newQuote: "“You're guided, respected, verified, and ready when the work dispatches.”",
+        backops: "<strong style=\"color: var(--slynk-orange);\">Sublynk</strong> works with your network so you can focus on the trade — compliance runs in the background with people when you need them."
       },
-      meddpiccIntro: "Education & discovery for <strong>subs and franchise owners</strong> working with a GC. Capture their words — Mic, Polish, or Stop & fill fields.",
+      meddpiccIntro: "Education & discovery for <strong>subs and franchise owners</strong> working within a network or TPA program. Capture their words — Mic, Polish, or Stop & fill fields.",
       personas: [
         {
           id: "sub",
           kicker: "You",
           name: "Sub / franchise owner",
           fear: "Mystery red, lost jobs, feeling stupid on a portal.",
-          role: "Get compliant for the GC who invited you — without admin purgatory.",
+          role: "Get compliant for the network that invited you — without admin purgatory.",
           interrupt: "If you can’t explain it to your crew, the portal failed — not you.",
           pointAt: "Fix list, upload speed, renewal reminders.",
           why: "You’re valuable for the trade, not for navigating insurance PDFs.",
-          close: "Upload, understand, fix, get green, stay green — keep the GC relationship."
+          close: "Upload, understand, fix, get green, stay green — keep the work flowing."
         },
         {
           id: "gc",
-          kicker: "Your GC",
-          name: "General contractor",
+          kicker: "Your network",
+          name: "Network / program manager",
           fear: "Assigning work then finding you weren’t compliant.",
           role: "Invites you, assigns jobs when status is green.",
           interrupt: "They need one answer from Sublynk — ready or not, with why.",
           pointAt: "Dispatch step — their risk is your delay.",
-          why: "GC keeps the customer; they hate chasing your COI.",
+          why: "The network keeps the customer; they hate chasing your COI.",
           close: "When you’re green, they dispatch with confidence."
         },
         {
           id: "network",
-          kicker: "Your network",
-          name: "Managed network (if applicable)",
-          fear: "You drop off and hurt their bench with the GC.",
-          role: "Sets program rules between you and multiple GC relationships.",
-          interrupt: "The network’s quality promise is only as good as your onboarding path.",
+          kicker: "The TPA / MRN",
+          name: "TPA or managed repair network",
+          fear: "You drop off and hurt their bench with the carrier.",
+          role: "Sets program rules across multiple carrier relationships.",
+          interrupt: "The program’s quality promise is only as good as your onboarding path.",
           pointAt: "Program join + monitoring.",
-          why: "Networks educate you once so every GC gets the same truth.",
-          close: "One path — many GC programs."
+          why: "Programs credential you once so every carrier gets the same truth.",
+          close: "One path — many carrier programs."
         }
       ],
       gcSteps: [
-        { num: 1, title: "Accept invite", copy: "Your GC (or their network) sends one guided link." },
+        { num: 1, title: "Onboard", copy: "Unlimited opportunities once completed." },
         { num: 2, title: "Complete your path", copy: "Upload what’s listed — nothing extra, nothing hidden." },
-        { num: 9, title: "Take the job", copy: "When you’re green, the GC can assign work." }
+        { num: 9, title: "Take the job", copy: "When you’re green, work gets dispatched." }
       ],
       sublynkSteps: [
         { num: 3, title: "Your documents", copy: "Insurance, licenses, certs — checklist in plain English." },
-        { num: 4, title: "Verification", copy: "Matched to what your GC program actually requires." },
+        { num: 4, title: "Verification", copy: "Matched to what your network program actually requires." },
         { num: 5, title: "Broker COI", copy: "Sublynk talks to the broker so you’re not in the middle." },
         { num: 6, title: "Human help", copy: "Chat/call when something needs judgment (old records, etc.)." },
         { num: 7, title: "Your status", copy: "Green / red with reasons you can understand." },
-        { num: 8, title: "Renewals", copy: "Fix before the GC discovers an expiry." }
+        { num: 8, title: "Renewals", copy: "Fix before your network discovers an expiry." }
       ],
       stages: stages({
-        2: { title: "Your guided invite", copy: "The GC opened the path — you see requirements in plain language.", points: ["One checklist", "What happens when you submit", "No mystery steps"], signal: "Path opened", phrase: "Explain it so your field crew could follow it." },
+        2: { title: "Your guided invite", copy: "Your network opened the path — you see requirements in plain language.", points: ["One checklist", "What happens when you submit", "No mystery steps"], signal: "Path opened", phrase: "Explain it so your field crew could follow it." },
         3: { title: "Upload without the spin", copy: "Background checks and docs that finish while you wait.", points: ["Fast uploads", "Clear errors", "Support when nervous"], signal: "Documents flowing", phrase: "Profile Gorilla is the fax machine — this isn’t." },
-        6: { title: "Human QA when it’s personal", copy: "Edge cases go to people who can explain to you and the GC.", points: ["Old record context", "Broker wording", "Live chat"], signal: "QA in progress", phrase: "You’re not alone on scary compliance questions." },
-        9: { title: "GC assigns the job", copy: "Your GC dispatches when Sublynk shows you green.", points: ["Job-ready", "No last-minute call", "Relationship preserved"], signal: "Ready for job", phrase: "Green means the GC can trust you today." }
+        6: { title: "Human QA when it’s personal", copy: "Edge cases go to people who can explain to you and your network.", points: ["Old record context", "Broker wording", "Live chat"], signal: "QA in progress", phrase: "You’re not alone on scary compliance questions." },
+        9: { title: "Work gets dispatched", copy: "Your network dispatches when Sublynk shows you green.", points: ["Job-ready", "No last-minute call", "Relationship preserved"], signal: "Ready for job", phrase: "Green means your network can trust you today." }
       }),
       discoveryQuestions: dq([
-        { id: "persona_type", label: "What trade / franchise, and which GC invited you?", hint: "Sub context", placeholder: "e.g. Flooring sub — invited by ABC GC" },
+        { id: "persona_type", label: "What trade / franchise, and which network invited you?", hint: "Sub context", placeholder: "e.g. Flooring sub — invited by ABC network" },
         { id: "current_portal", label: "What portal frustrated you before (PG, other)?", hint: "Amanda / PG compare", placeholder: "e.g. Profile Gorilla — slow uploads" },
         { id: "mystery_red", label: "How often do you see red without knowing what to fix?", hint: "Sub anxiety", placeholder: "Often / sometimes…" },
-        { id: "credentialing_timeline", label: "How long did your last GC onboarding take end-to-end?", hint: "Compare to days on Sublynk", placeholder: "e.g. 3 weeks on PG" },
+        { id: "credentialing_timeline", label: "How long did your last network onboarding take end-to-end?", hint: "Compare to days on Sublynk", placeholder: "e.g. 3 weeks on PG" },
         { id: "messy_middle_pain", label: "What part hurts most — insurance, licenses, background, or unclear status?", hint: "Their words", placeholder: "Their answer…" },
-        { id: "broker_owner", label: "Do you talk to the broker, or does Sublynk/GC handle COI?", hint: "Sub relief", placeholder: "Their answer…" },
+        { id: "broker_owner", label: "Do you talk to the broker, or does Sublynk handle COI?", hint: "Sub relief", placeholder: "Their answer…" },
         { id: "persona_fear", label: "Biggest fear — lost job, looking foolish on portal, or bad record?", hint: "Educate with empathy", placeholder: "In their words…" },
-        { id: "success_90d", label: "What would success look like with this GC in 90 days?", hint: "Jobs + clarity", placeholder: "Stay green, X jobs…" },
-        { id: "next_step", label: "What’s the next step with your GC (upload, broker, first job)?", hint: "Concrete", placeholder: "e.g. finish COI by Friday" }
+        { id: "success_90d", label: "What would success look like with this network in 90 days?", hint: "Jobs + clarity", placeholder: "Stay green, X jobs…" },
+        { id: "next_step", label: "What’s the next step with your network (upload, broker, first job)?", hint: "Concrete", placeholder: "e.g. finish COI by Friday" }
       ])
     },
 
     gc: {
       ...VIEW_META.gc,
       hero: {
-        eyebrow: "Restoration 1 of Huntington Beach · Joseph Sarofim",
-        titleLead: "Every tech credentialed.",
-        titleGrad: "Every carrier audit ready.",
-        sub: "You run ops, dispatch, and carrier relationships. Sublynk handles <b>IICRC tracking, COI verification, and carrier audit prep</b> so your team stays on job sites, not in spreadsheets.",
+        eyebrow: "GC bench manager · sub network",
+        titleLead: "Build your bench with",
+        titleGrad: "fully vetted subs.",
+        sub: "Sublynk turns onboarding and credentialing from <b>months to days</b> — same-day vetting, clear requirements, and a live readiness signal for dispatch.",
         metrics: [
-          { strong: "IICRC", span: "WRT, ASD, AMRT, FSRT tracked and monitored for every tech." },
-          { strong: "Carrier programs", span: "Contractor Connection, Sedgwick, Alacrity, Crawford requirements mapped." },
-          { strong: "Subs verified", span: "Plumbers, electricians, mold crews, content vendors. COI-current before they step on site." },
-          { strong: "Audit ready", span: "Green means compliant. No scramble when a carrier calls." }
+          { strong: "Recruit", span: "You pick the partners you want on the bench." },
+          { strong: "Invite", span: "Sublynk turns intent into a guided onboarding path." },
+          { strong: "Verify", span: "Automation plus human QA on the hard parts." },
+          { strong: "Dispatch", span: "Only job-ready subs move forward." }
         ]
       },
       oldNew: {
         kicker: "01 · Old World vs New World",
-        title: "The old world is spreadsheets and scramble.",
-        titleSoft: "The new world is one dashboard, always current.",
-        copy: "You are too small to hire a compliance person and too busy to be one. Sublynk handles the credentialing layer so you can focus on jobs.",
-        oldSummary: "You hire a tech or bring on a sub, then spend the next week chasing IICRC certs, COIs, and carrier-specific paperwork. When audit time comes, you scramble.",
-        newSummary: "Sublynk collects, verifies, and monitors everything. IICRC expirations, carrier requirements, sub COIs. You see green or red with the reason why.",
-        oldImpact: "techs sit idle while paperwork catches up, or worse, you find out mid-job.",
-        newImpact: "hired, credentialed, and carrier-audit-ready without the admin overhead.",
+        title: "The old world asks people to chase paper.",
+        titleSoft: "The new world gives dispatch a live trust signal.",
+        copy: "The old model turns GCs into the compliance department. The new model keeps the relationship on your side and puts trust on autopilot.",
+        oldSummary: "You recruit a sub, then accidentally become the compliance department. Everyone waits, nobody knows exactly why, and dispatch has to guess.",
+        newSummary: "You keep the relationship. Sublynk runs the trust engine: collect, verify, broker-check, QA, monitor, renew, and feed the green light back to dispatch.",
+        oldImpact: "good subs stall before they ever become job-ready.",
+        newImpact: "wanted → verified → assignable, without the paper chase.",
         oldWorld: [
-          { icon: "1", title: "Hire a tech", copy: "You find a good WRT-certified tech, then start the paperwork chase." },
-          { icon: "2", title: "Track certs in spreadsheets", copy: "IICRC expirations across WRT, ASD, AMRT, FSRT. Dates everywhere, nothing connected." },
-          { icon: "3", title: "Chase COIs from subs", copy: "Plumber needs updated insurance. Electrician's license expired. You find out by email or you don't." },
-          { icon: "4", title: "Carrier audit hits", copy: "Contractor Connection or Sedgwick asks for proof. You spend a day pulling files together." },
-          { icon: "5", title: "Dispatch risk", copy: "Send a tech to a loss site hoping everything is current. Sometimes it is not." }
+          { icon: "1", title: "Recruit the sub", copy: "You find the right partner and send them into a separate process." },
+          { icon: "2", title: "Send portal links", copy: "Generic checklist, old PDFs, unclear next steps." },
+          { icon: "3", title: "Chase documents", copy: "Ops follows up through email, phone, and broker back-and-forth." },
+          { icon: "4", title: "Wait on mystery flags", copy: "Red status without a clear reason or owner." },
+          { icon: "5", title: "Dispatch takes risk", copy: "Job held, guessed, or assigned before truth is current." }
         ],
         newWorld: [
-          { title: "One onboarding path per role", copy: "Requirements mapped to carrier program, certification type, and work category." },
-          { title: "Sublynk tracks every expiration", copy: "IICRC certs, COIs, licenses, background checks. Monitored and flagged before they lapse." },
-          { title: "Carrier audit prep is automatic", copy: "Contractor Connection, Sedgwick, Alacrity, Crawford. Requirements pre-mapped, always current." },
-          { title: "Subs verified before they step on site", copy: "Plumbers, electricians, mold crews. COI and license checked before dispatch." },
-          { title: "One dashboard, one truth", copy: "Green means compliant across every carrier. Red tells you exactly what is missing." }
+          { title: "Invite into a guided path", copy: "Requirements matched to program, location, and work type." },
+          { title: "Sublynk runs the messy middle", copy: "Docs, rules, broker COI, human QA behind the scenes." },
+          { title: "Everyone sees the fix list", copy: "Missing items stated plainly — for you and the sub." },
+          { title: "Status stays live", copy: "Monitoring and renewals keep the signal current." },
+          { title: "Dispatch gets a clean answer", copy: "Green means ready; red means do not assign yet." }
         ]
       },
       oneLine: {
-        kicker: "02 · The core idea",
-        lead: "You run the restoration jobs.",
-        grad: "Sublynk keeps every tech and sub audit-ready while you do.",
-        sub: "Your techs need current IICRC certs. Your subs need verified COIs. Your carrier programs need proof on demand. Sublynk handles all of that so your team gets <strong>one answer: compliant or here is what is missing.</strong>"
+        kicker: "02 · The line that lands",
+        lead: "You define quality on the bench.",
+        grad: "Sublynk makes sure the sub crosses the line compliant — and stays that way.",
+        sub: "You already found the sub you want. Sublynk handles the messy middle — insurance, licenses, broker COIs, renewals — so your team gets <strong>one answer: ready or not ready, with the reason why.</strong>"
       },
       whoDoesWhat: {
         kicker: "03 · Who does what",
-        title: "Your team runs jobs. Sublynk runs credentialing.",
-        copy: "You keep hiring, dispatching, and carrier relationships. Sublynk handles the six steps between 'hired' and 'audit-ready.'",
-        gcTitle: "Restoration 1 team",
-        gcDesc: "Hire techs, manage subs, dispatch to loss sites, own carrier relationships.",
-        sublynkDesc: "IICRC tracking, COI verification, carrier audit prep, expiration monitoring, renewals.",
-        bridgeBefore: "Hire → spreadsheet → chase certs → chase COIs → scramble for audit → hope",
-        bridgeAfter: "Hire → Sublynk onboards → dispatch when green"
+        title: "Shrink your job from nine moving parts to three clear actions.",
+        copy: "Your team keeps three relationship steps. Sublynk backops runs the six that turn intent into a verified signal.",
+        gcTitle: "GC & Network",
+        gcDesc: "Own the relationship and the work. Not every document chase.",
+        sublynkDesc: "Automation where fast; human QA where judgment matters.",
+        bridgeBefore: "Recruit → chase → email → resend → wait → re-check → hope",
+        bridgeAfter: "Recruit → invite → dispatch when green"
       },
       flow: {
-        kicker: "04 · The credentialing loop",
-        title: "Nine steps. Your team owns three. Sublynk runs the rest.",
-        copy: "Select any step to see who owns it and what it looks like for a restoration franchise.",
-        boardTitle: "Continuous credentialing for restoration",
-        boardSub: "Green is a living status. When an IICRC cert expires or a carrier requirement changes, the signal updates automatically."
+        kicker: "04 · Demo the operating system",
+        title: "Make the nine-step loop feel simple, not technical.",
+        copy: "Nine steps. One loop. Select any step to see who owns it and the live signal dispatch trusts.",
+        boardTitle: "The continuous credentialing loop",
+        boardSub: "Green is a living status — when documents expire or requirements change, the signal updates."
       },
       alwaysOn: {
         kicker: "05 · Always-on monitoring",
-        title: "IICRC certs expire. COIs lapse. <span class=\"soft\">Sublynk catches it first.</span>",
-        copy: "Credentialing does not end at hire. Sublynk monitors every expiration date so you never find out mid-job or mid-audit.",
+        title: "The wow is not onboarding. <span class=\"soft\">It is staying ready forever.</span>",
+        copy: "Credentialing does not end at onboarding. Sublynk watches expirations so dispatch never discovers a problem at assignment time.",
         orbTitle: "Always active",
         orbSub: "Monitor. Flag. Fix. Renew. Repeat.",
         listTitle: "What stays protected",
-        listIntro: "Continuous monitoring for the things that trip up restoration franchises.",
+        listIntro: "Continuous monitoring removes risks that show up only when a job is about to start.",
         items: [
-          { b: "IICRC certs never silently expire.", s: "WRT, ASD, AMRT, FSRT. Flagged before they lapse, not after a carrier asks." },
-          { b: "Sub COIs stay current.", s: "Your plumbers, electricians, and content vendors. Verified and monitored." },
-          { b: "Carrier requirements pre-mapped.", s: "Contractor Connection, Sedgwick, Alacrity. Always audit-ready." },
-          { b: "Humans handle the hard parts.", s: "Broker COIs, endorsement questions, edge cases where judgment matters." }
+          { b: "Nothing silently expires.", s: "Dates and status change before they become dispatch surprises." },
+          { b: "Red comes with a reason.", s: "You and the sub see what is missing — not a mystery flag." },
+          { b: "Automation does the speed work.", s: "Matrix matching, status updates, renewal nudges." },
+          { b: "Humans handle judgment.", s: "Broker COIs, endorsements, live chat where mistakes are expensive." }
         ]
       },
       persona: {
-        kicker: "06 · Who benefits",
-        title: "Every role in your operation sees the same truth.",
-        copy: "Whether you are managing techs, dispatching to a loss, or prepping for a carrier audit."
+        kicker: "06 · Persona talk track",
+        title: "Let every stakeholder see themselves in the same diagram.",
+        copy: "Same operating model — network, GC, and sub lenses."
       },
       proof: {
-        kicker: "07 · Three outcomes",
-        title: "What changes for Restoration 1 <span class=\"soft\">of Huntington Beach.</span>",
-        copy: "Three things your team feels in the first month.",
+        kicker: "07 · What the audience should remember",
+        title: "Three outcomes. <span class=\"soft\">No technical explanation required.</span>",
+        copy: "Three outcomes your partners feel in the field — not feature lists.",
         cards: [
-          { h: "Techs onboarded in hours, not weeks", p: "New hires go from offer to carrier-compliant the same day. No spreadsheet handoff." },
-          { h: "Carrier audits stop being emergencies", p: "Contractor Connection, Sedgwick, Alacrity. Everything is pre-mapped and current when they ask." },
-          { h: "Admin hours back in your week", p: "You stop tracking IICRC expirations and chasing sub COIs. Sublynk monitors and flags automatically." }
+          { h: "Faster recruiting conversion", p: "Subs are most motivated right after yes. A cleaner path protects momentum." },
+          { h: "Cleaner dispatch decisions", p: "One answer: green, red, or fix these items." },
+          { h: "Lower operational drag", p: "You stop chasing expiring documents; Sublynk runs renewals and broker loops." }
         ]
       },
       close: {
-        eyebrow: "What this means for your franchise",
-        title: "Every tech credentialed. <br />Every carrier <span>audit-ready.</span>",
-        oldQuote: "“Track it in a spreadsheet and hope nothing expires.”",
-        newQuote: "“Every tech and sub is verified, monitored, and ready before you need them.”",
-        backops: "<strong style=\"color: var(--slynk-orange);\">Sublynk</strong> handles credentialing for restoration franchises like yours. From hire, to compliant, to dispatched, to renewed. So you can focus on running jobs."
+        eyebrow: "Closing slide",
+        title: "Don't sell a portal.<br />Sell the moment a sub becomes <span>job-ready.</span>",
+        oldQuote: "“Go upload documents and wait.”",
+        newQuote: "“You are wanted, guided, verified, monitored, and ready for dispatch.”",
+        backops: "<strong style=\"color: var(--slynk-orange);\">Sublynk</strong> is the backops layer that keeps your sub network moving — from recruit, to compliant, to dispatched."
       },
-      meddpiccIntro: "Discovery for <strong>Restoration 1 of Huntington Beach</strong>. Notes from the conversation with Joseph.",
+      meddpiccIntro: "Discovery for <strong>GC bench managers</strong> and partners. Mic, Polish, or Stop & fill fields after the call.",
       personas: [
         {
           id: "network",
-          kicker: "Franchise GM",
-          name: "Joseph / General Manager",
-          fear: "Carrier audit hits and you spend a full day pulling files together.",
-          role: "Run ops, dispatch, hiring, and carrier relationships for the franchise.",
-          interrupt: "You are too small for a compliance hire and too busy to be the compliance person.",
-          pointAt: "Steps 3 through 8: everything between hiring a tech and them being audit-ready.",
-          why: "Same-day credentialing means techs work sooner. Auto-monitoring means audits are not emergencies.",
-          close: "Sublynk handles credentialing so the franchise can focus on restoration."
+          kicker: "Network ops",
+          name: "Managed repair network",
+          fear: "Recruits ghost before becoming compliant.",
+          role: "Build bench quality without drowning in COI email.",
+          interrupt: "Credentialing jail kills recruits — not your price.",
+          pointAt: "Steps 1 → 6: recruit through human QA.",
+          why: "Speed protects momentum. Clarity prevents subs giving up.",
+          close: "Network defines quality. Sublynk gets subs across the line motivated."
         },
         {
           id: "gc",
-          kicker: "Carrier programs",
-          name: "Insurance carrier requirements",
-          fear: "Falling out of good standing with Contractor Connection, Sedgwick, or Alacrity.",
-          role: "Each program has its own COI, EMR, and certification requirements.",
-          interrupt: "Carrier requirements change. If you find out late, you lose jobs.",
-          pointAt: "Always-on monitoring and carrier requirement mapping.",
-          why: "Pre-mapped requirements mean you are always ready when they ask.",
-          close: "One dashboard shows compliance status across every carrier program."
+          kicker: "GC ops",
+          name: "GC bench manager",
+          fear: "Sub looks compliant but dispatch finds a problem later.",
+          role: "Keep qualified subs ready and dispatch-unblocked.",
+          interrupt: "Your bench is only as fast as your slowest onboarding.",
+          pointAt: "GC side: recruit, onboard, dispatch. Sublynk runs 3–8.",
+          why: "Own relationship and assignment — not every insurance chase.",
+          close: "One thing to trust: green means ready, red means the fix."
         },
         {
           id: "sub",
-          kicker: "Subcontractors",
-          name: "Plumbers, electricians, mold crews",
-          fear: "Showing up to a loss site without current credentials.",
-          role: "Get verified before stepping on site. Stay verified as jobs keep coming.",
-          interrupt: "A sub with expired insurance on a loss site is a liability, not a helper.",
-          pointAt: "COI verification, license checks, and renewal monitoring.",
-          why: "Subs get a clear path. You get proof before dispatch.",
-          close: "Verified, monitored, and ready. Before the job, not after the problem."
+          kicker: "Sub",
+          name: "Sub / franchise owner",
+          fear: "Mystery red flags and lost jobs while waiting.",
+          role: "Get compliant, get work, stay out of admin purgatory.",
+          interrupt: "Red without a reason is not compliance — it is anxiety.",
+          pointAt: "Fix list, monitoring, renewal loop.",
+          why: "Need clarity — what’s missing, who fixes it, when they can work.",
+          close: "Upload, understand, fix, get green, stay green."
         }
       ],
       gcSteps: [
-        { num: 1, title: "Hire", copy: "Bring on a new tech or sub for your restoration team." },
-        { num: 2, title: "Onboard", copy: "One guided path. Requirements matched to carrier programs and role." },
-        { num: 9, title: "Dispatch to loss site", copy: "Send techs and subs to jobs knowing they are fully credentialed." }
+        { num: 1, title: "Recruit", copy: "Find the sub you want on your bench." },
+        { num: 2, title: "Onboard", copy: "Send one guided invite with the right program path." },
+        { num: 9, title: "Dispatch → job", copy: "Assign work only when the sub is green." }
       ],
       sublynkSteps: [
-        { num: 3, title: "Collect docs", copy: "IICRC certs, insurance, licenses, background checks. Centralized." },
-        { num: 4, title: "Verify credentials", copy: "WRT, ASD, AMRT, FSRT. Carrier-specific COI and EMR requirements." },
-        { num: 5, title: "Broker COI check", copy: "Validate insurance through the broker, not just a PDF." },
-        { num: 6, title: "Human QA", copy: "Endorsements, exceptions, carrier edge cases." },
-        { num: 7, title: "Live monitoring", copy: "IICRC expirations, COI lapses, carrier changes. Flagged before they matter." },
-        { num: 8, title: "Renewal cadence", copy: "Auto-reminders before anything expires." }
+        { num: 3, title: "Collect docs", copy: "Centralize insurance, licenses, certs, contracts, background." },
+        { num: 4, title: "Verify license / COI", copy: "Program rules, location, work type, dates." },
+        { num: 5, title: "Broker COI check", copy: "Validate through source of truth, not PDF alone." },
+        { num: 6, title: "Human QA", copy: "Endorsements, exceptions, edge cases." },
+        { num: 7, title: "Live monitoring", copy: "Green/red reasons stay current." },
+        { num: 8, title: "Renewal cadence", copy: "Before expiration breaks dispatch." }
       ],
       stages: null,
       discoveryQuestions: null
@@ -657,6 +942,70 @@
     .app {
       width: min(1180px, calc(100% - 40px));
       margin: 0 auto;
+    }
+
+    /* ── Left-side section navigator ── */
+    .side-nav {
+      position: fixed;
+      left: 22px;
+      top: 50%;
+      transform: translateY(-50%);
+      z-index: 30;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 0;
+    }
+    .side-nav-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 7px 0;
+      cursor: pointer;
+      border: none;
+      background: none;
+      text-align: left;
+    }
+    .side-nav-dash {
+      width: 16px;
+      height: 2.5px;
+      border-radius: 2px;
+      background: rgba(12, 21, 43, .18);
+      transition: width .25s, background .25s, box-shadow .25s;
+      flex-shrink: 0;
+    }
+    .side-nav-item.active .side-nav-dash {
+      width: 26px;
+      background: var(--slynk-orange);
+      box-shadow: 0 0 6px rgba(221,100,56,.35);
+    }
+    .side-nav-item:hover .side-nav-dash {
+      background: var(--slynk-orange);
+      width: 22px;
+    }
+    .side-nav-label {
+      font-size: 11px;
+      font-weight: 550;
+      letter-spacing: .03em;
+      color: rgba(12, 21, 43, .35);
+      white-space: nowrap;
+      opacity: 0;
+      transform: translateX(-4px);
+      transition: opacity .2s, transform .2s, color .2s;
+      pointer-events: none;
+    }
+    .side-nav:hover .side-nav-label {
+      opacity: 1;
+      transform: translateX(0);
+    }
+    .side-nav-item.active .side-nav-label {
+      color: var(--slynk-orange);
+    }
+    .side-nav:hover .side-nav-item.active .side-nav-label {
+      opacity: 1;
+    }
+    @media (max-width: 900px) {
+      .side-nav { display: none; }
     }
 
     .topbar {
@@ -969,6 +1318,11 @@
       background: var(--panel);
       text-align: left;
       box-shadow: none;
+      transition: border-color .15s, box-shadow .15s;
+    }
+    .metric-link:hover {
+      border-color: var(--slynk-orange);
+      box-shadow: 0 2px 12px rgba(221,100,56,.15);
     }
 
     .metric strong {
@@ -1953,6 +2307,93 @@
       color: #0c0a09;
     }
 
+    /* ── BACKGROUND CHECKS SECTION ── */
+    .bgcheck-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+      margin-top: 32px;
+    }
+    .bgcheck-path {
+      padding: 28px;
+      border-radius: 14px;
+      background: rgba(255,255,255,.85);
+      backdrop-filter: blur(12px);
+      border: 1px solid rgba(0,0,0,.06);
+    }
+    .bgcheck-path h3 {
+      font-size: 18px;
+      font-weight: 800;
+      margin-bottom: 8px;
+      color: var(--slynk-ink);
+    }
+    .bgcheck-path p {
+      font-size: 14px;
+      color: var(--slynk-muted);
+      line-height: 1.55;
+      margin-bottom: 14px;
+    }
+    .bgcheck-path ul {
+      list-style: none;
+      padding: 0;
+    }
+    .bgcheck-path ul li {
+      font-size: 13px;
+      color: var(--slynk-ink);
+      padding: 6px 0;
+      border-top: 1px solid rgba(0,0,0,.04);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .bgcheck-path ul li::before {
+      content: "✓";
+      color: var(--slynk-green);
+      font-weight: 700;
+      font-size: 12px;
+    }
+    .bgcheck-extras {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 16px;
+      margin-top: 24px;
+    }
+    .bgcheck-extras-card {
+      padding: 20px;
+      border-radius: 12px;
+      background: rgba(255,255,255,.85);
+      backdrop-filter: blur(12px);
+      border: 1px solid rgba(0,0,0,.06);
+    }
+    .bgcheck-extras-card h4 {
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--slynk-ink);
+      margin-bottom: 6px;
+    }
+    .bgcheck-extras-card p {
+      font-size: 13px;
+      color: var(--slynk-muted);
+      line-height: 1.5;
+    }
+    .bgcheck-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 8px;
+    }
+    .bgcheck-tag {
+      font-size: 12px;
+      font-weight: 600;
+      padding: 4px 10px;
+      border-radius: 6px;
+      background: rgba(221,100,56,.08);
+      color: var(--slynk-orange);
+    }
+    @media (max-width: 768px) {
+      .bgcheck-grid, .bgcheck-extras { grid-template-columns: 1fr; }
+    }
+
     .proof-strip {
       margin-top: 40px;
       display: grid;
@@ -2589,6 +3030,14 @@
     </header>
 
     <main>
+      <!-- Left-side section navigator -->
+      <nav class="side-nav" aria-label="Section timeline">
+        <button v-for="item in sideNav" :key="item.id" class="side-nav-item" :class="{ active: activeSection === item.id }" @click="scrollTo(item.id)">
+          <span class="side-nav-dash"></span>
+          <span class="side-nav-label">{{ item.label }}</span>
+        </button>
+      </nav>
+
       <section id="hero" class="hero">
         <div>
           <div class="eyebrow reveal visible">
@@ -2603,15 +3052,16 @@
           <p class="hero-sub reveal visible delay-2" v-html="c.hero && c.hero.sub"></p>
 
           <div class="hero-actions reveal visible delay-3">
-            <button class="primary-button" @click="scrollTo('old-new')">Show old vs new</button>
-            <button class="ghost-button" @click="scrollTo('who-does-what')">Explain who does what</button>
-            <button class="ghost-button" @click="scrollTo('meddpicc')">Discovery worksheet</button>
+            <button class="primary-button" @click="scrollTo('old-new')">Old vs New</button>
+            <button class="ghost-button" @click="scrollTo('who-does-what')">Who does what</button>
+            <button class="ghost-button" @click="scrollTo('meddpicc')">Discovery</button>
           </div>
 
           <div class="metric-strip reveal visible delay-3">
-            <div v-for="(m, i) in (c.hero && c.hero.metrics) || []" :key="'metric-' + i" class="metric">
+            <div v-for="(m, i) in (c.hero && c.hero.metrics) || []" :key="'metric-' + i" class="metric" :class="{ 'metric-link': m.link }" @click="m.link && openLink(m.link)" :style="m.link ? 'cursor:pointer' : ''">
               <strong>{{ m.strong }}</strong>
               <span>{{ m.span }}</span>
+              <small v-if="m.link" style="display:block;margin-top:4px;font-size:11px;color:var(--slynk-orange);font-weight:600;">{{ m.linkLabel || 'See it live →' }}</small>
             </div>
           </div>
         </div>
@@ -2853,6 +3303,7 @@
         </div>
       </section>
 
+      <!-- 06 · Personas -->
       <section id="persona" class="section">
         <div class="section-kicker reveal">{{ c.persona.kicker }}</div>
         <h2 class="section-title reveal delay-1">{{ c.persona.title }}</h2>
@@ -2874,7 +3325,7 @@
             <div class="talk-card-grid">
               <div class="talk-card full">
                 <span class="label">Opening question</span>
-                <p><strong>“{{ activePersona.interrupt }}”</strong></p>
+                <p><strong>"{{ activePersona.interrupt }}"</strong></p>
               </div>
               <div class="talk-card">
                 <span class="label">Show in the loop</span>
@@ -2893,7 +3344,154 @@
         </div>
       </section>
 
-      <section id="proof" class="section">
+      <!-- 07 · Program Requirements -->
+      <section v-if="c.programReqs" id="program-reqs" class="section">
+        <div class="section-kicker reveal">{{ c.programReqs.kicker }}</div>
+        <h2 class="section-title reveal delay-1" v-html="c.programReqs.title"></h2>
+        <p class="section-copy reveal delay-2">{{ c.programReqs.copy }}</p>
+
+        <div class="bgcheck-grid" style="grid-template-columns: 1fr 1fr;">
+          <div v-for="(card, i) in c.programReqs.cards" :key="'pr-' + i" class="bgcheck-path glass reveal" :class="'delay-' + (i + 1)">
+            <h3>{{ card.title }}</h3>
+            <p>{{ card.desc }}</p>
+            <ul>
+              <li v-for="(d, j) in card.details" :key="'prd-' + j">{{ d }}</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <!-- 08 · Join a Network -->
+      <section v-if="c.joinNetwork" id="join-network" class="section">
+        <div class="section-kicker reveal">{{ c.joinNetwork.kicker }}</div>
+        <h2 class="section-title reveal delay-1" v-html="c.joinNetwork.title"></h2>
+        <p class="section-copy reveal delay-2">{{ c.joinNetwork.copy }}</p>
+
+        <div class="bgcheck-grid" style="grid-template-columns: 1fr 1fr;">
+          <div v-for="(step, i) in c.joinNetwork.steps" :key="'jn-' + i" class="bgcheck-path glass reveal" :class="'delay-' + (i + 1)">
+            <h3>{{ step.title }}</h3>
+            <p>{{ step.desc }}</p>
+            <ul>
+              <li v-for="(d, j) in step.details" :key="'jnd-' + j">{{ d }}</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="bgcheck-extras reveal delay-3" style="grid-template-columns: 1fr 1fr;">
+          <div class="bgcheck-extras-card">
+            <h4>{{ c.joinNetwork.pricing.title }}</h4>
+            <p>{{ c.joinNetwork.pricing.copy }}</p>
+          </div>
+          <div class="bgcheck-extras-card">
+            <h4>{{ c.joinNetwork.nextStep.title }}</h4>
+            <p>{{ c.joinNetwork.nextStep.copy }}</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- 09 · COI Management -->
+      <section v-if="c.coiManagement" id="coi-management" class="section">
+        <div class="section-kicker reveal">{{ c.coiManagement.kicker }}</div>
+        <h2 class="section-title reveal delay-1" v-html="c.coiManagement.title"></h2>
+        <p class="section-copy reveal delay-2">{{ c.coiManagement.copy }}</p>
+
+        <div class="bgcheck-grid" style="grid-template-columns: 1fr 1fr;">
+          <div v-for="(card, i) in c.coiManagement.cards" :key="'coi-' + i" class="bgcheck-path glass reveal" :class="'delay-' + (i + 1)">
+            <h3>{{ card.title }}</h3>
+            <p>{{ card.desc }}</p>
+            <ul>
+              <li v-for="(d, j) in card.details" :key="'coid-' + j">{{ d }}</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <!-- 10 · Managing Credentials -->
+      <section v-if="c.credentials" id="credentials" class="section">
+        <div class="section-kicker reveal">{{ c.credentials.kicker }}</div>
+        <h2 class="section-title reveal delay-1" v-html="c.credentials.title"></h2>
+        <p class="section-copy reveal delay-2">{{ c.credentials.copy }}</p>
+
+        <div class="bgcheck-grid" style="grid-template-columns: 1fr 1fr 1fr;">
+          <div v-for="(card, i) in c.credentials.cards" :key="'cred-' + i" class="bgcheck-path glass reveal" :class="'delay-' + (i + 1)">
+            <h3>{{ card.title }}</h3>
+            <p>{{ card.desc }}</p>
+            <ul>
+              <li v-for="(d, j) in card.details" :key="'credd-' + j">{{ d }}</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <!-- 11 · Contract Signing -->
+      <section v-if="c.contractSigning" id="contract-signing" class="section">
+        <div class="section-kicker reveal">{{ c.contractSigning.kicker }}</div>
+        <h2 class="section-title reveal delay-1" v-html="c.contractSigning.title"></h2>
+        <p class="section-copy reveal delay-2">{{ c.contractSigning.copy }}</p>
+
+        <div style="display: flex; flex-direction: column; gap: 48px; margin-top: 48px;">
+          <div v-for="(card, i) in c.contractSigning.cards" :key="'csign-' + i" class="reveal" :class="'delay-' + (i + 1)" style="display: grid; grid-template-columns: 1fr 1fr; gap: 40px; align-items: center;" :style="i % 2 === 1 ? 'direction: rtl' : ''">
+            <div :style="i % 2 === 1 ? 'direction: ltr' : ''">
+              <div style="display: inline-block; background: #DD6438; color: #fff; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 1.5px; padding: 4px 12px; border-radius: 100px; margin-bottom: 12px;">{{ card.title }}</div>
+              <p style="color: #374151; font-size: 15px; line-height: 1.7; margin-bottom: 16px;">{{ card.desc }}</p>
+              <ul style="list-style: none; padding: 0; margin: 0;">
+                <li v-for="(d, j) in card.details" :key="'csignd-' + j" style="padding: 6px 0; font-size: 14px; color: #374151; border-bottom: 1px solid #f0f0f0; display: flex; align-items: flex-start; gap: 8px;">
+                  <span style="color: #16A34A; font-weight: 700; flex-shrink: 0;">&#10003;</span>
+                  <span>{{ d }}</span>
+                </li>
+              </ul>
+            </div>
+            <div :style="i % 2 === 1 ? 'direction: ltr' : ''" style="background: #f5f5f4; border-radius: 12px; overflow: hidden; border: 1px solid #e7e5e4;">
+              <img :src="card.img" :alt="card.title" style="width: 100%; display: block;" />
+            </div>
+          </div>
+        </div>
+
+        <!-- FAQ -->
+        <div v-if="c.contractSigning.faq" style="margin-top: 56px; max-width: 720px; margin-left: auto; margin-right: auto;">
+          <h3 class="reveal" style="font-size: 18px; font-weight: 700; color: #111827; margin-bottom: 24px; text-align: center;">Common questions</h3>
+          <div v-for="(item, i) in c.contractSigning.faq" :key="'cfaq-' + i" class="reveal" :class="'delay-' + (i + 1)" style="background: #fff; border: 1px solid #e7e5e4; border-radius: 12px; padding: 24px; margin-bottom: 16px;">
+            <p style="font-weight: 700; color: #111827; font-size: 15px; margin-bottom: 8px;">{{ item.q }}</p>
+            <p style="color: #6B7280; font-size: 14px; line-height: 1.7;">{{ item.a }}</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- 12 · Background Checks -->
+      <section v-if="c.bgChecks" id="bg-checks" class="section">
+        <div class="section-kicker reveal">{{ c.bgChecks.kicker }}</div>
+        <h2 class="section-title reveal delay-1" v-html="c.bgChecks.title"></h2>
+        <p class="section-copy reveal delay-2">{{ c.bgChecks.copy }}</p>
+
+        <div class="bgcheck-grid">
+          <div v-for="(path, i) in c.bgChecks.paths" :key="'bgp-' + i" class="bgcheck-path glass reveal" :class="'delay-' + (i + 1)">
+            <h3>{{ path.title }}</h3>
+            <p>{{ path.desc }}</p>
+            <ul>
+              <li v-for="(d, j) in path.details" :key="'bgd-' + j">{{ d }}</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="bgcheck-extras reveal delay-3">
+          <div class="bgcheck-extras-card">
+            <h4>{{ c.bgChecks.requirements.title }}</h4>
+            <div class="bgcheck-tags">
+              <span v-for="(item, i) in c.bgChecks.requirements.items" :key="'bgr-' + i" class="bgcheck-tag">{{ item }}</span>
+            </div>
+          </div>
+          <div class="bgcheck-extras-card">
+            <h4>{{ c.bgChecks.pricing.title }}</h4>
+            <p>{{ c.bgChecks.pricing.copy }}</p>
+          </div>
+          <div class="bgcheck-extras-card">
+            <h4>{{ c.bgChecks.compliance.title }}</h4>
+            <p>{{ c.bgChecks.compliance.copy }}</p>
+          </div>
+        </div>
+      </section>
+
+      <section id=”proof” class=”section”>
         <div class="section-kicker reveal">{{ c.proof.kicker }}</div>
         <h2 class="section-title reveal delay-1" v-html="c.proof.title"></h2>
         <p class="section-copy reveal delay-2">{{ c.proof.copy }}</p>
@@ -3092,7 +3690,7 @@
     function defaultAudienceForSurface(surface) {
       if (surface === "network") return "network";
       if (surface === "sub") return "sub";
-      return "gc";
+      return "network";
     }
 
     createApp({
@@ -3101,10 +3699,10 @@
           {
             num: 1,
             short: "Recruit",
-            title: "Recruit the right contractor",
+            title: "Recruit the right sub",
             owner: "GC / Network",
             copy: "The network or GC decides who belongs in the bench or program.",
-            points: ["Pick the contractor", "Define program, work type, and service area", "Start while the sub is still motivated"],
+            points: ["Pick the sub", "Define program, work type, and service area", "Start while the sub is still motivated"],
             signal: "Intent captured",
             docState: "not started",
             ruleState: "selected",
@@ -3138,7 +3736,7 @@
             ruleState: "active",
             qaState: "pending",
             renewalState: "watching",
-            phrase: "The contractor sees exactly what is needed — and why."
+            phrase: "The sub sees exactly what is needed — and why."
           },
           {
             num: 4,
@@ -3159,7 +3757,7 @@
             short: "Broker check",
             title: "Get COI truth from the source",
             owner: "Sublynk backops",
-            copy: "The broker loop makes insurance more trustworthy than relying only on a contractor-uploaded PDF.",
+            copy: "The broker loop makes insurance more trustworthy than relying only on a sub-uploaded PDF.",
             points: ["Broker-authoritative COI path", "Endorsement wording review", "Fewer fake-green approvals"],
             signal: "Source verified",
             docState: "reviewing",
@@ -3187,7 +3785,7 @@
             short: "Monitor",
             title: "Monitor status continuously",
             owner: "Sublynk backops",
-            copy: "Status is not a file cabinet. It is a live signal that updates when the contractor changes, expires, or falls out of compliance.",
+            copy: "Status is not a file cabinet. It is a live signal that updates when the sub changes, expires, or falls out of compliance.",
             points: ["Live status", "Reason codes", "Network-ready visibility"],
             signal: "Live signal",
             docState: "current",
@@ -3236,7 +3834,7 @@
             interrupt: "Credentialing jail kills recruits — not your price.",
             pointAt: "Point at steps 1 → 6: recruit, invite, collect, verify, broker check, human QA.",
             why: "Speed protects recruiting momentum. Clarity prevents the sub from giving up when requirements feel random.",
-            close: "The network defines quality. Sublynk makes the contractor cross the line while they are still motivated."
+            close: "The network defines quality. Sublynk makes the sub cross the line while they are still motivated."
           },
           {
             id: "gc",
@@ -3251,19 +3849,19 @@
           },
           {
             id: "sub",
-            kicker: "Contractor",
+            kicker: "Sub",
             name: "Sub / franchise owner",
             fear: "Mystery red flags, duplicate uploads, and lost jobs while waiting.",
             role: "Their job is to get compliant, get work, and stay out of admin purgatory.",
             interrupt: "Red without a reason is not compliance — it is anxiety.",
             pointAt: "Point at the fix list, live monitoring, and renewal loop.",
-            why: "Contractors do not need more portals. They need to know what is missing, who can fix it, and when they can work.",
-            close: "The contractor experience becomes simple: upload, understand, fix, get green, stay green."
+            why: "Subs do not need more portals. They need to know what is missing, who can fix it, and when they can work.",
+            close: "The sub experience becomes simple: upload, understand, fix, get green, stay green."
           }
         ];
 
         const discoveryQuestions = [
-          { id: "persona_type", section: "hero", meddpicc: "identify_pain", meddpiccOrder: 1, label: "Who are we speaking with today?", hint: "Network, GC ops, or contractor/franchise", placeholder: "e.g. Managed repair network ops" },
+          { id: "persona_type", section: "hero", meddpicc: "identify_pain", meddpiccOrder: 1, label: "Who are we speaking with today?", hint: "Network, GC ops, or sub/franchise", placeholder: "e.g. Managed repair network ops" },
           { id: "current_portal", section: "hero", meddpicc: "competition", meddpiccOrder: 1, label: "What do you use for credentialing today?", hint: "Profile Gorilla, Avetta, spreadsheets, etc.", placeholder: "e.g. PG + internal spreadsheet" },
           { id: "recruit_dropoff", section: "old-new", meddpicc: "metrics", meddpiccOrder: 4, label: "Where do you lose subs today — invite, payment, or first COI upload?", hint: "Talk track A1 ask", placeholder: "Their answer…" },
           { id: "credentialing_timeline", section: "old-new", meddpicc: "metrics", meddpiccOrder: 2, label: "How long does it typically take a sub to become job-ready?", hint: "Compare to same-day / days on Sublynk", placeholder: "e.g. 2–3 weeks on PG" },
@@ -3365,6 +3963,30 @@
         audienceBadge() {
           return this.c.badge || "Demo";
         },
+        sideNav() {
+          const base = [
+            { id: "hero", label: "Top" },
+            { id: "old-new", label: "Old vs New" },
+            { id: "one-line", label: "The line" },
+            { id: "who-does-what", label: "Who does what" },
+            { id: "flow", label: "Your path" },
+            { id: "always-on", label: "Stay ready" },
+          ];
+          base.push({ id: "persona", label: "Personas" });
+          if (this.c.programReqs) base.push({ id: "program-reqs", label: "Requirements" });
+          if (this.c.joinNetwork) base.push({ id: "join-network", label: "Join network" });
+          if (this.c.coiManagement) base.push({ id: "coi-management", label: "COI" });
+          if (this.c.credentials) base.push({ id: "credentials", label: "Credentials" });
+          if (this.c.contractSigning) base.push({ id: "contract-signing", label: "Contracts" });
+          if (this.c.bgChecks) base.push({ id: "bg-checks", label: "Background" });
+          base.push(
+            { id: "proof", label: "Proof" },
+            { id: "close", label: "Close" },
+            { id: "wrapup", label: "Wrap-up" },
+            { id: "meddpicc", label: "Discovery" }
+          );
+          return base;
+        },
         viewOptions() {
           const switchIds = window.DECK_SURFACE_OPTIONS?.[this.deckSurface] || ["network", "sub"];
           const ids =
@@ -3400,7 +4022,7 @@
       },
 
       mounted() {
-        const revealObserver = new IntersectionObserver(
+        this._revealObserver = new IntersectionObserver(
           entries => {
             entries.forEach(entry => {
               if (entry.isIntersecting) entry.target.classList.add("visible");
@@ -3409,9 +4031,7 @@
           { threshold: 0.14 }
         );
 
-        document.querySelectorAll(".reveal").forEach(el => revealObserver.observe(el));
-
-        const sectionObserver = new IntersectionObserver(
+        this._sectionObserver = new IntersectionObserver(
           entries => {
             const visible = entries
               .filter(entry => entry.isIntersecting)
@@ -3422,7 +4042,7 @@
           { rootMargin: "-25% 0px -55% 0px", threshold: [0.1, 0.25, 0.5] }
         );
 
-        document.querySelectorAll("section[id]").forEach(section => sectionObserver.observe(section));
+        this._observeAll();
 
         this.loadPersisted();
         this.loadSurfaceState();
@@ -3435,11 +4055,29 @@
         document.addEventListener("click", this.onDocumentClick);
       },
 
+      updated() {
+        this.$nextTick(() => this._observeAll());
+      },
+
       unmounted() {
         document.removeEventListener("click", this.onDocumentClick);
       },
 
       methods: {
+        _observeAll() {
+          document.querySelectorAll(".reveal").forEach(el => {
+            if (!el._revealObserved) {
+              el._revealObserved = true;
+              this._revealObserver.observe(el);
+            }
+          });
+          document.querySelectorAll("section[id]").forEach(section => {
+            if (!section._sectionObserved) {
+              section._sectionObserved = true;
+              this._sectionObserver.observe(section);
+            }
+          });
+        },
         fallbackCopy() {
           const g = window.DECK_SURFACES?.gc;
           if (g?.hero) return g;
@@ -3553,6 +4191,10 @@
         scrollTo(id) {
           const el = document.getElementById(id);
           if (el) el.scrollIntoView({ behavior: "smooth", block: "start" });
+        },
+
+        openLink(url) {
+          window.open(url, '_blank');
         },
 
         questionsForMeddpicc(key) {
