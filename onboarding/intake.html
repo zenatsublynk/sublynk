@@ -1,0 +1,1611 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sublynk - GC Onboarding Intake</title>
+<link rel="preconnect" href="https://rsms.me/">
+<link rel="stylesheet" href="https://rsms.me/inter/inter.css">
+<script src="https://cdn.sheetjs.com/xlsx-0.20.3/package/dist/xlsx.full.min.js"></script>
+<style>
+:root {
+  --orange: #DD6438;
+  --orange-light: #f0a070;
+  --navy: #0C152B;
+  --green: #16A34A;
+  --ink: #111827;
+  --bg: #FAF8F5;
+  --panel: #f5f5f4;
+  --red: #DC2626;
+  --border: #d6d3d1;
+  --border-light: #e7e5e4;
+  --text-muted: #6b7280;
+  --radius: 10px;
+  --shadow: 0 1px 3px rgba(0,0,0,.08), 0 1px 2px rgba(0,0,0,.04);
+  --shadow-lg: 0 10px 25px rgba(0,0,0,.08);
+}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { font-family: 'Inter', 'Inter Variable', system-ui, sans-serif; font-size: 15px; -webkit-font-smoothing: antialiased; }
+body { background: var(--bg); color: var(--ink); min-height: 100vh; }
+
+/* Header */
+.header { background: var(--navy); padding: 20px 24px; display: flex; align-items: center; gap: 14px; }
+.header-logo { font-size: 22px; font-weight: 700; color: #fff; letter-spacing: -.5px; }
+.header-logo span { color: var(--orange); }
+.header-sub { color: rgba(255,255,255,.55); font-size: 13px; margin-left: auto; }
+
+/* Progress */
+.progress-wrap { background: #fff; border-bottom: 1px solid var(--border-light); padding: 18px 24px; position: sticky; top: 0; z-index: 50; }
+.progress-bar { display: flex; align-items: center; justify-content: center; gap: 0; max-width: 900px; margin: 0 auto; }
+.step-ind { display: flex; align-items: center; gap: 0; cursor: pointer; }
+.step-circle { width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 600; border: 2px solid var(--border); color: var(--text-muted); background: #fff; transition: all .25s; flex-shrink: 0; }
+.step-circle svg { display: none; }
+.step-label { font-size: 11px; color: var(--text-muted); margin-top: 4px; text-align: center; white-space: nowrap; transition: color .25s; }
+.step-ind.active .step-circle { background: var(--orange); border-color: var(--orange); color: #fff; }
+.step-ind.active .step-label { color: var(--orange); font-weight: 600; }
+.step-ind.done .step-circle { background: var(--green); border-color: var(--green); color: #fff; }
+.step-ind.done .step-circle span { display: none; }
+.step-ind.done .step-circle svg { display: block; }
+.step-ind.done .step-label { color: var(--green); }
+.step-connector { width: 32px; height: 2px; background: var(--border-light); margin: 0 4px; margin-bottom: 18px; flex-shrink: 1; transition: background .25s; }
+.step-connector.done { background: var(--green); }
+.step-ind-wrap { display: flex; flex-direction: column; align-items: center; }
+
+/* Container */
+.container { max-width: 780px; margin: 0 auto; padding: 28px 20px 100px; }
+
+/* Card */
+.card { background: #fff; border-radius: var(--radius); box-shadow: var(--shadow); padding: 32px 28px; }
+.card-title { font-size: 20px; font-weight: 700; color: var(--navy); margin-bottom: 4px; }
+.card-desc { font-size: 14px; color: var(--text-muted); margin-bottom: 24px; line-height: 1.5; }
+
+/* Form */
+.field { margin-bottom: 18px; }
+.field-row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+.field-row-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 14px; }
+label.field-label { display: block; font-size: 13px; font-weight: 600; color: var(--ink); margin-bottom: 5px; }
+label.field-label .req { color: var(--red); margin-left: 2px; }
+label.field-label .opt { color: var(--text-muted); font-weight: 400; font-size: 12px; margin-left: 4px; }
+input[type="text"], input[type="email"], input[type="tel"], input[type="url"], input[type="date"], input[type="number"],
+select, textarea {
+  width: 100%; padding: 10px 12px; border: 1.5px solid var(--border); border-radius: 8px;
+  font-family: inherit; font-size: 14px; color: var(--ink); background: #fff;
+  transition: border-color .2s, box-shadow .2s; outline: none;
+}
+input:focus, select:focus, textarea:focus { border-color: var(--orange); box-shadow: 0 0 0 3px rgba(221,100,56,.12); }
+textarea { resize: vertical; min-height: 80px; }
+select { cursor: pointer; appearance: none; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' fill='%236b7280' viewBox='0 0 16 16'%3E%3Cpath d='M8 11L3 6h10z'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 12px center; padding-right: 32px; }
+.field-error { font-size: 12px; color: var(--red); margin-top: 4px; display: none; }
+.field.has-error input, .field.has-error select, .field.has-error textarea { border-color: var(--red); }
+.field.has-error .field-error { display: block; }
+.field-hint { font-size: 11px; color: var(--text-muted); margin-top: 3px; }
+.field-hint.secure { color: var(--green); }
+
+/* Radio group */
+.radio-group { display: flex; flex-wrap: wrap; gap: 8px 16px; }
+.radio-label { display: flex; align-items: center; gap: 6px; font-size: 13px; color: var(--ink); cursor: pointer; padding: 4px 0; }
+.radio-label input[type="radio"] { width: 16px; height: 16px; accent-color: var(--orange); cursor: pointer; flex-shrink: 0; }
+
+/* Toggle */
+.toggle-row { display: flex; align-items: center; justify-content: space-between; padding: 14px 16px; border: 1.5px solid var(--border-light); border-radius: 10px; margin-bottom: 8px; transition: border-color .2s, background .2s; }
+.toggle-row.active { border-color: var(--orange); background: rgba(221,100,56,.03); }
+.toggle-info { flex: 1; }
+.toggle-title { font-size: 14px; font-weight: 600; color: var(--ink); }
+.toggle-sub { font-size: 12px; color: var(--text-muted); margin-top: 2px; }
+.toggle-switch { position: relative; width: 44px; height: 24px; flex-shrink: 0; margin-left: 12px; }
+.toggle-switch input { opacity: 0; width: 0; height: 0; position: absolute; }
+.toggle-track { position: absolute; inset: 0; background: var(--border); border-radius: 12px; cursor: pointer; transition: background .25s; }
+.toggle-track::after { content: ''; position: absolute; top: 3px; left: 3px; width: 18px; height: 18px; background: #fff; border-radius: 50%; transition: transform .25s; box-shadow: 0 1px 3px rgba(0,0,0,.15); }
+.toggle-switch input:checked + .toggle-track { background: var(--orange); }
+.toggle-switch input:checked + .toggle-track::after { transform: translateX(20px); }
+.toggle-expand { max-height: 0; overflow: hidden; transition: max-height .35s ease, padding .35s ease; padding: 0 16px; }
+.toggle-expand.open { max-height: 2000px; padding: 16px 16px 8px; }
+.toggle-expand .field { margin-bottom: 14px; }
+.toggle-expand .field:last-child { margin-bottom: 6px; }
+
+/* Insurance coverage card */
+.ins-coverage { border: 1.5px solid var(--border-light); border-radius: 10px; margin-bottom: 10px; overflow: hidden; transition: border-color .2s; }
+.ins-coverage.active { border-color: var(--orange); }
+.ins-header { display: flex; align-items: center; justify-content: space-between; padding: 14px 16px; cursor: default; }
+.ins-header .toggle-title { font-size: 14px; }
+.ins-body { padding: 0 16px 16px; display: none; }
+.ins-body.open { display: block; }
+.ins-body .field-row { margin-bottom: 10px; }
+.ins-body .field { margin-bottom: 10px; }
+.ins-endorsements { padding-top: 8px; border-top: 1px solid var(--border-light); margin-top: 8px; }
+.ins-endorsements-label { font-size: 12px; font-weight: 600; color: var(--text-muted); text-transform: uppercase; letter-spacing: .5px; margin-bottom: 6px; }
+
+/* Custom limit input */
+.custom-limit { display: none; margin-top: 6px; }
+.custom-limit.show { display: block; }
+
+/* Checkboxes */
+.checkbox-group { display: flex; flex-direction: column; gap: 8px; }
+.checkbox-group.grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.checkbox-group.grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; }
+.cb-label { display: flex; align-items: center; gap: 8px; font-size: 14px; color: var(--ink); cursor: pointer; padding: 6px 0; }
+.cb-label input[type="checkbox"] { width: 18px; height: 18px; accent-color: var(--orange); cursor: pointer; flex-shrink: 0; }
+
+/* File upload */
+.upload-zone { border: 2px dashed var(--border); border-radius: var(--radius); padding: 28px 20px; text-align: center; cursor: pointer; transition: border-color .2s, background .2s; position: relative; }
+.upload-zone:hover, .upload-zone.drag-over { border-color: var(--orange); background: rgba(221,100,56,.04); }
+.upload-zone input[type="file"] { position: absolute; inset: 0; opacity: 0; cursor: pointer; }
+.upload-icon { margin-bottom: 8px; color: var(--text-muted); }
+.upload-text { font-size: 13px; color: var(--text-muted); }
+.upload-text strong { color: var(--orange); }
+.upload-hint { font-size: 11px; color: var(--text-muted); margin-top: 4px; }
+.file-preview { display: flex; align-items: center; gap: 10px; padding: 10px 12px; background: var(--panel); border-radius: 8px; margin-top: 8px; }
+.file-preview .file-name { font-size: 13px; font-weight: 500; flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.file-preview .file-size { font-size: 12px; color: var(--text-muted); }
+.file-preview .file-remove { background: none; border: none; color: var(--red); cursor: pointer; font-size: 18px; line-height: 1; padding: 2px 6px; border-radius: 4px; }
+.file-preview .file-remove:hover { background: rgba(220,38,38,.08); }
+
+/* Callout */
+.callout { background: #FFF7ED; border: 1px solid #FDBA74; border-radius: 8px; padding: 14px 16px; font-size: 13px; color: #9A3412; display: flex; gap: 10px; align-items: flex-start; margin-bottom: 20px; }
+.callout svg { flex-shrink: 0; margin-top: 1px; }
+.callout.info { background: #EFF6FF; border-color: #93C5FD; color: #1E40AF; }
+
+/* Buttons */
+.btn-row { display: flex; justify-content: space-between; margin-top: 28px; gap: 12px; }
+.btn { padding: 11px 28px; border-radius: 8px; font-family: inherit; font-size: 14px; font-weight: 600; cursor: pointer; border: none; transition: all .2s; display: inline-flex; align-items: center; gap: 8px; }
+.btn-primary { background: var(--orange); color: #fff; }
+.btn-primary:hover { background: #c7552e; }
+.btn-secondary { background: var(--panel); color: var(--ink); border: 1.5px solid var(--border); }
+.btn-secondary:hover { background: #e7e5e4; }
+.btn-green { background: var(--green); color: #fff; }
+.btn-green:hover { background: #15803d; }
+.btn-sm { padding: 6px 14px; font-size: 12px; }
+
+/* Review */
+.review-section { margin-bottom: 24px; }
+.review-section-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px; padding-bottom: 8px; border-bottom: 2px solid var(--panel); }
+.review-section-title { font-size: 15px; font-weight: 700; color: var(--navy); }
+.review-grid { display: grid; grid-template-columns: 180px 1fr; gap: 6px 16px; font-size: 13px; }
+.review-label { color: var(--text-muted); font-weight: 500; padding: 4px 0; }
+.review-value { color: var(--ink); padding: 4px 0; word-break: break-word; }
+
+/* Success */
+.success-overlay { position: fixed; inset: 0; background: rgba(12,21,43,.6); display: flex; align-items: center; justify-content: center; z-index: 100; opacity: 0; pointer-events: none; transition: opacity .3s; }
+.success-overlay.show { opacity: 1; pointer-events: auto; }
+.success-card { background: #fff; border-radius: 16px; padding: 48px 40px; text-align: center; max-width: 440px; width: 90%; box-shadow: var(--shadow-lg); transform: scale(.9); transition: transform .3s; }
+.success-overlay.show .success-card { transform: scale(1); }
+.success-icon { width: 64px; height: 64px; background: #DCFCE7; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 20px; }
+.success-title { font-size: 22px; font-weight: 700; color: var(--navy); margin-bottom: 8px; }
+.success-text { font-size: 14px; color: var(--text-muted); line-height: 1.6; }
+
+/* Resume banner */
+.resume-banner { background: #EFF6FF; border: 1px solid #93C5FD; border-radius: 8px; padding: 14px 18px; display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 20px; font-size: 13px; color: #1E40AF; }
+.resume-banner .btn { font-size: 12px; padding: 6px 16px; }
+
+/* Confetti canvas */
+#confetti-canvas { position: fixed; inset: 0; z-index: 200; pointer-events: none; }
+
+/* Step transitions */
+.step-content { display: none; animation: fadeSlideIn .35s ease; }
+.step-content.active { display: block; }
+@keyframes fadeSlideIn { from { opacity: 0; transform: translateX(20px); } to { opacity: 1; transform: translateX(0); } }
+
+/* Conditional show */
+.cond-hide { display: none; }
+.cond-hide.show { display: block; }
+
+/* Divider */
+.divider { border: none; border-top: 1px solid var(--border-light); margin: 22px 0; }
+
+/* Print */
+@media print {
+  .header, .progress-wrap, .btn-row, .resume-banner, .btn { display: none !important; }
+  .container { padding: 0; max-width: 100%; }
+  .card { box-shadow: none; border: 1px solid #ddd; }
+  .review-grid { font-size: 11px; }
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .card { padding: 24px 18px; }
+  .field-row, .field-row-3, .checkbox-group.grid, .checkbox-group.grid-3 { grid-template-columns: 1fr; }
+  .step-label { font-size: 9px; }
+  .step-connector { width: 12px; }
+  .review-grid { grid-template-columns: 1fr; }
+  .review-label { font-weight: 600; padding-bottom: 0; }
+  .radio-group { flex-direction: column; }
+}
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="header-logo">Sub<span>lynk</span></div>
+  <div class="header-sub">GC Onboarding Intake</div>
+</div>
+
+<div class="progress-wrap">
+  <div class="progress-bar" id="progressBar"></div>
+</div>
+
+<div class="container">
+  <div id="resumeBanner" class="resume-banner" style="display:none;">
+    <span>You have a saved draft. Resume where you left off?</span>
+    <div style="display:flex;gap:8px;">
+      <button class="btn btn-primary btn-sm" onclick="restoreSaved()">Resume</button>
+      <button class="btn btn-secondary btn-sm" onclick="clearSaved()">Start Fresh</button>
+    </div>
+  </div>
+
+  <!-- STEP 1: Organization Info -->
+  <div class="step-content active" data-step="1">
+    <div class="card">
+      <h2 class="card-title">Organization Info</h2>
+      <p class="card-desc">Tell us about your company so we can set up your Sublynk account.</p>
+
+      <div class="field-row">
+        <div class="field">
+          <label class="field-label">Legal Business Name <span class="req">*</span></label>
+          <input type="text" id="legalName" data-required="true" placeholder="e.g. ABC Restoration LLC">
+          <div class="field-error">Legal business name is required.</div>
+        </div>
+        <div class="field">
+          <label class="field-label">DBA <span class="req">*</span></label>
+          <input type="text" id="dba" data-required="true" placeholder="Doing business as...">
+          <div class="field-error">DBA is required.</div>
+        </div>
+      </div>
+
+      <div class="field-row">
+        <div class="field">
+          <label class="field-label">Tax ID Number (EIN) <span class="req">*</span></label>
+          <input type="text" id="taxId" data-required="true" placeholder="XX-XXXXXXX" maxlength="11">
+          <div class="field-hint secure">Stored securely &mdash; never shared externally.</div>
+          <div class="field-error">Tax ID is required.</div>
+        </div>
+        <div class="field">
+          <label class="field-label">Website URL <span class="opt">(optional)</span></label>
+          <input type="url" id="website" placeholder="https://yourcompany.com">
+        </div>
+      </div>
+
+      <div class="field">
+        <label class="field-label">Tax Classification <span class="req">*</span></label>
+        <div class="radio-group" id="taxClassGroup">
+          <label class="radio-label"><input type="radio" name="taxClass" value="Individual"> Individual</label>
+          <label class="radio-label"><input type="radio" name="taxClass" value="Sole Proprietor"> Sole Proprietor</label>
+          <label class="radio-label"><input type="radio" name="taxClass" value="Single Member LLC"> Single Member LLC</label>
+          <label class="radio-label"><input type="radio" name="taxClass" value="C Corporation"> C Corporation</label>
+          <label class="radio-label"><input type="radio" name="taxClass" value="S Corporation"> S Corporation</label>
+          <label class="radio-label"><input type="radio" name="taxClass" value="Partnership"> Partnership</label>
+          <label class="radio-label"><input type="radio" name="taxClass" value="Trust"> Trust</label>
+          <label class="radio-label"><input type="radio" name="taxClass" value="Estate"> Estate</label>
+          <label class="radio-label"><input type="radio" name="taxClass" value="LLC Partnership"> LLC Partnership</label>
+          <label class="radio-label"><input type="radio" name="taxClass" value="LLC C Corporation"> LLC C Corporation</label>
+          <label class="radio-label"><input type="radio" name="taxClass" value="LLC S Corporation"> LLC S Corporation</label>
+        </div>
+        <div class="field-error" id="taxClassError" style="display:none;">Tax classification is required.</div>
+      </div>
+
+      <hr class="divider">
+
+      <div class="field">
+        <label class="field-label">Address Line 1 <span class="req">*</span></label>
+        <input type="text" id="address1" data-required="true" placeholder="123 Main Street">
+        <div class="field-error">Address is required.</div>
+      </div>
+      <div class="field">
+        <label class="field-label">Address Line 2 <span class="opt">optional</span></label>
+        <input type="text" id="address2" placeholder="Suite, Unit, Building, etc.">
+        <div class="field-error"></div>
+      </div>
+      <div class="field-row-3">
+        <div class="field">
+          <label class="field-label">City <span class="req">*</span></label>
+          <input type="text" id="city" data-required="true" placeholder="City">
+          <div class="field-error">City is required.</div>
+        </div>
+        <div class="field">
+          <label class="field-label">State <span class="req">*</span></label>
+          <select id="state" data-required="true"><option value="">Select...</option></select>
+          <div class="field-error">Required.</div>
+        </div>
+        <div class="field">
+          <label class="field-label">Zipcode <span class="req">*</span></label>
+          <input type="text" id="zip" data-required="true" placeholder="00000" maxlength="10">
+          <div class="field-error">Required.</div>
+        </div>
+      </div>
+
+      <div class="field">
+        <label class="field-label">Primary Email Address <span class="req">*</span></label>
+        <input type="email" id="primaryEmail" data-required="true" placeholder="email@company.com">
+        <div class="field-error">Valid email is required.</div>
+      </div>
+
+      <div class="btn-row" style="justify-content:flex-end;">
+        <button class="btn btn-primary" onclick="goNext()">Continue <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M9 18l6-6-6-6"/></svg></button>
+      </div>
+    </div>
+  </div>
+
+  <!-- STEP 2: Certificate Holder & Description -->
+  <div class="step-content" data-step="2">
+    <div class="card">
+      <h2 class="card-title">Insurance &mdash; Certificate Holder &amp; Description</h2>
+      <p class="card-desc">Tell us who should appear on Certificates of Insurance and what description of operations language is required.</p>
+
+      <div class="field">
+        <label class="field-label">Required Certificate Holder <span class="req">*</span></label>
+        <textarea id="certHolder" data-required="true" placeholder="Enter the full name, address, and any specific language that must appear in the Certificate Holder field on your subcontractors' COIs." rows="4"></textarea>
+        <div class="field-error">Certificate holder information is required.</div>
+      </div>
+
+      <div class="field">
+        <label class="field-label">Required Description of Operations <span class="req">*</span></label>
+        <textarea id="descOps" data-required="true" placeholder="Enter any specific language or requirements that must appear in the Description of Operations field on the COI." rows="4"></textarea>
+        <div class="field-error">Description of operations is required.</div>
+      </div>
+
+      <div class="btn-row">
+        <button class="btn btn-secondary" onclick="goPrev()"><svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M15 18l-6-6 6-6"/></svg> Back</button>
+        <button class="btn btn-primary" onclick="goNext()">Continue <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M9 18l6-6-6-6"/></svg></button>
+      </div>
+    </div>
+  </div>
+
+  <!-- STEP 3: Insurance Requirements -->
+  <div class="step-content" data-step="3">
+    <div class="card">
+      <h2 class="card-title">Insurance Requirements</h2>
+      <p class="card-desc">Toggle on the insurance types you require from subcontractors, then set the minimum limits and endorsements for each.</p>
+
+      <div id="insuranceToggles"></div>
+
+      <hr class="divider">
+
+      <div class="field">
+        <label class="field-label">Do you have any other lines of insurance not mentioned above?</label>
+        <div class="radio-group">
+          <label class="radio-label"><input type="radio" name="otherInsurance" value="No" checked onchange="toggleCond('otherInsDetail',false)"> No</label>
+          <label class="radio-label"><input type="radio" name="otherInsurance" value="Yes" onchange="toggleCond('otherInsDetail',true)"> Yes</label>
+        </div>
+      </div>
+      <div class="cond-hide" id="otherInsDetail">
+        <div class="field">
+          <label class="field-label">Please describe</label>
+          <textarea id="otherInsText" placeholder="Describe additional insurance requirements..."></textarea>
+        </div>
+      </div>
+
+      <div class="field">
+        <label class="field-label">Do you have a Sample COI to share?</label>
+        <div class="radio-group">
+          <label class="radio-label"><input type="radio" name="sampleCoi" value="No" checked onchange="toggleCond('coiUploadArea',false)"> No</label>
+          <label class="radio-label"><input type="radio" name="sampleCoi" value="Yes" onchange="toggleCond('coiUploadArea',true)"> Yes</label>
+          <label class="radio-label"><input type="radio" name="sampleCoi" value="Maybe" onchange="toggleCond('coiUploadArea',true)"> Maybe</label>
+        </div>
+      </div>
+      <div class="cond-hide" id="coiUploadArea">
+        <div class="field">
+          <label class="field-label">Upload Sample COI</label>
+          <div class="upload-zone" id="zone_coi" ondragover="dzOver(event)" ondragleave="dzLeave(event)" ondrop="dzDropCoiMulti(event)">
+            <input type="file" accept=".pdf,.png,.jpg,.jpeg,.doc,.docx" multiple onchange="handleCoiUploadMulti(event)">
+            <div class="upload-icon"><svg width="32" height="32" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M12 16V4m0 0l-4 4m4-4l4 4M4 17v2a1 1 0 001 1h14a1 1 0 001-1v-2"/></svg></div>
+            <div class="upload-text">Drop COI here or <strong>click to browse</strong></div>
+            <div class="upload-hint">PDF, image, or Word document &mdash; multiple files allowed</div>
+          </div>
+          <div id="preview_coi"></div>
+        </div>
+      </div>
+
+      <div class="btn-row">
+        <button class="btn btn-secondary" onclick="goPrev()"><svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M15 18l-6-6 6-6"/></svg> Back</button>
+        <button class="btn btn-primary" onclick="goNext()">Continue <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M9 18l6-6-6-6"/></svg></button>
+      </div>
+    </div>
+  </div>
+
+  <!-- STEP 4: Programs & Certifications -->
+  <div class="step-content" data-step="4">
+    <div class="card">
+      <h2 class="card-title">Programs &amp; Certifications</h2>
+      <p class="card-desc">Select the program types and certification requirements for your subcontractors.</p>
+
+      <div class="field">
+        <label class="field-label">Program Types <span class="req">*</span></label>
+        <div class="checkbox-group">
+          <label class="cb-label"><input type="checkbox" id="prog_water"> Water Mitigation</label>
+          <label class="cb-label"><input type="checkbox" id="prog_mold"> Mold Remediation</label>
+          <label class="cb-label"><input type="checkbox" id="prog_fire"> Fire Mitigation</label>
+          <label class="cb-label"><input type="checkbox" id="prog_recon"> Reconstruction</label>
+          <label class="cb-label"><input type="checkbox" id="prog_board"> Board Up &amp; Tarping</label>
+        </div>
+        <div class="field-error" id="progError" style="display:none;">Please select at least one program type.</div>
+      </div>
+
+      <hr class="divider">
+
+      <div class="field">
+        <label class="field-label">Do you require any certifications beyond what's legally required?</label>
+        <div class="radio-group">
+          <label class="radio-label"><input type="radio" name="extraCerts" value="No" checked onchange="toggleCond('extraCertsDetail',false)"> No</label>
+          <label class="radio-label"><input type="radio" name="extraCerts" value="Yes" onchange="toggleCond('extraCertsDetail',true)"> Yes</label>
+          <label class="radio-label"><input type="radio" name="extraCerts" value="Maybe" onchange="toggleCond('extraCertsDetail',false)"> Maybe</label>
+        </div>
+      </div>
+      <div class="cond-hide" id="extraCertsDetail">
+        <div class="field">
+          <label class="field-label">Please explain what certifications are required</label>
+          <textarea id="extraCertsText" placeholder="Describe additional certification requirements..."></textarea>
+        </div>
+      </div>
+
+      <div class="btn-row">
+        <button class="btn btn-secondary" onclick="goPrev()"><svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M15 18l-6-6 6-6"/></svg> Back</button>
+        <button class="btn btn-primary" onclick="goNext()">Continue <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M9 18l6-6-6-6"/></svg></button>
+      </div>
+    </div>
+  </div>
+
+  <!-- STEP 5: Background Checks -->
+  <div class="step-content" data-step="5">
+    <div class="card">
+      <h2 class="card-title">Background Checks</h2>
+
+      <div style="background: linear-gradient(135deg, #FFF3EF, #fff8f5); border: 2px solid #DD6438; border-radius: 12px; padding: 20px 24px; margin-bottom: 24px;">
+        <div style="display:flex; align-items:flex-start; gap:12px;">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#DD6438" stroke-width="2" style="flex-shrink:0; margin-top:2px;"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+          <div>
+            <p style="font-weight:700; color:#0C152B; font-size:15px; margin-bottom:4px;">Sublynk Minimum Requirement</p>
+            <p style="color:#374151; font-size:14px; line-height:1.6;">Sublynk requires a minimum of one background check for an owner of every subcontractor, regardless of any additional requirements.</p>
+          </div>
+        </div>
+      </div>
+
+      <p class="card-desc">Configure additional screening requirements beyond the Sublynk minimum.</p>
+
+      <div class="toggle-row" id="bgToggleRow" style="border:none;padding:14px 0;margin-bottom:0;">
+        <div class="toggle-info"><div class="toggle-title">Do you want to enforce additional background check requirements?</div></div>
+        <label class="toggle-switch"><input type="checkbox" id="tog_bgcheck" onchange="toggleExpand('bgcheck')"><span class="toggle-track"></span></label>
+      </div>
+      <div class="toggle-expand" id="exp_bgcheck">
+
+        <div class="field">
+          <label class="field-label">Who must have a background check?</label>
+          <div class="checkbox-group">
+            <label class="cb-label"><input type="checkbox" id="bg_owners"> All owners</label>
+            <label class="cb-label"><input type="checkbox" id="bg_creds"> All credential holders</label>
+            <label class="cb-label"><input type="checkbox" id="bg_employees"> All employees</label>
+          </div>
+        </div>
+
+        <div class="field">
+          <label class="field-label">How long is a background check valid?</label>
+          <div class="radio-group">
+            <label class="radio-label"><input type="radio" name="bgValidity" value="1 year"> 1 year</label>
+            <label class="radio-label"><input type="radio" name="bgValidity" value="2 years"> 2 years</label>
+            <label class="radio-label"><input type="radio" name="bgValidity" value="3 years" checked> 3 years</label>
+          </div>
+        </div>
+
+        <div class="field">
+          <label class="field-label">Screening Requirements</label>
+          <div class="checkbox-group grid">
+            <label class="cb-label"><input type="checkbox" id="scr_ssn"> SSN Trace</label>
+            <label class="cb-label"><input type="checkbox" id="scr_sex"> Sex Offender Search</label>
+            <label class="cb-label"><input type="checkbox" id="scr_ofac"> Global Watchlist (OFAC)</label>
+            <label class="cb-label"><input type="checkbox" id="scr_natcrim"> National Criminal Search</label>
+            <label class="cb-label"><input type="checkbox" id="scr_fedcrim"> Federal Criminal Search</label>
+            <label class="cb-label"><input type="checkbox" id="scr_county"> County Criminal Search</label>
+            <label class="cb-label"><input type="checkbox" id="scr_mvr"> Motor Vehicle Report</label>
+            <label class="cb-label"><input type="checkbox" id="scr_countycivil"> County Civil Search</label>
+            <label class="cb-label"><input type="checkbox" id="scr_fedcivil"> Federal Civil Search</label>
+            <label class="cb-label"><input type="checkbox" id="scr_credit"> Credit Report</label>
+            <label class="cb-label"><input type="checkbox" id="scr_edu"> Education Verification</label>
+            <label class="cb-label"><input type="checkbox" id="scr_emp"> Employment Verification</label>
+            <label class="cb-label"><input type="checkbox" id="scr_drug" onchange="toggleCond('drugSubstances',this.checked)"> Drug Screening</label>
+          </div>
+        </div>
+
+        <div class="cond-hide" id="drugSubstances">
+          <div class="field">
+            <label class="field-label">Drug Screening &mdash; Select Substances</label>
+            <div class="checkbox-group grid-3">
+              <label class="cb-label"><input type="checkbox" id="drug_cocaine"> Cocaine</label>
+              <label class="cb-label"><input type="checkbox" id="drug_amphet"> Amphetamines</label>
+              <label class="cb-label"><input type="checkbox" id="drug_opiates"> Opiates</label>
+              <label class="cb-label"><input type="checkbox" id="drug_pcp"> PCP</label>
+              <label class="cb-label"><input type="checkbox" id="drug_barb"> Barbiturates</label>
+              <label class="cb-label"><input type="checkbox" id="drug_benzo"> Benzodiazepines</label>
+              <label class="cb-label"><input type="checkbox" id="drug_meth"> Methadone</label>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="btn-row">
+        <button class="btn btn-secondary" onclick="goPrev()"><svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M15 18l-6-6 6-6"/></svg> Back</button>
+        <button class="btn btn-primary" onclick="goNext()">Continue <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M9 18l6-6-6-6"/></svg></button>
+      </div>
+    </div>
+  </div>
+
+  <!-- STEP 6: Contracts -->
+  <div class="step-content" data-step="6">
+    <div class="card">
+      <h2 class="card-title">Contracts</h2>
+      <p class="card-desc">Upload your contract templates in Word format (.doc/.docx) so we can build signable templates in PandaDoc.</p>
+
+      <div class="callout">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#9A3412" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+        <span><strong>Please upload Word documents, not PDFs.</strong> This allows us to templatize contracts for electronic signing.</span>
+      </div>
+
+      <div class="field">
+        <label class="field-label">Do you require counter signatures?</label>
+        <div class="radio-group">
+          <label class="radio-label"><input type="radio" name="counterSigs" value="No" checked onchange="toggleCond('counterSigDetail',false)"> No</label>
+          <label class="radio-label"><input type="radio" name="counterSigs" value="Yes" onchange="toggleCond('counterSigDetail',true)"> Yes</label>
+        </div>
+      </div>
+      <div class="cond-hide" id="counterSigDetail">
+        <div style="background: var(--panel); border-radius: 8px; padding: 16px; margin-bottom: 16px;">
+          <p style="font-size: 14px; color: var(--ink); line-height: 1.6;">Our support team will reach out to capture the details of your counter signature requirements and configure them for your account.</p>
+        </div>
+      </div>
+
+      <hr class="divider">
+
+      <div class="field">
+        <label class="field-label">Do you have additional contracts beyond the standard Sublynk subcontractor agreement?</label>
+        <div class="radio-group">
+          <label class="radio-label"><input type="radio" name="additionalContracts" value="No" checked onchange="toggleCond('contractUploadArea',false)"> No</label>
+          <label class="radio-label"><input type="radio" name="additionalContracts" value="Yes" onchange="toggleCond('contractUploadArea',true)"> Yes</label>
+        </div>
+      </div>
+
+      <div class="cond-hide" id="contractUploadArea">
+        <div class="field">
+          <label class="field-label">Upload Contract Templates</label>
+          <div class="upload-zone" id="zone_contracts" ondragover="dzOver(event)" ondragleave="dzLeave(event)" ondrop="dzDropMulti(event)">
+            <input type="file" accept=".doc,.docx" multiple onchange="handleFileMulti(event)">
+            <div class="upload-icon"><svg width="32" height="32" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M12 16V4m0 0l-4 4m4-4l4 4M4 17v2a1 1 0 001 1h14a1 1 0 001-1v-2"/></svg></div>
+            <div class="upload-text">Drop files here or <strong>click to browse</strong></div>
+            <div class="upload-hint">.doc or .docx only &mdash; multiple files allowed</div>
+          </div>
+          <div id="preview_contracts"></div>
+        </div>
+      </div>
+
+      <hr class="divider">
+      <p class="card-desc" style="margin-bottom:16px;">Who signs contracts on behalf of your organization?</p>
+      <div class="field">
+        <label class="field-label">Signatory Name</label>
+        <input type="text" id="sigName" placeholder="Full name">
+      </div>
+      <div class="field-row">
+        <div class="field">
+          <label class="field-label">Signatory Title</label>
+          <input type="text" id="sigTitle" placeholder="e.g. Owner, CEO">
+        </div>
+        <div class="field">
+          <label class="field-label">Signatory Email</label>
+          <input type="email" id="sigEmail" placeholder="email@company.com">
+        </div>
+      </div>
+
+      <div class="btn-row">
+        <button class="btn btn-secondary" onclick="goPrev()"><svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M15 18l-6-6 6-6"/></svg> Back</button>
+        <button class="btn btn-primary" onclick="goNext()">Review &amp; Submit <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M9 18l6-6-6-6"/></svg></button>
+      </div>
+    </div>
+  </div>
+
+  <!-- STEP 7: Review & Submit -->
+  <div class="step-content" data-step="7">
+    <div class="card" id="reviewCard">
+      <h2 class="card-title">Review &amp; Submit</h2>
+      <p class="card-desc">Please review your information before submitting.</p>
+      <div id="reviewContent"></div>
+      <div class="btn-row">
+        <button class="btn btn-secondary" onclick="goPrev()"><svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M15 18l-6-6 6-6"/></svg> Back</button>
+        <div style="display:flex;gap:10px;">
+          <button class="btn btn-secondary" onclick="downloadCSV()"><svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 4v12m0 0l-4-4m4 4l4-4M4 17v2a1 1 0 001 1h14a1 1 0 001-1v-2"/></svg> Download Excel</button>
+          <button class="btn btn-green" onclick="submitForm()"><svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M5 13l4 4L19 7"/></svg> Submit</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Success overlay -->
+<div class="success-overlay" id="successOverlay">
+  <div class="success-card">
+    <div class="success-icon"><svg width="32" height="32" fill="none" stroke="#16A34A" stroke-width="2.5" viewBox="0 0 24 24"><path d="M5 13l4 4L19 7"/></svg></div>
+    <h3 class="success-title">Intake Submitted!</h3>
+    <p class="success-text">Your onboarding data has been downloaded as an Excel file. A member of the Sublynk team will reach out within 1 business day to get you started.</p>
+    <p style="font-size:13px; color:#6B7280; margin-top:8px;">Check your downloads folder for the Excel file.</p>
+    <div style="display:flex; gap:12px; margin-top:24px; justify-content:center;">
+      <button class="btn btn-secondary" onclick="downloadCSV()">Download Excel Again</button>
+      <button class="btn btn-primary" onclick="localStorage.removeItem('sublynk_gc_intake'); location.reload()">Start New Intake</button>
+    </div>
+  </div>
+</div>
+
+<canvas id="confetti-canvas"></canvas>
+
+<script>
+// ─── US States ───
+const US_STATES = ["AL","AK","AZ","AR","CA","CO","CT","DE","FL","GA","HI","ID","IL","IN","IA","KS","KY","LA","ME","MD","MA","MI","MN","MS","MO","MT","NE","NV","NH","NJ","NM","NY","NC","ND","OH","OK","OR","PA","RI","SC","SD","TN","TX","UT","VT","VA","WA","WV","WI","WY","DC"];
+const STATE_NAMES = {"AL":"Alabama","AK":"Alaska","AZ":"Arizona","AR":"Arkansas","CA":"California","CO":"Colorado","CT":"Connecticut","DE":"Delaware","FL":"Florida","GA":"Georgia","HI":"Hawaii","ID":"Idaho","IL":"Illinois","IN":"Indiana","IA":"Iowa","KS":"Kansas","KY":"Kentucky","LA":"Louisiana","ME":"Maine","MD":"Maryland","MA":"Massachusetts","MI":"Michigan","MN":"Minnesota","MS":"Mississippi","MO":"Missouri","MT":"Montana","NE":"Nebraska","NV":"Nevada","NH":"New Hampshire","NJ":"New Jersey","NM":"New Mexico","NY":"New York","NC":"North Carolina","ND":"North Dakota","OH":"Ohio","OK":"Oklahoma","OR":"Oregon","PA":"Pennsylvania","RI":"Rhode Island","SC":"South Carolina","SD":"South Dakota","TN":"Tennessee","TX":"Texas","UT":"Utah","VT":"Vermont","VA":"Virginia","WA":"Washington","WV":"West Virginia","WI":"Wisconsin","WY":"Wyoming","DC":"District of Columbia"};
+const stateSel = document.getElementById('state');
+US_STATES.forEach(s => { const o = document.createElement('option'); o.value = s; o.textContent = STATE_NAMES[s]; stateSel.appendChild(o); });
+
+// ─── Insurance Config ───
+const LIMIT_OPTIONS = ['$250,000','$500,000','$1,000,000','$2,000,000','$4,000,000','$5,000,000','Custom'];
+
+const INSURANCE_TYPES = [
+  {
+    key: 'cgl', title: 'Commercial General Liability',
+    limits: [
+      { id: 'cgl_occ', label: 'Each Occurrence', default: '$1,000,000' },
+      { id: 'cgl_agg', label: 'Aggregate', default: '$2,000,000' },
+      { id: 'cgl_pai', label: 'Personal & Advertising Injury', default: '$1,000,000' },
+      { id: 'cgl_coagg', label: 'Completed Ops Aggregate', default: '$2,000,000' }
+    ],
+    endorsements: [
+      { id: 'cgl_e_ai', label: 'Additional Insured CG2010' },
+      { id: 'cgl_e_co', label: 'Additional Insured Completed Ops CG2037' },
+      { id: 'cgl_e_ws', label: 'Waiver of Subrogation CG2404' },
+      { id: 'cgl_e_pnc', label: 'Primary & Non-Contributory' }
+    ]
+  },
+  {
+    key: 'cpl', title: 'Commercial Pollution Liability',
+    limits: [
+      { id: 'cpl_occ', label: 'Each Occurrence', default: '$1,000,000' }
+    ],
+    endorsements: [
+      { id: 'cpl_e_ai', label: 'Additional Insured CG2010' },
+      { id: 'cpl_e_co', label: 'Additional Insured Completed Ops CG2037' },
+      { id: 'cpl_e_ws', label: 'Waiver of Subrogation CG2404' },
+      { id: 'cpl_e_pnc', label: 'Primary & Non-Contributory' }
+    ]
+  },
+  {
+    key: 'auto', title: 'Commercial Auto Liability',
+    limits: [
+      { id: 'auto_csl', label: 'Combined Single Limit', default: '$1,000,000' }
+    ],
+    endorsements: [
+      { id: 'auto_e_ai', label: 'Additional Insured' },
+      { id: 'auto_e_ws', label: 'Waiver of Subrogation' }
+    ]
+  },
+  {
+    key: 'wc', title: 'Workers Comp / Employer\'s Liability',
+    limits: [
+      { id: 'wc_ea', label: 'Each Accident Limit', default: '$1,000,000' }
+    ],
+    endorsements: [
+      { id: 'wc_e_ai', label: 'Additional Insured' },
+      { id: 'wc_e_ws', label: 'Waiver of Subrogation' }
+    ]
+  },
+  {
+    key: 'umb', title: 'Umbrella / Excess Liability',
+    limits: [
+      { id: 'umb_occ', label: 'Each Occurrence', default: '$5,000,000' },
+      { id: 'umb_agg', label: 'Aggregate', default: '$5,000,000' }
+    ],
+    endorsements: [
+      { id: 'umb_e_ai', label: 'Additional Insured' },
+      { id: 'umb_e_ws', label: 'Waiver of Subrogation' }
+    ]
+  },
+  {
+    key: 'prof', title: 'Professional Liability',
+    limits: [
+      { id: 'prof_occ', label: 'Each Occurrence', default: '$1,000,000' },
+      { id: 'prof_agg', label: 'Aggregate', default: '$2,000,000' }
+    ],
+    endorsements: [
+      { id: 'prof_e_ai', label: 'Additional Insured' },
+      { id: 'prof_e_co', label: 'Additional Insured Completed Ops' },
+      { id: 'prof_e_ws', label: 'Waiver of Subrogation' },
+      { id: 'prof_e_pnc', label: 'Primary & Non-Contributory' }
+    ]
+  },
+  {
+    key: 'bail', title: 'Bailees',
+    limits: [
+      { id: 'bail_occ', label: 'Each Occurrence', default: '$250,000' }
+    ],
+    endorsements: []
+  }
+];
+
+function buildLimitSelect(id, defaultVal) {
+  let html = `<select id="${id}" onchange="toggleCustomLimit('${id}')">`;
+  LIMIT_OPTIONS.forEach(opt => {
+    const selected = opt === defaultVal ? ' selected' : '';
+    html += `<option value="${opt}"${selected}>${opt}</option>`;
+  });
+  html += `</select>`;
+  html += `<input type="text" id="${id}_custom" class="custom-limit" placeholder="Enter custom amount, e.g. $3,000,000">`;
+  return html;
+}
+
+function buildInsuranceToggles() {
+  const container = document.getElementById('insuranceToggles');
+  let html = '';
+  INSURANCE_TYPES.forEach(ins => {
+    html += `<div class="ins-coverage" id="ins_${ins.key}">`;
+    html += `<div class="ins-header">`;
+    html += `<div class="toggle-info"><div class="toggle-title">${ins.title}</div></div>`;
+    html += `<label class="toggle-switch"><input type="checkbox" id="tog_${ins.key}" onchange="toggleInsurance('${ins.key}')"><span class="toggle-track"></span></label>`;
+    html += `</div>`;
+    html += `<div class="ins-body" id="body_${ins.key}">`;
+
+    // Limits
+    if (ins.limits.length > 1) {
+      html += `<div class="field-row">`;
+      ins.limits.forEach(lim => {
+        html += `<div class="field"><label class="field-label">${lim.label}</label>${buildLimitSelect(lim.id, lim.default)}</div>`;
+      });
+      // If odd number of limits in a row, we might need to close differently
+      html += `</div>`;
+    } else {
+      ins.limits.forEach(lim => {
+        html += `<div class="field"><label class="field-label">${lim.label}</label>${buildLimitSelect(lim.id, lim.default)}</div>`;
+      });
+    }
+
+    // Endorsements
+    if (ins.endorsements.length > 0) {
+      html += `<div class="ins-endorsements">`;
+      html += `<div class="ins-endorsements-label">Endorsements</div>`;
+      html += `<div class="checkbox-group">`;
+      ins.endorsements.forEach(end => {
+        html += `<label class="cb-label"><input type="checkbox" id="${end.id}"> ${end.label}</label>`;
+      });
+      html += `</div></div>`;
+    }
+
+    html += `</div></div>`;
+  });
+  container.innerHTML = html;
+}
+
+function toggleInsurance(key) {
+  const cb = document.getElementById('tog_' + key);
+  const body = document.getElementById('body_' + key);
+  const card = document.getElementById('ins_' + key);
+  if (cb.checked) {
+    body.classList.add('open');
+    card.classList.add('active');
+  } else {
+    body.classList.remove('open');
+    card.classList.remove('active');
+  }
+}
+
+function toggleCustomLimit(id) {
+  const sel = document.getElementById(id);
+  const custom = document.getElementById(id + '_custom');
+  if (sel.value === 'Custom') {
+    custom.classList.add('show');
+    custom.focus();
+  } else {
+    custom.classList.remove('show');
+    custom.value = '';
+  }
+}
+
+// ─── Step Management ───
+const STEPS = [
+  { num: 1, label: 'Organization' },
+  { num: 2, label: 'Cert Holder' },
+  { num: 3, label: 'Insurance' },
+  { num: 4, label: 'Programs' },
+  { num: 5, label: 'Background' },
+  { num: 6, label: 'Contracts' },
+  { num: 7, label: 'Review' }
+];
+let currentStep = 1;
+const completedSteps = new Set();
+const uploadedFiles = [];
+
+function buildProgressBar() {
+  const bar = document.getElementById('progressBar');
+  bar.innerHTML = '';
+  STEPS.forEach((s, i) => {
+    const wrap = document.createElement('div');
+    wrap.className = 'step-ind-wrap';
+    const ind = document.createElement('div');
+    ind.className = 'step-ind';
+    if (s.num === currentStep) ind.classList.add('active');
+    if (completedSteps.has(s.num)) ind.classList.add('done');
+    ind.onclick = () => { if (completedSteps.has(s.num) || s.num === currentStep) goToStep(s.num); };
+
+    const circle = document.createElement('div');
+    circle.className = 'step-circle';
+    circle.innerHTML = `<span>${s.num}</span><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M5 13l4 4L19 7"/></svg>`;
+    const label = document.createElement('div');
+    label.className = 'step-label';
+    label.textContent = s.label;
+
+    ind.appendChild(circle);
+    ind.setAttribute('data-step-num', s.num);
+    wrap.appendChild(ind);
+    wrap.appendChild(label);
+
+    // Hide step 4 (Programs) indicator and its preceding connector when not enabled
+    if (s.num === 4 && !programsEnabled) {
+      wrap.style.display = 'none';
+    }
+
+    bar.appendChild(wrap);
+
+    if (i < STEPS.length - 1) {
+      const conn = document.createElement('div');
+      conn.className = 'step-connector';
+      conn.setAttribute('data-conn-after', s.num);
+      if (completedSteps.has(s.num)) conn.classList.add('done');
+      // Hide connector after step 3 leading to step 4 when programs not enabled
+      if (s.num === 3 && !programsEnabled) {
+        conn.style.display = 'none';
+      }
+      bar.appendChild(conn);
+    }
+  });
+}
+
+function goToStep(n) {
+  document.querySelectorAll('.step-content').forEach(el => el.classList.remove('active'));
+  document.querySelector(`.step-content[data-step="${n}"]`).classList.add('active');
+  currentStep = n;
+  if (n === 7) buildReview();
+  buildProgressBar();
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function goNext() {
+  if (!validateStep(currentStep)) return;
+  completedSteps.add(currentStep);
+  var next = currentStep + 1;
+  // Skip Programs step if not enabled
+  if (currentStep === 3 && !programsEnabled) next = 5;
+  goToStep(next);
+  saveToStorage();
+}
+
+function goPrev() {
+  if (currentStep > 1) {
+    var prev = currentStep - 1;
+    // Skip Programs step if not enabled
+    if (currentStep === 5 && !programsEnabled) prev = 3;
+    goToStep(prev);
+  }
+}
+
+// ─── Validation ───
+function validateStep(step) {
+  const container = document.querySelector(`[data-step="${step}"]`);
+  if (step === 1) {
+    let valid = validateFields(container);
+    // Also validate tax classification radio
+    const taxChecked = document.querySelector('input[name="taxClass"]:checked');
+    if (!taxChecked) {
+      document.getElementById('taxClassError').style.display = 'block';
+      valid = false;
+    } else {
+      document.getElementById('taxClassError').style.display = 'none';
+    }
+    return valid;
+  }
+  if (step === 2) {
+    return validateFields(container);
+  }
+  if (step === 4) {
+    // Only validate programs if the step is enabled
+    if (!programsEnabled) return true;
+    // At least one program must be selected
+    const anyProg = document.querySelector('#prog_water:checked, #prog_mold:checked, #prog_fire:checked, #prog_recon:checked, #prog_board:checked');
+    if (!anyProg) {
+      document.getElementById('progError').style.display = 'block';
+      return false;
+    }
+    document.getElementById('progError').style.display = 'none';
+    return true;
+  }
+  return true;
+}
+
+function validateFields(container) {
+  let valid = true;
+  container.querySelectorAll('[data-required="true"]').forEach(el => {
+    const field = el.closest('.field');
+    if (!field) return;
+    let ok = true;
+    if (el.type === 'email') {
+      ok = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(el.value.trim());
+    } else {
+      ok = el.value.trim() !== '';
+    }
+    field.classList.toggle('has-error', !ok);
+    if (!ok) valid = false;
+  });
+  if (!valid) {
+    const first = container.querySelector('.has-error');
+    if (first) first.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  }
+  return valid;
+}
+
+// Clear validation on input
+document.querySelectorAll('[data-required]').forEach(el => {
+  el.addEventListener('input', () => { const f = el.closest('.field'); if (f) f.classList.remove('has-error'); });
+  el.addEventListener('change', () => { const f = el.closest('.field'); if (f) f.classList.remove('has-error'); });
+});
+
+// Clear radio validation
+document.querySelectorAll('input[name="taxClass"]').forEach(r => {
+  r.addEventListener('change', () => { document.getElementById('taxClassError').style.display = 'none'; });
+});
+
+// Clear program validation
+['prog_water','prog_mold','prog_fire','prog_recon','prog_board'].forEach(id => {
+  const el = document.getElementById(id);
+  if (el) el.addEventListener('change', () => { document.getElementById('progError').style.display = 'none'; });
+});
+
+// ─── Tax ID formatting ───
+document.getElementById('taxId').addEventListener('input', function(e) {
+  let v = e.target.value.replace(/\D/g, '').slice(0, 9);
+  if (v.length > 2) v = v.slice(0, 2) + '-' + v.slice(2);
+  e.target.value = v;
+});
+
+// ─── Toggle helpers ───
+function toggleExpand(key) {
+  const cb = document.getElementById('tog_' + key);
+  const exp = document.getElementById('exp_' + key);
+  exp.classList.toggle('open', cb.checked);
+}
+
+function toggleCond(id, show) {
+  const el = document.getElementById(id);
+  el.classList.toggle('show', show);
+}
+
+// ─── File Upload (multi-file) ───
+function handleFileMulti(e) {
+  const files = Array.from(e.target.files);
+  files.forEach(file => addUploadedFile(file));
+  e.target.value = '';
+}
+
+function dzOver(e) { e.preventDefault(); e.currentTarget.classList.add('drag-over'); }
+function dzLeave(e) { e.currentTarget.classList.remove('drag-over'); }
+function dzDropMulti(e) {
+  e.preventDefault();
+  e.currentTarget.classList.remove('drag-over');
+  const files = Array.from(e.dataTransfer.files);
+  files.forEach(file => addUploadedFile(file));
+}
+
+function addUploadedFile(file) {
+  if (!file.name.match(/\.(doc|docx)$/i)) {
+    alert('Please upload .doc or .docx files only: ' + file.name);
+    return;
+  }
+  const reader = new FileReader();
+  reader.onload = function(ev) {
+    uploadedFiles.push({ name: file.name, size: file.size, data: ev.target.result });
+    renderFilePreviews();
+  };
+  reader.readAsDataURL(file);
+}
+
+function renderFilePreviews() {
+  const container = document.getElementById('preview_contracts');
+  if (!container) return;
+  let html = '';
+  uploadedFiles.forEach((f, i) => {
+    const sizeStr = f.size < 1024 ? f.size + ' B' : (f.size / 1024).toFixed(1) + ' KB';
+    html += `<div class="file-preview"><svg width="18" height="18" fill="none" stroke="var(--navy)" stroke-width="1.5" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg><span class="file-name">${f.name}</span><span class="file-size">${sizeStr}</span><button class="file-remove" onclick="removeUploadedFile(${i})">&times;</button></div>`;
+  });
+  container.innerHTML = html;
+}
+
+function removeUploadedFile(index) {
+  uploadedFiles.splice(index, 1);
+  renderFilePreviews();
+}
+
+// ─── COI Upload (multi-file) ───
+var coiFiles = [];
+
+function handleCoiUploadMulti(e) {
+  var files = e.target.files;
+  for (var i = 0; i < files.length; i++) addCoiFile(files[i]);
+  e.target.value = '';  // Reset so same files can be re-added and onchange fires on next pick
+}
+
+function dzDropCoiMulti(e) {
+  e.preventDefault();
+  e.currentTarget.classList.remove('drag-over');
+  var files = e.dataTransfer.files;
+  for (var i = 0; i < files.length; i++) addCoiFile(files[i]);
+}
+
+function addCoiFile(file) {
+  var reader = new FileReader();
+  reader.onload = function(ev) {
+    coiFiles.push({ name: file.name, size: file.size, data: ev.target.result });
+    renderCoiPreviews();
+  };
+  reader.readAsDataURL(file);
+}
+
+function renderCoiPreviews() {
+  var container = document.getElementById('preview_coi');
+  if (!container) return;
+  var html = '';
+  coiFiles.forEach(function(f, i) {
+    var sizeStr = f.size < 1024 ? f.size + ' B' : (f.size / 1024).toFixed(1) + ' KB';
+    html += '<div class="file-preview"><svg width="18" height="18" fill="none" stroke="var(--navy)" stroke-width="1.5" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg><span class="file-name">' + f.name + '</span><span class="file-size">' + sizeStr + '</span><button class="file-remove" onclick="removeCoiFile(' + i + ')">&times;</button></div>';
+  });
+  container.innerHTML = html;
+}
+
+function removeCoiFile(index) {
+  coiFiles.splice(index, 1);
+  renderCoiPreviews();
+}
+
+// ─── Programs Toggle ───
+var programsEnabled = false;
+function togglePrograms() {
+  programsEnabled = !programsEnabled;
+  var btn = document.getElementById('programsToggleBtn');
+  btn.textContent = programsEnabled ? 'Hide Programs' : 'Show Programs';
+  buildProgressBar();
+}
+
+// ─── Gather Data ───
+function gatherData() {
+  const v = id => (document.getElementById(id)?.value || '').trim();
+  const c = id => document.getElementById(id)?.checked || false;
+  const radio = name => { const r = document.querySelector(`input[name="${name}"]:checked`); return r ? r.value : ''; };
+  const yn = bool => bool ? 'Yes' : 'No';
+
+  // Limit value helper
+  function limitVal(id) {
+    const sel = document.getElementById(id);
+    if (!sel) return '';
+    if (sel.value === 'Custom') {
+      const custom = document.getElementById(id + '_custom');
+      return custom ? custom.value.trim() || 'Custom' : 'Custom';
+    }
+    return sel.value;
+  }
+
+  const fileNames = uploadedFiles.map(f => f.name);
+
+  // Legacy flat format for review screen (unchanged)
+  const coverages = [];
+  INSURANCE_TYPES.forEach(ins => {
+    if (!c('tog_' + ins.key)) return;
+    const limParts = ins.limits.map(l => `${l.label}: ${limitVal(l.id)}`).join(', ');
+    const endParts = ins.endorsements.filter(e => c(e.id)).map(e => e.label);
+    let line = `${ins.title}: ${limParts}`;
+    if (endParts.length) line += ` [Endorsements: ${endParts.join(', ')}]`;
+    coverages.push(line);
+  });
+  const programs = [];
+  if (c('prog_water')) programs.push('Water Mitigation');
+  if (c('prog_mold')) programs.push('Mold Remediation');
+  if (c('prog_fire')) programs.push('Fire Mitigation');
+  if (c('prog_recon')) programs.push('Reconstruction');
+  if (c('prog_board')) programs.push('Board Up & Tarping');
+  const bgWho = [];
+  if (c('bg_owners')) bgWho.push('All owners');
+  if (c('bg_creds')) bgWho.push('All credential holders');
+  if (c('bg_employees')) bgWho.push('All employees');
+  if (c('bg_one')) bgWho.push('Only one person regardless of role');
+  const screenTypes = [];
+  if (c('scr_ssn')) screenTypes.push('SSN Trace');
+  if (c('scr_sex')) screenTypes.push('Sex Offender Search');
+  if (c('scr_ofac')) screenTypes.push('Global Watchlist (OFAC)');
+  if (c('scr_natcrim')) screenTypes.push('National Criminal Search');
+  if (c('scr_fedcrim')) screenTypes.push('Federal Criminal Search');
+  if (c('scr_county')) screenTypes.push('County Criminal Search');
+  if (c('scr_mvr')) screenTypes.push('Motor Vehicle Report');
+  if (c('scr_countycivil')) screenTypes.push('County Civil Search');
+  if (c('scr_fedcivil')) screenTypes.push('Federal Civil Search');
+  if (c('scr_credit')) screenTypes.push('Credit Report');
+  if (c('scr_edu')) screenTypes.push('Education Verification');
+  if (c('scr_emp')) screenTypes.push('Employment Verification');
+  if (c('scr_drug')) screenTypes.push('Drug Screening');
+  const drugSubs = [];
+  if (c('drug_cocaine')) drugSubs.push('Cocaine');
+  if (c('drug_amphet')) drugSubs.push('Amphetamines');
+  if (c('drug_opiates')) drugSubs.push('Opiates');
+  if (c('drug_pcp')) drugSubs.push('PCP');
+  if (c('drug_barb')) drugSubs.push('Barbiturates');
+  if (c('drug_benzo')) drugSubs.push('Benzodiazepines');
+  if (c('drug_meth')) drugSubs.push('Methadone');
+
+  return {
+    'Legal Business Name': v('legalName'),
+    'DBA': v('dba'),
+    'Tax ID': v('taxId'),
+    'Tax Classification': radio('taxClass'),
+    'Website URL': v('website'),
+    'Address Line 1': v('address1'),
+    'Address Line 2': v('address2'),
+    'City': v('city'),
+    'State': v('state'),
+    'Zipcode': v('zip'),
+    'Primary Email': v('primaryEmail'),
+    'Certificate Holder': v('certHolder'),
+    'Description of Operations': v('descOps'),
+    'Insurance Coverages': coverages.join('; '),
+    'Other Insurance': radio('otherInsurance') === 'Yes' ? v('otherInsText') : 'No',
+    'Sample COI': radio('sampleCoi'),
+    'COI Files': coiFiles.map(function(f){return f.name}).join(', '),
+    'Program Types': programs.join('; '),
+    'Extra Certifications Required': radio('extraCerts'),
+    'Extra Certifications Detail': radio('extraCerts') === 'Yes' ? v('extraCertsText') : '',
+    'Background Checks': c('tog_bgcheck') ? 'Yes' : 'No',
+    'BG Check Who': bgWho.join('; '),
+    'BG Check Validity': c('tog_bgcheck') ? radio('bgValidity') : '',
+    'Screening Types': screenTypes.join('; '),
+    'Drug Substances': drugSubs.join('; '),
+    'Counter Signatures': radio('counterSigs') || 'No',
+    'Additional Contracts': radio('additionalContracts'),
+    'Uploaded Contracts': fileNames.join('; '),
+    'Signatory Name': v('sigName'),
+    'Signatory Title': v('sigTitle'),
+    'Signatory Email': v('sigEmail')
+  };
+}
+
+// ─── Structured Excel Export Data ───
+// Matches CNetwork Setup Requirements template tabs
+function gatherExcelData() {
+  const v = id => (document.getElementById(id)?.value || '').trim();
+  const c = id => document.getElementById(id)?.checked || false;
+  const radio = name => { const r = document.querySelector(`input[name="${name}"]:checked`); return r ? r.value : ''; };
+  const yn = bool => bool ? 'Yes' : 'No';
+
+  function limitVal(id) {
+    const sel = document.getElementById(id);
+    if (!sel) return '';
+    if (sel.value === 'Custom') {
+      const custom = document.getElementById(id + '_custom');
+      return custom ? custom.value.trim() || 'Custom' : 'Custom';
+    }
+    return sel.value;
+  }
+
+  // ── Tab 1: Demographic Info ──
+  const demographics = {
+    'Legal Business Name': v('legalName'),
+    'DBA': v('dba'),
+    'Tax ID': v('taxId'),
+    'Tax Classification': radio('taxClass'),
+    'Website': v('website'),
+    'Address Line 1': v('address1'),
+    'Address Line 2': v('address2'),
+    'City': v('city'),
+    'State': v('state'),
+    'Zip': v('zip'),
+    'Primary Contact Email': v('primaryEmail')
+  };
+
+  // ── Tab 2: Insurance ──
+  const insurance = {
+    'Certificate Holder': v('certHolder'),
+    'Description of Operations': v('descOps'),
+    // CGL
+    'CGL Required': yn(c('tog_cgl')),
+    'CGL Each Occurrence': c('tog_cgl') ? limitVal('cgl_occ') : '',
+    'CGL Aggregate': c('tog_cgl') ? limitVal('cgl_agg') : '',
+    'CGL Personal & Advertising Injury': c('tog_cgl') ? limitVal('cgl_pai') : '',
+    'CGL Completed Ops Aggregate': c('tog_cgl') ? limitVal('cgl_coagg') : '',
+    'CGL Additional Insured CG2010': c('tog_cgl') ? yn(c('cgl_e_ai')) : '',
+    'CGL Additional Insured CO CG2037': c('tog_cgl') ? yn(c('cgl_e_co')) : '',
+    'CGL Waiver of Subrogation CG2404': c('tog_cgl') ? yn(c('cgl_e_ws')) : '',
+    'CGL Primary & Non-Contributory': c('tog_cgl') ? yn(c('cgl_e_pnc')) : '',
+    // Pollution
+    'Pollution Required': yn(c('tog_cpl')),
+    'Pollution Each Occurrence': c('tog_cpl') ? limitVal('cpl_occ') : '',
+    'Pollution Additional Insured CG2010': c('tog_cpl') ? yn(c('cpl_e_ai')) : '',
+    'Pollution Additional Insured CO CG2037': c('tog_cpl') ? yn(c('cpl_e_co')) : '',
+    'Pollution Waiver of Subrogation CG2404': c('tog_cpl') ? yn(c('cpl_e_ws')) : '',
+    'Pollution Primary & Non-Contributory': c('tog_cpl') ? yn(c('cpl_e_pnc')) : '',
+    // Auto
+    'Commercial Auto Required': yn(c('tog_auto')),
+    'Auto Combined Single Limit': c('tog_auto') ? limitVal('auto_csl') : '',
+    'Auto Additional Insured': c('tog_auto') ? yn(c('auto_e_ai')) : '',
+    'Auto Waiver of Subrogation': c('tog_auto') ? yn(c('auto_e_ws')) : '',
+    // Workers Comp
+    'Workers Comp Required': yn(c('tog_wc')),
+    'WC Each Accident Limit': c('tog_wc') ? limitVal('wc_ea') : '',
+    'WC Additional Insured': c('tog_wc') ? yn(c('wc_e_ai')) : '',
+    'WC Waiver of Subrogation': c('tog_wc') ? yn(c('wc_e_ws')) : '',
+    // Umbrella
+    'Umbrella Required': yn(c('tog_umb')),
+    'Umbrella Each Occurrence': c('tog_umb') ? limitVal('umb_occ') : '',
+    'Umbrella Aggregate': c('tog_umb') ? limitVal('umb_agg') : '',
+    'Umbrella Additional Insured': c('tog_umb') ? yn(c('umb_e_ai')) : '',
+    'Umbrella Waiver of Subrogation': c('tog_umb') ? yn(c('umb_e_ws')) : '',
+    // Professional
+    'Professional Liability Required': yn(c('tog_prof')),
+    'Professional Each Occurrence': c('tog_prof') ? limitVal('prof_occ') : '',
+    'Professional Aggregate': c('tog_prof') ? limitVal('prof_agg') : '',
+    'Professional Additional Insured': c('tog_prof') ? yn(c('prof_e_ai')) : '',
+    'Professional Additional Insured CO': c('tog_prof') ? yn(c('prof_e_co')) : '',
+    'Professional Waiver of Subrogation': c('tog_prof') ? yn(c('prof_e_ws')) : '',
+    'Professional Primary & Non-Contributory': c('tog_prof') ? yn(c('prof_e_pnc')) : '',
+    // Bailees
+    'Bailees Required': yn(c('tog_bail')),
+    'Bailees Each Occurrence': c('tog_bail') ? limitVal('bail_occ') : '',
+    // Other
+    'Other Insurance Required': radio('otherInsurance') === 'Yes' ? v('otherInsText') : 'No',
+    'Sample COI Provided': radio('sampleCoi'),
+    'COI Files': coiFiles.map(function(f){return f.name}).join(', ')
+  };
+
+  // ── Tab 3: Programs ──
+  const programsTab = {
+    'Water Mitigation': yn(c('prog_water')),
+    'Mold Remediation': yn(c('prog_mold')),
+    'Fire Mitigation': yn(c('prog_fire')),
+    'Reconstruction': yn(c('prog_recon')),
+    'Board Up & Tarping': yn(c('prog_board')),
+    'Extra Certifications Required': radio('extraCerts'),
+    'Extra Certifications Detail': radio('extraCerts') === 'Yes' ? v('extraCertsText') : ''
+  };
+
+  // ── Tab 4: Background Checks ──
+  const bgEnabled = c('tog_bgcheck');
+  const bgChecks = {
+    'Background Checks Enabled': yn(bgEnabled),
+    'Check All Owners': yn(c('bg_owners')),
+    'Check All Credential Holders': yn(c('bg_creds')),
+    'Check All Employees': yn(c('bg_employees')),
+    'Check Only One Person': yn(c('bg_one')),
+    'Validity Period': bgEnabled ? radio('bgValidity') : '',
+    'SSN Trace': yn(c('scr_ssn')),
+    'Sex Offender Search': yn(c('scr_sex')),
+    'Global Watchlist (OFAC)': yn(c('scr_ofac')),
+    'National Criminal Search': yn(c('scr_natcrim')),
+    'Federal Criminal Search': yn(c('scr_fedcrim')),
+    'County Criminal Search': yn(c('scr_county')),
+    'Motor Vehicle Report': yn(c('scr_mvr')),
+    'County Civil Search': yn(c('scr_countycivil')),
+    'Federal Civil Search': yn(c('scr_fedcivil')),
+    'Credit Report': yn(c('scr_credit')),
+    'Education Verification': yn(c('scr_edu')),
+    'Employment Verification': yn(c('scr_emp')),
+    'Drug Screening': yn(c('scr_drug')),
+    'Drug - Cocaine': yn(c('drug_cocaine')),
+    'Drug - Amphetamines': yn(c('drug_amphet')),
+    'Drug - Opiates': yn(c('drug_opiates')),
+    'Drug - PCP': yn(c('drug_pcp')),
+    'Drug - Barbiturates': yn(c('drug_barb')),
+    'Drug - Benzodiazepines': yn(c('drug_benzo')),
+    'Drug - Methadone': yn(c('drug_meth'))
+  };
+
+  // ── Tab 5: Contracts ──
+  const contracts = {
+    'Counter Signatures Required': radio('counterSigs') || 'No',
+    'Additional Contracts': radio('additionalContracts'),
+    'Uploaded Contract Files': uploadedFiles.map(f => f.name).join(', '),
+    'Signatory Name': v('sigName'),
+    'Signatory Title': v('sigTitle'),
+    'Signatory Email': v('sigEmail')
+  };
+
+  return { demographics, insurance, programsTab, bgChecks, contracts };
+}
+
+// ─── Build Review ───
+function buildReview() {
+  const data = gatherData();
+  const sections = [
+    { title: 'Organization Info', step: 1, fields: ['Legal Business Name','DBA','Tax ID','Tax Classification','Website URL','Address Line 1','Address Line 2','City','State','Zipcode','Primary Email'] },
+    { title: 'Certificate Holder & Description', step: 2, fields: ['Certificate Holder','Description of Operations'] },
+    { title: 'Insurance Requirements', step: 3, fields: ['Insurance Coverages','Other Insurance','Sample COI','COI Files'] },
+    { title: 'Programs & Certifications', step: 4, fields: ['Program Types','Extra Certifications Required','Extra Certifications Detail'], showIf: function() { return programsEnabled; } },
+    { title: 'Background Checks', step: 5, fields: ['Background Checks','BG Check Who','BG Check Validity','Screening Types','Drug Substances'] },
+    { title: 'Contracts', step: 6, fields: ['Counter Signatures','Additional Contracts','Uploaded Contracts','Signatory Name','Signatory Title','Signatory Email'] }
+  ];
+
+  let html = '';
+  sections.forEach(sec => {
+    // Skip section if showIf is defined and returns false
+    if (sec.showIf && !sec.showIf()) return;
+    html += `<div class="review-section"><div class="review-section-header"><span class="review-section-title">${sec.title}</span><button class="btn btn-secondary btn-sm" onclick="goToStep(${sec.step})">Edit</button></div><div class="review-grid">`;
+    sec.fields.forEach(f => {
+      let val = data[f] || '';
+      // Mask tax ID in review
+      if (f === 'Tax ID' && val.length > 4) {
+        val = '***-***' + val.slice(-4);
+      }
+      const display = val || '<span style="color:var(--text-muted);">--</span>';
+      html += `<div class="review-label">${f}</div><div class="review-value">${display}</div>`;
+    });
+    html += '</div></div>';
+  });
+  document.getElementById('reviewContent').innerHTML = html;
+}
+
+// ─── Excel Download (multi-sheet XLSX) ───
+function downloadCSV() {
+  const excel = gatherExcelData();
+  const wb = XLSX.utils.book_new();
+
+  // Helper: convert {key: value} object to a vertical two-column sheet
+  // Column A = field labels, Column B = values
+  function addSheet(name, dataObj) {
+    const rows = Object.entries(dataObj).map(([k, val]) => [k, val]);
+    const ws = XLSX.utils.aoa_to_sheet([['Field', 'Value'], ...rows]);
+    // Auto-size column A
+    ws['!cols'] = [{ wch: 40 }, { wch: 30 }];
+    XLSX.utils.book_append_sheet(wb, ws, name);
+  }
+
+  addSheet('Demographic Info', excel.demographics);
+  addSheet('Insurance', excel.insurance);
+  addSheet('Programs', excel.programsTab);
+  addSheet('Background Checks', excel.bgChecks);
+  addSheet('Contracts', excel.contracts);
+
+  const flatData = gatherData();
+  const orgSlug = (flatData['Legal Business Name'] || 'unknown').replace(/[^a-zA-Z0-9]+/g, '-').toLowerCase();
+  const dateStr = new Date().toISOString().slice(0, 10);
+
+  XLSX.writeFile(wb, `sublynk-onboarding-${orgSlug}-${dateStr}.xlsx`);
+}
+
+// ─── Submit ───
+function submitForm() {
+  // Auto-download Excel first so data is never lost
+  downloadCSV();
+
+  // Collect form data
+  var payload = collectFormData();
+
+  // Upload contract files first (if any), then process submission
+  if (uploadedFiles.length > 0) {
+    var filesUploaded = 0;
+    var fileIds = [];
+    var fileNames = [];
+
+    uploadedFiles.forEach(function(f) {
+      // Convert base64 data URL to Blob for google.script.run.withFormData
+      var byteString = atob(f.data.split(',')[1]);
+      var ab = new ArrayBuffer(byteString.length);
+      var ia = new Uint8Array(ab);
+      for (var i = 0; i < byteString.length; i++) ia[i] = byteString.charCodeAt(i);
+      var blob = new Blob([ab], {type: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'});
+
+      var reader = new FileReader();
+      reader.onload = function(e) {
+        var base64Only = e.target.result.split(',')[1];
+        google.script.run
+          .withSuccessHandler(function(fileId) {
+            fileIds.push(fileId);
+            fileNames.push(f.name);
+            filesUploaded++;
+            if (filesUploaded === uploadedFiles.length) {
+              // All files uploaded, now process submission with file IDs
+              payload.driveFileIds = fileIds;
+              payload.driveFileNames = fileNames;
+              google.script.run
+                .withSuccessHandler(function() { console.log('Full pipeline complete'); })
+                .withFailureHandler(function(err) { console.warn('Submission failed:', err); })
+                .processSubmission(payload);
+            }
+          })
+          .withFailureHandler(function(err) {
+            console.warn('File upload failed:', err);
+            filesUploaded++;
+            if (filesUploaded === uploadedFiles.length) {
+              payload.driveFileIds = fileIds;
+              payload.driveFileNames = fileNames;
+              google.script.run
+                .withSuccessHandler(function() { console.log('Pipeline complete (some files failed)'); })
+                .withFailureHandler(function(err2) { console.warn('Submission failed:', err2); })
+                .processSubmission(payload);
+            }
+          })
+          .uploadContractFile(base64Only, f.name);
+      };
+      reader.readAsDataURL(blob);
+    });
+  } else {
+    // No files — just process submission
+    google.script.run
+      .withSuccessHandler(function() { console.log('Saved to Drive + Sheets + Notion'); })
+      .withFailureHandler(function(err) { console.warn('Save failed:', err); })
+      .processSubmission(payload);
+  }
+
+  // Upload all COI samples
+  if (coiFiles.length > 0) {
+    coiFiles.forEach(function(cf) {
+      var coiBase64 = cf.data.split(',')[1];
+      google.script.run
+        .withSuccessHandler(function(url) { console.log('COI uploaded:', url); })
+        .withFailureHandler(function(err) { console.warn('COI upload failed:', err); })
+        .uploadCoiSample(coiBase64, cf.name, payload.legalName, payload.signatoryName || payload.legalName);
+    });
+  }
+
+  document.getElementById('successOverlay').classList.add('show');
+  launchConfetti();
+  // Don't clear localStorage — keep until "Start New" is clicked
+}
+
+function collectFormData() {
+  const g = id => { const el = document.getElementById(id); return el ? el.value || '' : ''; };
+  const checked = name => [...document.querySelectorAll('input[name="' + name + '"]:checked')].map(c => c.value);
+  const toggled = id => { const el = document.getElementById(id); return el ? el.checked : false; };
+
+  return {
+    legalName: g('legalName'), dba: g('dba'), taxId: g('taxId'),
+    taxClassification: document.querySelector('input[name="taxClass"]:checked')?.value || '',
+    website: g('website'), address1: g('address1'), address2: g('address2'),
+    city: g('city'), state: g('state'), zip: g('zip'), email: g('primaryEmail'),
+    certHolder: g('certHolder'), descOfOps: g('descOfOps'),
+    cglEnabled: toggled('toggle_cgl'),
+    cglEachOccurrence: g('cgl_each_occurrence'), cglAggregate: g('cgl_aggregate'),
+    cglPersonalInjury: g('cgl_personal_injury'), cglCompletedOps: g('cgl_completed_ops'),
+    pollutionEnabled: toggled('toggle_pollution'), pollutionLimit: g('pollution_each_occurrence'),
+    autoEnabled: toggled('toggle_auto'), autoCsl: g('auto_csl'),
+    wcEnabled: toggled('toggle_wc'), wcEachAccident: g('wc_each_accident'),
+    umbrellaEnabled: toggled('toggle_umbrella'),
+    umbrellaEachOccurrence: g('umbrella_each_occurrence'), umbrellaAggregate: g('umbrella_aggregate'),
+    plEnabled: toggled('toggle_pl'),
+    plEachOccurrence: g('pl_each_occurrence'), plAggregate: g('pl_aggregate'),
+    baileesEnabled: toggled('toggle_bailees'), baileesLimit: g('bailees_each_occurrence'),
+    endorsements: checked('endorsements'),
+    otherInsuranceNotes: g('otherInsuranceNotes'),
+    hasSampleCoi: document.querySelector('input[name="sampleCoi"]:checked')?.value || '',
+    programs: checked('programs'),
+    extraCertsRequired: document.querySelector('input[name="extraCerts"]:checked')?.value || '',
+    extraCertsDetails: g('extraCertsDetails'),
+    bgChecksRequired: toggled('toggle_bgchecks'),
+    bgWho: checked('bgWho'), bgValidity: document.querySelector('input[name="bgValidity"]:checked')?.value || '',
+    bgScreenings: checked('bgScreenings'), drugSubstances: checked('drugSubstances'),
+    counterSigs: document.querySelector('input[name="counterSigs"]:checked')?.value || 'No',
+    hasAdditionalContracts: document.querySelector('input[name="additionalContracts"]:checked')?.value || '',
+    contractFiles: [...document.querySelectorAll('.file-item .file-name')].map(el => el.textContent),
+    signatoryName: g('sigName'), signatoryTitle: g('sigTitle'), signatoryEmail: g('sigEmail'),
+    coiFiles: coiFiles.map(function(f){return f.name}).join(', ')
+  };
+}
+
+// ─── Confetti ───
+function launchConfetti() {
+  const canvas = document.getElementById('confetti-canvas');
+  const ctx = canvas.getContext('2d');
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+  const colors = ['#DD6438','#16A34A','#0C152B','#FDBA74','#93C5FD','#F59E0B'];
+  const pieces = [];
+  for (let i = 0; i < 150; i++) {
+    pieces.push({
+      x: Math.random() * canvas.width,
+      y: Math.random() * canvas.height - canvas.height,
+      w: Math.random() * 10 + 5,
+      h: Math.random() * 6 + 3,
+      color: colors[Math.floor(Math.random() * colors.length)],
+      vy: Math.random() * 3 + 2,
+      vx: (Math.random() - .5) * 4,
+      rot: Math.random() * 360,
+      rv: (Math.random() - .5) * 10,
+      opacity: 1
+    });
+  }
+  let frame = 0;
+  function draw() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    let alive = false;
+    pieces.forEach(p => {
+      p.x += p.vx;
+      p.y += p.vy;
+      p.rot += p.rv;
+      p.vy += .05;
+      if (frame > 120) p.opacity -= .01;
+      if (p.opacity <= 0) return;
+      alive = true;
+      ctx.save();
+      ctx.translate(p.x, p.y);
+      ctx.rotate(p.rot * Math.PI / 180);
+      ctx.globalAlpha = Math.max(0, p.opacity);
+      ctx.fillStyle = p.color;
+      ctx.fillRect(-p.w / 2, -p.h / 2, p.w, p.h);
+      ctx.restore();
+    });
+    frame++;
+    if (alive) requestAnimationFrame(draw);
+    else ctx.clearRect(0, 0, canvas.width, canvas.height);
+  }
+  draw();
+}
+
+// ─── LocalStorage ───
+const STORAGE_KEY = 'sublynk_gc_intake';
+
+function saveToStorage() {
+  const inputs = {};
+  document.querySelectorAll('input[type="text"], input[type="email"], input[type="tel"], input[type="url"], input[type="date"], input[type="number"], textarea, select').forEach(el => {
+    if (el.id) inputs[el.id] = el.value;
+  });
+  document.querySelectorAll('input[type="checkbox"]').forEach(el => {
+    if (el.id) inputs[el.id] = el.checked;
+  });
+  document.querySelectorAll('input[type="radio"]:checked').forEach(el => {
+    if (el.name) inputs['radio_' + el.name] = el.value;
+  });
+  const payload = { inputs, currentStep, completedSteps: Array.from(completedSteps), ts: Date.now() };
+  try { localStorage.setItem(STORAGE_KEY, JSON.stringify(payload)); } catch(e) {}
+}
+
+function checkSaved() {
+  try {
+    const raw = localStorage.getItem(STORAGE_KEY);
+    if (!raw) return;
+    const data = JSON.parse(raw);
+    if (!data.inputs || Object.keys(data.inputs).length < 2) return;
+    document.getElementById('resumeBanner').style.display = 'flex';
+  } catch(e) {}
+}
+
+function restoreSaved() {
+  try {
+    const raw = localStorage.getItem(STORAGE_KEY);
+    if (!raw) return;
+    const data = JSON.parse(raw);
+    if (data.inputs) {
+      Object.keys(data.inputs).forEach(key => {
+        if (key.startsWith('radio_')) {
+          const name = key.slice(6);
+          const val = data.inputs[key];
+          const radio = document.querySelector(`input[name="${name}"][value="${val}"]`);
+          if (radio) { radio.checked = true; radio.dispatchEvent(new Event('change')); }
+          return;
+        }
+        const el = document.getElementById(key);
+        if (!el) return;
+        if (el.type === 'checkbox') { el.checked = data.inputs[key]; el.dispatchEvent(new Event('change')); }
+        else el.value = data.inputs[key];
+      });
+    }
+    if (data.completedSteps) data.completedSteps.forEach(s => completedSteps.add(s));
+    if (data.currentStep) goToStep(data.currentStep);
+  } catch(e) {}
+  document.getElementById('resumeBanner').style.display = 'none';
+}
+
+function clearSaved() {
+  localStorage.removeItem(STORAGE_KEY);
+  document.getElementById('resumeBanner').style.display = 'none';
+}
+
+// Auto-save every 30 seconds
+setInterval(saveToStorage, 30000);
+
+// ─── Init ───
+buildInsuranceToggles();
+buildProgressBar();
+checkSaved();
+</script>
+<div id="programsToggleBtn" onclick="togglePrograms()" style="position:fixed; bottom:20px; right:20px; z-index:60; font-size:11px; padding:5px 12px; background:#fff; border:1px solid #d6d3d1; color:#6b7280; border-radius:6px; cursor:pointer; box-shadow:0 1px 4px rgba(0,0,0,.08); user-select:none; transition: opacity .2s;">Show Programs</div>
+</body>
+</html>
