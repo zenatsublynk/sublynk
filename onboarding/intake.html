@@ -1616,16 +1616,17 @@ function callBackend(action, data, onSuccess, onFailure) {
         runner.uploadCoiSample(data.base64Data, data.fileName, data.companyName, data.contactName); break;
     }
   } else {
-    // Running standalone (GitHub Pages) — POST to Apps Script web app
+    // Running standalone (GitHub Pages) -- POST to Apps Script web app
+    // Uses no-cors mode: request is delivered and processed, but response
+    // is opaque (CORS restriction). XLSX local download is the backup.
     fetch(APPS_SCRIPT_URL, {
       method: 'POST',
-      headers: { 'Content-Type': 'text/plain' },
+      mode: 'no-cors',
       body: JSON.stringify(Object.assign({ action: action }, data))
     })
-    .then(function(res) { return res.json(); })
-    .then(function(result) {
-      if (result.error) { (onFailure || console.warn)(result.error); }
-      else { (onSuccess || function(){})(result); }
+    .then(function() {
+      console.log('Backend call sent: ' + action);
+      (onSuccess || function(){})({ sent: true });
     })
     .catch(function(err) { (onFailure || console.warn)(err); });
   }
