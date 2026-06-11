@@ -136,6 +136,76 @@ select { cursor: pointer; appearance: none; background-image: url("data:image/sv
 .cat-section-label { font-size: 12px; font-weight: 600; color: var(--text-muted); text-transform: uppercase; letter-spacing: .5px; margin-bottom: 8px; margin-top: 14px; }
 .cat-section-label:first-child { margin-top: 0; }
 
+/* Call Guide */
+.call-guide-fab {
+  position: fixed; bottom: 24px; right: 24px; z-index: 900;
+  display: flex; align-items: center; gap: 8px;
+  background: var(--navy); color: #fff; border: none;
+  padding: 12px 20px; border-radius: 40px; cursor: pointer;
+  font-family: inherit; font-size: 13px; font-weight: 600;
+  box-shadow: 0 4px 20px rgba(12,21,43,.25);
+  transition: all .25s ease;
+}
+.call-guide-fab:hover { transform: translateY(-2px); box-shadow: 0 6px 28px rgba(12,21,43,.35); }
+.call-guide-fab.open { border-radius: 14px 14px 0 0; transform: none; box-shadow: none; }
+.call-guide-fab svg { flex-shrink: 0; }
+.call-guide-panel {
+  position: fixed; bottom: 0; right: 24px; z-index: 899;
+  width: 380px; max-height: 70vh;
+  background: #fff; border-radius: 14px 14px 0 0;
+  box-shadow: 0 -4px 30px rgba(0,0,0,.12);
+  transform: translateY(100%); opacity: 0;
+  transition: transform .3s ease, opacity .25s ease;
+  display: flex; flex-direction: column;
+  overflow: hidden;
+}
+.call-guide-panel.open { transform: translateY(0); opacity: 1; }
+.call-guide-body { overflow-y: auto; padding: 0 0 16px; flex: 1; }
+.call-guide-body::-webkit-scrollbar { width: 4px; }
+.call-guide-body::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
+.cg-section { border-bottom: 1px solid var(--border-light); }
+.cg-section:last-child { border-bottom: none; }
+.cg-section-header {
+  display: flex; align-items: center; gap: 10px;
+  padding: 14px 18px; cursor: pointer; transition: background .15s;
+  user-select: none;
+}
+.cg-section-header:hover { background: var(--panel); }
+.cg-section-step {
+  width: 24px; height: 24px; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 11px; font-weight: 700; flex-shrink: 0;
+  background: var(--panel); color: var(--text-muted);
+  transition: all .2s;
+}
+.cg-section.active .cg-section-step { background: var(--orange); color: #fff; }
+.cg-section-title { font-size: 13px; font-weight: 600; color: var(--ink); flex: 1; }
+.cg-section.active .cg-section-title { color: var(--orange); }
+.cg-chevron {
+  transition: transform .2s; color: var(--text-muted); flex-shrink: 0;
+}
+.cg-section.expanded .cg-chevron { transform: rotate(180deg); }
+.cg-section-body {
+  max-height: 0; overflow: hidden;
+  transition: max-height .3s ease, padding .2s ease;
+  padding: 0 18px;
+}
+.cg-section.expanded .cg-section-body {
+  max-height: 600px; padding: 0 18px 16px;
+}
+.cg-tip {
+  display: flex; align-items: flex-start; gap: 8px;
+  padding: 6px 0; font-size: 13px; line-height: 1.5; color: #374151;
+}
+.cg-tip-icon { flex-shrink: 0; margin-top: 3px; color: var(--orange); }
+.cg-tip-label {
+  font-size: 10px; font-weight: 700; text-transform: uppercase;
+  letter-spacing: .6px; color: var(--text-muted);
+  margin: 12px 0 4px; padding-top: 8px;
+  border-top: 1px solid var(--border-light);
+}
+.cg-tip-label:first-child { margin-top: 0; border-top: none; padding-top: 0; }
+
 /* Checkboxes */
 .checkbox-group { display: flex; flex-direction: column; gap: 8px; }
 .checkbox-group.grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
@@ -1813,6 +1883,154 @@ renderCategories();
 buildProgressBar();
 checkSaved();
 </script>
-<div id="programsToggleBtn" onclick="togglePrograms()" style="position:fixed; bottom:20px; right:20px; z-index:60; font-size:11px; padding:5px 12px; background:#fff; border:1px solid #d6d3d1; color:#6b7280; border-radius:6px; cursor:pointer; box-shadow:0 1px 4px rgba(0,0,0,.08); user-select:none; transition: opacity .2s;">Show Programs</div>
+<div id="programsToggleBtn" onclick="togglePrograms()" style="position:fixed; bottom:24px; left:24px; z-index:60; font-size:11px; padding:5px 12px; background:#fff; border:1px solid #d6d3d1; color:#6b7280; border-radius:6px; cursor:pointer; box-shadow:0 1px 4px rgba(0,0,0,.08); user-select:none; transition: opacity .2s;">Show Programs</div>
+
+<!-- Call Guide Panel -->
+<button class="call-guide-fab" id="callGuideFab" onclick="toggleCallGuide()">
+  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 013 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
+  <span id="callGuideLabel">Call Guide</span>
+</button>
+
+<div class="call-guide-panel" id="callGuidePanel">
+  <div class="call-guide-body" id="callGuideBody"></div>
+</div>
+
+<script>
+// ─── Call Guide ───
+var callGuideOpen = false;
+var CALL_GUIDE = [
+  {
+    step: 1, title: 'Organization Info',
+    tips: [
+      { type: 'ask', text: 'What is the full legal entity name as it appears on your W-9?' },
+      { type: 'ask', text: 'Do you operate under a DBA or trade name?' },
+      { type: 'ask', text: 'What is your EIN? We use this for tax ID verification only.' },
+      { type: 'note', text: 'Tax classification determines 1099 reporting. Most GCs are C-Corp or S-Corp.' },
+      { type: 'ask', text: 'What is the best email for compliance notifications?' }
+    ]
+  },
+  {
+    step: 2, title: 'Certificate Holder',
+    tips: [
+      { type: 'ask', text: 'Who should be listed as the certificate holder on your subs\' COIs?' },
+      { type: 'note', text: 'Typically the GC legal name + address. Some add "and its affiliates."' },
+      { type: 'ask', text: 'Is there a standard Description of Operations you require on every COI?' },
+      { type: 'note', text: 'If they are unsure, suggest: "All operations performed on behalf of [GC name]."' }
+    ]
+  },
+  {
+    step: 3, title: 'Insurance Requirements',
+    tips: [
+      { type: 'label', text: 'Walk-through' },
+      { type: 'note', text: 'Go line by line. Toggle on each coverage they require, then set limits.' },
+      { type: 'ask', text: 'Do you require CGL? What are your minimum limits per occurrence and aggregate?' },
+      { type: 'ask', text: 'Do you need Additional Insured, Waiver of Sub, or Primary & Non-Contributory endorsements?' },
+      { type: 'label', text: 'Common patterns' },
+      { type: 'note', text: 'Most GCs require CGL + Auto + WC at minimum. Umbrella is common for larger projects.' },
+      { type: 'note', text: 'Pollution is typical for restoration, mold, or environmental work.' },
+      { type: 'note', text: 'Bailees applies when subs handle customer property (contents, pack-outs).' },
+      { type: 'label', text: 'COI sample' },
+      { type: 'ask', text: 'Do you have a sample COI you can share? This helps us match your exact format.' }
+    ]
+  },
+  {
+    step: 4, title: 'Service Categories & Programs',
+    tips: [
+      { type: 'label', text: 'Categories' },
+      { type: 'ask', text: 'What types of work do your subs perform? Let\'s create a category for each.' },
+      { type: 'note', text: 'Examples: Inspection, Repair, Replacement, Water Mitigation, Mold Remediation, Roofing, HVAC, Electrical, Plumbing, Contents, Pack-Out.' },
+      { type: 'note', text: 'Each category can have different insurance and credential requirements.' },
+      { type: 'label', text: 'Per-category insurance' },
+      { type: 'ask', text: 'Do all categories require the same insurance, or do some need different coverage?' },
+      { type: 'note', text: '"Same as global" uses the insurance from Step 3. "Custom" lets you require or waive specific lines per category.' },
+      { type: 'note', text: 'Example: Mold Remediation may require Pollution Liability, but Inspection may waive it.' },
+      { type: 'label', text: 'Credentials' },
+      { type: 'ask', text: 'Are there specific licenses or certifications required for each category?' },
+      { type: 'note', text: 'Examples: State roofing license, EPA Lead-Safe cert, IICRC WRT, HOG inspector cert, asbestos abatement license.' }
+    ]
+  },
+  {
+    step: 5, title: 'Background Checks',
+    tips: [
+      { type: 'ask', text: 'Do you require background checks on sub personnel?' },
+      { type: 'ask', text: 'Who needs to be screened - all employees, owners only, or just one representative?' },
+      { type: 'label', text: 'Screening types' },
+      { type: 'note', text: 'SSN Trace, Sex Offender, and National Criminal are the most common baseline.' },
+      { type: 'ask', text: 'Do you require MVR for anyone driving to job sites?' },
+      { type: 'ask', text: 'Do you require drug screening? If so, which panel?' },
+      { type: 'label', text: 'Validity' },
+      { type: 'ask', text: 'How often should background checks be renewed? Annual is most common.' }
+    ]
+  },
+  {
+    step: 6, title: 'Contracts & Signatures',
+    tips: [
+      { type: 'ask', text: 'Do you require counter-signatures on your MSA or subcontractor agreement?' },
+      { type: 'ask', text: 'Are there additional contracts beyond the MSA that subs need to sign?' },
+      { type: 'note', text: 'Upload any contracts here. We will present them for e-signature during sub onboarding.' },
+      { type: 'label', text: 'Signatory' },
+      { type: 'ask', text: 'Who is authorized to sign on behalf of your organization?' }
+    ]
+  }
+];
+
+function toggleCallGuide() {
+  callGuideOpen = !callGuideOpen;
+  var fab = document.getElementById('callGuideFab');
+  var panel = document.getElementById('callGuidePanel');
+  var label = document.getElementById('callGuideLabel');
+
+  if (callGuideOpen) {
+    fab.classList.add('open');
+    panel.classList.add('open');
+    label.textContent = 'Close Guide';
+    renderCallGuide();
+  } else {
+    fab.classList.remove('open');
+    panel.classList.remove('open');
+    label.textContent = 'Call Guide';
+  }
+}
+
+function renderCallGuide() {
+  var body = document.getElementById('callGuideBody');
+  var html = '';
+  CALL_GUIDE.forEach(function(sec) {
+    var isActive = sec.step === currentStep;
+    var isExpanded = isActive;
+    html += '<div class="cg-section' + (isActive ? ' active expanded' : '') + '" data-cg-step="' + sec.step + '">';
+    html += '<div class="cg-section-header" onclick="toggleCgSection(this)">';
+    html += '<span class="cg-section-step">' + sec.step + '</span>';
+    html += '<span class="cg-section-title">' + sec.title + '</span>';
+    html += '<svg class="cg-chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>';
+    html += '</div>';
+    html += '<div class="cg-section-body">';
+    sec.tips.forEach(function(tip) {
+      if (tip.type === 'label') {
+        html += '<div class="cg-tip-label">' + tip.text + '</div>';
+      } else {
+        var icon = tip.type === 'ask'
+          ? '<svg class="cg-tip-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 015.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>'
+          : '<svg class="cg-tip-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>';
+        html += '<div class="cg-tip">' + icon + '<span>' + tip.text + '</span></div>';
+      }
+    });
+    html += '</div></div>';
+  });
+  body.innerHTML = html;
+}
+
+function toggleCgSection(headerEl) {
+  var section = headerEl.parentElement;
+  section.classList.toggle('expanded');
+}
+
+// Update guide when step changes
+var _origGoToStep = goToStep;
+goToStep = function(n) {
+  _origGoToStep(n);
+  if (callGuideOpen) renderCallGuide();
+};
+</script>
 </body>
 </html>
