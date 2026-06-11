@@ -1592,6 +1592,45 @@ function buildReview() {
   document.getElementById('reviewContent').innerHTML = html;
 }
 
+// ─── Apps Script API Bridge ───
+// Detects if running inside Apps Script or standalone (GitHub Pages)
+// If standalone, calls the deployed web app via fetch()
+var IS_APPSCRIPT = (typeof google !== 'undefined' && google.script && google.script.run);
+var APPS_SCRIPT_URL = 'https://script.google.com/a/macros/sublynk.com/s/AKfycbwg4vlFSqvXprpU5eTqvIpxCmf7dt9Nk4osdeo9MuKU72npfQtDKEmURPHPONfV1qiITA/exec';
+
+function callBackend(action, data, onSuccess, onFailure) {
+  if (IS_APPSCRIPT) {
+    // Running inside Apps Script — use google.script.run directly
+    var runner = google.script.run
+      .withSuccessHandler(onSuccess || function(){})
+      .withFailureHandler(onFailure || function(e){ console.warn('Backend error:', e); });
+
+    switch (action) {
+      case 'processSubmission':
+        runner.processSubmission(data.payload); break;
+      case 'createOnboardingFolder':
+        runner.createOnboardingFolder(data.companyName, data.dateStr, data.xlsxBase64, data.fileName); break;
+      case 'uploadContractFile':
+        runner.uploadContractFile(data.base64Data, data.fileName); break;
+      case 'uploadCoiSample':
+        runner.uploadCoiSample(data.base64Data, data.fileName, data.companyName, data.contactName); break;
+    }
+  } else {
+    // Running standalone (GitHub Pages) — POST to Apps Script web app
+    fetch(APPS_SCRIPT_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'text/plain' },
+      body: JSON.stringify(Object.assign({ action: action }, data))
+    })
+    .then(function(res) { return res.json(); })
+    .then(function(result) {
+      if (result.error) { (onFailure || console.warn)(result.error); }
+      else { (onSuccess || function(){})(result); }
+    })
+    .catch(function(err) { (onFailure || console.warn)(err); });
+  }
+}
+
 // ─── Excel Download (multi-sheet XLSX) ───
 function downloadCSV() {
   const excel = gatherExcelData();
@@ -1632,19 +1671,12 @@ function downloadCSV() {
 
   // Upload to Google Drive: create GC folder + subfolders + upload XLSX
   // Parent folder: Sublynk Sub Management Network
-  try {
-    const xlsxData = XLSX.write(wb, { bookType: 'xlsx', type: 'base64' });
-    google.script.run
-      .withSuccessHandler(function(result) {
-        console.log('Drive folder created:', result);
-      })
-      .withFailureHandler(function(err) {
-        console.error('Drive upload failed:', err);
-      })
-      .createOnboardingFolder(companyName, dateStr, xlsxData, fileName);
-  } catch(e) {
-    console.log('Google Script not available (standalone mode), local download only');
-  }
+  const xlsxData = XLSX.write(wb, { bookType: 'xlsx', type: 'base64' });
+  callBackend('createOnboardingFolder',
+    { companyName: companyName, dateStr: dateStr, xlsxBase64: xlsxData, fileName: fileName },
+    function(result) { console.log('Drive folder created:', result); },
+    function(err) { console.error('Drive upload failed:', err); }
+  );
 }
 
 // ─── Submit ───
@@ -1662,7 +1694,6 @@ function submitForm() {
     var fileNames = [];
 
     uploadedFiles.forEach(function(f) {
-      // Convert base64 data URL to Blob for google.script.run.withFormData
       var byteString = atob(f.data.split(',')[1]);
       var ab = new ArrayBuffer(byteString.length);
       var ia = new Uint8Array(ab);
@@ -1672,59 +1703,60 @@ function submitForm() {
       var reader = new FileReader();
       reader.onload = function(e) {
         var base64Only = e.target.result.split(',')[1];
-        google.script.run
-          .withSuccessHandler(function(fileId) {
-            fileIds.push(fileId);
+        callBackend('uploadContractFile',
+          { base64Data: base64Only, fileName: f.name },
+          function(result) {
+            fileIds.push(result.fileId || result);
             fileNames.push(f.name);
             filesUploaded++;
             if (filesUploaded === uploadedFiles.length) {
-              // All files uploaded, now process submission with file IDs
               payload.driveFileIds = fileIds;
               payload.driveFileNames = fileNames;
-              google.script.run
-                .withSuccessHandler(function() { console.log('Full pipeline complete'); })
-                .withFailureHandler(function(err) { console.warn('Submission failed:', err); })
-                .processSubmission(payload);
+              callBackend('processSubmission', { payload: payload },
+                function() { console.log('Full pipeline complete'); },
+                function(err) { console.warn('Submission failed:', err); }
+              );
             }
-          })
-          .withFailureHandler(function(err) {
+          },
+          function(err) {
             console.warn('File upload failed:', err);
             filesUploaded++;
             if (filesUploaded === uploadedFiles.length) {
               payload.driveFileIds = fileIds;
               payload.driveFileNames = fileNames;
-              google.script.run
-                .withSuccessHandler(function() { console.log('Pipeline complete (some files failed)'); })
-                .withFailureHandler(function(err2) { console.warn('Submission failed:', err2); })
-                .processSubmission(payload);
+              callBackend('processSubmission', { payload: payload },
+                function() { console.log('Pipeline complete (some files failed)'); },
+                function(err2) { console.warn('Submission failed:', err2); }
+              );
             }
-          })
-          .uploadContractFile(base64Only, f.name);
+          }
+        );
       };
       reader.readAsDataURL(blob);
     });
   } else {
-    // No files — just process submission
-    google.script.run
-      .withSuccessHandler(function() { console.log('Saved to Drive + Sheets + Notion'); })
-      .withFailureHandler(function(err) { console.warn('Save failed:', err); })
-      .processSubmission(payload);
+    // No files -- just process submission
+    callBackend('processSubmission', { payload: payload },
+      function() { console.log('Saved to Drive + Sheets + Notion'); },
+      function(err) { console.warn('Save failed:', err); }
+    );
   }
 
   // Upload all COI samples
   if (coiFiles.length > 0) {
     coiFiles.forEach(function(cf) {
       var coiBase64 = cf.data.split(',')[1];
-      google.script.run
-        .withSuccessHandler(function(url) { console.log('COI uploaded:', url); })
-        .withFailureHandler(function(err) { console.warn('COI upload failed:', err); })
-        .uploadCoiSample(coiBase64, cf.name, payload.legalName, payload.signatoryName || payload.legalName);
+      callBackend('uploadCoiSample',
+        { base64Data: coiBase64, fileName: cf.name, companyName: payload.legalName, contactName: payload.signatoryName || payload.legalName },
+        function(url) { console.log('COI uploaded:', url); },
+        function(err) { console.warn('COI upload failed:', err); }
+      );
     });
   }
 
   document.getElementById('successOverlay').classList.add('show');
   launchConfetti();
-  // Don't clear localStorage — keep until "Start New" is clicked
+  // Don't clear localStorage -- keep until "Start New" is clicked
 }
 
 function collectFormData() {
