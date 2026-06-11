@@ -1611,7 +1611,7 @@ function callBackend(action, data, onSuccess, onFailure) {
       case 'createOnboardingFolder':
         runner.createOnboardingFolder(data.companyName, data.dateStr, data.xlsxBase64, data.fileName); break;
       case 'uploadContractFile':
-        runner.uploadContractFile(data.base64Data, data.fileName); break;
+        runner.uploadContractFile(data.base64Data, data.fileName, data.companyName); break;
       case 'uploadCoiSample':
         runner.uploadCoiSample(data.base64Data, data.fileName, data.companyName, data.contactName); break;
     }
@@ -1705,7 +1705,7 @@ function submitForm() {
       reader.onload = function(e) {
         var base64Only = e.target.result.split(',')[1];
         callBackend('uploadContractFile',
-          { base64Data: base64Only, fileName: f.name },
+          { base64Data: base64Only, fileName: f.name, companyName: payload.legalName },
           function(result) {
             fileIds.push(result.fileId || result);
             fileNames.push(f.name);
