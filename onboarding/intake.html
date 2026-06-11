@@ -1365,10 +1365,28 @@ function downloadCSV() {
   addSheet('Contracts', excel.contracts);
 
   const flatData = gatherData();
-  const orgSlug = (flatData['Legal Business Name'] || 'unknown').replace(/[^a-zA-Z0-9]+/g, '-').toLowerCase();
+  const companyName = flatData['Legal Business Name'] || 'Unknown';
   const dateStr = new Date().toISOString().slice(0, 10);
+  const fileName = `Network Setup Requirements ${companyName} ${dateStr}.xlsx`;
 
-  XLSX.writeFile(wb, `sublynk-onboarding-${orgSlug}-${dateStr}.xlsx`);
+  // Local download as backup
+  XLSX.writeFile(wb, fileName);
+
+  // Upload to Google Drive: create GC folder + subfolders + upload XLSX
+  // Parent folder: Sublynk Sub Management Network
+  try {
+    const xlsxData = XLSX.write(wb, { bookType: 'xlsx', type: 'base64' });
+    google.script.run
+      .withSuccessHandler(function(result) {
+        console.log('Drive folder created:', result);
+      })
+      .withFailureHandler(function(err) {
+        console.error('Drive upload failed:', err);
+      })
+      .createOnboardingFolder(companyName, dateStr, xlsxData, fileName);
+  } catch(e) {
+    console.log('Google Script not available (standalone mode), local download only');
+  }
 }
 
 // ─── Submit ───
