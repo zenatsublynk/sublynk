@@ -1892,6 +1892,7 @@ function collectFormData() {
     otherInsuranceNotes: g('otherInsuranceNotes'),
     hasSampleCoi: document.querySelector('input[name="sampleCoi"]:checked')?.value || '',
     programs: serviceCategories.map(function(c) { return c.name; }),
+    selectedPrograms: Object.keys(selectedProgramIndices).filter(function(idx) { return selectedProgramIndices[idx]; }).map(function(idx) { return PROGRAMS[idx].name; }),
     extraCertsRequired: document.querySelector('input[name="extraCerts"]:checked')?.value || '',
     extraCertsDetails: g('extraCertsDetails'),
     bgChecksRequired: toggled('toggle_bgchecks'),
