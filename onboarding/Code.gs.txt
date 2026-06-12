@@ -1,0 +1,235 @@
+// ─── Sublynk GC Onboarding Intake - Apps Script Backend ───
+// Deploy as: Web App > Execute as Me > Anyone can access
+
+var PARENT_FOLDER_ID = '1KQxjb19o84Az5TTaRoOahcPfS30JfLKK';
+
+// ─── API endpoint for external calls (GitHub Pages, etc.) ───
+function doPost(e) {
+  try {
+    var body = JSON.parse(e.postData.contents);
+    var action = body.action;
+    var result;
+
+    switch (action) {
+      case 'processSubmission':
+        result = processSubmission(body.payload);
+        break;
+      case 'createOnboardingFolder':
+        result = createOnboardingFolder(body.companyName, body.dateStr, body.xlsxBase64, body.fileName);
+        break;
+      case 'uploadContractFile':
+        result = { fileId: uploadContractFile(body.base64Data, body.fileName, body.companyName) };
+        break;
+      case 'uploadCoiSample':
+        result = { url: uploadCoiSample(body.base64Data, body.fileName, body.companyName, body.contactName) };
+        break;
+      default:
+        result = { error: 'Unknown action: ' + action };
+    }
+
+    return ContentService.createTextOutput(JSON.stringify(result))
+      .setMimeType(ContentService.MimeType.JSON);
+  } catch (err) {
+    return ContentService.createTextOutput(JSON.stringify({ error: err.message }))
+      .setMimeType(ContentService.MimeType.JSON);
+  }
+}
+
+// ─── Serve the form ───
+function doGet() {
+  return HtmlService.createHtmlOutputFromFile('intake')
+    .setTitle('Sublynk - GC Onboarding Intake')
+    .setXFrameOptionsMode(HtmlService.XFrameOptionsMode.ALLOWALL);
+}
+
+// ─── Create GC folder structure + upload XLSX ───
+// Called on form submit. Creates:
+//   {Parent}/
+//     {Company Name}/
+//       Network Setup Requirements {Company} {Date}.xlsx
+//       COI Sample/
+//       Contract Sample/
+function createOnboardingFolder(companyName, dateStr, xlsxBase64, fileName) {
+  var parentFolder = DriveApp.getFolderById(PARENT_FOLDER_ID);
+
+  // Create or find company folder
+  var companyFolders = parentFolder.getFoldersByName(companyName);
+  var companyFolder;
+  if (companyFolders.hasNext()) {
+    companyFolder = companyFolders.next();
+  } else {
+    companyFolder = parentFolder.createFolder(companyName);
+  }
+
+  // Create subfolders if they don't exist
+  ['COI Sample', 'Contract Sample'].forEach(function(name) {
+    var existing = companyFolder.getFoldersByName(name);
+    if (!existing.hasNext()) {
+      companyFolder.createFolder(name);
+    }
+  });
+
+  // Upload XLSX (replace if exists)
+  var xlsxBlob = Utilities.newBlob(
+    Utilities.base64Decode(xlsxBase64),
+    'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+    fileName
+  );
+
+  var existingFiles = companyFolder.getFilesByName(fileName);
+  if (existingFiles.hasNext()) {
+    existingFiles.next().setTrashed(true);
+  }
+
+  var file = companyFolder.createFile(xlsxBlob);
+
+  return {
+    folderId: companyFolder.getId(),
+    folderUrl: companyFolder.getUrl(),
+    fileId: file.getId(),
+    fileUrl: file.getUrl()
+  };
+}
+
+// ─── Upload contract file to Drive ───
+function uploadContractFile(base64Data, fileName, companyName) {
+  var parentFolder = DriveApp.getFolderById(PARENT_FOLDER_ID);
+
+  // Find or create company folder
+  var companyFolders = parentFolder.getFoldersByName(companyName);
+  var companyFolder;
+  if (companyFolders.hasNext()) {
+    companyFolder = companyFolders.next();
+  } else {
+    companyFolder = parentFolder.createFolder(companyName);
+  }
+
+  // Find or create Contract Sample subfolder
+  var contractFolders = companyFolder.getFoldersByName('Contract Sample');
+  var contractFolder;
+  if (contractFolders.hasNext()) {
+    contractFolder = contractFolders.next();
+  } else {
+    contractFolder = companyFolder.createFolder('Contract Sample');
+  }
+
+  var blob = Utilities.newBlob(
+    Utilities.base64Decode(base64Data),
+    'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+    fileName
+  );
+  var file = contractFolder.createFile(blob);
+  return file.getId();
+}
+
+// ─── Upload COI sample to Drive ───
+function uploadCoiSample(base64Data, fileName, companyName, contactName) {
+  var parentFolder = DriveApp.getFolderById(PARENT_FOLDER_ID);
+
+  // Find or create company folder
+  var companyFolders = parentFolder.getFoldersByName(companyName);
+  var companyFolder;
+  if (companyFolders.hasNext()) {
+    companyFolder = companyFolders.next();
+  } else {
+    companyFolder = parentFolder.createFolder(companyName);
+  }
+
+  // Find or create COI Sample subfolder
+  var coiFolders = companyFolder.getFoldersByName('COI Sample');
+  var coiFolder;
+  if (coiFolders.hasNext()) {
+    coiFolder = coiFolders.next();
+  } else {
+    coiFolder = companyFolder.createFolder('COI Sample');
+  }
+
+  var mimeType = 'application/pdf';
+  var lower = fileName.toLowerCase();
+  if (lower.match(/\.png$/)) mimeType = 'image/png';
+  else if (lower.match(/\.jpe?g$/)) mimeType = 'image/jpeg';
+  else if (lower.match(/\.docx?$/)) mimeType = 'application/vnd.openxmlformats-officedocument.wordprocessingml.document';
+
+  var blob = Utilities.newBlob(
+    Utilities.base64Decode(base64Data),
+    mimeType,
+    fileName
+  );
+  var file = coiFolder.createFile(blob);
+  return file.getUrl();
+}
+
+// ─── Process full submission ───
+function processSubmission(payload) {
+  // Log to spreadsheet
+  logToSheet(payload);
+
+  // Create folder structure if not already done
+  // (backup in case createOnboardingFolder didn't fire)
+  try {
+    var parentFolder = DriveApp.getFolderById(PARENT_FOLDER_ID);
+    var companyName = payload.legalName || 'Unknown';
+    var companyFolders = parentFolder.getFoldersByName(companyName);
+    if (!companyFolders.hasNext()) {
+      var folder = parentFolder.createFolder(companyName);
+      folder.createFolder('COI Sample');
+      folder.createFolder('Contract Sample');
+    }
+  } catch(e) {
+    Logger.log('Folder creation in processSubmission failed: ' + e);
+  }
+
+  return { success: true };
+}
+
+// ─── Log submission to Google Sheet ───
+function logToSheet(payload) {
+  var ss = SpreadsheetApp.getActiveSpreadsheet();
+  if (!ss) {
+    // If no bound spreadsheet, create one in the parent folder
+    var parentFolder = DriveApp.getFolderById(PARENT_FOLDER_ID);
+    ss = SpreadsheetApp.create('Sublynk Onboarding Submissions');
+    var file = DriveApp.getFileById(ss.getId());
+    parentFolder.addFile(file);
+    DriveApp.getRootFolder().removeFile(file);
+  }
+
+  var sheet = ss.getSheetByName('Submissions');
+  if (!sheet) {
+    sheet = ss.insertSheet('Submissions');
+    // Add headers on first run
+    var headers = [
+      'Timestamp', 'Legal Business Name', 'DBA', 'Tax ID', 'Tax Classification',
+      'Website', 'Address', 'City', 'State', 'Zip', 'Primary Email',
+      'Certificate Holder', 'Description of Operations',
+      'Signatory Name', 'Signatory Title', 'Signatory Email',
+      'Counter Signatures', 'Additional Contracts', 'Drive File IDs'
+    ];
+    sheet.appendRow(headers);
+    sheet.getRange(1, 1, 1, headers.length).setFontWeight('bold');
+  }
+
+  var row = [
+    new Date(),
+    payload.legalName || '',
+    payload.dba || '',
+    payload.taxId || '',
+    payload.taxClass || '',
+    payload.website || '',
+    payload.address1 || '',
+    payload.city || '',
+    payload.state || '',
+    payload.zip || '',
+    payload.primaryEmail || '',
+    payload.certHolder || '',
+    payload.descOps || '',
+    payload.signatoryName || '',
+    payload.signatoryTitle || '',
+    payload.signatoryEmail || '',
+    payload.counterSigs || '',
+    payload.additionalContracts || '',
+    (payload.driveFileIds || []).join(', ')
+  ];
+
+  sheet.appendRow(row);
+}
