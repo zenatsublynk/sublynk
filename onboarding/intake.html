@@ -498,22 +498,15 @@ select { cursor: pointer; appearance: none; background-image: url("data:image/sv
         <div style="display:flex; align-items:flex-start; gap:12px;">
           <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#DD6438" stroke-width="2" style="flex-shrink:0; margin-top:2px;"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
           <div>
-            <p style="font-weight:700; color:#0C152B; font-size:15px; margin-bottom:4px;">Custom Categories</p>
-            <p style="color:#374151; font-size:14px; line-height:1.6;">Add the service categories your company uses. Examples: Inspection, Repair, Replacement, Water Mitigation, Mold Remediation, Roofing, etc. Each category gets its own insurance and credential requirements.</p>
+            <p style="font-weight:700; color:#0C152B; font-size:15px; margin-bottom:4px;">Select Programs</p>
+            <p style="color:#374151; font-size:14px; line-height:1.6;">Toggle on the programs your subs perform. Each program expands to show its service categories. Selected categories get their own insurance and credential requirements below.</p>
           </div>
         </div>
       </div>
 
-      <!-- Add Category Input -->
-      <div class="field">
-        <label class="field-label">Add Service Category <span class="req">*</span></label>
-        <div style="display: flex; gap: 8px;">
-          <input type="text" id="newCategoryInput" placeholder="e.g. Inspection, Repair, Replacement..." style="flex:1;" onkeydown="if(event.key==='Enter'){event.preventDefault();addCategory();}">
-          <button class="btn btn-primary btn-sm" onclick="addCategory()" style="white-space:nowrap; padding: 10px 18px;">+ Add</button>
-        </div>
-        <div class="field-hint">Press Enter or click Add. You can add as many categories as needed.</div>
-        <div class="field-error" id="progError" style="display:none;">Please add at least one service category.</div>
-      </div>
+      <!-- Program Toggles -->
+      <div id="programToggles"></div>
+      <div class="field-error" id="progError" style="display:none;">Please select at least one program and service category.</div>
 
       <!-- Category Cards Container -->
       <div id="categoriesContainer"></div>
@@ -552,7 +545,7 @@ select { cursor: pointer; appearance: none; background-image: url("data:image/sv
           <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#DD6438" stroke-width="2" style="flex-shrink:0; margin-top:2px;"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
           <div>
             <p style="font-weight:700; color:#0C152B; font-size:15px; margin-bottom:4px;">Sublynk Minimum Requirement</p>
-            <p style="color:#374151; font-size:14px; line-height:1.6;">Sublynk requires a minimum of one background check for an owner of every subcontractor, regardless of any additional requirements.</p>
+            <p style="color:#374151; font-size:14px; line-height:1.6;">Sublynk requires a minimum of one background check for an owner of every subcontractor organization, regardless of any additional requirements.</p>
           </div>
         </div>
       </div>
@@ -1049,7 +1042,7 @@ document.querySelectorAll('input[name="taxClass"]').forEach(r => {
   r.addEventListener('change', () => { document.getElementById('taxClassError').style.display = 'none'; });
 });
 
-// Program validation cleared dynamically via addCategory()
+// Program validation cleared dynamically via toggleProgram()
 
 // ─── Tax ID formatting ───
 document.getElementById('taxId').addEventListener('input', function(e) {
@@ -1165,11 +1158,29 @@ function togglePrograms() {
   buildProgressBar();
 }
 
-// ─── Dynamic Service Categories ───
+// ─── Programs Data (from CNetwork Setup Requirements template) ───
+var PROGRAMS = [
+  { name: 'Mitigation & Emergency Response', categories: ['Board Up & Tarping', 'Commercial Mitigation', 'Fire Mitigation', 'Tree Removal', 'Water Mitigation'] },
+  { name: 'Environmental & Hazardous Materials', categories: ['Asbestos Abatement', 'Lead Abatement', 'Mold Remediation', 'Trauma & Biohazard'] },
+  { name: 'Cleaning & Specialized Cleaning', categories: ['Cleaning'] },
+  { name: 'Contents', categories: ['Contents Off-site', 'Contents On-site'] },
+  { name: 'Professional Services & Assessment', categories: ['Adjusting', 'Engineering', 'Inspection & Estimation', 'Testing'] },
+  { name: 'General Contracting', categories: ['Commercial Reconstruction', 'Demolition', 'General Contracting', 'Reconstruction', 'Remodeling'] },
+  { name: 'Reconstruction', categories: ['Commercial Reconstruction', 'Demolition', 'Reconstruction', 'Remodeling'] },
+  { name: 'MEP (Mechanical, Electrical, Plumbing)', categories: ['Electrical', 'HVAC', 'Plumbing'] },
+  { name: 'Carpentry/Drywall/Interior Finishes', categories: ['Cabinetry', 'Carpentry (Finish)', 'Carpentry (Rough)', 'Drywalling', 'Insulation'] },
+  { name: 'Painting', categories: ['Painting'] },
+  { name: 'Flooring', categories: ['Flooring'] },
+  { name: 'Roofing', categories: ['Commercial Roofing', 'Residential Roofing'] },
+  { name: 'Exterior & Structural Trades', categories: ['Masonry (Veneer)', 'Masonry (Structural)', 'Stucco & Plaster', 'Window Install & Repair'] },
+  { name: 'Trade Employers or Partners', categories: ['Designer', 'Real Estate Agent', 'Investor or Broker', 'Property Manager', 'Insurance Agent', 'Labor Only'] }
+];
+
+var selectedProgramIndices = {};
 var serviceCategories = [];
 var catIdCounter = 0;
+var catInsConfig = {};
 
-// Insurance lines available for per-category mapping
 var INS_LINES = [
   { key: 'cgl', label: 'Commercial General Liability (CGL)' },
   { key: 'cpl', label: 'Commercial Pollution Liability' },
@@ -1180,35 +1191,99 @@ var INS_LINES = [
   { key: 'bail', label: 'Bailees' }
 ];
 
-function addCategory() {
-  var input = document.getElementById('newCategoryInput');
-  var name = input.value.trim();
-  if (!name) return;
-  // Check for duplicates
-  var exists = serviceCategories.some(function(c) { return c.name.toLowerCase() === name.toLowerCase(); });
-  if (exists) { input.style.borderColor = 'var(--red)'; setTimeout(function(){ input.style.borderColor = ''; }, 1500); return; }
-
-  catIdCounter++;
-  var cat = {
-    id: catIdCounter,
-    name: name,
-    insurance: {},
-    credentials: '',
-    insRequired: 'same',  // 'same' = use global, 'custom' = per-category overrides
-    expanded: true
-  };
-  // Default: all insurance lines follow global settings
-  INS_LINES.forEach(function(line) { cat.insurance[line.key] = 'global'; });
-  serviceCategories.push(cat);
-  input.value = '';
+function toggleProgram(idx) {
+  selectedProgramIndices[idx] = !selectedProgramIndices[idx];
+  rebuildServiceCategories();
+  renderProgramToggles();
   renderCategories();
-  // Clear validation error
   document.getElementById('progError').style.display = 'none';
 }
 
-function removeCategory(id) {
-  serviceCategories = serviceCategories.filter(function(c) { return c.id !== id; });
+function toggleServiceCat(progIdx, catIdx) {
+  var catName = PROGRAMS[progIdx].categories[catIdx];
+  var existing = serviceCategories.find(function(c) { return c.name === catName; });
+  if (existing) {
+    catInsConfig[catName] = { insRequired: existing.insRequired, insurance: Object.assign({}, existing.insurance), credentials: existing.credentials };
+    serviceCategories = serviceCategories.filter(function(c) { return c.name !== catName; });
+  } else {
+    addServiceCat(catName);
+  }
+  renderProgramToggles();
   renderCategories();
+}
+
+function addServiceCat(name) {
+  catIdCounter++;
+  var saved = catInsConfig[name];
+  var cat = {
+    id: catIdCounter,
+    name: name,
+    insurance: saved ? Object.assign({}, saved.insurance) : {},
+    credentials: saved ? saved.credentials : '',
+    insRequired: saved ? saved.insRequired : 'same',
+    expanded: false
+  };
+  if (!saved) {
+    INS_LINES.forEach(function(line) { cat.insurance[line.key] = 'global'; });
+  }
+  serviceCategories.push(cat);
+}
+
+function rebuildServiceCategories() {
+  serviceCategories.forEach(function(cat) {
+    catInsConfig[cat.name] = { insRequired: cat.insRequired, insurance: Object.assign({}, cat.insurance), credentials: cat.credentials };
+  });
+  var neededCategories = {};
+  Object.keys(selectedProgramIndices).forEach(function(idx) {
+    if (!selectedProgramIndices[idx]) return;
+    PROGRAMS[idx].categories.forEach(function(catName) {
+      neededCategories[catName] = true;
+    });
+  });
+  serviceCategories = serviceCategories.filter(function(cat) {
+    return neededCategories[cat.name];
+  });
+  var existingNames = {};
+  serviceCategories.forEach(function(cat) { existingNames[cat.name] = true; });
+  Object.keys(neededCategories).forEach(function(catName) {
+    if (!existingNames[catName]) {
+      addServiceCat(catName);
+    }
+  });
+}
+
+function renderProgramToggles() {
+  var container = document.getElementById('programToggles');
+  var html = '';
+  PROGRAMS.forEach(function(prog, idx) {
+    var isOn = !!selectedProgramIndices[idx];
+    var catCount = 0;
+    if (isOn) {
+      prog.categories.forEach(function(catName) {
+        if (serviceCategories.some(function(c) { return c.name === catName; })) catCount++;
+      });
+    }
+    html += '<div style="border:2px solid ' + (isOn ? 'var(--orange)' : 'var(--border-light)') + '; border-radius:10px; padding:14px 16px; margin-bottom:10px; background:' + (isOn ? 'linear-gradient(135deg,#FFF3EF,#fff8f5)' : 'var(--card-bg)') + '; transition:all .2s;">';
+    html += '<div style="display:flex; align-items:center; gap:10px; cursor:pointer;" onclick="toggleProgram(' + idx + ')">';
+    html += '<div style="width:22px; height:22px; border-radius:5px; border:2px solid ' + (isOn ? 'var(--orange)' : '#CBD5E1') + '; background:' + (isOn ? 'var(--orange)' : '#fff') + '; display:flex; align-items:center; justify-content:center; flex-shrink:0;">';
+    if (isOn) html += '<svg width="13" height="13" fill="none" stroke="#fff" stroke-width="3" viewBox="0 0 24 24"><path d="M5 13l4 4L19 7"/></svg>';
+    html += '</div>';
+    html += '<div style="flex:1;"><span style="font-weight:600; font-size:14px; color:var(--navy);">' + escHtml(prog.name) + '</span>';
+    if (isOn) html += ' <span style="font-size:11px; color:var(--text-muted);">(' + catCount + '/' + prog.categories.length + ' categories)</span>';
+    html += '</div></div>';
+    if (isOn) {
+      html += '<div style="margin-top:10px; padding-top:10px; border-top:1px solid rgba(221,100,56,.15); display:grid; grid-template-columns:repeat(auto-fill,minmax(200px,1fr)); gap:4px 16px;">';
+      prog.categories.forEach(function(catName, ci) {
+        var isChecked = serviceCategories.some(function(c) { return c.name === catName; });
+        html += '<label style="display:flex; align-items:center; gap:6px; padding:4px 0; font-size:13px; cursor:pointer;">';
+        html += '<input type="checkbox"' + (isChecked ? ' checked' : '') + ' onchange="toggleServiceCat(' + idx + ',' + ci + ')" style="width:16px; height:16px; accent-color:var(--orange); cursor:pointer;">';
+        html += escHtml(catName) + '</label>';
+      });
+      html += '</div>';
+    }
+    html += '</div>';
+  });
+  container.innerHTML = html;
 }
 
 function toggleCategoryExpand(id) {
@@ -1229,7 +1304,6 @@ function setCatInsMode(id, mode) {
 function toggleCatIns(catId, insKey) {
   var cat = serviceCategories.find(function(c) { return c.id === catId; });
   if (!cat) return;
-  // Toggle between 'required', 'waived', 'global'
   if (cat.insurance[insKey] === 'required') cat.insurance[insKey] = 'waived';
   else if (cat.insurance[insKey] === 'waived') cat.insurance[insKey] = 'required';
   else cat.insurance[insKey] = 'required';
@@ -1246,27 +1320,26 @@ function updateCatCredentials(id) {
 function renderCategories() {
   var container = document.getElementById('categoriesContainer');
   if (serviceCategories.length === 0) {
-    container.innerHTML = '<div style="text-align:center; padding: 24px; color: var(--text-muted); font-size: 13px; border: 2px dashed var(--border-light); border-radius: 10px; margin-top: 12px;">No service categories added yet. Add your first category above.</div>';
+    container.innerHTML = '<div style="text-align:center; padding: 24px; color: var(--text-muted); font-size: 13px; border: 2px dashed var(--border-light); border-radius: 10px; margin-top: 12px;">Select programs above to add service categories.</div>';
     return;
   }
 
-  var html = '';
+  var html = '<h3 style="font-size:15px; font-weight:700; color:var(--navy); margin:20px 0 12px;">Per-Category Insurance &amp; Credentials</h3>';
+  html += '<p style="font-size:13px; color:var(--text-muted); margin-bottom:16px;">Configure insurance requirements and credentials for each selected service category. Click a category to expand.</p>';
   serviceCategories.forEach(function(cat, idx) {
     var exp = cat.expanded ? ' expanded' : '';
     html += '<div class="cat-card' + exp + '" id="cat_' + cat.id + '">';
     html += '<div class="cat-header">';
     html += '<div class="cat-header-left">';
     html += '<span class="cat-name">' + escHtml(cat.name) + '</span>';
-    html += '<span class="cat-badge">Category ' + (idx + 1) + '</span>';
+    html += '<span class="cat-badge">' + (cat.insRequired === 'custom' ? 'Custom Insurance' : 'Global Insurance') + '</span>';
     html += '</div>';
     html += '<div class="cat-actions">';
-    html += '<button class="cat-toggle-btn" onclick="toggleCategoryExpand(' + cat.id + ')">' + (cat.expanded ? 'Collapse' : 'Edit') + '</button>';
-    html += '<button class="cat-remove-btn" onclick="removeCategory(' + cat.id + ')" title="Remove">&times;</button>';
+    html += '<button class="cat-toggle-btn" onclick="toggleCategoryExpand(' + cat.id + ')">' + (cat.expanded ? 'Collapse' : 'Configure') + '</button>';
     html += '</div></div>';
 
     html += '<div class="cat-body">';
 
-    // Insurance mapping section
     html += '<div class="cat-section-label">Insurance Requirements</div>';
     html += '<div class="radio-group" style="margin-bottom: 12px;">';
     html += '<label class="radio-label"><input type="radio" name="catIns_' + cat.id + '" value="same"' + (cat.insRequired === 'same' ? ' checked' : '') + ' onchange="setCatInsMode(' + cat.id + ',\'same\')"> Same as global insurance settings</label>';
@@ -1291,9 +1364,8 @@ function renderCategories() {
       html += '</div>';
     }
 
-    // Credentials section
     html += '<div class="cat-section-label" style="margin-top:18px;">Required Credentials / Licenses</div>';
-    html += '<textarea id="cat_creds_' + cat.id + '" placeholder="e.g. State roofing license, HOG inspector certification, EPA Lead-Safe certification..." style="min-height:60px; font-size:13px;" onblur="updateCatCredentials(' + cat.id + ')">' + escHtml(cat.credentials) + '</textarea>';
+    html += '<textarea id="cat_creds_' + cat.id + '" placeholder="e.g. State roofing license, EPA Lead-Safe certification, IICRC WRT..." style="min-height:60px; font-size:13px;" onblur="updateCatCredentials(' + cat.id + ')">' + escHtml(cat.credentials) + '</textarea>';
     html += '<div class="field-hint">List any certifications, licenses, or credentials subs need for this category.</div>';
 
     html += '</div></div>';
@@ -1336,6 +1408,10 @@ function gatherData() {
     let line = `${ins.title}: ${limParts}`;
     if (endParts.length) line += ` [Endorsements: ${endParts.join(', ')}]`;
     coverages.push(line);
+  });
+  var selectedProgNames = [];
+  Object.keys(selectedProgramIndices).forEach(function(idx) {
+    if (selectedProgramIndices[idx]) selectedProgNames.push(PROGRAMS[idx].name);
   });
   const programs = serviceCategories.map(function(cat) { return cat.name; });
   const bgWho = [];
@@ -1384,6 +1460,7 @@ function gatherData() {
     'Other Insurance': radio('otherInsurance') === 'Yes' ? v('otherInsText') : 'No',
     'Sample COI': radio('sampleCoi'),
     'COI Files': coiFiles.map(function(f){return f.name}).join(', '),
+    'Selected Programs': selectedProgNames.join('; '),
     'Program Types': programs.join('; '),
     'Extra Certifications Required': radio('extraCerts'),
     'Extra Certifications Detail': radio('extraCerts') === 'Yes' ? v('extraCertsText') : '',
@@ -1488,13 +1565,29 @@ function gatherExcelData() {
     'COI Files': coiFiles.map(function(f){return f.name}).join(', ')
   };
 
-  // ── Tab 3: Programs (dynamic categories) ──
-  const programsTab = {};
-  serviceCategories.forEach(function(cat, idx) {
-    programsTab['Category ' + (idx + 1)] = cat.name;
-    programsTab[cat.name + ' - Insurance Mode'] = cat.insRequired === 'same' ? 'Same as Global' : 'Custom';
-    programsTab[cat.name + ' - Credentials'] = cat.credentials || '';
+  // ── Tab 3: Programs Matrix (programs as columns, categories as rows) ──
+  var selectedProgs = [];
+  Object.keys(selectedProgramIndices).forEach(function(idx) {
+    if (selectedProgramIndices[idx]) selectedProgs.push(PROGRAMS[idx]);
   });
+  var allCatNames = serviceCategories.map(function(cat) { return cat.name; });
+  var programsMatrix = [['Service Category'].concat(selectedProgs.map(function(p) { return p.name; }))];
+  var uniqueCats = {};
+  selectedProgs.forEach(function(p) {
+    p.categories.forEach(function(c) { uniqueCats[c] = true; });
+  });
+  Object.keys(uniqueCats).forEach(function(catName) {
+    var row = [catName];
+    selectedProgs.forEach(function(p) {
+      var inProgram = p.categories.indexOf(catName) >= 0;
+      var isSelected = allCatNames.indexOf(catName) >= 0;
+      row.push(inProgram && isSelected ? 'True' : 'False');
+    });
+    programsMatrix.push(row);
+  });
+  const programsTab = {};
+  programsTab['Selected Programs'] = selectedProgs.map(function(p) { return p.name; }).join('; ');
+  programsTab['Selected Categories'] = allCatNames.join('; ');
   programsTab['Extra Certifications Required'] = radio('extraCerts');
   programsTab['Extra Certifications Detail'] = radio('extraCerts') === 'Yes' ? v('extraCertsText') : '';
 
@@ -1558,7 +1651,7 @@ function gatherExcelData() {
     'Signatory Email': v('sigEmail')
   };
 
-  return { demographics, insurance, programsTab, insDetailRows, credentialsTab, bgChecks, contracts };
+  return { demographics, insurance, programsTab, programsMatrix, insDetailRows, credentialsTab, bgChecks, contracts };
 }
 
 // ─── Build Review ───
@@ -1568,7 +1661,7 @@ function buildReview() {
     { title: 'Organization Info', step: 1, fields: ['Legal Business Name','DBA','Tax ID','Tax Classification','Website URL','Address Line 1','Address Line 2','City','State','Zipcode','Primary Email'] },
     { title: 'Certificate Holder & Description', step: 2, fields: ['Certificate Holder','Description of Operations'] },
     { title: 'Insurance Requirements', step: 3, fields: ['Insurance Coverages','Other Insurance','Sample COI','COI Files'] },
-    { title: 'Service Categories & Programs', step: 4, fields: ['Program Types','Extra Certifications Required','Extra Certifications Detail'], showIf: function() { return programsEnabled; } },
+    { title: 'Service Categories & Programs', step: 4, fields: ['Selected Programs','Program Types','Extra Certifications Required','Extra Certifications Detail'], showIf: function() { return programsEnabled; } },
     { title: 'Background Checks', step: 5, fields: ['Background Checks','BG Check Who','BG Check Validity','Screening Types','Drug Substances'] },
     { title: 'Contracts', step: 6, fields: ['Counter Signatures','Additional Contracts','Uploaded Contracts','Signatory Name','Signatory Title','Signatory Email'] }
   ];
@@ -1617,18 +1710,25 @@ function callBackend(action, data, onSuccess, onFailure) {
     }
   } else {
     // Running standalone (GitHub Pages) -- POST to Apps Script web app
-    // Uses no-cors mode: request is delivered and processed, but response
-    // is opaque (CORS restriction). XLSX local download is the backup.
+    // Apps Script handles CORS for simple POST requests (no Content-Type header)
     fetch(APPS_SCRIPT_URL, {
       method: 'POST',
-      mode: 'no-cors',
+      redirect: 'follow',
       body: JSON.stringify(Object.assign({ action: action }, data))
     })
-    .then(function() {
-      console.log('Backend call sent: ' + action);
-      (onSuccess || function(){})({ sent: true });
+    .then(function(resp) {
+      if (!resp.ok) throw new Error('Backend returned ' + resp.status);
+      return resp.text();
     })
-    .catch(function(err) { (onFailure || console.warn)(err); });
+    .then(function(text) {
+      console.log('Backend response (' + action + '):', text);
+      try { var json = JSON.parse(text); (onSuccess || function(){})(json); }
+      catch(e) { (onSuccess || function(){})({ raw: text }); }
+    })
+    .catch(function(err) {
+      console.error('Backend call failed (' + action + '):', err);
+      (onFailure || console.warn)(err);
+    });
   }
 }
 
@@ -1649,7 +1749,13 @@ function downloadCSV() {
 
   addSheet('Demographic Info', excel.demographics);
   addSheet('Insurance', excel.insurance);
-  addSheet('Programs', excel.programsTab);
+  // Programs: matrix sheet (categories as rows, programs as columns)
+  if (excel.programsMatrix && excel.programsMatrix.length > 1) {
+    var wsProgs = XLSX.utils.aoa_to_sheet(excel.programsMatrix);
+    wsProgs['!cols'] = excel.programsMatrix[0].map(function() { return { wch: 28 }; });
+    XLSX.utils.book_append_sheet(wb, wsProgs, 'Programs');
+  }
+  addSheet('Programs Summary', excel.programsTab);
 
   // Insurance Detail: matrix sheet (rows = ins lines, cols = categories)
   if (excel.insDetailRows && excel.insDetailRows.length > 1) {
@@ -1912,6 +2018,7 @@ setInterval(saveToStorage, 30000);
 
 // ─── Init ───
 buildInsuranceToggles();
+renderProgramToggles();
 renderCategories();
 buildProgressBar();
 checkSaved();
@@ -1948,14 +2055,14 @@ var CALL_GUIDE = [
       { type: 'ask', text: 'Who should be listed as the certificate holder on your subs\' COIs?' },
       { type: 'note', text: 'Typically the GC legal name + address. Some add "and its affiliates."' },
       { type: 'ask', text: 'Is there a standard Description of Operations you require on every COI?' },
-      { type: 'note', text: 'If they are unsure, suggest: "All operations performed on behalf of [GC name]."' }
+      { type: 'note', text: 'If you are unsure, suggest: "All operations performed on behalf of [GC name]."' }
     ]
   },
   {
     step: 3, title: 'Insurance Requirements',
     tips: [
       { type: 'label', text: 'Walk-through' },
-      { type: 'note', text: 'Go line by line. Toggle on each coverage they require, then set limits.' },
+      { type: 'note', text: 'Go line by line. Toggle on each coverage you require, then set limits.' },
       { type: 'ask', text: 'Do you require CGL? What are your minimum limits per occurrence and aggregate?' },
       { type: 'ask', text: 'Do you need Additional Insured, Waiver of Sub, or Primary & Non-Contributory endorsements?' },
       { type: 'label', text: 'Common patterns' },
@@ -1969,10 +2076,10 @@ var CALL_GUIDE = [
   {
     step: 4, title: 'Service Categories & Programs',
     tips: [
-      { type: 'label', text: 'Categories' },
-      { type: 'ask', text: 'What types of work do your subs perform? Let\'s create a category for each.' },
-      { type: 'note', text: 'Examples: Inspection, Repair, Replacement, Water Mitigation, Mold Remediation, Roofing, HVAC, Electrical, Plumbing, Contents, Pack-Out.' },
-      { type: 'note', text: 'Each category can have different insurance and credential requirements.' },
+      { type: 'label', text: 'Programs' },
+      { type: 'ask', text: 'Which programs do your subs perform? Toggle on each program that applies.' },
+      { type: 'note', text: 'Programs include Mitigation, Environmental, Contents, General Contracting, MEP, Roofing, and more. Each program has predefined service categories.' },
+      { type: 'note', text: 'When you toggle a program on, all its service categories are selected by default. Uncheck any that don\'t apply.' },
       { type: 'label', text: 'Per-category insurance' },
       { type: 'ask', text: 'Do all categories require the same insurance, or do some need different coverage?' },
       { type: 'note', text: '"Same as global" uses the insurance from Step 3. "Custom" lets you require or waive specific lines per category.' },
