@@ -3,10 +3,13 @@
 
 var PARENT_FOLDER_ID = '1KQxjb19o84Az5TTaRoOahcPfS30JfLKK';
 // Set these in Apps Script: Project Settings > Script Properties
-// NOTION_TOKEN = your Notion integration token
-// NOTION_DB_ID = your onboarding database ID
-var NOTION_TOKEN = PropertiesService.getScriptProperties().getProperty('NOTION_TOKEN');
-var NOTION_DB_ID = PropertiesService.getScriptProperties().getProperty('NOTION_DB_ID');
+// NOTION_TOKEN, NOTION_DB_ID, PANDADOC_KEY, PANDADOC_TEMPLATES_FOLDER
+var SCRIPT_PROPS = PropertiesService.getScriptProperties();
+var NOTION_TOKEN = SCRIPT_PROPS.getProperty('NOTION_TOKEN');
+var NOTION_DB_ID = SCRIPT_PROPS.getProperty('NOTION_DB_ID');
+var PANDADOC_KEY = SCRIPT_PROPS.getProperty('PANDADOC_KEY');
+var PANDADOC_TEMPLATES_FOLDER = SCRIPT_PROPS.getProperty('PANDADOC_TEMPLATES_FOLDER');
+var NOTION_REVIEW_PARENT = SCRIPT_PROPS.getProperty('NOTION_REVIEW_PARENT');
 
 // ─── API endpoint for external calls (GitHub Pages, etc.) ───
 function doPost(e) {
@@ -195,6 +198,22 @@ function processSubmission(payload) {
     Logger.log('Notion post failed: ' + e);
   }
 
+  // Upload contracts as PandaDoc templates + create QA review task
+  var fileIds = payload.driveFileIds || [];
+  if (fileIds.length > 0 && PANDADOC_KEY) {
+    try {
+      var driveLinks = { folderUrl: folderUrl };
+      var pandaResults = templatizeInPandaDoc(payload, driveLinks);
+      try {
+        createReviewTask(payload, driveLinks, pandaResults);
+      } catch(e2) {
+        Logger.log('Review task creation failed: ' + e2);
+      }
+    } catch(e) {
+      Logger.log('PandaDoc upload failed: ' + e);
+    }
+  }
+
   return { success: true };
 }
 
@@ -297,4 +316,150 @@ function logToSheet(payload) {
   ];
 
   sheet.appendRow(row);
+}
+
+// ─── PANDADOC: Upload contracts as templates ───
+function templatizeInPandaDoc(data, driveLinks) {
+  var orgName = (data.legalName || 'Unknown').replace(/[^a-zA-Z0-9 ]/g, '').trim();
+  var sigName = data.signatoryName || orgName;
+  var sigEmail = data.signatoryEmail || data.email || '';
+  var sigTitle = data.signatoryTitle || 'Owner';
+  var results = [];
+
+  var pandaFolderUuid = PANDADOC_TEMPLATES_FOLDER;
+  try {
+    var folderResp = UrlFetchApp.fetch('https://api.pandadoc.com/public/v1/documents/folders', {
+      method: 'post',
+      contentType: 'application/json',
+      headers: { 'Authorization': 'API-Key ' + PANDADOC_KEY },
+      payload: JSON.stringify({ name: orgName, parent_uuid: PANDADOC_TEMPLATES_FOLDER }),
+      muteHttpExceptions: true
+    });
+    var folderResult = JSON.parse(folderResp.getContentText());
+    if (folderResult.uuid) {
+      pandaFolderUuid = folderResult.uuid;
+      Logger.log('PandaDoc subfolder created: ' + orgName + ' (' + pandaFolderUuid + ')');
+    }
+  } catch(e) {
+    Logger.log('PandaDoc subfolder creation failed, using parent: ' + e);
+  }
+
+  var fileIds = data.driveFileIds || [];
+  var fileNames = data.driveFileNames || [];
+  for (var i = 0; i < fileIds.length; i++) {
+    var fileId = fileIds[i];
+    var fileName = fileNames[i] || ('Contract-' + (i + 1) + '.docx');
+
+    try {
+      var driveFile = DriveApp.getFileById(fileId);
+      var fileBlob = driveFile.getBlob();
+      var docName = orgName + ' - ' + fileName.replace(/\.(docx?|pdf)$/i, '');
+
+      var dataJson = JSON.stringify({
+        name: docName,
+        folder_uuid: pandaFolderUuid,
+        recipients: [
+          {
+            email: sigEmail,
+            first_name: sigName.split(' ')[0] || sigName,
+            last_name: sigName.split(' ').slice(1).join(' ') || '',
+            role: 'Contractor',
+            signing_order: 1
+          }
+        ],
+        fields: {
+          contractor_name: { value: orgName, role: 'Contractor' },
+          contractor_signer_name: { value: sigName, role: 'Contractor' },
+          contractor_signer_title: { value: sigTitle, role: 'Contractor' },
+          sign_date: { value: Utilities.formatDate(new Date(), 'America/Los_Angeles', 'yyyy-MM-dd'), role: 'Contractor' }
+        },
+        tokens: [
+          { name: 'contractor.company', value: orgName },
+          { name: 'contractor.name', value: sigName },
+          { name: 'contractor.title', value: sigTitle },
+          { name: 'contractor.email', value: sigEmail },
+          { name: 'contractor.address', value: (data.address1 || '') + ', ' + (data.city || '') + ', ' + (data.state || '') + ' ' + (data.zip || '') }
+        ],
+        metadata: {
+          source: 'sublynk-onboarding-form',
+          org_name: orgName,
+          drive_folder: driveLinks.folderUrl
+        },
+        tags: ['onboarding', 'auto-generated', 'needs-qa'],
+        parse_form_fields: true
+      });
+
+      var boundary = '----PandaDocBoundary' + Utilities.getUuid();
+      var requestBody = Utilities.newBlob(
+        '--' + boundary + '\r\n' +
+        'Content-Disposition: form-data; name="file"; filename="' + fileName + '"\r\n' +
+        'Content-Type: application/vnd.openxmlformats-officedocument.wordprocessingml.document\r\n\r\n'
+      ).getBytes()
+      .concat(fileBlob.getBytes())
+      .concat(Utilities.newBlob(
+        '\r\n--' + boundary + '\r\n' +
+        'Content-Disposition: form-data; name="data"\r\n' +
+        'Content-Type: application/json\r\n\r\n' +
+        dataJson + '\r\n' +
+        '--' + boundary + '--\r\n'
+      ).getBytes());
+
+      var response = UrlFetchApp.fetch('https://api.pandadoc.com/public/v1/templates', {
+        method: 'post',
+        contentType: 'multipart/form-data; boundary=' + boundary,
+        headers: { 'Authorization': 'API-Key ' + PANDADOC_KEY },
+        payload: requestBody,
+        muteHttpExceptions: true
+      });
+
+      var result = JSON.parse(response.getContentText());
+      if (result.id) {
+        results.push({ success: true, id: result.id, name: fileName });
+        Logger.log('PandaDoc template created: ' + result.id + ' - ' + fileName);
+      } else {
+        results.push({ success: false, name: fileName, error: response.getContentText() });
+        Logger.log('PandaDoc template error: ' + response.getContentText());
+      }
+    } catch (err) {
+      results.push({ success: false, name: fileName, error: err.toString() });
+      Logger.log('PandaDoc template failed: ' + err.toString());
+    }
+  }
+  return results;
+}
+
+// ─── NOTION: QA Review Task for Madeline ───
+function createReviewTask(data, driveLinks, pandaResults) {
+  var orgName = (data.legalName || 'Unknown').replace(/[^a-zA-Z0-9 ]/g, '').trim();
+  var parentPageId = NOTION_REVIEW_PARENT || '372828b976238174a77ae1a7153d4484';
+
+  var taskPayload = {
+    parent: { page_id: parentPageId },
+    properties: { title: { title: [{ text: { content: 'QA: ' + orgName + ' contracts in PandaDoc' } }] } },
+    children: [
+      { object: 'block', type: 'paragraph', paragraph: { rich_text: [{ type: 'text', text: { content: 'Review and finalize PandaDoc field placement for ' + orgName + '. Auto-injected signature block needs verification.' }, annotations: { bold: true } }] } },
+      { object: 'block', type: 'paragraph', paragraph: { rich_text: [{ type: 'text', text: { content: '\nCompany: ' + orgName + '\nSignatory: ' + (data.signatoryName || 'N/A') + ' (' + (data.signatoryEmail || 'N/A') + ')\n' } }] } },
+      { object: 'block', type: 'heading_2', heading_2: { rich_text: [{ type: 'text', text: { content: 'PandaDoc Templates' } }] } },
+      { object: 'block', type: 'paragraph', paragraph: { rich_text: pandaResults.map(function(r) {
+        if (r.success) return { type: 'text', text: { content: r.name + '\n', link: { url: 'https://app.pandadoc.com/a/#/templates-next/' + r.id } } };
+        return { type: 'text', text: { content: r.name + ' (FAILED)\n' } };
+      }) } },
+      { object: 'block', type: 'heading_2', heading_2: { rich_text: [{ type: 'text', text: { content: 'QA Checklist' } }] } },
+      { object: 'block', type: 'to_do', to_do: { rich_text: [{ type: 'text', text: { content: 'Open each template in PandaDoc editor' } }], checked: false } },
+      { object: 'block', type: 'to_do', to_do: { rich_text: [{ type: 'text', text: { content: 'Verify signature fields are positioned correctly' } }], checked: false } },
+      { object: 'block', type: 'to_do', to_do: { rich_text: [{ type: 'text', text: { content: 'Verify printed name, title, and date fields' } }], checked: false } },
+      { object: 'block', type: 'to_do', to_do: { rich_text: [{ type: 'text', text: { content: 'Check auto-injected signature block at end' } }], checked: false } },
+      { object: 'block', type: 'to_do', to_do: { rich_text: [{ type: 'text', text: { content: 'Remove duplicate or misplaced fields' } }], checked: false } },
+      { object: 'block', type: 'to_do', to_do: { rich_text: [{ type: 'text', text: { content: 'Mark template as ready to send' } }], checked: false } },
+      { object: 'block', type: 'paragraph', paragraph: { rich_text: [{ type: 'text', text: { content: '\nDrive folder: ' }, annotations: { color: 'gray' } }, { type: 'text', text: { content: 'Open', link: { url: driveLinks.folderUrl } } }] } }
+    ]
+  };
+
+  UrlFetchApp.fetch('https://api.notion.com/v1/pages', {
+    method: 'post',
+    contentType: 'application/json',
+    headers: { 'Authorization': 'Bearer ' + NOTION_TOKEN, 'Notion-Version': '2022-06-28' },
+    payload: JSON.stringify(taskPayload),
+    muteHttpExceptions: true
+  });
 }
