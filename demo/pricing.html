@@ -1,0 +1,250 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Sublynk — Pricing</title>
+<style>
+ :root{--navy:#0d142a;--orange:#dd6336;--bg:#f5f5f4;--border:#e7e5e4;--ink:#0c0a09;--muted:#78716c;--green:#15803d;--red:#b8431f}
+ *{box-sizing:border-box}html,body{margin:0}
+ body{font-family:Inter,-apple-system,'Segoe UI',Roboto,Arial,sans-serif;background:#fff;color:var(--ink);line-height:1.55;-webkit-font-smoothing:antialiased}
+ .wrap{max-width:1040px;margin:0 auto;padding:0 24px}
+ a{color:inherit}
+ /* nav */
+ nav{border-bottom:1px solid var(--border);background:#fff}
+ nav .wrap{display:flex;align-items:center;justify-content:space-between;padding:16px 24px}
+ nav img{height:24px;display:block}
+ nav .links{display:flex;gap:26px;font-size:14px;font-weight:600;color:var(--navy)}
+ nav .links a{text-decoration:none;opacity:.8}nav .links a:hover{opacity:1}
+ .btn{display:inline-block;text-decoration:none;font-weight:700;font-size:14px;border-radius:9px;padding:10px 16px}
+ .btn.o{background:var(--orange);color:#fff}
+ /* header */
+ header.hero{text-align:center;padding:52px 0 30px}
+ .eyebrow{display:inline-block;font-size:12px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--orange)}
+ h1{font-size:38px;letter-spacing:-.02em;color:var(--navy);margin:10px 0 10px}
+ .lede{font-size:17px;color:var(--muted);max-width:600px;margin:0 auto}
+ /* toggle */
+ .toggle{display:inline-flex;background:#f1efed;border:1px solid var(--border);border-radius:12px;padding:4px;margin:26px auto 0;gap:4px}
+ .tog{border:0;background:transparent;font:inherit;font-weight:700;font-size:14.5px;color:var(--muted);padding:10px 22px;border-radius:9px;cursor:pointer;transition:.15s}
+ .tog.active{background:#fff;color:var(--navy);box-shadow:0 2px 8px rgba(13,20,42,.08)}
+ .togwrap{text-align:center}
+ .togsub{font-size:12.5px;color:var(--muted);margin-top:10px}
+ /* plans */
+ .pane{padding:30px 0 8px}
+ .plans{display:grid;grid-template-columns:1fr 1fr;gap:20px;max-width:780px;margin:0 auto;align-items:start}
+ .plans.one{grid-template-columns:1fr;max-width:430px}
+ .plan{border:1px solid var(--border);border-radius:18px;padding:28px 26px;background:#fff;position:relative}
+ .plan.feat{border:2px solid var(--orange);box-shadow:0 18px 44px rgba(221,99,54,.12)}
+ .badge{position:absolute;top:-12px;left:26px;background:var(--orange);color:#fff;font-size:11px;font-weight:800;letter-spacing:.05em;text-transform:uppercase;padding:4px 11px;border-radius:999px}
+ .ptier{font-size:13px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--orange)}
+ .pprice{font-size:44px;font-weight:800;letter-spacing:-1.5px;color:var(--navy);margin:6px 0 2px}
+ .pprice span{font-size:17px;font-weight:600;color:var(--muted);letter-spacing:0}
+ .pwho{font-size:14px;color:var(--muted);min-height:40px;margin-bottom:14px}
+ .plan ul{list-style:none;margin:0 0 18px;padding:0}
+ .plan li{display:flex;gap:9px;align-items:flex-start;font-size:14px;color:#3f3a37;padding:6px 0}
+ .plan li .ck{flex:none;width:17px;height:17px;border-radius:50%;background:#e8f6ee;color:var(--green);display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:800;margin-top:1px}
+ .addon{font-size:12.5px;color:var(--muted);background:#fafaf9;border:1px solid var(--border);border-radius:9px;padding:9px 12px;margin-bottom:16px}
+ .pbtn{display:block;text-align:center;text-decoration:none;font-weight:700;font-size:14.5px;border-radius:10px;padding:12px;border:1px solid var(--navy);color:var(--navy)}
+ .pbtn.o{background:var(--orange);border-color:var(--orange);color:#fff}
+ /* background tiers */
+ .bgtiers{max-width:780px;margin:30px auto 0;border:1px solid var(--border);border-radius:16px;padding:22px 24px;background:#fafaf9}
+ .bgtiers h3{margin:0 0 4px;font-size:16px;color:var(--navy)}
+ .bgtiers .note{font-size:13px;color:var(--muted);margin:0 0 14px}
+ .bgrow{display:flex;align-items:baseline;gap:14px;padding:10px 0;border-bottom:1px solid var(--border);font-size:13.5px}
+ .bgrow:last-child{border-bottom:0}
+ .bgrow .tname{font-weight:700;color:var(--navy);width:120px;flex:none}
+ .bgrow .tprice{font-weight:800;color:var(--navy);width:58px;flex:none;font-variant-numeric:tabular-nums}
+ .bgrow .tdesc{color:var(--muted)}
+ /* roi embed */
+ .roisec{background:var(--navy);margin-top:46px;padding:46px 0}
+ .roisec .panel{background:#fff;border-radius:22px;padding:36px 38px;box-shadow:0 24px 60px rgba(0,0,0,.35);max-width:940px;margin:0 auto}
+ .roisec h2{margin:6px 0 6px;font-size:27px;letter-spacing:-.4px;color:var(--navy)}
+ .roisec .rlede{margin:0 0 24px;color:var(--muted);font-size:15px;max-width:620px}
+ .control{background:#fafaf9;border:1px solid var(--border);border-radius:14px;padding:18px 20px;margin-bottom:22px}
+ .control .top{display:flex;justify-content:space-between;align-items:baseline;flex-wrap:wrap;gap:8px}
+ .control label{font-weight:600;font-size:14px;color:var(--navy)}
+ .countbox input{width:90px;font:inherit;font-size:23px;font-weight:800;color:var(--navy);text-align:right;border:1px solid var(--border);border-radius:10px;padding:4px 10px}
+ .countbox span{font-size:13px;color:var(--muted)}
+ input[type=range]{width:100%;margin-top:13px;accent-color:var(--orange)}
+ .ticks{display:flex;justify-content:space-between;font-size:11px;color:#a8a29e;margin-top:4px}
+ .rhero{display:flex;align-items:center;justify-content:space-between;gap:18px;flex-wrap:wrap;background:var(--navy);color:#fff;border-radius:16px;padding:22px 26px;margin-bottom:24px}
+ .rhero .big{font-size:40px;font-weight:800;letter-spacing:-1px;line-height:1}.rhero .big .lk{color:var(--orange)}
+ .rhero .sub{font-size:13px;color:#aeb4c2;margin-top:6px}
+ .rhero .yr{text-align:right}.rhero .yr .n{font-size:22px;font-weight:800}.rhero .yr .l{font-size:12px;color:#aeb4c2;text-transform:uppercase;letter-spacing:.08em}
+ .cols{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+ .col{border:1px solid var(--border);border-radius:16px;padding:20px;background:#fff}
+ .col.old{border-top:4px solid var(--red)}.col.new{border-top:4px solid var(--green);background:#fbfdfb}
+ .col h4{margin:0 0 2px;font-size:16px;color:var(--navy)}.col .tag{font-size:12px;color:var(--muted);margin:0 0 14px}
+ .rrow{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:8px 0;border-bottom:1px dashed #eceae8;font-size:13.5px}
+ .rrow:last-of-type{border-bottom:0}.rrow .nm{color:#44403c}
+ .rrow .amt{margin-left:auto;font-variant-numeric:tabular-nums;font-weight:700;color:var(--navy)}
+ .rtotal{display:flex;justify-content:space-between;align-items:baseline;margin-top:14px;padding-top:13px;border-top:2px solid var(--border)}
+ .rtotal .l{font-weight:700;color:var(--navy)}.rtotal .v{font-size:24px;font-weight:800;color:var(--red);font-variant-numeric:tabular-nums}
+ .col.new .rtotal .v{color:var(--green)}
+ .perks{margin:12px 0 0;padding:0;list-style:none;font-size:13px;color:#44403c}
+ .perks li{padding:5px 0 5px 22px;position:relative}.perks li::before{content:"\2713";position:absolute;left:0;color:var(--green);font-weight:800}
+ .rfoot{margin-top:18px;font-size:12px;color:var(--muted);line-height:1.6}
+ /* footer */
+ footer{background:var(--navy);color:#9aa3b2;padding:40px 0 30px;font-size:13px;text-align:center}
+ footer .fine{margin-top:8px;font-size:12px;color:#7c8aa6}
+ @media(max-width:760px){h1{font-size:30px}.plans,.cols{grid-template-columns:1fr}.rhero .yr{text-align:left}nav .links{display:none}}
+</style></head>
+<body>
+<nav><div class="wrap">
+  <a href="index.html"><img src="sublynk-color.png" alt="Sublynk"></a>
+  <div class="links"><a href="index.html#platform">Platform</a><a href="index.html#how">How it works</a><a href="pricing.html">Pricing</a><a href="index.html#directory">Directory</a></div>
+  <a class="btn o" href="index.html#cta">Get Sublynk Certified</a>
+</div></nav>
+
+<header class="hero"><div class="wrap">
+  <span class="eyebrow">Pricing</span>
+  <h1>Simple, transparent pricing.</h1>
+  <p class="lede">Credentialing was always a cost center. On Sublynk it is a flat, predictable line item, and a sales tool. No lead fees. No percentage of the job. Ever.</p>
+  <div class="togwrap">
+    <div class="toggle">
+      <button class="tog active" data-pane="contractor">Contractor / Network</button>
+      <button class="tog" data-pane="sub">Subcontractor</button>
+    </div>
+    <div class="togsub" id="togsub">You run a network or GC and credential your subcontractors.</div>
+  </div>
+</div></header>
+
+<!-- CONTRACTOR / NETWORK -->
+<section class="pane" id="pane-contractor"><div class="wrap">
+  <div class="plans">
+    <div class="plan">
+      <div class="ptier">One network</div>
+      <div class="pprice">$25<span> / month</span></div>
+      <div class="pwho">Credential your bench into a single network or program.</div>
+      <ul>
+        <li><span class="ck">&#10003;</span>Full credentialing suite: COIs, licenses, background checks, business screening</li>
+        <li><span class="ck">&#10003;</span>Verified at the source, same-day turnaround</li>
+        <li><span class="ck">&#10003;</span>Always-green monitoring with expiration alerts</li>
+        <li><span class="ck">&#10003;</span>Your public, verified profile</li>
+      </ul>
+      <div class="addon">+ $10 / month per additional location (same tax ID)</div>
+      <a class="pbtn" href="index.html#cta">Get started</a>
+    </div>
+    <div class="plan feat">
+      <div class="badge">Most popular</div>
+      <div class="ptier">Unlimited networks</div>
+      <div class="pprice">$35<span> / month</span></div>
+      <div class="pwho">Join unlimited networks and TPAs with one profile, reused everywhere.</div>
+      <ul>
+        <li><span class="ck">&#10003;</span>Everything in One network</li>
+        <li><span class="ck">&#10003;</span>Unlimited network and carrier connections</li>
+        <li><span class="ck">&#10003;</span>One profile satisfies every program, no re-uploading</li>
+        <li><span class="ck">&#10003;</span>Priority placement in the public directory</li>
+      </ul>
+      <div class="addon">+ $10 / month per additional location (same tax ID)</div>
+      <a class="pbtn o" href="index.html#cta">Get started</a>
+    </div>
+  </div>
+
+  <div class="bgtiers">
+    <h3>Background checks, billed per check</h3>
+    <p class="note">Passed through at cost, no markup. Choose the tier each network or owner role requires.</p>
+    <div class="bgrow"><span class="tname">Tier 1</span><span class="tprice">$35</span><span class="tdesc">SSN trace, county and national criminal, watchlists, sex offender. Same business day.</span></div>
+    <div class="bgrow"><span class="tname">Tier 2</span><span class="tprice">$55</span><span class="tdesc">Adds motor vehicle and federal criminal. Meets AccuServe and CORE employee requirements.</span></div>
+    <div class="bgrow"><span class="tname">Tier 3</span><span class="tprice">$95</span><span class="tdesc">Adds county and federal civil. Meets Altimeter, Sedgwick, and State Farm employee requirements.</span></div>
+    <div class="bgrow"><span class="tname">Tier 3 + Credit</span><span class="tprice">$102</span><span class="tdesc">Adds a personal credit check. Meets AccuServe owner requirements.</span></div>
+    <div class="bgrow"><span class="tname">Tier 4</span><span class="tprice">$145</span><span class="tdesc">Adds employment history verification. Meets owner-level requirements.</span></div>
+  </div>
+</div></section>
+
+<!-- SUBCONTRACTOR -->
+<section class="pane" id="pane-sub" hidden><div class="wrap">
+  <div class="plans one">
+    <div class="plan feat">
+      <div class="badge">Get certified</div>
+      <div class="ptier">Sublynk Certified</div>
+      <div class="pprice">$100<span> / year</span></div>
+      <div class="pwho">Get vetted once. Reused on every network, carrier, and customer that matters.</div>
+      <ul>
+        <li><span class="ck">&#10003;</span>Background check, license, and insurance verified at the source</li>
+        <li><span class="ck">&#10003;</span>Your portable public profile, build it once, take it everywhere</li>
+        <li><span class="ck">&#10003;</span>Found by homeowners and carriers searching the public directory</li>
+        <li><span class="ck">&#10003;</span>Direct leads to you, no lead fees, no percentage of the job</li>
+        <li><span class="ck">&#10003;</span>Stop paying for the same background check over and over</li>
+      </ul>
+      <a class="pbtn o" href="index.html#cta">Get Sublynk Certified</a>
+    </div>
+  </div>
+
+  <div class="bgtiers">
+    <h3>Background checks, billed per check</h3>
+    <p class="note">Order your own, at cost, no markup. Choose the tier each network or owner role requires.</p>
+    <div class="bgrow"><span class="tname">Tier 1</span><span class="tprice">$35</span><span class="tdesc">SSN trace, county and national criminal, watchlists, sex offender. Same business day.</span></div>
+    <div class="bgrow"><span class="tname">Tier 2</span><span class="tprice">$55</span><span class="tdesc">Adds motor vehicle and federal criminal. Meets AccuServe and CORE employee requirements.</span></div>
+    <div class="bgrow"><span class="tname">Tier 3</span><span class="tprice">$95</span><span class="tdesc">Adds county and federal civil. Meets Altimeter, Sedgwick, and State Farm employee requirements.</span></div>
+    <div class="bgrow"><span class="tname">Tier 3 + Credit</span><span class="tprice">$102</span><span class="tdesc">Adds a personal credit check. Meets AccuServe owner requirements.</span></div>
+    <div class="bgrow"><span class="tname">Tier 4</span><span class="tprice">$145</span><span class="tdesc">Adds employment history verification. Meets owner-level requirements.</span></div>
+  </div>
+</div></section>
+
+<!-- ROI CALCULATOR -->
+<section class="roisec"><div class="wrap"><div class="panel">
+  <span class="eyebrow">For networks and GCs</span>
+  <h2>See what credentialing really costs you.</h2>
+  <p class="rlede">The old way means stitching together six or more tools, and the bill scales with every sub you add. Sublynk is one platform at a flat price. Drag the slider to your roster.</p>
+  <div class="control">
+    <div class="top"><label for="count">How many subcontractors or vendors do you manage?</label>
+      <div class="countbox"><input id="count" type="number" min="1" max="500" value="100"><span> subs / vendors</span></div></div>
+    <input id="slider" type="range" min="10" max="500" step="5" value="100">
+    <div class="ticks"><span>10</span><span>100</span><span>250</span><span>500</span></div>
+  </div>
+  <div class="rhero">
+    <div><div class="big">You save <span class="lk" id="saveMo">$0</span><span style="font-size:18px">/mo</span></div><div class="sub" id="pct">about 0% less than the old way</div></div>
+    <div class="yr"><div class="n" id="saveYr">$0</div><div class="l">back every year</div></div>
+  </div>
+  <div class="cols">
+    <div class="col old"><h4>The old way</h4><p class="tag">Separate tools, each billed per sub, every month</p><div id="oldRows"></div><div class="rtotal"><span class="l">Old way total</span><span class="v" id="oldTotal">$0</span></div></div>
+    <div class="col new"><h4>The Sublynk way</h4><p class="tag">One platform, same-day, flat price</p>
+      <div class="rrow"><span class="nm">Sublynk Certified platform</span><span class="amt" id="subAmt">$25</span></div>
+      <p style="font-size:13px;color:#44403c;margin:12px 0 0">Flat <b>$25/mo</b> per org (plus $10 per location). It does <b>not</b> climb as you add subs, that is the whole point.</p>
+      <ul class="perks"><li>COIs, licenses, background checks, screening in one place</li><li>Same-day instead of days of chasing paper</li><li>A public, verified profile that wins you work</li></ul>
+      <div class="rtotal"><span class="l">Sublynk total</span><span class="v" id="newTotal">$25</span></div></div>
+  </div>
+  <p class="rfoot">Industry-typical assumptions: COI tracking around $8 per sub / month, background checks around $40 per sub / year. At 100 subs the old way lands near the $2,500 / month benchmark. Sublynk is $25/mo per org, flat.</p>
+</div></div></section>
+
+<footer><div class="wrap">
+  <div>Sublynk, the certified contractor platform. No predatory lead fees. Ever.</div>
+  <div class="fine">© 2026 Sublynk, Inc. · 5610 Ward Rd, STE 300, Arvada, CO 80002 · info@sublynk.com</div>
+</div></footer>
+
+<script>
+ // toggle
+ document.querySelectorAll('.tog').forEach(function(b){
+   b.addEventListener('click',function(){
+     document.querySelectorAll('.tog').forEach(function(x){x.classList.remove('active')});
+     this.classList.add('active');
+     var p=this.getAttribute('data-pane');
+     document.getElementById('pane-contractor').hidden=(p!=='contractor');
+     document.getElementById('pane-sub').hidden=(p!=='sub');
+     document.getElementById('togsub').textContent = p==='contractor'
+       ? 'You run a network or GC and credential your subcontractors.'
+       : 'You are a contractor getting vetted to win work across networks.';
+   });
+ });
+ // ROI calc
+ var ITEMS=[
+   {key:'coi',nm:'COI tracking &amp; verification',rate:8.00,per:'mo'},
+   {key:'bg',nm:'Background checks',rate:40.0,per:'yr'},
+   {key:'lic',nm:'License verification',rate:4.00,per:'mo'},
+   {key:'kyb',nm:'Business screening (KYC / KYB)',rate:3.00,per:'mo'},
+   {key:'sign',nm:'Document signing',rate:1.40,per:'mo'},
+   {key:'admin',nm:'Spreadsheet tracking &amp; admin',rate:5.25,per:'mo'}
+ ];
+ var q=function(s){return document.querySelector(s)},money=function(n){return '$'+Math.round(n).toLocaleString('en-US')};
+ q('#oldRows').innerHTML=ITEMS.map(function(it){return '<div class="rrow"><span class="nm">'+it.nm+'</span><span class="amt" id="amt-'+it.key+'">$0</span></div>'}).join('');
+ var m=function(it){return it.per==='yr'?it.rate/12:it.rate};
+ function recalc(){
+   var n=Math.max(1,parseInt(q('#count').value)||0),o=0;
+   ITEMS.forEach(function(it){var v=m(it)*n;o+=v;q('#amt-'+it.key).textContent=money(v)});
+   q('#oldTotal').textContent=money(o);q('#newTotal').textContent='$25';q('#subAmt').textContent='$25';
+   var s=Math.max(0,o-25);q('#saveMo').textContent=money(s);q('#saveYr').textContent=money(s*12);
+   q('#pct').textContent='about '+(o>0?Math.round(s/o*100):0)+'% less than the old way';
+ }
+ q('#slider').addEventListener('input',function(e){q('#count').value=e.target.value;recalc()});
+ q('#count').addEventListener('input',function(e){var v=parseInt(e.target.value)||0;if(v>=10&&v<=500)q('#slider').value=v;recalc()});
+ recalc();
+</script>
+</body></html>
