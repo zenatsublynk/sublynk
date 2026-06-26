@@ -332,9 +332,9 @@ select { cursor: pointer; appearance: none; background-image: url("data:image/sv
           <div class="field-error">Legal business name is required.</div>
         </div>
         <div class="field">
-          <label class="field-label">DBA <span class="req">*</span></label>
-          <input type="text" id="dba" data-required="true" placeholder="Doing business as...">
-          <div class="field-error">DBA is required.</div>
+          <label class="field-label">DBA <span class="opt">(optional)</span></label>
+          <input type="text" id="dba" placeholder="Doing business as...">
+          <div class="field-hint">Leave blank if you do not have a DBA, and we will use your legal name.</div>
         </div>
       </div>
 
@@ -743,9 +743,9 @@ const INSURANCE_TYPES = [
       { id: 'cgl_coagg', label: 'Completed Ops Aggregate', default: '$2,000,000' }
     ],
     endorsements: [
-      { id: 'cgl_e_ai', label: 'Additional Insured CG2010' },
-      { id: 'cgl_e_co', label: 'Additional Insured Completed Ops CG2037' },
-      { id: 'cgl_e_ws', label: 'Waiver of Subrogation CG2404' },
+      { id: 'cgl_e_ai', label: 'Additional Insured CG2010 (or equivalent)' },
+      { id: 'cgl_e_co', label: 'Additional Insured Completed Ops CG2037 (or equivalent)' },
+      { id: 'cgl_e_ws', label: 'Waiver of Subrogation CG2404 (or equivalent)' },
       { id: 'cgl_e_pnc', label: 'Primary & Non-Contributory' }
     ]
   },
@@ -755,9 +755,9 @@ const INSURANCE_TYPES = [
       { id: 'cpl_occ', label: 'Each Occurrence', default: '$1,000,000' }
     ],
     endorsements: [
-      { id: 'cpl_e_ai', label: 'Additional Insured CG2010' },
-      { id: 'cpl_e_co', label: 'Additional Insured Completed Ops CG2037' },
-      { id: 'cpl_e_ws', label: 'Waiver of Subrogation CG2404' },
+      { id: 'cpl_e_ai', label: 'Additional Insured' },
+      { id: 'cpl_e_co', label: 'Additional Insured Completed Ops' },
+      { id: 'cpl_e_ws', label: 'Waiver of Subrogation' },
       { id: 'cpl_e_pnc', label: 'Primary & Non-Contributory' }
     ]
   },
@@ -1444,7 +1444,7 @@ function gatherData() {
 
   return {
     'Legal Business Name': v('legalName'),
-    'DBA': v('dba'),
+    'DBA': v('dba') || v('legalName'),
     'Tax ID': v('taxId'),
     'Tax Classification': radio('taxClass'),
     'Website URL': v('website'),
@@ -1499,7 +1499,7 @@ function gatherExcelData() {
   // ── Tab 1: Demographic Info ──
   const demographics = {
     'Legal Business Name': v('legalName'),
-    'DBA': v('dba'),
+    'DBA': v('dba') || v('legalName'),
     'Tax ID': v('taxId'),
     'Tax Classification': radio('taxClass'),
     'Website': v('website'),
@@ -1528,9 +1528,9 @@ function gatherExcelData() {
     // Pollution
     'Pollution Required': yn(c('tog_cpl')),
     'Pollution Each Occurrence': c('tog_cpl') ? limitVal('cpl_occ') : '',
-    'Pollution Additional Insured CG2010': c('tog_cpl') ? yn(c('cpl_e_ai')) : '',
-    'Pollution Additional Insured CO CG2037': c('tog_cpl') ? yn(c('cpl_e_co')) : '',
-    'Pollution Waiver of Subrogation CG2404': c('tog_cpl') ? yn(c('cpl_e_ws')) : '',
+    'Pollution Additional Insured': c('tog_cpl') ? yn(c('cpl_e_ai')) : '',
+    'Pollution Additional Insured Completed Ops': c('tog_cpl') ? yn(c('cpl_e_co')) : '',
+    'Pollution Waiver of Subrogation': c('tog_cpl') ? yn(c('cpl_e_ws')) : '',
     'Pollution Primary & Non-Contributory': c('tog_cpl') ? yn(c('cpl_e_pnc')) : '',
     // Auto
     'Commercial Auto Required': yn(c('tog_auto')),
@@ -1872,7 +1872,7 @@ function collectFormData() {
   const toggled = id => { const el = document.getElementById(id); return el ? el.checked : false; };
 
   return {
-    legalName: g('legalName'), dba: g('dba'), taxId: g('taxId'),
+    legalName: g('legalName'), dba: g('dba') || g('legalName'), taxId: g('taxId'),
     taxClassification: document.querySelector('input[name="taxClass"]:checked')?.value || '',
     website: g('website'), address1: g('address1'), address2: g('address2'),
     city: g('city'), state: g('state'), zip: g('zip'), email: g('primaryEmail'),
