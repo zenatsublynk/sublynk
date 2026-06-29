@@ -731,7 +731,7 @@ const stateSel = document.getElementById('state');
 US_STATES.forEach(s => { const o = document.createElement('option'); o.value = s; o.textContent = STATE_NAMES[s]; stateSel.appendChild(o); });
 
 // ─── Insurance Config ───
-const LIMIT_OPTIONS = ['$250,000','$500,000','$1,000,000','$2,000,000','$4,000,000','$5,000,000','Custom'];
+const LIMIT_OPTIONS = ['$100,000','$250,000','$500,000','$1,000,000','$2,000,000','$4,000,000','$5,000,000','Custom'];
 
 const INSURANCE_TYPES = [
   {
@@ -746,11 +746,12 @@ const INSURANCE_TYPES = [
       { id: 'cgl_e_ai', label: 'Additional Insured CG2010 (or equivalent)' },
       { id: 'cgl_e_co', label: 'Additional Insured Completed Ops CG2037 (or equivalent)' },
       { id: 'cgl_e_ws', label: 'Waiver of Subrogation CG2404 (or equivalent)' },
-      { id: 'cgl_e_pnc', label: 'Primary & Non-Contributory' }
+      { id: 'cgl_e_pnc', label: 'Primary & Non-Contributory' },
+      { id: 'cgl_e_ppa', label: 'Per-Project Aggregate (CG2503 or equivalent)' }
     ]
   },
   {
-    key: 'cpl', title: 'Commercial Pollution Liability',
+    key: 'cpl', title: 'Commercial Pollution Liability (required for pollution, mold & abatement work)',
     limits: [
       { id: 'cpl_occ', label: 'Each Occurrence', default: '$1,000,000' }
     ],
@@ -774,7 +775,9 @@ const INSURANCE_TYPES = [
   {
     key: 'wc', title: 'Workers Comp / Employer\'s Liability',
     limits: [
-      { id: 'wc_ea', label: 'Each Accident Limit', default: '$1,000,000' }
+      { id: 'wc_ea', label: "Employer's Liability - Each Accident", default: '$1,000,000' },
+      { id: 'wc_emp', label: "Employer's Liability - Each Employee", default: '$1,000,000' },
+      { id: 'wc_pol', label: "Employer's Liability - Policy Limit", default: '$1,000,000' }
     ],
     endorsements: [
       { id: 'wc_e_ai', label: 'Additional Insured' },
@@ -793,7 +796,7 @@ const INSURANCE_TYPES = [
     ]
   },
   {
-    key: 'prof', title: 'Professional Liability',
+    key: 'prof', title: 'Professional Liability / E&O (required for inspection, estimating & engineering work)',
     limits: [
       { id: 'prof_occ', label: 'Each Occurrence', default: '$1,000,000' },
       { id: 'prof_agg', label: 'Aggregate', default: '$2,000,000' }
@@ -1625,10 +1628,15 @@ function gatherExcelData() {
 
   // ── Tab: Insurance ──
   function endo(parts) { return parts.filter(Boolean).join(', '); }
-  var cglEndo = endo([c('cgl_e_ai') && 'additional insured (CG2010)', c('cgl_e_co') && 'additional insured - completed operations (CG2037)', c('cgl_e_ws') && 'Waiver of subrogation (CG2404)', c('cgl_e_pnc') && 'Primary & Non-Contributory']);
+  var cglEndo = endo([c('cgl_e_ai') && 'additional insured (CG2010)', c('cgl_e_co') && 'additional insured - completed operations (CG2037)', c('cgl_e_ws') && 'Waiver of subrogation (CG2404)', c('cgl_e_pnc') && 'Primary & Non-Contributory', c('cgl_e_ppa') && 'Per-project aggregate (CG2503)']);
   var cplEndo = endo([c('cpl_e_ai') && 'additional insured', c('cpl_e_co') && 'additional insured - completed operations', c('cpl_e_ws') && 'waiver of subrogation', c('cpl_e_pnc') && 'Primary & Non-Contributory']);
   var autoEndo = endo([c('auto_e_ai') && 'additional insured', c('auto_e_ws') && 'waiver of subrogation']);
-  var wcEndo = endo([c('wc_e_ai') && 'additional insured', c('wc_e_ws') && 'waiver of subrogation']);
+  var umbEndo = endo([c('umb_e_ai') && 'additional insured', c('umb_e_ws') && 'waiver of subrogation']);
+  var profEndo = endo([c('prof_e_ai') && 'additional insured', c('prof_e_co') && 'additional insured - completed operations', c('prof_e_ws') && 'waiver of subrogation', c('prof_e_pnc') && 'Primary & Non-Contributory']);
+  function limStr(id){ var sel=document.getElementById(id); if(!sel) return ''; var val=sel.value; if(val==='Custom'){var cu=document.getElementById(id+'_custom'); val=cu?cu.value.trim():'';} return val; }
+  var wcEndoParts = [c('wc_e_ai') && 'additional insured', c('wc_e_ws') && 'waiver of subrogation'];
+  if (c('tog_wc')) { var elBits=[]; if (limStr('wc_emp')) elBits.push('each employee ' + limStr('wc_emp')); if (limStr('wc_pol')) elBits.push('policy limit ' + limStr('wc_pol')); if (elBits.length) wcEndoParts.push("Employer's Liability " + elBits.join(', ')); }
+  var wcEndo = endo(wcEndoParts);
   var company = v('legalName') || 'Network';
   var insurance = [
     ['Name', 'Value', 'Field Name', 'Endorsements'],
@@ -1642,9 +1650,9 @@ function gatherExcelData() {
     ['Auto Combined Single Limit', lim('tog_auto', 'auto_csl'), 'AUTOMOBILE_LIMITS.automobile_liability_limits_combined_single_limit', autoEndo],
     ["Worker's Comp Each Accident", lim('tog_wc', 'wc_ea'), 'WC_LIMITS.workers_compensation_and_employers_liability_limits_each_accident', wcEndo],
     ['Bailees Each Occurence', lim('tog_bail', 'bail_occ'), 'BAILEES_LIMITS.bailees_limits_each_occurrence'],
-    ['Umbrealla Each Occurence', lim('tog_umb', 'umb_occ'), 'UMBRELLA_LIMITS.excess_or_umbrella_liability_limits_each_occurrence'],
+    ['Umbrealla Each Occurence', lim('tog_umb', 'umb_occ'), 'UMBRELLA_LIMITS.excess_or_umbrella_liability_limits_each_occurrence', umbEndo],
     ['Umbrealla Aggregate', lim('tog_umb', 'umb_agg'), 'UMBRELLA_LIMITS.excess_or_umbrella_liability_limits_aggregate'],
-    ['Professional Each Occurence', lim('tog_prof', 'prof_occ'), 'PROFESSIONAL_LIABILITY_LIMITS.professional_limits_each_occurrence'],
+    ['Professional Each Occurence', lim('tog_prof', 'prof_occ'), 'PROFESSIONAL_LIABILITY_LIMITS.professional_limits_each_occurrence', profEndo],
     ['Professional Aggregate', lim('tog_prof', 'prof_agg'), 'PROFESSIONAL_LIABILITY_LIMITS.professional_limits_general_aggregate'],
     ['Sample COI', coiNames],
     [],
