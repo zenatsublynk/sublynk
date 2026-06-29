@@ -1,7 +1,7 @@
 // ─── Sublynk GC Onboarding Intake - Apps Script Backend ───
 // Deploy as: Web App > Execute as Me > Anyone can access
-// Scope: Google Sheet log + Google Drive (company folder, COI + Contract uploads, XLSX).
-// No Notion / no PandaDoc in this version. The full-pipeline version is in Code.gs.FULL-PIPELINE.txt.
+// Scope: Google Sheet log + Google Drive (one folder per org: COI Sample, Contract Sample, XLSX).
+// No Notion / no PandaDoc in this version. Full-pipeline version is in Code.gs.FULL-PIPELINE.txt.
 
 var PARENT_FOLDER_ID = '1KQxjb19o84Az5TTaRoOahcPfS30JfLKK';
 
@@ -44,40 +44,40 @@ function doGet() {
     .setXFrameOptionsMode(HtmlService.XFrameOptionsMode.ALLOWALL);
 }
 
-// ─── Create GC folder structure + upload XLSX ───
-// Called on form submit. Creates:
-//   {Parent}/
-//     {Company Name}/
-//       Network Setup Requirements {Company} {Date}.xlsx
-//       COI Sample/
-//       Contract Sample/
-function createOnboardingFolder(companyName, dateStr, xlsxBase64, fileName) {
-  var parentFolder = DriveApp.getFolderById(PARENT_FOLDER_ID);
-
-  // Create or find company folder
-  var companyFolders = parentFolder.getFoldersByName(companyName);
-  var companyFolder;
-  if (companyFolders.hasNext()) {
-    companyFolder = companyFolders.next();
-  } else {
-    companyFolder = parentFolder.createFolder(companyName);
+// ─── Folder helpers (race-safe) ───
+// The form fires createOnboardingFolder, uploadContractFile, uploadCoiSample and
+// processSubmission concurrently. Without a lock, each "find-or-create folder by name"
+// races the others and you get duplicate org folders (some empty). A script lock
+// serializes folder creation so exactly ONE folder per name is ever made.
+function getOrCreateFolder(parent, name) {
+  var lock = LockService.getScriptLock();
+  var locked = false;
+  try { locked = lock.tryLock(30000); } catch (e) { locked = false; }
+  try {
+    var it = parent.getFoldersByName(name);
+    return it.hasNext() ? it.next() : parent.createFolder(name);
+  } finally {
+    if (locked) { try { lock.releaseLock(); } catch (e) {} }
   }
+}
 
-  // Create subfolders if they don't exist
-  ['COI Sample', 'Contract Sample'].forEach(function(name) {
-    var existing = companyFolder.getFoldersByName(name);
-    if (!existing.hasNext()) {
-      companyFolder.createFolder(name);
-    }
-  });
+function getOrgFolder(companyName) {
+  return getOrCreateFolder(DriveApp.getFolderById(PARENT_FOLDER_ID), companyName || 'Unknown');
+}
 
-  // Upload XLSX (replace if exists)
+// ─── Create GC folder + upload the XLSX ───
+// One org folder per company. Subfolders (COI Sample / Contract Sample) are NOT created
+// here — they are created on demand only when a file is uploaded, so we never leave empties.
+function createOnboardingFolder(companyName, dateStr, xlsxBase64, fileName) {
+  var companyFolder = getOrgFolder(companyName);
+
   var xlsxBlob = Utilities.newBlob(
     Utilities.base64Decode(xlsxBase64),
     'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
     fileName
   );
 
+  // Replace an existing XLSX of the same name (idempotent re-submits)
   var existingFiles = companyFolder.getFilesByName(fileName);
   if (existingFiles.hasNext()) {
     existingFiles.next().setTrashed(true);
@@ -93,27 +93,10 @@ function createOnboardingFolder(companyName, dateStr, xlsxBase64, fileName) {
   };
 }
 
-// ─── Upload contract file to Drive ───
+// ─── Upload contract file to Drive (Contract Sample subfolder, created on demand) ───
 function uploadContractFile(base64Data, fileName, companyName) {
-  var parentFolder = DriveApp.getFolderById(PARENT_FOLDER_ID);
-
-  // Find or create company folder
-  var companyFolders = parentFolder.getFoldersByName(companyName);
-  var companyFolder;
-  if (companyFolders.hasNext()) {
-    companyFolder = companyFolders.next();
-  } else {
-    companyFolder = parentFolder.createFolder(companyName);
-  }
-
-  // Find or create Contract Sample subfolder
-  var contractFolders = companyFolder.getFoldersByName('Contract Sample');
-  var contractFolder;
-  if (contractFolders.hasNext()) {
-    contractFolder = contractFolders.next();
-  } else {
-    contractFolder = companyFolder.createFolder('Contract Sample');
-  }
+  var companyFolder = getOrgFolder(companyName);
+  var contractFolder = getOrCreateFolder(companyFolder, 'Contract Sample');
 
   var blob = Utilities.newBlob(
     Utilities.base64Decode(base64Data),
@@ -124,27 +107,10 @@ function uploadContractFile(base64Data, fileName, companyName) {
   return file.getId();
 }
 
-// ─── Upload COI sample to Drive ───
+// ─── Upload COI sample to Drive (COI Sample subfolder, created on demand) ───
 function uploadCoiSample(base64Data, fileName, companyName, contactName) {
-  var parentFolder = DriveApp.getFolderById(PARENT_FOLDER_ID);
-
-  // Find or create company folder
-  var companyFolders = parentFolder.getFoldersByName(companyName);
-  var companyFolder;
-  if (companyFolders.hasNext()) {
-    companyFolder = companyFolders.next();
-  } else {
-    companyFolder = parentFolder.createFolder(companyName);
-  }
-
-  // Find or create COI Sample subfolder
-  var coiFolders = companyFolder.getFoldersByName('COI Sample');
-  var coiFolder;
-  if (coiFolders.hasNext()) {
-    coiFolder = coiFolders.next();
-  } else {
-    coiFolder = companyFolder.createFolder('COI Sample');
-  }
+  var companyFolder = getOrgFolder(companyName);
+  var coiFolder = getOrCreateFolder(companyFolder, 'COI Sample');
 
   var mimeType = 'application/pdf';
   var lower = fileName.toLowerCase();
@@ -166,18 +132,10 @@ function processSubmission(payload) {
   // Log to spreadsheet
   logToSheet(payload);
 
-  // Create folder structure if not already done
-  // (backup in case createOnboardingFolder didn't fire)
+  // Ensure the org folder exists (race-safe). Does NOT create empty subfolders.
   try {
-    var parentFolder = DriveApp.getFolderById(PARENT_FOLDER_ID);
-    var companyName = payload.legalName || 'Unknown';
-    var companyFolders = parentFolder.getFoldersByName(companyName);
-    if (!companyFolders.hasNext()) {
-      var folder = parentFolder.createFolder(companyName);
-      folder.createFolder('COI Sample');
-      folder.createFolder('Contract Sample');
-    }
-  } catch(e) {
+    getOrgFolder(payload.legalName || 'Unknown');
+  } catch (e) {
     Logger.log('Folder creation in processSubmission failed: ' + e);
   }
 
@@ -199,7 +157,6 @@ function logToSheet(payload) {
   var sheet = ss.getSheetByName('Submissions');
   if (!sheet) {
     sheet = ss.insertSheet('Submissions');
-    // Add headers on first run
     var headers = [
       'Timestamp', 'Legal Business Name', 'DBA', 'Tax ID', 'Tax Classification',
       'Website', 'Address', 'City', 'State', 'Zip', 'Primary Email',
@@ -234,4 +191,65 @@ function logToSheet(payload) {
   ];
 
   sheet.appendRow(row);
+}
+
+// ─── ONE-OFF CLEANUP UTILITY ───
+// Run this manually from the Apps Script editor (Run > consolidateNetworkFolders) to clean up
+// duplicate org folders created by the old race. For each org name under the parent it keeps the
+// OLDEST folder, moves every file/subfolder from the duplicates into it (merging same-named
+// subfolders), flattens any nested same-name folder, and TRASHES the empties. Trashing is
+// reversible from Drive Trash. Safe to run repeatedly.
+function consolidateNetworkFolders() {
+  var parent = DriveApp.getFolderById(PARENT_FOLDER_ID);
+  var byName = {};
+  var it = parent.getFolders();
+  while (it.hasNext()) {
+    var f = it.next();
+    (byName[f.getName()] = byName[f.getName()] || []).push(f);
+  }
+  Object.keys(byName).forEach(function (name) {
+    var group = byName[name];
+    group.sort(function (a, b) { return a.getDateCreated().getTime() - b.getDateCreated().getTime(); });
+    var keeper = group[0];
+    for (var i = 1; i < group.length; i++) {
+      mergeFolderInto_(group[i], keeper);
+      group[i].setTrashed(true);
+      Logger.log('Merged + trashed duplicate "' + name + '" ' + group[i].getId() + ' -> ' + keeper.getId());
+    }
+    normalizeOrgFolder_(keeper);
+  });
+  Logger.log('consolidateNetworkFolders done.');
+}
+
+// Pull a same-name nested folder up, and merge any duplicate subfolders by name.
+function normalizeOrgFolder_(org) {
+  var orgName = org.getName();
+  var subs = [], it = org.getFolders();
+  while (it.hasNext()) subs.push(it.next());
+  // 1) flatten nested folder with the same name as its parent org
+  subs.forEach(function (s) {
+    if (s.getName() === orgName) { mergeFolderInto_(s, org); s.setTrashed(true); }
+  });
+  // 2) merge duplicate subfolders by name (e.g. two "COI Sample")
+  var seen = {}, it2 = org.getFolders();
+  while (it2.hasNext()) {
+    var s = it2.next();
+    if (seen[s.getName()]) { mergeFolderInto_(s, seen[s.getName()]); s.setTrashed(true); }
+    else seen[s.getName()] = s;
+  }
+}
+
+// Move all files + subfolders from src into dest (merging same-named subfolders recursively).
+function mergeFolderInto_(src, dest) {
+  if (src.getId() === dest.getId()) return;
+  var files = src.getFiles();
+  while (files.hasNext()) { files.next().moveTo(dest); }
+  var subs = src.getFolders();
+  while (subs.hasNext()) {
+    var s = subs.next();
+    var destIt = dest.getFoldersByName(s.getName());
+    var destSub = destIt.hasNext() ? destIt.next() : dest.createFolder(s.getName());
+    mergeFolderInto_(s, destSub);
+    s.setTrashed(true);
+  }
 }
