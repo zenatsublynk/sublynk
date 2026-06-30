@@ -14,11 +14,18 @@
   body{margin:0}
   ::placeholder{color:#a8a29e}
   input:focus{outline:none;border-color:#dd6336 !important;box-shadow:0 0 0 3px rgba(221,99,54,.12)}
+  .es-prev{overflow-x:auto}
+  @media (max-width:600px){
+    .es-page{padding:22px 14px !important}
+    .es-grid{grid-template-columns:1fr !important}
+    .es-prev{padding:16px !important}
+    .es-vhead{flex-wrap:wrap !important}
+  }
 </style>
 </head>
 <body>
 
-<div style="min-height:100vh;background:#f5f5f4;font-family:Inter,Arial,sans-serif;color:#0c0a09;padding:40px 24px">
+<div class="es-page" style="min-height:100vh;background:#f5f5f4;font-family:Inter,Arial,sans-serif;color:#0c0a09;padding:40px 24px">
   <div style="max-width:860px;margin:0 auto">
 
     <!-- Header -->
@@ -31,7 +38,7 @@
     <!-- Form panel -->
     <div style="background:#ffffff;border:1px solid #e7e5e4;border-radius:14px;padding:26px 28px;margin-bottom:30px">
       <div style="font-size:12px;font-weight:600;letter-spacing:0.08em;text-transform:uppercase;color:#dd6336;margin-bottom:18px">Your details</div>
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px 20px">
+      <div class="es-grid" style="display:grid;grid-template-columns:1fr 1fr;gap:16px 20px">
         <label style="display:block">
           <span style="display:block;font-size:12px;font-weight:600;color:#57534e;margin-bottom:6px">Full name</span>
           <input id="f_name" placeholder="Jane Smith" style="width:100%;font-family:Inter,Arial,sans-serif;font-size:14px;color:#0c0a09;background:#f5f5f4;border:1px solid #e7e5e4;border-radius:9px;padding:10px 12px">
@@ -88,14 +95,14 @@
 
     <!-- Variation A -->
     <div style="background:#ffffff;border:1px solid #e7e5e4;border-radius:14px;padding:24px 28px 26px;margin-bottom:22px">
-      <div style="display:flex;align-items:baseline;justify-content:space-between;gap:16px;margin-bottom:18px">
+      <div class="es-vhead" style="display:flex;align-items:baseline;justify-content:space-between;gap:16px;margin-bottom:18px">
         <div>
           <div style="font-size:11px;font-weight:700;letter-spacing:0.09em;text-transform:uppercase;color:#dd6336">Variation A</div>
           <div style="font-size:16px;font-weight:600;color:#0d142a;margin-top:3px">Sublynk logo · divider</div>
         </div>
         <button id="copyA" style="flex-shrink:0;font-family:Inter,Arial,sans-serif;font-size:13px;font-weight:600;color:#ffffff;background:#0d142a;border:none;border-radius:8px;padding:10px 18px;cursor:pointer">Copy signature</button>
       </div>
-      <div style="background:#ffffff;border:1px dashed #e7e5e4;border-radius:10px;padding:22px">
+      <div class="es-prev" style="background:#ffffff;border:1px dashed #e7e5e4;border-radius:10px;padding:22px">
         <div id="previewA"></div>
       </div>
       <textarea id="codeA" readonly style="display:none;width:100%;height:120px;margin-top:14px;font-family:ui-monospace,Menlo,monospace;font-size:11px;line-height:1.5;color:#57534e;background:#f5f5f4;border:1px solid #e7e5e4;border-radius:9px;padding:12px;resize:vertical"></textarea>
@@ -103,14 +110,14 @@
 
     <!-- Variation B -->
     <div style="background:#ffffff;border:1px solid #e7e5e4;border-radius:14px;padding:24px 28px 26px;margin-bottom:22px">
-      <div style="display:flex;align-items:baseline;justify-content:space-between;gap:16px;margin-bottom:18px">
+      <div class="es-vhead" style="display:flex;align-items:baseline;justify-content:space-between;gap:16px;margin-bottom:18px">
         <div>
           <div style="font-size:11px;font-weight:700;letter-spacing:0.09em;text-transform:uppercase;color:#dd6336">Variation B</div>
           <div style="font-size:16px;font-weight:600;color:#0d142a;margin-top:3px">Navy background · white logo panel</div>
         </div>
         <button id="copyB" style="flex-shrink:0;font-family:Inter,Arial,sans-serif;font-size:13px;font-weight:600;color:#ffffff;background:#0d142a;border:none;border-radius:8px;padding:10px 18px;cursor:pointer">Copy signature</button>
       </div>
-      <div style="background:#f5f5f4;border:1px dashed #e7e5e4;border-radius:10px;padding:22px">
+      <div class="es-prev" style="background:#f5f5f4;border:1px dashed #e7e5e4;border-radius:10px;padding:22px">
         <div id="previewB"></div>
       </div>
       <textarea id="codeB" readonly style="display:none;width:100%;height:120px;margin-top:14px;font-family:ui-monospace,Menlo,monospace;font-size:11px;line-height:1.5;color:#57534e;background:#f5f5f4;border:1px solid #e7e5e4;border-radius:9px;padding:12px;resize:vertical"></textarea>
@@ -118,14 +125,14 @@
 
     <!-- Variation C -->
     <div style="background:#ffffff;border:1px solid #e7e5e4;border-radius:14px;padding:24px 28px 26px;margin-bottom:30px">
-      <div style="display:flex;align-items:baseline;justify-content:space-between;gap:16px;margin-bottom:18px">
+      <div class="es-vhead" style="display:flex;align-items:baseline;justify-content:space-between;gap:16px;margin-bottom:18px">
         <div>
           <div style="font-size:11px;font-weight:700;letter-spacing:0.09em;text-transform:uppercase;color:#dd6336">Variation C</div>
           <div style="font-size:16px;font-weight:600;color:#0d142a;margin-top:3px">Minimalist · transparent</div>
         </div>
         <button id="copyC" style="flex-shrink:0;font-family:Inter,Arial,sans-serif;font-size:13px;font-weight:600;color:#ffffff;background:#0d142a;border:none;border-radius:8px;padding:10px 18px;cursor:pointer">Copy signature</button>
       </div>
-      <div style="background:#ffffff;border:1px dashed #e7e5e4;border-radius:10px;padding:22px">
+      <div class="es-prev" style="background:#ffffff;border:1px dashed #e7e5e4;border-radius:10px;padding:22px">
         <div id="previewC"></div>
       </div>
       <textarea id="codeC" readonly style="display:none;width:100%;height:120px;margin-top:14px;font-family:ui-monospace,Menlo,monospace;font-size:11px;line-height:1.5;color:#57534e;background:#f5f5f4;border:1px solid #e7e5e4;border-radius:9px;padding:12px;resize:vertical"></textarea>
