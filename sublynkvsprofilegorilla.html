@@ -1,0 +1,252 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Sublynk vs Profile Gorilla — Cost Calculator</title>
+<style>
+ :root{--navy:#0d142a;--orange:#dd6336;--bg:#f5f5f4;--border:#e7e5e4;--ink:#0c0a09;--muted:#78716c;--green:#15803d;--red:#b8431f}
+ *{box-sizing:border-box}html,body{margin:0}
+ body{font-family:Inter,-apple-system,'Segoe UI',Roboto,Arial,sans-serif;background:#fff;color:var(--ink);line-height:1.55;-webkit-font-smoothing:antialiased}
+ .wrap{max-width:1040px;margin:0 auto;padding:0 24px}
+ a{color:inherit}
+ /* nav */
+ nav{border-bottom:1px solid var(--border);background:#fff}
+ nav .wrap{display:flex;align-items:center;justify-content:space-between;padding:16px 24px}
+ nav img{height:24px;display:block}
+ nav .links{display:flex;gap:26px;font-size:14px;font-weight:600;color:var(--navy)}
+ nav .links a{text-decoration:none;opacity:.8}nav .links a:hover{opacity:1}
+ .btn{display:inline-block;text-decoration:none;font-weight:700;font-size:14px;border-radius:9px;padding:10px 16px}
+ .btn.o{background:var(--orange);color:#fff}
+ /* header */
+ header.hero{text-align:center;padding:52px 0 14px}
+ .eyebrow{display:inline-block;font-size:12px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--orange)}
+ h1{font-size:38px;letter-spacing:-.02em;color:var(--navy);margin:10px 0 10px}
+ h1 .vs{color:var(--muted);font-weight:600}
+ .lede{font-size:17px;color:var(--muted);max-width:660px;margin:0 auto}
+ /* calculator shell */
+ .calcsec{background:var(--navy);margin-top:34px;padding:46px 0 56px}
+ .calcsec .panel{background:#fff;border-radius:22px;padding:34px 36px;box-shadow:0 24px 60px rgba(0,0,0,.35);max-width:960px;margin:0 auto}
+ /* inputs */
+ .controls{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px;margin-bottom:14px}
+ .control{background:#fafaf9;border:1px solid var(--border);border-radius:14px;padding:16px 18px}
+ .control label{display:block;font-weight:700;font-size:13px;color:var(--navy);margin-bottom:2px}
+ .control .hint{font-size:11.5px;color:var(--muted);min-height:30px}
+ .valbox{display:flex;align-items:baseline;gap:7px;margin-top:4px}
+ .valnum{font-size:30px;font-weight:800;color:var(--navy);line-height:1;font-variant-numeric:tabular-nums}
+ .valunit{font-size:12.5px;color:var(--muted)}
+ input[type=range]{width:100%;margin-top:14px;height:22px;accent-color:var(--orange);cursor:pointer}
+ .ticks{display:flex;justify-content:space-between;font-size:10.5px;color:#a8a29e;margin-top:2px}
+ /* integrated-provider toggle */
+ .bgtoggle{display:flex;align-items:center;gap:11px;background:#fafaf9;border:1px solid var(--border);border-radius:14px;padding:14px 18px;margin-bottom:24px;cursor:pointer;user-select:none}
+ .tg{width:42px;height:24px;background:#d6d3d1;border-radius:13px;position:relative;transition:.2s;flex:none}
+ .tg.on{background:var(--orange)}
+ .tg::after{content:'';position:absolute;width:18px;height:18px;background:#fff;border-radius:50%;top:3px;left:3px;transition:.2s;box-shadow:0 1px 3px rgba(0,0,0,.25)}
+ .tg.on::after{left:21px}
+ .tglab{font-size:12.5px;color:#44403c}.tglab b{color:var(--navy)}
+ /* verdict hero */
+ .rhero{display:flex;align-items:center;justify-content:space-between;gap:18px;flex-wrap:wrap;background:linear-gradient(120deg,#0d142a,#16203f);color:#fff;border-radius:16px;padding:24px 28px;margin-bottom:26px}
+ .rhero .big{font-size:40px;font-weight:800;letter-spacing:-1px;line-height:1}.rhero .big .lk{color:var(--orange)}
+ .rhero .sub{font-size:13px;color:#aeb4c2;margin-top:7px}
+ .rhero .yr{text-align:right}.rhero .yr .n{font-size:24px;font-weight:800}.rhero .yr .l{font-size:12px;color:#aeb4c2;text-transform:uppercase;letter-spacing:.08em}
+ /* head to head columns */
+ .cols{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+ .col{border:1px solid var(--border);border-radius:16px;padding:22px;background:#fff;position:relative}
+ .col.them{border-top:4px solid var(--red)}.col.us{border-top:4px solid var(--green);background:#fbfdfb}
+ .col .who{display:flex;align-items:center;gap:9px;margin-bottom:2px}
+ .col h4{margin:0;font-size:17px;color:var(--navy)}
+ .col .tag{font-size:12px;color:var(--muted);margin:2px 0 16px}
+ .pill{font-size:10.5px;font-weight:800;letter-spacing:.05em;text-transform:uppercase;padding:3px 9px;border-radius:999px}
+ .pill.bad{background:#fbe9e3;color:var(--red)}.pill.good{background:#e8f6ee;color:var(--green)}
+ .rrow{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:9px 0;border-bottom:1px dashed #eceae8;font-size:13.5px}
+ .rrow:last-of-type{border-bottom:0}.rrow .nm{color:#44403c}.rrow .nm small{display:block;color:#a8a29e;font-size:11px}
+ .rrow .amt{margin-left:auto;font-variant-numeric:tabular-nums;font-weight:700;color:var(--navy)}
+ .rrow.zero .amt{color:#a8a29e}
+ .rtotal{display:flex;justify-content:space-between;align-items:baseline;margin-top:16px;padding-top:14px;border-top:2px solid var(--border)}
+ .rtotal .l{font-weight:700;color:var(--navy)}.rtotal .l small{display:block;font-weight:500;color:var(--muted);font-size:11px}
+ .rtotal .v{font-size:26px;font-weight:800;color:var(--red);font-variant-numeric:tabular-nums}
+ .rtotal .v .pm{font-size:13px;font-weight:600;color:var(--muted)}
+ .col.us .rtotal .v{color:var(--green)}
+ .perks{margin:14px 0 0;padding:0;list-style:none;font-size:13px;color:#44403c}
+ .perks li{padding:5px 0 5px 22px;position:relative}.perks li::before{content:"\2713";position:absolute;left:0;color:var(--green);font-weight:800}
+ .perks.x li::before{content:"\2715";color:var(--red)}
+ .note{background:#fff8e1;border:1px solid #f0c040;border-radius:9px;padding:9px 12px;font-size:12px;color:#7a5c00;margin-top:12px}
+ .ctarow{text-align:center;margin-top:26px}
+ .ctarow a{display:inline-block;text-decoration:none;font-weight:700;font-size:15px;border-radius:11px;padding:14px 28px;background:var(--orange);color:#fff}
+ .rfoot{margin-top:20px;font-size:11.5px;color:var(--muted);line-height:1.6;max-width:880px}
+ /* footer */
+ footer{background:var(--navy);color:#9aa3b2;padding:40px 0 30px;font-size:13px;text-align:center}
+ footer .fine{margin-top:8px;font-size:12px;color:#7c8aa6}
+ @media(max-width:760px){h1{font-size:28px}.controls,.cols{grid-template-columns:1fr}.rhero .yr{text-align:left}nav .links{display:none}}
+</style>
+<nav><div class="wrap">
+  <a href="index.html"><img src="data:image/png;base64,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" alt="Sublynk"></a>
+  <div class="links"><a href="index.html#platform">Platform</a><a href="index.html#how">How it works</a><a href="pricing.html">Pricing</a><a href="index.html#directory">Directory</a></div>
+  <a class="btn o" href="index.html#cta">Get Sublynk Certified</a>
+</div></nav>
+
+<header class="hero"><div class="wrap">
+  <span class="eyebrow">Head to head</span>
+  <h1>Sublynk <span class="vs">vs</span> Profile Gorilla</h1>
+  <p class="lede">Profile Gorilla stacks tiered location bundles, per-program fees, and a $10 review fee on every background check. Sublynk is one profile, unlimited networks, checks at cost with no review fee. Enter your numbers and watch the gap.</p>
+</div></header>
+
+<section class="calcsec"><div class="wrap"><div class="panel">
+  <!-- INPUTS -->
+  <div class="controls">
+    <div class="control">
+      <label>Locations</label>
+      <div class="hint">Offices or branches under your tax ID.</div>
+      <div class="valbox"><span class="valnum" id="locV">10</span><span class="valunit">locations</span></div>
+      <input id="locS" type="range" min="1" max="25" step="1" value="10">
+      <div class="ticks"><span>1</span><span>10</span><span>20</span><span>25</span></div>
+    </div>
+    <div class="control">
+      <label>Client programs</label>
+      <div class="hint">Networks, TPAs and carrier programs you credential into.</div>
+      <div class="valbox"><span class="valnum" id="netV">16</span><span class="valunit">programs</span></div>
+      <input id="netS" type="range" min="1" max="30" step="1" value="16">
+      <div class="ticks"><span>1</span><span>10</span><span>20</span><span>30</span></div>
+    </div>
+    <div class="control">
+      <label>Background checks / mo</label>
+      <div class="hint">New hires and re-screens you run each month.</div>
+      <div class="valbox"><span class="valnum" id="bgV">8</span><span class="valunit">/ month</span></div>
+      <input id="bgS" type="range" min="0" max="100" step="1" value="8">
+      <div class="ticks"><span>0</span><span>25</span><span>50</span><span>100</span></div>
+    </div>
+  </div>
+
+  <!-- INTEGRATED PROVIDER TOGGLE -->
+  <div class="bgtoggle" id="bgToggle">
+    <div class="tg" id="tgEl"></div>
+    <span class="tglab"><b>Using an integrated background-check provider</b> (ClearStar, ScreeningOne, C4 Operations) &mdash; waives Profile Gorilla's $10 per-check review fee.</span>
+  </div>
+
+  <!-- VERDICT -->
+  <div class="rhero">
+    <div><div class="big" id="bigLine">Sublynk saves you <span class="lk" id="saveMo">$0</span><span style="font-size:18px">/mo</span></div><div class="sub" id="pct">about 0% less than Profile Gorilla</div></div>
+    <div class="yr"><div class="n" id="saveYr">$0</div><div class="l">back every year</div></div>
+  </div>
+
+  <!-- HEAD TO HEAD -->
+  <div class="cols">
+    <div class="col them">
+      <div class="who"><h4>Profile Gorilla</h4><span class="pill bad">Stacked fees</span></div>
+      <p class="tag">Tiered location bundles + per-program fees + review fees</p>
+      <div id="pgRows"></div>
+      <ul class="perks x"><li>Every tier and program adds another fee</li><li>$10 review fee per check unless you bring an integrated provider</li></ul>
+      <div class="note" id="pgNote" style="display:none">11+ locations typically requires a custom quote from Profile Gorilla &mdash; figure shown is an extrapolation.</div>
+      <div class="rtotal"><span class="l">Profile Gorilla<small>per month</small></span><span class="v" id="pgTotal">$0</span></div>
+    </div>
+    <div class="col us">
+      <div class="who"><h4>Sublynk</h4><span class="pill good">Unlimited networks</span></div>
+      <p class="tag">One profile, reused on every network &mdash; flat price</p>
+      <div id="slRows"></div>
+      <ul class="perks"><li>One verified profile satisfies every program</li><li>No review fee on background checks &mdash; ever</li></ul>
+      <div class="rtotal"><span class="l">Sublynk<small>per month</small></span><span class="v" id="slTotal">$0</span></div>
+    </div>
+  </div>
+
+  <div class="ctarow"><a href="index.html#cta">Get Sublynk Certified</a></div>
+
+  <p class="rfoot"><b>Profile Gorilla</b> pricing effective July 1, 2026: location/subscription bundles (1&nbsp;=&nbsp;$25, 2&ndash;3&nbsp;=&nbsp;$47.50, 4&ndash;6&nbsp;=&nbsp;$85, 7&ndash;10&nbsp;=&nbsp;$130, then +$11/location), tiered client-program fees, and a $10 review fee per background check (waived with an integrated provider). <b>Sublynk:</b> $25/mo one network or $35/mo unlimited networks, first location included then $10/mo per additional location ($12/mo for locations 11+), and no review fee on background checks. The cost of the background check itself is passed through at cost on both sides and is not included here. All figures USD per month.</p>
+</div></div></section>
+
+<footer><div class="wrap">
+  <div>Sublynk, the certified contractor platform. No predatory lead fees. Ever.</div>
+  <div class="fine">© 2026 Sublynk, Inc. · 5610 Ward Rd, STE 300, Arvada, CO 80002 · info@sublynk.com</div>
+</div></footer>
+
+<script>
+ // ---- assumptions (edit here to match a real quote) ----
+ // Profile Gorilla, effective July 1, 2026
+ function pgLocationFee(n){
+   if(n<=0)return 0;
+   if(n===1)return 25;
+   if(n<=3)return 47.50;
+   if(n<=6)return 85;
+   if(n<=10)return 130;
+   return 130+(n-10)*11;        // +$11 per location after 10
+ }
+ function pgClientFee(n){
+   if(n<=1)return 0;
+   if(n<=3)return 10;
+   if(n<=6)return 20;
+   if(n<=9)return 30;
+   if(n<=12)return 40;
+   if(n<=15)return 50;
+   if(n<=18)return 60;
+   if(n<=21)return 70;
+   return 70+Math.ceil((n-21)/3)*10;
+ }
+ var PG_REVIEW=10;              // $/check review fee, waived with integrated provider
+ // Sublynk (matches sublynk.com pricing)
+ var SL={oneNetMo:25, unlimitedMo:35, addlLocMo:10, addlLocMo11:12, locTier:10};
+ function slLocCost(loc){
+   var addl=Math.max(0,loc-1);              // first location included
+   var t1=Math.min(addl,SL.locTier-1);      // locations 2..10
+   var t2=Math.max(0,loc-SL.locTier);       // locations 11+
+   return t1*SL.addlLocMo + t2*SL.addlLocMo11;
+ }
+
+ var integrated=false;
+ var q=function(s){return document.querySelector(s)};
+ function fmt(n){var s=n.toFixed(2).replace(/\.00$/,'');return '$'+s.replace(/\B(?=(\d{3})+(?!\d))/g,',');}
+ function rowHTML(nm,sub,amt,zero){
+   return '<div class="rrow'+(zero?' zero':'')+'"><span class="nm">'+nm+(sub?' <small>'+sub+'</small>':'')+'</span><span class="amt">'+amt+'</span></div>';
+ }
+ function vals(){
+   return {
+     loc:Math.max(1,parseInt(q('#locS').value)||1),
+     net:Math.max(1,parseInt(q('#netS').value)||1),
+     bg :Math.max(0,parseInt(q('#bgS').value)||0)
+   };
+ }
+ function recalc(){
+   var v=vals();
+   // ---- Profile Gorilla (monthly) ----
+   var pgLoc=pgLocationFee(v.loc);
+   var pgNet=pgClientFee(v.net);
+   var pgBg =integrated?0:v.bg*PG_REVIEW;
+   var pgTot=pgLoc+pgNet+pgBg;
+   q('#pgRows').innerHTML=
+     rowHTML('Subscription','tiered bundle, '+v.loc+' location'+(v.loc!==1?'s':''),fmt(pgLoc))+
+     rowHTML('Client programs',v.net+' program'+(v.net!==1?'s':''),pgNet?fmt(pgNet):fmt(0),pgNet===0)+
+     rowHTML('BG review fee',integrated?'waived &mdash; integrated provider':v.bg+' × $10/check',fmt(pgBg),pgBg===0);
+   q('#pgTotal').innerHTML=fmt(pgTot)+'<span class="pm"> /mo</span>';
+   q('#pgNote').style.display=(v.loc>10)?'block':'none';
+
+   // ---- Sublynk (monthly) ----
+   var slNet=v.net<=1?SL.oneNetMo:SL.unlimitedMo;
+   var slLoc=slLocCost(v.loc);
+   var slBg =0;
+   var slTot=slNet+slLoc+slBg;
+   q('#slRows').innerHTML=
+     rowHTML(v.net<=1?'One network plan':'Unlimited Networks plan',v.net<=1?'$25/mo flat':'$35/mo flat, all programs',fmt(slNet))+
+     rowHTML('Additional locations',v.loc<=1?'first location included':'$10/mo each, $12/mo for 11+',fmt(slLoc),slLoc===0)+
+     rowHTML('Background checks','no review fee, ever',fmt(0),true);
+   q('#slTotal').innerHTML=fmt(slTot)+'<span class="pm"> /mo</span>';
+
+   // ---- Verdict ----
+   var diff=pgTot-slTot;
+   if(diff>0){
+     q('#bigLine').innerHTML='Sublynk saves you <span class="lk">'+fmt(diff)+'</span><span style="font-size:18px">/mo</span>';
+     q('#pct').textContent='about '+(pgTot>0?Math.round(diff/pgTot*100):0)+'% less than Profile Gorilla';
+     q('#saveYr').textContent=fmt(diff*12);
+   }else if(diff<0){
+     q('#bigLine').innerHTML='Profile Gorilla is <span class="lk">'+fmt(-diff)+'</span><span style="font-size:18px">/mo</span> less here';
+     q('#pct').textContent='add programs, locations or checks to see the gap open up';
+     q('#saveYr').textContent=fmt(0);
+   }else{
+     q('#bigLine').innerHTML='Dead even at <span class="lk">'+fmt(slTot)+'</span><span style="font-size:18px">/mo</span>';
+     q('#pct').textContent='add programs, locations or checks to see the gap open up';
+     q('#saveYr').textContent=fmt(0);
+   }
+ }
+ // slider drives the big readout
+ function link(slId,outId){
+   var sl=q(slId),out=q(outId);
+   sl.addEventListener('input',function(){out.textContent=sl.value;recalc()});
+ }
+ link('#locS','#locV');link('#netS','#netV');link('#bgS','#bgV');
+ q('#bgToggle').addEventListener('click',function(){integrated=!integrated;q('#tgEl').classList.toggle('on',integrated);recalc()});
+ recalc();
+</script>
+</body></html>
