@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Email Signature Generator · Sublynk</title>
+<meta name="description" content="Build your on-brand Sublynk email signature. Fill in your details, preview it live, and copy it straight into Gmail or Outlook.">
+<link rel="icon" href="https://app.sublynk.com/favicon.ico">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{--navy:#0d142a;--orange:#dd6336;--bg:#f5f5f4;--border:#e7e5e4;--ink:#0c0a09;--muted:#78716c;--green:#16a34a;}
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);font-family:Inter,-apple-system,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;-webkit-font-smoothing:antialiased;line-height:1.55;}
+  a{color:inherit}
+  .topbar{background:rgba(255,255,255,.92);backdrop-filter:blur(8px);border-bottom:1px solid var(--border);position:sticky;top:0;z-index:20;}
+  .topbar .wrap{max-width:1080px;margin:0 auto;padding:14px 24px;display:flex;align-items:center;justify-content:space-between;}
+  .topbar img{height:24px}
+  .topbar a.back{font-size:14px;font-weight:600;color:var(--navy);text-decoration:none}
+  .topbar a.back:hover{color:var(--orange)}
+  .hero{max-width:1080px;margin:0 auto;padding:46px 24px 8px;}
+  .eyebrow{font-size:12px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--orange);}
+  h1{font-size:38px;line-height:1.1;letter-spacing:-.02em;color:var(--navy);margin:10px 0 12px;}
+  .lead{font-size:17px;color:var(--muted);max-width:640px;}
+  .grid{max-width:1080px;margin:0 auto;padding:26px 24px 60px;display:grid;grid-template-columns:1fr 1fr;gap:28px;align-items:start;}
+  @media(max-width:840px){.grid{grid-template-columns:1fr}h1{font-size:30px}}
+  .card{background:#fff;border:1px solid var(--border);border-radius:14px;padding:24px;}
+  .card h2{font-size:15px;font-weight:700;color:var(--navy);margin:0 0 4px;letter-spacing:.01em}
+  .card .sub{font-size:13px;color:var(--muted);margin:0 0 18px}
+  label{display:block;font-size:12.5px;font-weight:600;color:var(--navy);margin:14px 0 5px;}
+  input{width:100%;padding:10px 12px;border:1px solid var(--border);border-radius:9px;font-size:14px;font-family:inherit;color:var(--ink);background:#fff;}
+  input:focus{outline:none;border-color:var(--orange);box-shadow:0 0 0 3px rgba(221,99,54,.12)}
+  .hint{font-size:11.5px;color:var(--muted);margin-top:4px}
+  .preview-shell{position:sticky;top:84px}
+  .preview-frame{background:#fff;border:1px solid var(--border);border-radius:10px;padding:24px;min-height:120px}
+  .btnrow{display:flex;gap:10px;margin-top:18px;flex-wrap:wrap}
+  button.copy{background:var(--orange);color:#fff;border:none;border-radius:9px;font-weight:600;font-size:14px;padding:12px 22px;cursor:pointer;font-family:inherit;}
+  button.copy:hover{background:#c9552b}
+  button.copy.ok{background:var(--green)}
+  .steps{max-width:1080px;margin:0 auto 70px;padding:0 24px;}
+  details{background:#fff;border:1px solid var(--border);border-radius:12px;padding:4px 18px;margin-bottom:12px}
+  summary{font-size:14.5px;font-weight:600;color:var(--navy);cursor:pointer;padding:14px 0;list-style:none}
+  summary::-webkit-details-marker{display:none}
+  summary:before{content:"+";color:var(--orange);font-weight:700;margin-right:10px}
+  details[open] summary:before{content:"\2013"}
+  details ol{margin:0 0 16px;padding-left:20px;font-size:14px;color:var(--ink)}
+  details li{margin:6px 0}
+  footer{background:var(--navy);color:#9aa3b2;padding:42px 0 30px;font-size:14px;margin-top:10px}
+  footer .wrap{max-width:1080px;margin:0 auto;padding:0 24px}
+  footer img{height:22px;margin-bottom:12px}
+  footer .fine{margin-top:24px;padding-top:16px;border-top:1px solid #23304d;font-size:12.5px;color:#7c8aa6}
+  /* signature preview internal styles are inline so they survive copy/paste */
+</style>
+</head>
+<body>
+
+<div class="topbar"><div class="wrap">
+  <a href="../"><img src="https://app.sublynk.com/assets/logo-color-DS8Xvtsx.png" alt="Sublynk"></a>
+  <a class="back" href="../">&larr; Back to Sublynk</a>
+</div></div>
+
+<div class="hero">
+  <div class="eyebrow">Brand Resource</div>
+  <h1>Email Signature Generator</h1>
+  <p class="lead">Fill in your details, watch the preview update, then copy your signature straight into Gmail or Outlook. Sublynk Certified contractors can add their verified profile link so every email earns trust.</p>
+</div>
+
+<div class="grid">
+  <!-- FORM -->
+  <div class="card">
+    <h2>Your details</h2>
+    <p class="sub">Leave the profile link blank for a standard signature, or paste it to add the Sublynk Certified badge.</p>
+
+    <label for="name">Full name</label>
+    <input id="name" type="text" value="Zen Lenon" autocomplete="name">
+
+    <label for="title">Title</label>
+    <input id="title" type="text" value="Sublynk GTM Leader">
+
+    <label for="tagline">Tagline <span style="font-weight:400;color:var(--muted)">(optional)</span></label>
+    <input id="tagline" type="text" value="I help contractors go green, go to market and grow.">
+
+    <label for="email">Email</label>
+    <input id="email" type="email" value="zen@sublynk.com" autocomplete="email">
+
+    <label for="phone">Phone <span style="font-weight:400;color:var(--muted)">(optional)</span></label>
+    <input id="phone" type="text" value="" placeholder="(555) 123-4567">
+
+    <label for="website">Website</label>
+    <input id="website" type="text" value="app.sublynk.com">
+
+    <label for="profile">Sublynk Certified profile link <span style="font-weight:400;color:var(--muted)">(optional)</span></label>
+    <input id="profile" type="text" value="" placeholder="https://app.sublynk.com/profiles/your-company">
+    <div class="hint">Adds a verified badge line that links to your public Sublynk Certified profile.</div>
+  </div>
+
+  <!-- PREVIEW -->
+  <div class="preview-shell">
+    <div class="card">
+      <h2>Live preview</h2>
+      <p class="sub">This is exactly what pastes into your email.</p>
+      <div class="preview-frame">
+        <div id="sigPreview"></div>
+      </div>
+      <div class="btnrow">
+        <button class="copy" id="copyBtn" type="button">Copy signature</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="steps">
+  <details open>
+    <summary>How to add it in Gmail</summary>
+    <ol>
+      <li>Click <strong>Copy signature</strong> above.</li>
+      <li>In Gmail, open <strong>Settings</strong> (gear icon) and choose <strong>See all settings</strong>.</li>
+      <li>On the <strong>General</strong> tab, scroll to <strong>Signature</strong> and click <strong>Create new</strong> (or pick an existing one).</li>
+      <li>Click into the signature box and paste with <strong>Cmd+V</strong> (Mac) or <strong>Ctrl+V</strong> (Windows).</li>
+      <li>Scroll down and click <strong>Save Changes</strong>.</li>
+    </ol>
+  </details>
+  <details>
+    <summary>How to add it in Outlook</summary>
+    <ol>
+      <li>Click <strong>Copy signature</strong> above.</li>
+      <li>In Outlook, go to <strong>Settings</strong>, then <strong>Mail</strong>, then <strong>Compose and reply</strong>.</li>
+      <li>Under <strong>Email signature</strong>, click into the box and paste with <strong>Cmd+V</strong> or <strong>Ctrl+V</strong>.</li>
+      <li>Click <strong>Save</strong>.</li>
+    </ol>
+  </details>
+</div>
+
+<footer><div class="wrap">
+  <img src="https://app.sublynk.com/assets/logo-white-D7N9haAe.png" alt="Sublynk">
+  <div>The certified contractor platform. Get verified, get found, win more work.</div>
+  <div class="fine">&copy; 2026 Sublynk, Inc. &middot; 5610 Ward Rd, STE 300, Arvada, CO 80002 &middot; <a href="mailto:info@sublynk.com" style="color:#cfd4de">info@sublynk.com</a></div>
+</div></footer>
+
+<script>
+  var NAVY="#0d142a", ORANGE="#dd6336", MUTED="#78716c", BORDER="#e7e5e4";
+  var ids=["name","title","tagline","email","phone","website","profile"];
+  function val(id){return (document.getElementById(id).value||"").trim();}
+
+  function buildSignature(){
+    var name=val("name"), title=val("title"), tagline=val("tagline"),
+        email=val("email"), phone=val("phone"), website=val("website"), profile=val("profile");
+
+    var contacts=[];
+    if(email) contacts.push('<a href="mailto:'+email+'" style="color:'+MUTED+';text-decoration:none">'+email+'</a>');
+    if(phone) contacts.push('<span style="color:'+MUTED+'">'+phone+'</span>');
+    if(website){
+      var href=website.indexOf("http")===0?website:"https://"+website;
+      contacts.push('<a href="'+href+'" style="color:'+MUTED+';text-decoration:none">'+website+'</a>');
+    }
+    var contactLine=contacts.join('<span style="color:#c9c5c1"> &nbsp;&middot;&nbsp; </span>');
+
+    var certLine="";
+    if(profile){
+      var phref=profile.indexOf("http")===0?profile:"https://"+profile;
+      certLine='<tr><td style="padding-top:8px;font-family:Inter,Arial,sans-serif;font-size:12.5px;">'
+        +'<a href="'+phref+'" style="color:'+ORANGE+';text-decoration:none;font-weight:600">'
+        +'&#10003; Sublynk Certified &nbsp;&mdash;&nbsp; view our verified profile</a></td></tr>';
+    }
+
+    var taglineRow = tagline
+      ? '<tr><td style="padding-top:2px;font-family:Inter,Arial,sans-serif;font-size:12px;font-style:italic;color:'+MUTED+';">'+tagline+'</td></tr>'
+      : '';
+
+    return ''
+      +'<table cellpadding="0" cellspacing="0" border="0" style="font-family:Inter,Arial,sans-serif;border-collapse:collapse;">'
+      +'<tr><td style="padding-bottom:10px;">'
+        +'<img src="https://app.sublynk.com/assets/logo-color-DS8Xvtsx.png" alt="Sublynk" height="24" style="height:24px;display:block;">'
+      +'</td></tr>'
+      +'<tr><td style="font-family:Inter,Arial,sans-serif;font-size:15px;font-weight:700;color:'+NAVY+';">'+(name||"Your Name")+'</td></tr>'
+      +'<tr><td style="font-family:Inter,Arial,sans-serif;font-size:13px;color:'+MUTED+';padding-top:1px;">'+(title||"Your Title")+'</td></tr>'
+      +taglineRow
+      +'<tr><td style="padding:10px 0 0;"><div style="border-top:1px solid '+BORDER+';width:260px;"></div></td></tr>'
+      +'<tr><td style="font-family:Inter,Arial,sans-serif;font-size:12.5px;color:'+MUTED+';padding-top:9px;">'+contactLine+'</td></tr>'
+      +certLine
+      +'</table>';
+  }
+
+  function plainText(){
+    var parts=[val("name"),val("title"),val("tagline"),
+      [val("email"),val("phone"),val("website")].filter(Boolean).join("  |  ")];
+    if(val("profile")) parts.push("Sublynk Certified - "+val("profile"));
+    return parts.filter(Boolean).join("\n");
+  }
+
+  function render(){ document.getElementById("sigPreview").innerHTML=buildSignature(); }
+  ids.forEach(function(id){ document.getElementById(id).addEventListener("input", render); });
+  render();
+
+  document.getElementById("copyBtn").addEventListener("click", function(){
+    var btn=this, html=buildSignature(), text=plainText();
+    function flash(){ var o=btn.textContent; btn.textContent="Copied"; btn.classList.add("ok");
+      setTimeout(function(){ btn.textContent=o; btn.classList.remove("ok"); },1800); }
+    if(navigator.clipboard && window.ClipboardItem){
+      navigator.clipboard.write([new ClipboardItem({
+        "text/html": new Blob([html],{type:"text/html"}),
+        "text/plain": new Blob([text],{type:"text/plain"})
+      })]).then(flash).catch(fallback);
+    } else { fallback(); }
+    function fallback(){
+      var range=document.createRange(); range.selectNode(document.getElementById("sigPreview"));
+      var sel=window.getSelection(); sel.removeAllRanges(); sel.addRange(range);
+      try{ document.execCommand("copy"); flash(); }catch(e){ alert("Press Cmd+C / Ctrl+C to copy the signature."); }
+      sel.removeAllRanges();
+    }
+  });
+</script>
+</body>
+</html>
