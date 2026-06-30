@@ -202,13 +202,17 @@ function data(){
   var websiteDisplay = websiteRaw.replace(/^https?:\/\//i,"").replace(/\/$/,"");
   var websiteHref = /^https?:\/\//i.test(websiteRaw) ? websiteRaw : "https://"+websiteDisplay;
   var phoneHref = "tel:+1"+s.phone.replace(/[^0-9]/g,"");
-  var titleLine = [s.title, s.company].filter(Boolean).join(" · ");
+  var LINKEDIN = "https://www.linkedin.com/company/sublynk/";
+  var companyHtml = esc(s.company);
+  if (s.company.trim().toLowerCase() === "sublynk") companyHtml = '<a href="' + LINKEDIN + '" style="color:inherit;text-decoration:none">' + esc(s.company) + '</a>';
+  var titleLine = [esc(s.title), companyHtml].filter(Boolean).join(" · ");
   return {
     accent: accent,
     name: esc(s.name),
     title: esc(s.title),
     company: esc(s.company),
-    titleLine: esc(titleLine),
+    titleLine: titleLine,
+    companyHtml: companyHtml,
     phone: esc(s.phone),
     phoneHref: esc(phoneHref),
     email: esc(s.email),
@@ -263,7 +267,7 @@ function buildC(d){
   var top = [];
   if(d.name) top.push('<span style="font-weight:bold">'+d.name+'</span>');
   if(d.title) top.push('<span style="color:'+d.accent+'">'+d.title+'</span>');
-  if(d.company) top.push('<span style="color:#78716c">'+d.company+'</span>');
+  if(d.companyHtml) top.push('<span style="color:#78716c">'+d.companyHtml+'</span>');
   var contact = [];
   if(d.phone) contact.push('m: '+d.phone);
   if(d.email) contact.push('<a href="'+d.emailHref+'" style="color:#0d142a;text-decoration:none">'+d.email+'</a>');
