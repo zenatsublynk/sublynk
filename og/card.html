@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<style>
+  *{margin:0;box-sizing:border-box}
+  html,body{width:1200px;height:630px;overflow:hidden}
+  body{background:#0d142a;color:#fff;position:relative;
+       font-family:-apple-system,'Helvetica Neue','Segoe UI',Arial,sans-serif;}
+  .wm{position:absolute;right:-90px;bottom:-150px;width:540px;height:540px;border-radius:50%;
+      background:radial-gradient(circle at center, rgba(221,99,54,.20), rgba(221,99,54,0) 70%);}
+  .accent{position:absolute;left:0;top:0;bottom:0;width:12px;background:#dd6336}
+  .wrap{position:absolute;inset:0;padding:70px 80px;display:flex;flex-direction:column;justify-content:space-between}
+  .logo{display:flex;align-items:center;gap:14px}
+  .logo .mark{width:36px;height:36px;border-radius:9px;background:#dd6336;display:inline-block}
+  .logo .wm2{font-size:34px;font-weight:800;letter-spacing:.01em}
+  .pill{display:inline-block;background:rgba(221,99,54,.16);color:#f2a883;border:1px solid rgba(221,99,54,.45);
+        font-size:19px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;padding:8px 16px;border-radius:999px}
+  h1{font-size:76px;font-weight:800;line-height:1.03;letter-spacing:-.025em;margin:22px 0 18px;max-width:1010px}
+  .sub{font-size:31px;line-height:1.35;color:#cfd4de;font-weight:400;max-width:960px}
+  .foot{display:flex;align-items:center;gap:12px;font-size:22px;color:#9aa3b2}
+  .dot{width:8px;height:8px;border-radius:50%;background:#dd6336;display:inline-block}
+</style>
+</head>
+<body>
+  <div class="wm"></div>
+  <div class="accent"></div>
+  <div class="wrap">
+    <div class="logo"><span class="mark"></span><span class="wm2">SUBLYNK</span></div>
+    <div>
+      <span class="pill" id="eyebrow">Sublynk</span>
+      <h1 id="title">Title</h1>
+      <div class="sub" id="sub">Subtitle</div>
+    </div>
+    <div class="foot"><span class="dot"></span> The certified contractor platform &nbsp;&middot;&nbsp; app.sublynk.com</div>
+  </div>
+<script>
+  var p=new URLSearchParams(location.search);
+  if(p.get('t')) document.getElementById('title').textContent=p.get('t');
+  if(p.get('s')) document.getElementById('sub').textContent=p.get('s');
+  if(p.get('e')) document.getElementById('eyebrow').textContent=p.get('e');
+</script>
+</body>
+</html>
