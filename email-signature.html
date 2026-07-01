@@ -81,7 +81,7 @@
           <input id="f_profile" placeholder="https://app.sublynk.com/profiles/your-company" style="width:100%;font-family:Inter,Arial,sans-serif;font-size:14px;color:#0c0a09;background:#f5f5f4;border:1px solid #e7e5e4;border-radius:9px;padding:10px 12px">
         </label>
         <label style="display:block;grid-column:1 / -1">
-          <span style="display:block;font-size:12px;font-weight:600;color:#57534e;margin-bottom:6px">Call-to-action link <span style="color:#a8a29e;font-weight:500">(button reads &ldquo;Get Started&rdquo;)</span></span>
+          <span style="display:block;font-size:12px;font-weight:600;color:#57534e;margin-bottom:6px">Call-to-action link <span style="color:#a8a29e;font-weight:500">(button reads &ldquo;Learn more&rdquo;)</span></span>
           <input id="f_cta" placeholder="https://cal.com/zen-at-sublynk/sublynk-certified-network" style="width:100%;font-family:Inter,Arial,sans-serif;font-size:14px;color:#0c0a09;background:#f5f5f4;border:1px solid #e7e5e4;border-radius:9px;padding:10px 12px">
         </label>
         <label style="display:block;grid-column:1 / -1">
@@ -245,7 +245,7 @@ function data(){
 // ---- Variation A: Sublynk logo + divider (light) ----
 function buildA(d){
   var btns = '';
-  if(d.ctaUrl) btns += '<a href="'+d.ctaUrl+'" style="display:inline-block;background:'+d.accent+';color:#ffffff;text-decoration:none;font-family:Arial,Helvetica,sans-serif;font-size:12px;font-weight:bold;line-height:1;padding:10px 18px;border-radius:6px">Get Started</a>';
+  if(d.ctaUrl) btns += '<a href="'+d.ctaUrl+'" style="display:inline-block;background:'+d.accent+';color:#ffffff;text-decoration:none;font-family:Arial,Helvetica,sans-serif;font-size:12px;font-weight:bold;line-height:1;padding:10px 18px;border-radius:6px">Learn more</a>';
   if(d.secondaryUrl) btns += (btns?'&nbsp;&nbsp;':'')+'<a href="'+d.secondaryUrl+'" style="display:inline-block;background:#ffffff;color:#0d142a;text-decoration:none;font-family:Arial,Helvetica,sans-serif;font-size:12px;font-weight:bold;line-height:1;padding:9px 17px;border:1px solid '+d.accent+';border-radius:6px">Join Sublynk</a>';
   var cert = (d.showCertified ? '\n      <tr><td colspan="2" style="padding-top:8px;font-size:12px;line-height:1.7;font-family:Arial,Helvetica,sans-serif">\n        <a href="'+d.profileUrl+'" style="color:#0d142a;text-decoration:none;font-weight:bold"><span style="color:'+d.accent+'">&#10003;</span> Sublynk Certified</a><span style="color:#78716c"> &mdash; view our verified profile</span>\n      </td></tr>' : "") + (btns ? '\n      <tr><td colspan="2" style="padding-top:14px">'+btns+'</td></tr>' : "");
   var body = '';
@@ -259,7 +259,7 @@ function buildA(d){
 // ---- Variation B: Navy background ----
 function buildB(d){
   var btns = '';
-  if(d.ctaUrl) btns += '<a href="'+d.ctaUrl+'" style="display:inline-block;background:'+d.accent+';color:#ffffff;text-decoration:none;font-family:Arial,Helvetica,sans-serif;font-size:12px;font-weight:bold;line-height:1;padding:10px 18px;border-radius:6px">Get Started</a>';
+  if(d.ctaUrl) btns += '<a href="'+d.ctaUrl+'" style="display:inline-block;background:'+d.accent+';color:#ffffff;text-decoration:none;font-family:Arial,Helvetica,sans-serif;font-size:12px;font-weight:bold;line-height:1;padding:10px 18px;border-radius:6px">Learn more</a>';
   if(d.secondaryUrl) btns += (btns?'&nbsp;&nbsp;':'')+'<a href="'+d.secondaryUrl+'" style="display:inline-block;background:#0d142a;color:#ffffff;text-decoration:none;font-family:Arial,Helvetica,sans-serif;font-size:12px;font-weight:bold;line-height:1;padding:9px 17px;border:1px solid '+d.accent+';border-radius:6px">Join Sublynk</a>';
   var cert = (d.showCertified ? '\n<div style="font-size:12px;line-height:1.7;margin-top:9px"><a href="'+d.profileUrl+'" style="color:#ffffff;text-decoration:none;font-weight:bold"><span style="color:'+d.accent+'">&#10003;</span> Sublynk Certified</a><span style="color:#9b9892"> &mdash; view our verified profile</span></div>' : "") + (btns ? '\n<div style="margin-top:12px">'+btns+'</div>' : "");
   var body = '';
@@ -274,7 +274,7 @@ function buildB(d){
 // ---- Variation C: Minimalist transparent ----
 function buildC(d){
   var btns = '';
-  if(d.ctaUrl) btns += '<a href="'+d.ctaUrl+'" style="display:inline-block;background:'+d.accent+';color:#ffffff;text-decoration:none;font-family:Arial,Helvetica,sans-serif;font-size:11px;font-weight:bold;line-height:1;padding:8px 14px;border-radius:6px">Get Started</a>';
+  if(d.ctaUrl) btns += '<a href="'+d.ctaUrl+'" style="display:inline-block;background:'+d.accent+';color:#ffffff;text-decoration:none;font-family:Arial,Helvetica,sans-serif;font-size:11px;font-weight:bold;line-height:1;padding:8px 14px;border-radius:6px">Learn more</a>';
   if(d.secondaryUrl) btns += (btns?'&nbsp;&nbsp;':'')+'<a href="'+d.secondaryUrl+'" style="display:inline-block;background:#ffffff;color:#0d142a;text-decoration:none;font-family:Arial,Helvetica,sans-serif;font-size:11px;font-weight:bold;line-height:1;padding:7px 13px;border:1px solid '+d.accent+';border-radius:6px">Join Sublynk</a>';
   var cert = (d.showCertified ? '\n<div style="font-size:11px;color:#78716c;line-height:1.9;margin-top:3px"><a href="'+d.profileUrl+'" style="color:#0d142a;text-decoration:none;font-weight:bold"><span style="color:'+d.accent+'">&#10003;</span> Sublynk Certified</a><span style="color:#a8a29e"> &mdash; view our verified profile</span></div>' : "") + (btns ? '\n<div style="margin-top:8px">'+btns+'</div>' : "");
   var top = [];
@@ -296,7 +296,7 @@ function plainText(d){
   return [s.name, [s.title, s.company].filter(Boolean).join(" · "),
     "m: "+s.phone, s.email, s.website,
     d.showCertified ? "Sublynk Certified — "+s.profileUrl : "",
-    s.ctaUrl ? "Get Started: "+s.ctaUrl : "",
+    s.ctaUrl ? "Learn more: "+s.ctaUrl : "",
     s.secondaryUrl ? "Join Sublynk: "+s.secondaryUrl : ""].filter(Boolean).join("\n");
 }
 
