@@ -1,0 +1,134 @@
+<!doctype html>
+<html lang=en>
+<head>
+<meta charset=utf-8>
+<meta name=viewport content="width=device-width,initial-scale=1">
+<title>Sublynk CRM</title>
+<link rel=preconnect href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel=stylesheet>
+<style>
+:root{--orange:#DD6336;--navy:#0D142A;--panel:#141d33;--panel2:#0f172e;--bd:#24304d;--gray:#8b97a8;--ink:#e8edf4;--green:#43A46D}
+*{box-sizing:border-box;margin:0}
+body{font-family:Inter,-apple-system,'Segoe UI',Arial,sans-serif;background:var(--navy);color:var(--ink);-webkit-font-smoothing:antialiased}
+.topbar{background:#0a1020;border-bottom:1px solid var(--bd);display:flex;align-items:center;gap:12px;padding:0 22px;height:58px;position:sticky;top:0;z-index:5}
+.topbar img.logo{height:22px}
+.pill{font-size:12px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;padding:5px 12px;border-radius:999px;text-decoration:none;border:1px solid transparent;cursor:pointer}
+.pill.active{color:var(--orange);border-color:rgba(221,99,54,.4)}
+.pill.link{color:var(--gray)}
+.pill.link:hover{color:var(--ink)}
+.topbar .spacer{flex:1}
+.signout{background:none;border:1px solid var(--bd);color:var(--gray);font:inherit;font-size:12px;border-radius:8px;padding:6px 11px;cursor:pointer}
+.wrap{max-width:1280px;margin:0 auto;padding:22px 22px 40px}
+h1{font-size:20px;font-weight:800}.sub{color:var(--gray);font-size:13px;margin:3px 0 18px}
+.cards{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:16px}
+.card{background:var(--panel);border:1px solid var(--bd);border-top:3px solid var(--bd);border-radius:12px;padding:12px 18px;min-width:120px;cursor:pointer}
+.card:hover{border-color:#33415f}.card.act{border-top-color:var(--orange)}
+.card b{font-size:21px;font-weight:800;font-variant-numeric:tabular-nums}.card .l{font-size:11px;color:var(--gray);text-transform:uppercase;letter-spacing:.4px;margin-top:2px}
+.bar{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-bottom:14px}
+select,.search input{font:inherit;font-size:13px;padding:8px 11px;border:1px solid var(--bd);border-radius:9px;background:var(--panel);color:var(--ink);outline:none}
+select:focus,.search input:focus{border-color:var(--orange)}
+.search{position:relative}.search input{min-width:250px}
+.chk{display:flex;align-items:center;gap:6px;font-size:13px;color:var(--ink);background:var(--panel);border:1px solid var(--bd);border-radius:9px;padding:7px 11px;cursor:pointer;user-select:none}
+.chk:has(input:checked){border-color:var(--orange);background:rgba(221,99,54,.08)}
+.chk input{accent-color:var(--orange)}
+button.mini{font:inherit;font-size:13px;font-weight:600;padding:7px 13px;border:1px solid var(--bd);border-radius:9px;background:var(--panel);color:var(--ink);cursor:pointer}
+.tablecard{background:var(--panel);border:1px solid var(--bd);border-radius:14px;overflow:hidden}
+table{width:100%;border-collapse:collapse;font-size:13.5px}
+th,td{text-align:left;padding:10px 15px;border-bottom:1px solid #1c2740;vertical-align:middle}
+th{background:#111a30;color:var(--gray);font-size:11px;text-transform:uppercase;letter-spacing:.4px;font-weight:600}
+tbody tr:hover td{background:#111a2e}td b{color:#fff;font-weight:600}
+a{color:var(--orange);text-decoration:none}a:hover{text-decoration:underline}
+.tag{font-size:11px;font-weight:700;padding:2px 9px;border-radius:999px;text-transform:capitalize;background:rgba(139,151,168,.15);color:var(--gray)}
+.muted{color:#556}
+.foot{display:flex;justify-content:space-between;align-items:center;margin-top:14px;color:var(--gray);font-size:13px}
+</style>
+</head>
+<body>
+<header class=topbar>
+  <img class=logo src="https://app.sublynk.com/assets/logo-color-DS8Xvtsx.png" alt="Sublynk">
+  <span class="pill active">CRM</span>
+  <a class="pill link" href="sequencer.html">Sequencer</a>
+  <span class=spacer></span>
+  <button class=signout id=signout>Sign out</button>
+</header>
+<div class=wrap>
+  <h1>Leads</h1>
+  <div class=sub>Verified outbound audience &middot; live from Supabase &middot; existing customers auto-excluded</div>
+  <div class=cards id=cards></div>
+  <div class=bar>
+    <select id=fsource><option value="">All sources</option></select>
+    <select id=fvertical><option value="">All verticals</option></select>
+    <select id=fstate><option value="">All states</option></select>
+    <label class=search><input id=q placeholder="Search company, email, owner, city..."></label>
+    <label class=chk><input type=checkbox id=fhasemail> Has email</label>
+    <label class=chk><input type=checkbox id=fhasphone> Has phone</label>
+    <label class=chk><input type=checkbox id=fhasowner> Has owner</label>
+    <button class=mini id=clear>Clear</button>
+  </div>
+  <div class=tablecard><table><thead><tr>
+    <th>Company</th><th>Owner</th><th>Email</th><th>Phone</th><th>City</th><th>State</th><th>Vertical</th><th>Source</th>
+  </tr></thead><tbody id=rows></tbody></table></div>
+  <div class=foot><span id=count></span><span style="display:flex;gap:8px">
+    <button class=mini id=prev>Prev</button><button class=mini id=next>Next</button>
+  </span></div>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="config.js"></script>
+<script>
+const sb = supabase.createClient(window.SUBLYNK.SUPABASE_URL, window.SUBLYNK.SUPABASE_ANON_KEY);
+const $=id=>document.getElementById(id); const PAGE=100; let page=0;
+function esc(s){return (s||'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]))}
+
+// Auth guard: no session -> back to login. Everything below only runs for a signed-in user.
+(async ()=>{
+  const { data } = await sb.auth.getSession();
+  if(!data.session){ location.replace('login.html'); return; }
+  $('signout').onclick=async()=>{ await sb.auth.signOut(); location.replace('login.html'); };
+  await facets(); load();
+})();
+
+async function facets(){
+  const { data, error } = await sb.rpc('leads_facets');
+  if(error) return;
+  const f=data;
+  const cards=[['All leads',f.total,'']].concat(f.verticals.map(v=>[v.vertical||'(none)',v.c,v.vertical]));
+  $('cards').innerHTML=cards.map(([l,n,v])=>`<div class=card data-v="${v||''}"><b>${(n||0).toLocaleString()}</b><div class=l>${esc(l)}</div></div>`).join('');
+  document.querySelectorAll('.card').forEach(c=>c.onclick=()=>{$('fvertical').value=c.dataset.v;page=0;load();});
+  const fill=(sel,arr,key)=>arr.forEach(r=>{const o=document.createElement('option');o.value=r[key]||'';o.textContent=(r[key]||'(none)')+' ('+(r.c||0).toLocaleString()+')';sel.appendChild(o)});
+  fill($('fsource'),f.sources,'source'); fill($('fvertical'),f.verticals,'vertical'); fill($('fstate'),f.states,'state');
+}
+
+async function load(){
+  let query = sb.from('sublynk_leads')
+    .select('company,owner_name,email,phone,city,state,vertical,source', {count:'exact'})
+    .eq('do_not_contact', false);
+  if($('fsource').value) query=query.eq('source',$('fsource').value);
+  if($('fvertical').value) query=query.eq('vertical',$('fvertical').value);
+  if($('fstate').value) query=query.eq('state',$('fstate').value);
+  const qq=$('q').value.trim();
+  if(qq){ const p=qq.replace(/[%,]/g,' '); query=query.or(`company.ilike.%${p}%,email.ilike.%${p}%,city.ilike.%${p}%,owner_name.ilike.%${p}%`); }
+  if($('fhasemail').checked) query=query.not('email','is',null).neq('email','');
+  if($('fhasphone').checked) query=query.not('phone','is',null).neq('phone','');
+  if($('fhasowner').checked) query=query.not('owner_name','is',null).neq('owner_name','');
+  query=query.order('company',{nullsFirst:false}).range(page*PAGE,(page+1)*PAGE-1);
+  const { data:rows, count, error } = await query;
+  if(error){ $('rows').innerHTML=`<tr><td colspan=8 class=muted style="padding:22px">${esc(error.message)}</td></tr>`; return; }
+  $('rows').innerHTML=(rows||[]).map(r=>`<tr>
+    <td><b>${esc(r.company)}</b></td><td>${esc(r.owner_name)||'<span class=muted>&mdash;</span>'}</td>
+    <td>${r.email?`<a href="mailto:${esc(r.email)}">${esc(r.email)}</a>`:'<span class=muted>&mdash;</span>'}</td>
+    <td>${esc(r.phone)||'<span class=muted>&mdash;</span>'}</td><td>${esc(r.city)||'<span class=muted>&mdash;</span>'}</td>
+    <td>${esc(r.state)||'<span class=muted>&mdash;</span>'}</td><td><span class=tag>${esc(r.vertical)}</span></td>
+    <td class=muted>${esc(r.source)}</td></tr>`).join('') || '<tr><td colspan=8 class=muted style="padding:22px;text-align:center">No matches</td></tr>';
+  const from=count?page*PAGE+1:0, to=Math.min((page+1)*PAGE,count||0);
+  $('count').textContent=`Showing ${from.toLocaleString()}-${to.toLocaleString()} of ${(count||0).toLocaleString()}`;
+  $('prev').disabled=page<=0; $('next').disabled=to>=(count||0);
+  document.querySelectorAll('.card').forEach(c=>c.classList.toggle('act',c.dataset.v===$('fvertical').value&&c.dataset.v!==''));
+}
+let t;
+['fsource','fvertical','fstate','fhasemail','fhasphone','fhasowner'].forEach(id=>$(id).onchange=()=>{page=0;load()});
+$('q').oninput=()=>{clearTimeout(t);t=setTimeout(()=>{page=0;load()},300)};
+$('clear').onclick=()=>{['fsource','fvertical','fstate'].forEach(i=>$(i).value='');$('q').value='';['fhasemail','fhasphone','fhasowner'].forEach(i=>$(i).checked=false);page=0;load()};
+$('prev').onclick=()=>{if(page>0){page--;load()}};$('next').onclick=()=>{page++;load()};
+</script>
+</body>
+</html>
