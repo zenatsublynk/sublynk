@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang=en>
+<head>
+<meta charset=utf-8>
+<meta name=viewport content="width=device-width,initial-scale=1">
+<title>Sublynk Console — Sign in</title>
+<link rel=preconnect href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel=stylesheet>
+<style>
+:root{--orange:#DD6336;--navy:#0D142A;--panel:#141d33;--panel2:#0f172e;--bd:#24304d;--gray:#8b97a8;--ink:#e8edf4;--red:#e0745f}
+*{box-sizing:border-box;margin:0}
+body{font-family:Inter,-apple-system,'Segoe UI',Arial,sans-serif;background:var(--navy);color:var(--ink);min-height:100vh;display:flex;align-items:center;justify-content:center;padding:24px}
+.box{width:100%;max-width:360px;background:var(--panel);border:1px solid var(--bd);border-radius:16px;padding:30px 28px}
+.logo{height:26px;margin-bottom:22px}
+h1{font-size:19px;font-weight:800;letter-spacing:-.01em}
+.sub{color:var(--gray);font-size:13px;margin:5px 0 22px}
+label{display:block;font-size:12px;color:var(--gray);text-transform:uppercase;letter-spacing:.05em;font-weight:600;margin:0 0 6px}
+input{width:100%;font:inherit;font-size:14px;background:var(--panel2);border:1px solid var(--bd);color:var(--ink);border-radius:9px;padding:11px 13px;margin-bottom:16px;outline:none}
+input:focus{border-color:var(--orange);box-shadow:0 0 0 3px rgba(221,99,54,.14)}
+button{width:100%;font:inherit;font-size:14px;font-weight:700;background:var(--orange);color:#fff;border:none;border-radius:9px;padding:12px;cursor:pointer}
+button:disabled{opacity:.5;cursor:default}
+.err{color:var(--red);font-size:13px;margin-top:14px;min-height:18px}
+.foot{color:var(--gray);font-size:11px;margin-top:18px;line-height:1.5}
+</style>
+</head>
+<body>
+  <form class=box id=form>
+    <img class=logo src="https://app.sublynk.com/assets/logo-color-DS8Xvtsx.png" alt="Sublynk">
+    <h1>Console sign in</h1>
+    <div class=sub>Sublynk CRM &amp; Outbound Sequencer</div>
+    <label for=email>Email</label>
+    <input id=email type=email autocomplete=username required>
+    <label for=pw>Password</label>
+    <input id=pw type=password autocomplete=current-password required>
+    <button id=btn type=submit>Sign in</button>
+    <div class=err id=err></div>
+    <div class=foot>Access is limited to authorized Sublynk accounts. All data is protected by Supabase row-level security — this page shows nothing until you are signed in.</div>
+  </form>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="config.js"></script>
+  <script>
+    const sb = supabase.createClient(window.SUBLYNK.SUPABASE_URL, window.SUBLYNK.SUPABASE_ANON_KEY);
+    // Already signed in? Skip straight to the CRM.
+    sb.auth.getSession().then(({data})=>{ if(data.session) location.replace('crm.html'); });
+    const $=id=>document.getElementById(id);
+    $('form').addEventListener('submit', async (e)=>{
+      e.preventDefault();
+      $('btn').disabled=true; $('err').textContent='';
+      const { error } = await sb.auth.signInWithPassword({ email:$('email').value.trim(), password:$('pw').value });
+      if(error){ $('err').textContent=error.message; $('btn').disabled=false; return; }
+      location.replace('crm.html');
+    });
+  </script>
+</body>
+</html>
