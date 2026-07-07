@@ -41,6 +41,13 @@ tbody tr:hover td{background:#111a2e}td b{color:#fff;font-weight:600}
 a{color:var(--orange);text-decoration:none}a:hover{text-decoration:underline}
 .tag{font-size:11px;font-weight:700;padding:2px 9px;border-radius:999px;text-transform:capitalize;background:rgba(139,151,168,.15);color:var(--gray)}
 .muted{color:#556}
+.cred b{color:#e8edf4;font-weight:600;font-size:13px}
+.cred .meta{color:var(--gray);font-size:11px;display:block;margin-top:1px}
+.stat-pill{font-size:10px;font-weight:700;padding:1px 7px;border-radius:999px;text-transform:uppercase;letter-spacing:.03em;margin-left:5px}
+.stat-pill.ok{background:rgba(67,164,109,.18);color:#5fce8f}
+.stat-pill.bad{background:rgba(224,116,95,.18);color:#e0745f}
+.exp-bad{color:#e0745f;font-weight:600}
+.exp-soon{color:#e8a33f;font-weight:600}
 .foot{display:flex;justify-content:space-between;align-items:center;margin-top:14px;color:var(--gray);font-size:13px}
 </style>
 </head>
@@ -67,7 +74,7 @@ a{color:var(--orange);text-decoration:none}a:hover{text-decoration:underline}
     <button class=mini id=clear>Clear</button>
   </div>
   <div class=tablecard><table><thead><tr>
-    <th>Company</th><th>Owner</th><th>Email</th><th>Phone</th><th>City</th><th>State</th><th>Vertical</th><th>Source</th>
+    <th>Company</th><th>Owner</th><th>Email</th><th>Phone</th><th>City</th><th>State</th><th>Credential</th><th>Expires</th><th>Vertical</th><th>Source</th>
   </tr></thead><tbody id=rows></tbody></table></div>
   <div class=foot><span id=count></span><span style="display:flex;gap:8px">
     <button class=mini id=prev>Prev</button><button class=mini id=next>Next</button>
@@ -79,6 +86,26 @@ a{color:var(--orange);text-decoration:none}a:hover{text-decoration:underline}
 const sb = supabase.createClient(window.SUBLYNK.SUPABASE_URL, window.SUBLYNK.SUPABASE_ANON_KEY);
 const $=id=>document.getElementById(id); const PAGE=100; let page=0;
 function esc(s){return (s||'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]))}
+// Credential cell: label + a status pill + (license/cert number and IICRC acronyms) underneath.
+function credCell(r){
+  const label=r.credential_label; if(!label) return '<span class=muted>&mdash;</span>';
+  const st=(r.credential_status||'').toString();
+  const good=/active|certified/i.test(st);
+  const pill=st?`<span class="stat-pill ${good?'ok':'bad'}">${esc(st)}</span>`:'';
+  const num=r.cert_number||r.license_number||'';
+  const meta=[num,r.cert_acronyms].filter(Boolean).map(esc).join(' &middot; ');
+  return `<span class=cred><b>${esc(label)}</b>${pill}${meta?`<span class=meta>${meta}</span>`:''}</span>`;
+}
+// Expires cell: red if past, amber within 60 days, plain otherwise, dash if none (e.g. IICRC).
+function expCell(d){
+  if(!d) return '<span class=muted>&mdash;</span>';
+  const exp=new Date(d+'T00:00:00'), now=new Date();
+  const days=Math.round((exp-now)/86400000);
+  const txt=exp.toLocaleDateString('en-US',{year:'numeric',month:'short',day:'numeric'});
+  if(days<0) return `<span class=exp-bad>${txt}</span>`;
+  if(days<=60) return `<span class=exp-soon>${txt}</span>`;
+  return txt;
+}
 
 // Auth guard: no session -> back to login. Everything below only runs for a signed-in user.
 (async ()=>{
@@ -101,7 +128,7 @@ async function facets(){
 
 async function load(){
   let query = sb.from('sublynk_leads')
-    .select('company,owner_name,email,phone,city,state,vertical,source', {count:'exact'})
+    .select('company,owner_name,email,phone,city,state,vertical,source,credential_label,credential_status,credential_expires,cert_acronyms,cert_number,license_number', {count:'exact'})
     .eq('do_not_contact', false);
   if($('fsource').value) query=query.eq('source',$('fsource').value);
   if($('fvertical').value) query=query.eq('vertical',$('fvertical').value);
@@ -118,8 +145,10 @@ async function load(){
     <td><b>${esc(r.company)}</b></td><td>${esc(r.owner_name)||'<span class=muted>&mdash;</span>'}</td>
     <td>${r.email?`<a href="mailto:${esc(r.email)}">${esc(r.email)}</a>`:'<span class=muted>&mdash;</span>'}</td>
     <td>${esc(r.phone)||'<span class=muted>&mdash;</span>'}</td><td>${esc(r.city)||'<span class=muted>&mdash;</span>'}</td>
-    <td>${esc(r.state)||'<span class=muted>&mdash;</span>'}</td><td><span class=tag>${esc(r.vertical)}</span></td>
-    <td class=muted>${esc(r.source)}</td></tr>`).join('') || '<tr><td colspan=8 class=muted style="padding:22px;text-align:center">No matches</td></tr>';
+    <td>${esc(r.state)||'<span class=muted>&mdash;</span>'}</td>
+    <td>${credCell(r)}</td><td>${expCell(r.credential_expires)}</td>
+    <td><span class=tag>${esc(r.vertical)}</span></td>
+    <td class=muted>${esc(r.source)}</td></tr>`).join('') || '<tr><td colspan=10 class=muted style="padding:22px;text-align:center">No matches</td></tr>';
   const from=count?page*PAGE+1:0, to=Math.min((page+1)*PAGE,count||0);
   $('count').textContent=`Showing ${from.toLocaleString()}-${to.toLocaleString()} of ${(count||0).toLocaleString()}`;
   $('prev').disabled=page<=0; $('next').disabled=to>=(count||0);
