@@ -71,6 +71,7 @@ a{color:var(--orange);text-decoration:none}a:hover{text-decoration:underline}
     <label class=chk><input type=checkbox id=fhasemail> Has email</label>
     <label class=chk><input type=checkbox id=fhasphone> Has phone</label>
     <label class=chk><input type=checkbox id=fhasowner> Has owner</label>
+    <label class=chk><input type=checkbox id=fexpsoon> Expiring &le;90d</label>
     <button class=mini id=clear>Clear</button>
   </div>
   <div class=tablecard><table><thead><tr>
@@ -138,7 +139,17 @@ async function load(){
   if($('fhasemail').checked) query=query.not('email','is',null).neq('email','');
   if($('fhasphone').checked) query=query.not('phone','is',null).neq('phone','');
   if($('fhasowner').checked) query=query.not('owner_name','is',null).neq('owner_name','');
-  query=query.order('company',{nullsFirst:false}).range(page*PAGE,(page+1)*PAGE-1);
+  if($('fexpsoon').checked){
+    // credentials expiring within 90 days (today .. +90d). Sorts by soonest-first so the most
+    // urgent lapses surface at the top. A lapsing license is a natural outreach hook.
+    const today=new Date(), in90=new Date(Date.now()+90*86400000);
+    const iso=d=>d.toISOString().slice(0,10);
+    query=query.not('credential_expires','is',null).gte('credential_expires',iso(today)).lte('credential_expires',iso(in90))
+               .order('credential_expires',{ascending:true});
+  } else {
+    query=query.order('company',{nullsFirst:false});
+  }
+  query=query.range(page*PAGE,(page+1)*PAGE-1);
   const { data:rows, count, error } = await query;
   if(error){ $('rows').innerHTML=`<tr><td colspan=8 class=muted style="padding:22px">${esc(error.message)}</td></tr>`; return; }
   $('rows').innerHTML=(rows||[]).map(r=>`<tr>
@@ -155,9 +166,9 @@ async function load(){
   document.querySelectorAll('.card').forEach(c=>c.classList.toggle('act',c.dataset.v===$('fvertical').value&&c.dataset.v!==''));
 }
 let t;
-['fsource','fvertical','fstate','fhasemail','fhasphone','fhasowner'].forEach(id=>$(id).onchange=()=>{page=0;load()});
+['fsource','fvertical','fstate','fhasemail','fhasphone','fhasowner','fexpsoon'].forEach(id=>$(id).onchange=()=>{page=0;load()});
 $('q').oninput=()=>{clearTimeout(t);t=setTimeout(()=>{page=0;load()},300)};
-$('clear').onclick=()=>{['fsource','fvertical','fstate'].forEach(i=>$(i).value='');$('q').value='';['fhasemail','fhasphone','fhasowner'].forEach(i=>$(i).checked=false);page=0;load()};
+$('clear').onclick=()=>{['fsource','fvertical','fstate'].forEach(i=>$(i).value='');$('q').value='';['fhasemail','fhasphone','fhasowner','fexpsoon'].forEach(i=>$(i).checked=false);page=0;load()};
 $('prev').onclick=()=>{if(page>0){page--;load()}};$('next').onclick=()=>{page++;load()};
 </script>
 </body>
