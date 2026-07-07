@@ -128,7 +128,7 @@ async function facets(){
 
 async function load(){
   let query = sb.from('sublynk_leads')
-    .select('company,owner_name,email,phone,city,state,vertical,source,credential_label,credential_status,credential_expires,cert_acronyms,cert_number,license_number', {count:'exact'})
+    .select('company,owner_name,email,phone,city,state,vertical,source,credential_label,credential_status,credential_expires,cert_acronyms,cert_number,license_number', {count:'estimated'})
     .eq('do_not_contact', false);
   if($('fsource').value) query=query.eq('source',$('fsource').value);
   if($('fvertical').value) query=query.eq('vertical',$('fvertical').value);
@@ -150,7 +150,7 @@ async function load(){
     <td><span class=tag>${esc(r.vertical)}</span></td>
     <td class=muted>${esc(r.source)}</td></tr>`).join('') || '<tr><td colspan=10 class=muted style="padding:22px;text-align:center">No matches</td></tr>';
   const from=count?page*PAGE+1:0, to=Math.min((page+1)*PAGE,count||0);
-  $('count').textContent=`Showing ${from.toLocaleString()}-${to.toLocaleString()} of ${(count||0).toLocaleString()}`;
+  $('count').textContent=`Showing ${from.toLocaleString()}-${to.toLocaleString()} of ~${(count||0).toLocaleString()}`;
   $('prev').disabled=page<=0; $('next').disabled=to>=(count||0);
   document.querySelectorAll('.card').forEach(c=>c.classList.toggle('act',c.dataset.v===$('fvertical').value&&c.dataset.v!==''));
 }
