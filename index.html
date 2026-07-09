@@ -318,9 +318,9 @@
 
       <div class="flex items-center gap-3">
         <a href="app/login.html" class="hidden sm:inline text-sm font-medium text-gray-500 hover:text-sublynk-navy transition">Sign in</a>
-        <button @click="showPage('subs')" class="bg-sublynk-orange hover:bg-sublynk-orange-hover text-white px-5 py-2.5 rounded-xl text-sm font-semibold transition shadow-sm">
+        <a href="https://app.sublynk.com/" class="bg-sublynk-orange hover:bg-sublynk-orange-hover text-white px-5 py-2.5 rounded-xl text-sm font-semibold transition shadow-sm">
           Join now
-        </button>
+        </a>
       </div>
 
       <button @click="mobileMenu = !mobileMenu" class="md:hidden text-gray-500 ml-3">
@@ -369,6 +369,16 @@
           <p class="text-gray-500 text-lg md:text-xl max-w-2xl mx-auto mt-6 leading-relaxed">
             Contractors get verified in minutes. Networks stay compliant automatically. One profile works everywhere. Real people here to help.
           </p>
+
+          <!-- Top-fold CTAs -->
+          <div class="flex flex-col sm:flex-row items-center justify-center gap-3 mt-8">
+            <a href="https://app.sublynk.com/contractors" class="w-full sm:w-auto bg-sublynk-orange hover:bg-sublynk-orange-hover text-white px-8 py-3.5 rounded-xl font-semibold transition shadow-sm">
+              Find contractors
+            </a>
+            <a href="trust-loop.html" class="w-full sm:w-auto bg-white border-2 border-sublynk-border hover:border-sublynk-orange text-sublynk-navy px-8 py-3.5 rounded-xl font-semibold transition">
+              Learn more
+            </a>
+          </div>
 
           <!-- Video -->
           <div class="mt-10 max-w-4xl mx-auto animate-fade-up delay-100">
