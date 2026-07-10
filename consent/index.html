@@ -16,11 +16,13 @@
 *{box-sizing:border-box;margin:0}
 body{font-family:Inter,-apple-system,'Segoe UI',Arial,sans-serif;background:var(--paper);color:var(--ink);
   -webkit-font-smoothing:antialiased;line-height:1.6}
-.bar{background:var(--navy);color:#fff;padding:16px 0}
+.bar{background:var(--navy);padding:13px 0;position:sticky;top:0;z-index:10}
 .wrap{max-width:640px;margin:0 auto;padding:0 22px}
-.brand{display:flex;align-items:center;gap:9px;font-weight:800;font-size:19px;letter-spacing:-.02em}
-.brand .dot{width:8px;height:8px;border-radius:50%;background:var(--orange)}
-main{padding:34px 0 60px}
+.bar a{display:inline-flex;align-items:center}
+.bar img{height:24px;width:auto;display:block}
+main{padding:30px 0 60px;position:relative;overflow:hidden}
+.glow{position:absolute;top:0;left:50%;transform:translateX(-50%);width:620px;height:300px;max-width:96%;background:var(--orange);opacity:.07;filter:blur(120px);border-radius:50%;pointer-events:none;z-index:0}
+main>:not(.glow){position:relative;z-index:1}
 .eyebrow{font-size:12px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--orange-deep)}
 h1{font-size:30px;line-height:1.15;font-weight:800;letter-spacing:-.02em;color:var(--navy);margin:8px 0 10px;text-wrap:balance}
 .sub{font-size:17px;color:var(--muted);max-width:52ch}
@@ -63,13 +65,14 @@ button.cta:disabled{opacity:.45;cursor:not-allowed}
 </style>
 </head>
 <body>
-<div class=bar><div class=wrap><div class=brand><span class=dot></span> sublynk</div></div></div>
+<div class=bar><div class=wrap><a href="https://zenatsublynk.github.io/sublynk/" aria-label="Sublynk home"><img src="https://app.sublynk.com/assets/logo-white-D7N9haAe.png" alt="Sublynk"></a></div></div>
 
 <main class=wrap>
+  <span class=glow aria-hidden=true></span>
   <div id=form-view>
     <div class=eyebrow>Job alerts</div>
     <h1>Get first call on jobs from our networks</h1>
-    <p class=sub>Turn on job alerts and Sublynk will reach out the moment a job from one of our managed repair networks matches your trade and service area. Real jobs, already sourced. You must be a vetted, verified Sublynk Certified member to apply, and Sublynk never charges lead fees or takes a cut of your work.</p>
+    <p class=sub>We call you when a real job near you needs your trade, straight from our networks. You must be Sublynk Certified to apply. No lead fees, and we never take a cut of your work.</p>
 
     <div class=card>
       <h2>What each alert includes</h2>
