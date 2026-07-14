@@ -1,0 +1,13 @@
+name = "sublynk-consent-worker"
+main = "src/index.js"
+compatibility_date = "2025-07-14"
+
+# sublynk.com is NOT on Cloudflare (it resolves on DigitalOcean nameservers), so a custom
+# route/domain there is not possible (Cloudflare requires an active zone you own). This
+# deploys to the account's default *.workers.dev subdomain instead -- no DNS changes needed.
+# `wrangler deploy` will print the final URL; put that into consent/index.html's API_ENDPOINT.
+# If sublynk.com is ever migrated to Cloudflare, a real custom domain can be added then via
+# https://developers.cloudflare.com/workers/configuration/routing/custom-domains/
+
+# Secrets are set via: npx wrangler secret put TURNSTILE_SECRET (etc)
+# They are already uploaded to your Cloudflare account and will be available to the Worker

@@ -1,0 +1,15 @@
+{
+  "name": "sublynk-consent-worker",
+  "version": "1.0.0",
+  "description": "Cloudflare Worker for handling job alerts consent form with Turnstile CAPTCHA",
+  "main": "src/index.js",
+  "type": "module",
+  "scripts": {
+    "dev": "wrangler dev",
+    "deploy": "wrangler deploy",
+    "test": "npm run test:widget"
+  },
+  "devDependencies": {
+    "wrangler": "^4.110.0"
+  }
+}
