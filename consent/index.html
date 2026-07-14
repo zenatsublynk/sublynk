@@ -177,12 +177,6 @@ if(params.get('name')) fullName.value=params.get('name');
 if(params.get('company')) company.value=params.get('company');
 refresh();
 
-// Best-effort public IP for the consent record. Never blocks submit if it fails.
-async function getIP(){
-  try{ const r=await fetch('https://api.ipify.org?format=json'); return (await r.json()).ip || null; }
-  catch{ return null; }
-}
-
 $('optin').addEventListener('submit', async (ev)=>{
   ev.preventDefault();
   err.style.display='none';
@@ -194,7 +188,6 @@ $('optin').addEventListener('submit', async (ev)=>{
   if(!norm){ err.textContent='Please enter a valid US mobile number.'; err.style.display='block'; return; }
   if(!consent.checked){ err.textContent='Please check the box to turn on job alerts.'; err.style.display='block'; return; }
   submit.disabled=true; submit.textContent='Turning on...';
-  const ip=await getIP();
   const row={
     full_name:fullName.value.trim(),
     company:company.value.trim(),
@@ -202,15 +195,23 @@ $('optin').addEventListener('submit', async (ev)=>{
     phone:norm, phone_raw:phone.value.trim(),
     consent_calls:true, consent_sms:true, channels:'calls+sms',
     disclosure_version:DISCLOSURE_VERSION, disclosure_text:DISCLOSURE_TEXT,
-    networks_shown:NETWORKS_SHOWN, page_url:location.href, user_agent:navigator.userAgent, ip:ip,
+    networks_shown:NETWORKS_SHOWN, page_url:location.href, user_agent:navigator.userAgent,
     source:'job-alerts-optin', status:'active', contact_ref:CONTACT_REF
   };
-  // IMPORTANT: no .select() -> supabase-js uses Prefer: return=minimal, which is the ONLY mode the
-  // anon insert-only RLS policy allows (a returning select would be blocked and 401).
-  const { error } = await sb.from('consent_events').insert(row);
-  if(error){
+  // IMPORTANT: no .select() -> supabase-js uses Prefer: return=minimal, the ONLY mode the anon
+  // insert-only RLS policy allows (a returning select would be blocked and 401). IP is captured
+  // server-side later by the Turnstile verifier Worker, not from the browser.
+  // Retry a few times so a transient network blip does not lose a consent.
+  let saved=false;
+  for(let attempt=0; attempt<3 && !saved; attempt++){
+    if(attempt) await new Promise(r=>setTimeout(r, 800*attempt));
+    try{ const { error } = await sb.from('consent_events').insert(row); if(!error) saved=true; }
+    catch(e){ /* network/blocked: fall through to retry */ }
+  }
+  if(!saved){
     submit.disabled=false; submit.textContent='Turn on job alerts';
-    err.textContent='Something went wrong. Please try again in a moment.'; err.style.display='block';
+    err.textContent='Could not save that. Check your connection (or turn off any ad blocker) and try again.';
+    err.style.display='block';
     return;
   }
   $('form-view').style.display='none';
