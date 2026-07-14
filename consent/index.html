@@ -71,8 +71,8 @@ button.cta:disabled{opacity:.45;cursor:not-allowed}
   <span class=glow aria-hidden=true></span>
   <div id=form-view>
     <div class=eyebrow>Job alerts</div>
-    <h1>Get automated job alerts from our preferred networks</h1>
-    <p class=sub>We call you when a real job near you needs your trade, straight from our networks. You must be Sublynk Certified to apply. No lead fees, and we never take a cut of your work.</p>
+    <h1>Get automated job alerts from the Sublynk Certified Network</h1>
+    <p class=sub>We call you when a real job near you needs your trade, from the contractors, businesses, and networks that work with us. You must be Sublynk Certified to apply. No lead fees, and we never take a cut of your work.</p>
 
     <div class=card>
       <h2>What each alert includes</h2>
@@ -81,10 +81,10 @@ button.cta:disabled{opacity:.45;cursor:not-allowed}
         <li><svg viewBox="0 0 24 24" fill=none stroke=currentColor stroke-width=2.5 stroke-linecap=round stroke-linejoin=round><path d="M20 6 9 17l-5-5"/></svg><b>Location</b> and service area</li>
         <li><svg viewBox="0 0 24 24" fill=none stroke=currentColor stroke-width=2.5 stroke-linecap=round stroke-linejoin=round><path d="M20 6 9 17l-5-5"/></svg><b>Timeline</b> and how soon crews are needed</li>
         <li><svg viewBox="0 0 24 24" fill=none stroke=currentColor stroke-width=2.5 stroke-linecap=round stroke-linejoin=round><path d="M20 6 9 17l-5-5"/></svg><b>Pay and terms</b>, and whether it is one-time or ongoing</li>
-        <li><svg viewBox="0 0 24 24" fill=none stroke=currentColor stroke-width=2.5 stroke-linecap=round stroke-linejoin=round><path d="M20 6 9 17l-5-5"/></svg><b>The network</b> offering the job</li>
+        <li><svg viewBox="0 0 24 24" fill=none stroke=currentColor stroke-width=2.5 stroke-linecap=round stroke-linejoin=round><path d="M20 6 9 17l-5-5"/></svg><b>The business or network</b> offering the job</li>
         <li><svg viewBox="0 0 24 24" fill=none stroke=currentColor stroke-width=2.5 stroke-linecap=round stroke-linejoin=round><path d="M20 6 9 17l-5-5"/></svg><b>A direct apply link</b> to finish on your Sublynk Certified profile</li>
       </ul>
-      <div class=nets>Jobs come from vetted managed repair networks on Sublynk, including <b>Accuserve</b>, <b>CORE</b>, <b>Timber Warriors</b>, <b>Altimeter</b>, and <b>Mangrove</b>.</div>
+      <div class=nets>Jobs come from the contractors, businesses, and managed repair networks that work with Sublynk.</div>
     </div>
 
     <div class=card>
@@ -131,11 +131,10 @@ const $=id=>document.getElementById(id);
 
 // The exact consent language shown to and agreed by the contractor. Versioned so we can prove,
 // for any signup, precisely what they agreed to. Any wording change bumps DISCLOSURE_VERSION.
-const DISCLOSURE_VERSION = 'v1.1-2026-07-10';
-const NETWORKS_SHOWN = 'Accuserve, CORE, Timber Warriors, Altimeter, Mangrove';
+const DISCLOSURE_VERSION = 'v1.2-2026-07-11';
+const NETWORKS_SHOWN = '';
 const DISCLOSURE_TEXT =
-  'By checking this box and entering my mobile number, I give my express written consent for Sublynk, on behalf of the '
-+ 'repair networks on its platform (such as Accuserve, CORE, Timber Warriors, Altimeter, and Mangrove), to contact me at '
+  'By checking this box and entering my mobile number, I give my express written consent for Sublynk to contact me at '
 + 'that number with recurring job-alert calls and text messages about job opportunities matched to me. These calls and '
 + 'texts may be made using an automatic telephone dialing system, autodialer, and an artificial, prerecorded, or '
 + 'AI-generated voice. Consent is not a condition of using Sublynk or receiving any job. Message and data rates may apply '
@@ -144,8 +143,7 @@ const DISCLOSURE_TEXT =
 
 // Render the consent label and the fine print from the single source of truth above.
 $('consent-text').innerHTML =
-  'By checking this box and entering my mobile number, I give my <b>express written consent</b> for Sublynk, on behalf of '
-+ 'the repair networks on its platform (such as Accuserve, CORE, Timber Warriors, Altimeter, and Mangrove), to contact me '
+  'By checking this box and entering my mobile number, I give my <b>express written consent</b> for Sublynk to contact me '
 + 'at that number with recurring job-alert <b>calls and text messages</b> about jobs matched to me, including by '
 + '<b>automatic telephone dialing system, autodialer, and artificial, prerecorded, or AI-generated voice</b>. '
 + 'Consent is <b>not a condition</b> of using Sublynk or receiving any job. Message and data rates may apply and frequency varies. '
