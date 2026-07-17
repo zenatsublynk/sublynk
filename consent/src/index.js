@@ -40,6 +40,9 @@ async function notifySlack(env, alert, text) {
         ...alert,
         text: `${alert.username}: ${text}`,
         blocks: [
+          // Leading divider so back-to-back alerts from the same app read as separate alerts,
+          // not one grouped block, when Slack stacks them under a single sender header.
+          { type: 'divider' },
           { type: 'context', elements: [
             { type: 'image', image_url: alert.icon_url, alt_text: alert.username },
             { type: 'mrkdwn', text: `*${alert.username}*` },
@@ -168,7 +171,7 @@ export default {
         if (!saved.ok) { console.error('agreement save failed:', saved.error); return json({ error: 'Could not save that. Please try again.' }, 500); }
 
         ctx.waitUntil(notifySlack(env, ALERTS.subNetwork,
-          `*New sub-network setup agreement — $500*\n${full_name.trim()} · ${company.trim()}\n${email.trim()}\nSend the invoice.`));
+          `*New sub-network setup agreement ($500)*\n${full_name.trim()} · ${company.trim()}\n${email.trim()}\nSend the invoice.`));
         return json({ success: true, message: 'Agreement recorded successfully' });
       } catch (e) {
         console.error('agreement error:', e);
@@ -229,33 +232,40 @@ export default {
           return '';
         };
 
+        // Join the selected choices of a Gravity Forms checkbox group. GF sends each choice under
+        // `<id>.<n>` (entry payload) or `input_<id>.<n>` (raw form post); unchecked arrive as ''.
+        const gather = (id) => Object.entries(data)
+          .filter(([k, v]) => (k.startsWith(`${id}.`) || k.startsWith(`input_${id}.`)) && v != null && String(v).trim())
+          .map(([, v]) => String(v).trim()).join(', ');
+
+        // Aliases cover friendly names (recommended custom mapping) AND the raw Gravity Forms field IDs
+        // of the staging contact form: 1.3/1.6 name, 3 phone, 4 email, 6 role, 7 network size, 8 message, 10 interest.
         let name = pick(['name', 'full_name', 'fullname', 'your-name', 'contact_name']);
         if (!name) {
-          const fn = pick(['first_name', 'fname', 'first', 'your-first-name', 'names[first_name]']);
-          const ln = pick(['last_name', 'lname', 'last', 'your-last-name', 'names[last_name]']);
+          const fn = pick(['first_name', 'fname', 'first', 'your-first-name', 'names[first_name]', '1.3', 'input_1.3']);
+          const ln = pick(['last_name', 'lname', 'last', 'your-last-name', 'names[last_name]', '1.6', 'input_1.6']);
           name = `${fn} ${ln}`.trim();
         }
-        const email = pick(['email', 'your-email', 'email_address', 'your-email-address']);
-        const phone = pick(['phone', 'your-phone', 'tel', 'telephone', 'phone_number']);
+        const email = pick(['email', 'your-email', 'email_address', 'your-email-address', '4', 'input_4']);
+        const phone = pick(['phone', 'your-phone', 'tel', 'telephone', 'phone_number', '3', 'input_3']);
         const company = pick(['company', 'organization', 'business', 'company_name']);
+        const role = pick(['role', 'i_am', 'iam', 'type', 'contact_type']) || gather('6');
+        const interest = pick(['interest', 'interested_in', 'interests', 'goal']) || gather('10');
+        const networkSize = pick(['network_size', 'members', 'network_members', 'members_count', '7', 'input_7']);
         const subject = pick(['subject', 'your-subject', 'topic']);
-        const message = pick(['message', 'your-message', 'msg', 'comments', 'comment', 'body']);
+        const message = pick(['message', 'your-message', 'msg', 'comments', 'comment', 'body', '8', 'input_8']);
 
         // Require at least one meaningful field so empty/garbage POSTs never spam the channel.
         if (!name && !email && !phone && !message) return json({ success: true, skipped: true });
 
-        // Surface any extra fields the aliases missed, so nothing useful is silently dropped.
-        const KNOWN = new Set(['name', 'full_name', 'fullname', 'your-name', 'contact_name', 'first_name', 'fname', 'first', 'your-first-name', 'names[first_name]', 'last_name', 'lname', 'last', 'your-last-name', 'names[last_name]', 'email', 'your-email', 'email_address', 'your-email-address', 'phone', 'your-phone', 'tel', 'telephone', 'phone_number', 'company', 'organization', 'business', 'company_name', 'subject', 'your-subject', 'topic', 'message', 'your-message', 'msg', 'comments', 'comment', 'body', '_wpcf7', '_wpcf7_version', '_wpcf7_locale', '_wpcf7_unit_tag', '_wpcf7_container_post', '_wpcf7_posted_data_hash', 'g-recaptcha-response', '_wpnonce']);
-        const extras = Object.entries(data)
-          .filter(([k, v]) => !KNOWN.has(k) && v != null && String(v).trim() && String(v).length < 200)
-          .map(([k, v]) => `${k}: ${String(v).trim()}`);
-
         let text = '*New website contact*';
         const line1 = [name, company, email, phone].filter(Boolean).join(' · ');
         if (line1) text += `\n${line1}`;
+        if (role) text += `\n*Type:* ${role}`;
+        if (interest) text += `\n*Interested in:* ${interest}`;
+        if (networkSize) text += `\n*Network size:* ${networkSize}`;
         if (subject) text += `\n*Subject:* ${subject}`;
         if (message) text += `\n> ${message.replace(/\n/g, '\n> ')}`;
-        if (extras.length) text += `\n_${extras.join(' · ')}_`;
 
         ctx.waitUntil(notifySlack(env, ALERTS.contact, text));
         return json({ success: true });
