@@ -1634,12 +1634,13 @@ function gatherExcelData() {
   var umbEndo = endo([c('umb_e_ai') && 'additional insured', c('umb_e_ws') && 'waiver of subrogation']);
   var profEndo = endo([c('prof_e_ai') && 'additional insured', c('prof_e_co') && 'additional insured - completed operations', c('prof_e_ws') && 'waiver of subrogation', c('prof_e_pnc') && 'Primary & Non-Contributory']);
   function limStr(id){ var sel=document.getElementById(id); if(!sel) return ''; var val=sel.value; if(val==='Custom'){var cu=document.getElementById(id+'_custom'); val=cu?cu.value.trim():'';} return val; }
+  // WC endorsements = the checkbox endorsements only. Jesse's reference does NOT include an
+  // Employer's Liability each-employee/policy-limit detail here (Chris flagged that addition 2026-07-02).
   var wcEndoParts = [c('wc_e_ai') && 'additional insured', c('wc_e_ws') && 'waiver of subrogation'];
-  if (c('tog_wc')) { var elBits=[]; if (limStr('wc_emp')) elBits.push('each employee ' + limStr('wc_emp')); if (limStr('wc_pol')) elBits.push('policy limit ' + limStr('wc_pol')); if (elBits.length) wcEndoParts.push("Employer's Liability " + elBits.join(', ')); }
   var wcEndo = endo(wcEndoParts);
   var company = v('legalName') || 'Network';
   var insurance = [
-    ['Name', 'Value', 'Field Name', 'Endorsements'],
+    ['Name', 'Value', 'Field Name', ''],
     ['Required Certholder Text', v('certHolder'), '[ORG_NAME]_REQUIRED_TEXT'],
     ['Required Description of Operations', v('descOps'), '[ORG_NAME]_DESCRIPTION_OF_OPS'],
     ['CGL Each Occurence', lim('tog_cgl', 'cgl_occ'), 'CGL_LIMITS.commercial_general_liability_limits_each_occurrence', cglEndo],
