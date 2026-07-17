@@ -16,22 +16,37 @@ function json(body, status = 200) {
 
 // Per-alert Slack identities. Icons are hosted on the GitHub Pages repo so Slack can render them.
 const ICON_BASE = 'https://zenatsublynk.github.io/sublynk/assets/slack';
+const ICON_V = '?v=2'; // bump when the icon art changes, to force Slack to refetch (it caches by URL)
 const ALERTS = {
-  jobAlert:   { username: 'AI Job Alerts',     icon_url: `${ICON_BASE}/emoji-ai-job-alert.png` },
-  subNetwork: { username: 'Sub Network Setup', icon_url: `${ICON_BASE}/emoji-sub-network.png` },
-  intake:     { username: 'Onboarding Intake', icon_url: `${ICON_BASE}/emoji-bench-ready.png` },
-  contact:    { username: 'Website Contact',   icon_url: `${ICON_BASE}/emoji-contact-inbound.png` },
+  jobAlert:   { username: 'AI Job Alerts',     icon_url: `${ICON_BASE}/emoji-ai-job-alert.png${ICON_V}` },
+  subNetwork: { username: 'Sub Network Setup', icon_url: `${ICON_BASE}/emoji-sub-network.png${ICON_V}` },
+  intake:     { username: 'Onboarding Intake', icon_url: `${ICON_BASE}/emoji-bench-ready.png${ICON_V}` },
+  contact:    { username: 'Website Contact',   icon_url: `${ICON_BASE}/emoji-contact-inbound.png${ICON_V}` },
 };
 
 // Fire-and-forget Slack notification to the #gtm incoming webhook. Never throws.
-// `alert` is one of the ALERTS entries (sets the message's name + avatar); `text` is Slack mrkdwn.
+// `alert` is one of the ALERTS entries; `text` is Slack mrkdwn for the body.
+// We set the webhook username/icon override (renders as the avatar where the workspace allows it)
+// AND embed the icon inline via a Block Kit context row, so each alert type stays visually distinct
+// even if the workspace blocks per-message avatar overrides. `text` doubles as the notification
+// fallback that Slack requires whenever `blocks` are present.
 async function notifySlack(env, alert, text) {
   if (!env.SLACK_WEBHOOK_URL) return; // not configured -> silently skip
   try {
     await fetch(env.SLACK_WEBHOOK_URL, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ ...alert, text }),
+      body: JSON.stringify({
+        ...alert,
+        text: `${alert.username}: ${text}`,
+        blocks: [
+          { type: 'context', elements: [
+            { type: 'image', image_url: alert.icon_url, alt_text: alert.username },
+            { type: 'mrkdwn', text: `*${alert.username}*` },
+          ] },
+          { type: 'section', text: { type: 'mrkdwn', text } },
+        ],
+      }),
     });
   } catch (e) {
     console.warn('Slack notify failed:', e && e.message);
