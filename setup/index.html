@@ -116,16 +116,12 @@ button.cta:disabled{opacity:.45;cursor:not-allowed}
   </p>
 </main>
 
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<script src="../app/config.js"></script>
 <script>
 const $=id=>document.getElementById(id);
-const VERSION='v1-2026-07-16';
-const AGREEMENT_TEXT =
-  'I would like to move forward with the Sublynk subcontractor network setup and evaluation described above '
-+ '(audit of my contracts and subcontractor requirements, a plan to bridge the gaps, and setup of my network '
-+ 'and bench in Sublynk), and I authorize Sublynk to send me an invoice for the one-time $500 consulting fee. '
-+ 'No payment is collected on this page, and full terms are provided with the invoice. By checking this box I am agreeing electronically.';
+// This page posts to the Cloudflare Worker (first-party), not directly to Supabase. That avoids
+// ad-blockers that block supabase.co, and the Worker owns the canonical $500 agreement terms + text
+// and pings #gtm on success.
+const WORKER='https://sublynk-consent-worker.zen-426.workers.dev';
 
 $('consent-text').innerHTML =
   'I would like to move forward with the <b>Sublynk network setup and evaluation</b> above, and I authorize Sublynk to '
@@ -147,8 +143,6 @@ if(params.get('name')) fullName.value=params.get('name');
 if(params.get('company')) company.value=params.get('company');
 refresh();
 
-const sb = supabase.createClient(window.SUBLYNK.SUPABASE_URL, window.SUBLYNK.SUPABASE_ANON_KEY);
-
 $('optin').addEventListener('submit', async (ev)=>{
   ev.preventDefault();
   err.style.display='none';
@@ -160,26 +154,30 @@ $('optin').addEventListener('submit', async (ev)=>{
 
   submit.disabled=true; submit.textContent='Submitting...';
 
-  const row={
+  const payload={
     full_name:fullName.value.trim(), company:company.value.trim(), email:email.value.trim(),
-    phone:phone.value.trim()||null, agreed:true, fee_usd:500,
-    agreement_version:VERSION, agreement_text:AGREEMENT_TEXT, source:'network-setup', contact_ref:CONTACT_REF
+    phone:phone.value.trim()||null, agreed:true, contact_ref:CONTACT_REF
   };
 
   try {
     let ok=false, lastErr=null;
     for(let attempt=0; attempt<3 && !ok; attempt++){
       if(attempt) await new Promise(r=>setTimeout(r, 800*attempt));
-      const { error } = await sb.from('consulting_agreements').insert(row);
-      if(!error){ ok=true; break; } lastErr=error;
+      try {
+        const resp = await fetch(WORKER+'/api/agreement', {
+          method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify(payload)
+        });
+        if(resp.ok){ ok=true; break; }
+        lastErr = new Error('server '+resp.status);
+      } catch(e){ lastErr=e; }
     }
-    if(!ok) throw lastErr || new Error('insert failed');
+    if(!ok) throw lastErr || new Error('submit failed');
     $('form-view').style.display='none';
     $('done-view').style.display='block';
     window.scrollTo({top:0,behavior:'smooth'});
   } catch(e){
     submit.disabled=false; submit.textContent='Agree and get started';
-    err.textContent='Could not save that. Check your connection (or turn off any ad blocker) and try again.';
+    err.textContent='Could not save that. Check your connection and try again.';
     err.style.display='block';
     console.error('Submission error:', e && e.message);
   }

@@ -1744,6 +1744,26 @@ function buildReview() {
 var IS_APPSCRIPT = (typeof google !== 'undefined' && google.script && google.script.run);
 var APPS_SCRIPT_URL = 'https://script.google.com/a/macros/sublynk.com/s/AKfycbwg4vlFSqvXprpU5eTqvIpxCmf7dt9Nk4osdeo9MuKU72npfQtDKEmURPHPONfV1qiITA/exec';
 
+// #gtm alert relay (Cloudflare Worker). Fire-and-forget: it never blocks or fails the submission,
+// and it does not touch the Apps Script pipeline above. If it can't reach the Worker, the intake
+// still saves to Sheets/Drive/Notion as normal -- only the Slack heads-up is skipped.
+var ALERT_WORKER_URL = 'https://sublynk-consent-worker.zen-426.workers.dev';
+function notifyIntakeAlert(p) {
+  try {
+    fetch(ALERT_WORKER_URL + '/api/intake', {
+      method: 'POST',
+      // No Content-Type header keeps this a "simple" CORS request, matching the Apps Script call.
+      body: JSON.stringify({
+        company: p.legalName || p.dba || '',
+        contact_name: p.signatoryName || '',
+        email: p.signatoryEmail || p.email || '',
+        city: p.city || '', state: p.state || '',
+        programs: ((p.selectedPrograms && p.selectedPrograms.length ? p.selectedPrograms : p.programs) || []).join(', ')
+      })
+    }).catch(function(){});
+  } catch (e) {}
+}
+
 function callBackend(action, data, onSuccess, onFailure) {
   if (IS_APPSCRIPT) {
     // Running inside Apps Script — use google.script.run directly
@@ -1828,6 +1848,9 @@ function submitForm() {
 
   // Collect form data
   var payload = collectFormData();
+
+  // Ping #gtm that an intake was submitted (fire-and-forget; does not gate the pipeline below).
+  notifyIntakeAlert(payload);
 
   // Upload contract files first (if any), then process submission
   if (uploadedFiles.length > 0) {
