@@ -1505,10 +1505,12 @@ function gatherExcelData() {
     return isNaN(n) ? String(raw).trim() : n;
   }
   function num(str) { var d = String(str || '').replace(/[^0-9]/g, ''); return d === '' ? '' : parseFloat(d); }
-  function lim(tog, id) { return c(tog) ? limitNum(id) : 'Not req.'; }
+  // Not-required coverages are left blank (Jesse's format), NOT "Not req.".
+  function lim(tog, id) { return c(tog) ? limitNum(id) : ''; }
 
   // CTO canonical service categories (rows in Programs / Insurance Detail / Credentials).
-  var CTO_CATEGORIES = ['Water Mitigation','Mold Remediation','Fire Mitigation','Reconstruction','Board Up & Tarping','Tree Removal','Contents Off-site','Contents On-site','Trauma & Biohazard','Commercial Mitigation','Asbestos Abatement','Lead Abatement','Cleaning','Adjusting','Engineering','Inspection & Estimation','Testing','Commercial Reconstruction','Demolition','General Contracting','Remodeling - Full Service','Electrical','HVAC','Plumbing','Cabinetry','Carpentry - Finish & Punch List','Carpentry - Rough','Drywalling','Insulation','Painting','Flooring','Commercial Roofing','Verneer & Flatwork Masonry','Structural Masonry','Residential Roofing','Stucco & Plaster','Window Install & Repair','Designer','Real Estate Agent','Investor or Broker','Property Manager','Insurance Agent','Labor Only'];
+  // Order + names mirror ServiceMaster's Programs tab (Jesse's canonical set). Parser keys on the name.
+  var CTO_CATEGORIES = ['Board Up & Tarping','Tree Removal','Asbestos Abatement','Lead Abatement','Mold Remediation','Trauma & Biohazard','Cleaning','Contents Off-site','Contents On-site','Adjusting','Engineering','Inspection & Estimation','Testing','Demolition','General Contracting','Remodeling - Full Service','Commercial Reconstruction','Reconstruction','Electrical','HVAC','Plumbing','Cabinetry','Carpentry - Finish & Punch List','Carpentry - Rough','Drywalling','Insulation','Painting','Flooring','Commercial Roofing','Residential Roofing','Verneer & Flatwork Masonry','Structural Masonry','Stucco & Plaster','Window Install & Repair','Labor Only','Commercial Mitigation','Fire Mitigation','Water Mitigation','Designer','Real Estate Agent','Investor or Broker','Property Manager','Insurance Agent','Temporary Housing'];
   // Map this form's category labels to the CTO canonical names.
   var CAT_MAP = {
     'Remodeling':'Remodeling - Full Service',
@@ -1534,7 +1536,7 @@ function gatherExcelData() {
 
   // ── Tab: Template (static CTO network-setup dev checklist) ──
   var template = [
-    [null, '0/29 completed  '],
+    [null, '0/30 completed  '],
     [null, 'Subfloor Network Setup Checklist'],
     ['✓', 'Task'],
     ['General'],
@@ -1555,6 +1557,7 @@ function gatherExcelData() {
     [false, 'Add Required Desciption of Operations (core/programs/[org_name].py)'],
     [false, 'Add Cert Holder object (core/programs/[org_name].py -> [ORG_NAME]_CERTHOLDERS)'],
     [false, 'Create Sample COI PDF and upload to Django admin'],
+    [false, 'Make Sample COI Public in S3 Bucket'],
     [false, 'Add COI Upload Request template (templates/insurance/invitations/email/[ORG_NAME]/network_requirements.txt)'],
     [false, 'Add Commercial General Liabilty Limits (core/programs/[org_name].py -> CGL_LIMITS)'],
     [false, 'Add Pollution Liabilty Limits (core/programs/[org_name].py -> POLLUTION_LIMITS)'],
@@ -1578,6 +1581,7 @@ function gatherExcelData() {
   // ── Tab: Demographic Info ──
   var demographics = [
     ['Name', 'Value', 'Field Name'],
+    ['Org ID', '', '[ORG_NAME]_ORGANIZATION_ID'],
     ['Legal Name', v('legalName'), 'business_legal_name'],
     ['DBA Name', v('dba'), 'doing_business_as_name'],
     ['Tax ID', num(v('taxId')), 'tax_id_number'],
@@ -1589,33 +1593,34 @@ function gatherExcelData() {
     ['Address City', v('city'), 'city'],
     ['Address State', v('state'), 'state_code'],
     ['Address Zipcode', num(v('zip')), 'zip_code'],
-    ['Primary Email', v('primaryEmail')],
-    ['Public Join Requests', 'No']
+    ['Primary Email', v('primaryEmail'), ''],
+    ['Public Join Requests', false, ''],
+    ['Credentialing Email', v('primaryEmail'), '']
   ];
 
   // ── Tab: FileLocations ──
   var coiNames = coiFiles.map(function(f) { return f.name; }).join(', ');
   var fileLocations = [
     ['Name', 'Value', 'Field Name'],
-    ['Network Requirements PDF', ''],
-    ['Network Example COI', coiNames]
+    ['Network Requirements PDF', '', ''],
+    ['Network Example COI ', coiNames, '']
   ];
 
   // ── Tab: Contracts ──
   var contracts = [
-    ['Contract Name', 'Contract Type', 'Pandadoc Template ID', 'Contract Order'],
-    ['W9 Form', 'W9 Form', '', 99]
+    ['Contract Name', 'Contract Type', 'Pandadoc Template ID', 'Contract Order']
   ];
   uploadedFiles.forEach(function(f, i) {
     contracts.push([f.name.replace(/\.(docx?|pdf)$/i, ''), 'Base Agreement', '', i + 1]);
   });
+  contracts.push(['W9 Form 2024', 'W9 Form', '', 99]);
 
   // ── Tab: Programs (matrix: program columns x canonical category rows) ──
   var programs = [];
   programs.push(['Program Name'].concat(selectedProgs.map(function(p) { return p.name; })));
   programs.push(['Program Description'].concat(selectedProgs.map(function() { return ''; })));
   programs.push(['Program Order'].concat(selectedProgs.map(function(_, i) { return i + 1; })));
-  programs.push(['Required Contract Types'].concat(selectedProgs.map(function() { return 'W9 Form'; })));
+  programs.push(['Required Contract Types'].concat(selectedProgs.map(function() { return 'W9 Form, Base Agreement'; })));
   programs.push(['Service Category']);
   CTO_CATEGORIES.forEach(function(cc) {
     var row = [cc];
@@ -1627,85 +1632,93 @@ function gatherExcelData() {
   });
 
   // ── Tab: Insurance ──
+  // Endorsement labels mirror Jesse's reference style: Title Case, no CG form codes.
   function endo(parts) { return parts.filter(Boolean).join(', '); }
-  var cglEndo = endo([c('cgl_e_ai') && 'additional insured (CG2010)', c('cgl_e_co') && 'additional insured - completed operations (CG2037)', c('cgl_e_ws') && 'Waiver of subrogation (CG2404)', c('cgl_e_pnc') && 'Primary & Non-Contributory', c('cgl_e_ppa') && 'Per-project aggregate (CG2503)']);
-  var cplEndo = endo([c('cpl_e_ai') && 'additional insured', c('cpl_e_co') && 'additional insured - completed operations', c('cpl_e_ws') && 'waiver of subrogation', c('cpl_e_pnc') && 'Primary & Non-Contributory']);
-  var autoEndo = endo([c('auto_e_ai') && 'additional insured', c('auto_e_ws') && 'waiver of subrogation']);
-  var umbEndo = endo([c('umb_e_ai') && 'additional insured', c('umb_e_ws') && 'waiver of subrogation']);
-  var profEndo = endo([c('prof_e_ai') && 'additional insured', c('prof_e_co') && 'additional insured - completed operations', c('prof_e_ws') && 'waiver of subrogation', c('prof_e_pnc') && 'Primary & Non-Contributory']);
+  var cglEndo = endo([c('cgl_e_ai') && 'Additional Insured', c('cgl_e_co') && 'Additional Insured - Completed Operations', c('cgl_e_ws') && 'Waiver of Subrogation', c('cgl_e_pnc') && 'Primary & Non-Contributory', c('cgl_e_ppa') && 'Per-Project Aggregate']);
+  var cplEndo = endo([c('cpl_e_ai') && 'Additional Insured', c('cpl_e_co') && 'Additional Insured - Completed Operations', c('cpl_e_ws') && 'Waiver of Subrogation', c('cpl_e_pnc') && 'Primary & Non-Contributory']);
+  var autoEndo = endo([c('auto_e_ai') && 'Additional Insured', c('auto_e_ws') && 'Waiver of Subrogation']);
+  var umbEndo = endo([c('umb_e_ai') && 'Additional Insured', c('umb_e_ws') && 'Waiver of Subrogation']);
+  var profEndo = endo([c('prof_e_ai') && 'Additional Insured', c('prof_e_co') && 'Additional Insured - Completed Operations', c('prof_e_ws') && 'Waiver of Subrogation', c('prof_e_pnc') && 'Primary & Non-Contributory']);
   function limStr(id){ var sel=document.getElementById(id); if(!sel) return ''; var val=sel.value; if(val==='Custom'){var cu=document.getElementById(id+'_custom'); val=cu?cu.value.trim():'';} return val; }
-  // WC endorsements = the checkbox endorsements only. Jesse's reference does NOT include an
-  // Employer's Liability each-employee/policy-limit detail here (Chris flagged that addition 2026-07-02).
-  var wcEndoParts = [c('wc_e_ai') && 'additional insured', c('wc_e_ws') && 'waiver of subrogation'];
-  var wcEndo = endo(wcEndoParts);
-  var company = v('legalName') || 'Network';
+  // WC endorsements = the checkbox endorsements only. Employer's Liability each-employee/policy-limit
+  // detail is NOT in Jesse's format; it goes in the additive "Sublynk Detail" tab instead.
+  var wcEndo = endo([c('wc_e_ai') && 'Additional Insured', c('wc_e_ws') && 'Waiver of Subrogation']);
   var insurance = [
-    ['Name', 'Value', 'Field Name', ''],
-    ['Required Certholder Text', v('certHolder'), '[ORG_NAME]_REQUIRED_TEXT'],
-    ['Required Description of Operations', v('descOps'), '[ORG_NAME]_DESCRIPTION_OF_OPS'],
+    ['Name', 'Value', 'Field Name', 'Endorsements'],
+    ['Required Certholder Text', v('certHolder'), '[ORG_NAME]_REQUIRED_TEXT', ''],
+    ['Required Description of Operations', v('descOps'), '[ORG_NAME]_DESCRIPTION_OF_OPS', ''],
     ['CGL Each Occurence', lim('tog_cgl', 'cgl_occ'), 'CGL_LIMITS.commercial_general_liability_limits_each_occurrence', cglEndo],
-    ['CGL General Aggregate', lim('tog_cgl', 'cgl_agg'), 'CGL_LIMITS.commercial_general_liability_limits_general_aggregate'],
-    ['CGL Personal & Advertising Injury', lim('tog_cgl', 'cgl_pai'), 'CGL_LIMITS.commercial_general_liability_limits_personal_and_advertising_injury'],
-    ['CGL Completed Ops Aggregate', lim('tog_cgl', 'cgl_coagg'), 'CGL_LIMITS.commercial_general_liability_products_completed_operations_aggregate'],
+    ['CGL General Aggregate', lim('tog_cgl', 'cgl_agg'), 'CGL_LIMITS.commercial_general_liability_limits_general_aggregate', ''],
+    ['CGL Personal & Advertising Injury', lim('tog_cgl', 'cgl_pai'), 'CGL_LIMITS.commercial_general_liability_limits_personal_and_advertising_injury', ''],
+    ['CGL Completed Ops Aggregate', lim('tog_cgl', 'cgl_coagg'), 'CGL_LIMITS.commercial_general_liability_products_completed_operations_aggregate', ''],
     ['CPL Each Occurence', lim('tog_cpl', 'cpl_occ'), 'POLLUTION_LIMITS.pollution_limits_each_occurrence', cplEndo],
     ['Auto Combined Single Limit', lim('tog_auto', 'auto_csl'), 'AUTOMOBILE_LIMITS.automobile_liability_limits_combined_single_limit', autoEndo],
     ["Worker's Comp Each Accident", lim('tog_wc', 'wc_ea'), 'WC_LIMITS.workers_compensation_and_employers_liability_limits_each_accident', wcEndo],
-    ['Bailees Each Occurence', lim('tog_bail', 'bail_occ'), 'BAILEES_LIMITS.bailees_limits_each_occurrence'],
-    ['Umbrealla Each Occurence', lim('tog_umb', 'umb_occ'), 'UMBRELLA_LIMITS.excess_or_umbrella_liability_limits_each_occurrence', umbEndo],
-    ['Umbrealla Aggregate', lim('tog_umb', 'umb_agg'), 'UMBRELLA_LIMITS.excess_or_umbrella_liability_limits_aggregate'],
+    ['Bailees Each Occurence', lim('tog_bail', 'bail_occ'), 'BAILEES_LIMITS.bailees_limits_each_occurrence', ''],
+    ['Umbrella Each Occurence', lim('tog_umb', 'umb_occ'), 'UMBRELLA_LIMITS.excess_or_umbrella_liability_limits_each_occurrence', umbEndo],
+    ['Umbrella Aggregate', lim('tog_umb', 'umb_agg'), 'UMBRELLA_LIMITS.excess_or_umbrella_liability_limits_aggregate', ''],
     ['Professional Each Occurence', lim('tog_prof', 'prof_occ'), 'PROFESSIONAL_LIABILITY_LIMITS.professional_limits_each_occurrence', profEndo],
-    ['Professional Aggregate', lim('tog_prof', 'prof_agg'), 'PROFESSIONAL_LIABILITY_LIMITS.professional_limits_general_aggregate'],
-    ['Sample COI', coiNames],
-    [],
-    [],
-    ['COI Request email template:', company + ' COI Request email template']
+    ['Professional Aggregate', lim('tog_prof', 'prof_agg'), 'PROFESSIONAL_LIABILITY_LIMITS.professional_limits_general_aggregate', ''],
+    ['Email Copy for broker request email', '', '', '']
   ];
 
-  // ── Tab: Insurance Detail (matrix: canonical category rows x limit columns, 'x' = required) ──
-  var idCols = ['CGL Each Occurence', 'CGL General Aggregate', 'CGL Personal & Advertising Injury', 'CGL Completed Ops Aggregate', 'CPL Each Occurence', 'Auto Combined Single Limit', "Worker's Comp Each Accident", 'Bailees Each Occurence', 'Umbrealla Each Occurence', 'Umbrealla Aggregate', 'Professional Each Occurence', 'Professional Aggregate'];
+  // ── Tab: Insurance Detail (matrix: category rows x 7 coverage columns, 'x' = required) ──
+  var idCols = ['CGL', 'CPL', 'Auto', "Worker's Comp", 'Bailees', 'Umbrella', 'Professional'];
   var insuranceDetail = [['Service Category'].concat(idCols)];
   CTO_CATEGORIES.forEach(function(cc) {
     var catObj = selCanon[cc];
     var row = [cc];
-    if (!catObj) { idCols.forEach(function() { row.push(null); }); insuranceDetail.push(row); return; }
+    if (!catObj) { idCols.forEach(function() { row.push(''); }); insuranceDetail.push(row); return; }
     var cgl = lineRequired(catObj, 'cgl'), cpl = lineRequired(catObj, 'cpl'), auto = lineRequired(catObj, 'auto'), wc = lineRequired(catObj, 'wc'), bail = lineRequired(catObj, 'bail'), umb = lineRequired(catObj, 'umb'), prof = lineRequired(catObj, 'prof');
-    [cgl, cgl, cgl, cgl, cpl, auto, wc, bail, umb, umb, prof, prof].forEach(function(m) { row.push(m ? 'x' : null); });
+    [cgl, cpl, auto, wc, bail, umb, prof].forEach(function(m) { row.push(m ? 'x' : ''); });
     insuranceDetail.push(row);
   });
 
-  // ── Tab: Background Checks ──
+  // ── Tab: Background Checks (Jesse's 2-column format; Tier levels are his to assign) ──
   var bgEnabled = c('tog_bgcheck');
   var validYears = '';
   if (bgEnabled) { var vy = (radio('bgValidity') || '').replace(/[^0-9]/g, ''); validYears = vy ? parseFloat(vy) : ''; }
+  var backgroundChecks = [
+    ['BGC Requirement Type', 'BGC Valid Years'],
+    ['Minimum One Clear Check Required', validYears],
+    ['Role Type', 'Required Level'],
+    ['Employee', ''],
+    ['Owner', ''],
+    ['Subcontractor', ''],
+    ['Other', '']
+  ];
+  // Screening + drug detail the form captures (Jesse's format omits it) -> additive "Sublynk Detail" tab.
   var drugOn = c('scr_drug');
-  var drugVal = drugOn ? 'Same' : '';
-  var backgroundChecks = [['BGC Requirement Type', 'BGC Valid Years', 'Drug Screen Valid Years']];
-  if (bgEnabled) {
-    if (c('bg_owners')) backgroundChecks.push(['All Owners Required', validYears, drugVal]);
-    if (c('bg_creds')) backgroundChecks.push(['All Credential Holders Required', validYears, drugVal]);
-    if (c('bg_employees')) backgroundChecks.push(['All Employees Required', validYears, drugVal]);
-    backgroundChecks.push(['Minimum One Clear Check Required', validYears, drugVal]);
-  }
   var SCREEN_LABELS = [['scr_county','County Criminal Search'],['scr_countycivil','County Civil Search'],['scr_fedcrim','Federal Criminal Search'],['scr_fedcivil','Federal Civil Search'],['scr_ofac','Global Watchlist Search'],['scr_natcrim','National Criminal Search'],['scr_sex','Sex Offender Search'],['scr_ssn','Ssn Trace'],['scr_mvr','Motor Vehicle Report'],['scr_credit','Credit Report'],['scr_edu','Education Verification'],['scr_emp','Employment Verification']];
   var screenings = SCREEN_LABELS.filter(function(s) { return c(s[0]); }).map(function(s) { return s[1]; });
   if (drugOn) {
     var subs = [['drug_cocaine','Cocaine'],['drug_amphet','Amphetamines'],['drug_opiates','Opiates'],['drug_pcp','PCP'],['drug_barb','Barbiturates'],['drug_benzo','Benzodiazepines'],['drug_meth','Methadone']].filter(function(s){return c(s[0]);}).map(function(s){return s[1];});
     screenings.push('Drug Screening' + (subs.length ? ' (' + subs.join(', ') + ')' : ''));
   }
-  if (bgEnabled) {
-    backgroundChecks.push([]);
-    backgroundChecks.push(['Role Type', 'Required Level', 'Screenings']);
-    backgroundChecks.push(['All Required Roles', '', screenings.join('\n')]);
-  }
 
-  // ── Tab: Credentials (canonical category rows + per-category credential text) ──
+  // ── Tab: Credentials (category rows; each credential in its own column, mirroring Jesse) ──
   var credentials = [['Service Category', 'Credential Requirements']];
   CTO_CATEGORIES.forEach(function(cc) {
     var catObj = selCanon[cc];
-    credentials.push([cc, (catObj && catObj.credentials) ? catObj.credentials : '']);
+    var credText = (catObj && catObj.credentials) ? catObj.credentials : '';
+    var creds = credText.split(/[\n,]+/).map(function(s) { return s.trim(); }).filter(Boolean);
+    credentials.push([cc].concat(creds));
   });
 
-  return { template: template, demographics: demographics, fileLocations: fileLocations, contracts: contracts, programs: programs, insurance: insurance, insuranceDetail: insuranceDetail, backgroundChecks: backgroundChecks, credentials: credentials };
+  // ── Tab: Sublynk Detail (ADDITIVE, not part of Jesse's network-setup format; safe to delete) ──
+  // Captures intake data Jesse's template omits: background-check screening detail + WC Employer's Liability.
+  var sublynkDetail = [
+    ['Sublynk Detail', 'Value'],
+    ['Note', 'Additive tab, not part of the network setup format. Safe to delete.'],
+    ['Background check applies to', [c('bg_owners') && 'Owners', c('bg_creds') && 'Credential holders', c('bg_employees') && 'Employees'].filter(Boolean).join(', ')],
+    ['Background check valid years', validYears],
+    ['Background check screenings', screenings.join(', ')],
+    ['Drug screening', drugOn ? 'Yes' : 'No'],
+    ["WC Employer's Liability - each employee", c('tog_wc') ? limStr('wc_emp') : ''],
+    ["WC Employer's Liability - policy limit", c('tog_wc') ? limStr('wc_pol') : '']
+  ];
+
+  return { template: template, demographics: demographics, fileLocations: fileLocations, contracts: contracts, programs: programs, insurance: insurance, insuranceDetail: insuranceDetail, backgroundChecks: backgroundChecks, credentials: credentials, sublynkDetail: sublynkDetail };
 }
 
 // ─── Build Review ───
@@ -1824,7 +1837,8 @@ function downloadCSV() {
   aoa('Insurance', x.insurance, [{ wch: 34 }, { wch: 40 }, { wch: 64 }, { wch: 60 }]);
   aoa('Insurance Detail', x.insuranceDetail, x.insuranceDetail[0].map(function () { return { wch: 22 }; }));
   aoa('Background Checks', x.backgroundChecks, [{ wch: 30 }, { wch: 16 }, { wch: 60 }]);
-  aoa('Credentials', x.credentials, [{ wch: 30 }, { wch: 60 }]);
+  aoa('Credentials', x.credentials, [{ wch: 30 }, { wch: 34 }, { wch: 34 }, { wch: 34 }, { wch: 34 }, { wch: 34 }, { wch: 34 }, { wch: 34 }]);
+  aoa('Sublynk Detail', x.sublynkDetail, [{ wch: 42 }, { wch: 72 }]);
 
   const companyName = (document.getElementById('legalName')?.value || 'Unknown').trim() || 'Unknown';
   const dateStr = new Date().toISOString().slice(0, 10);
