@@ -1,0 +1,189 @@
+<!doctype html>
+<html lang=en>
+<head>
+<meta charset=utf-8>
+<meta name=viewport content="width=device-width,initial-scale=1">
+<title>Sublynk network setup</title>
+<meta name=robots content="noindex">
+<link rel=icon type="image/svg+xml" href="../og/favicon.svg">
+<link rel=icon type="image/png" href="../og/favicon.png">
+<link rel=preconnect href="https://fonts.googleapis.com">
+<link rel=preconnect href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel=stylesheet>
+<style>
+:root{--orange:#DD6336;--orange-deep:#B44A22;--navy:#0D142A;--ink:#0C0A09;--paper:#FAF8F5;
+  --surface:#fff;--surface-2:#F3EFE9;--muted:#6E6862;--faint:#938C84;--border:#E8E3DC;--green:#2F7D54;--green-bg:#E6F1E9}
+*{box-sizing:border-box;margin:0}
+body{font-family:Inter,-apple-system,'Segoe UI',Arial,sans-serif;background:var(--paper);color:var(--ink);
+  -webkit-font-smoothing:antialiased;line-height:1.6}
+.bar{background:var(--navy);padding:13px 0;position:sticky;top:0;z-index:10}
+.wrap{max-width:640px;margin:0 auto;padding:0 22px}
+.bar a{display:inline-flex;align-items:center}
+.bar img{height:24px;width:auto;display:block}
+main{padding:30px 0 60px;position:relative;overflow:hidden}
+.glow{position:absolute;top:0;left:50%;transform:translateX(-50%);width:620px;height:300px;max-width:96%;background:var(--orange);opacity:.07;filter:blur(120px);border-radius:50%;pointer-events:none;z-index:0}
+main>:not(.glow){position:relative;z-index:1}
+.eyebrow{font-size:12px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--orange-deep)}
+h1{font-size:30px;line-height:1.15;font-weight:800;letter-spacing:-.02em;color:var(--navy);margin:8px 0 10px;text-wrap:balance}
+.sub{font-size:17px;color:var(--muted);max-width:54ch}
+.card{background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:22px 22px;margin-top:22px;
+  box-shadow:0 1px 3px rgba(13,20,42,.05)}
+h2{font-size:15px;font-weight:800;color:var(--navy);margin-bottom:12px}
+.get{list-style:none}
+.get li{position:relative;padding-left:34px;margin:14px 0;font-size:14.5px;color:var(--ink)}
+.get li .n{position:absolute;left:0;top:0;width:24px;height:24px;border-radius:7px;background:var(--navy);color:#fff;
+  font-size:12px;font-weight:800;display:flex;align-items:center;justify-content:center}
+.get b{color:var(--navy)}
+.fee{margin-top:16px;font-size:13.5px;color:var(--muted);background:var(--surface-2);border-radius:10px;padding:12px 14px}
+.fee b{color:var(--navy)}
+label.fld{display:block;margin:14px 0 0}
+label.fld span{display:block;font-size:12.5px;font-weight:600;color:var(--navy);margin-bottom:5px}
+label.fld .opt{color:var(--faint);font-weight:400}
+input[type=text],input[type=tel],input[type=email]{width:100%;font:inherit;font-size:15px;padding:11px 13px;
+  border:1px solid var(--border);border-radius:10px;background:#fff;color:var(--ink);outline:none}
+input:focus{border-color:var(--orange);box-shadow:0 0 0 3px rgba(221,99,54,.12)}
+.hp{position:absolute;left:-9999px;height:0;overflow:hidden}
+.consent{display:flex;gap:11px;align-items:flex-start;margin-top:20px;background:var(--surface-2);
+  border:1px solid var(--border);border-radius:12px;padding:14px 15px}
+.consent input{margin-top:3px;width:18px;height:18px;accent-color:var(--orange);flex:0 0 auto;cursor:pointer}
+.consent label{font-size:13px;color:var(--ink);line-height:1.55}
+.consent a{color:var(--orange-deep)}
+button.cta{width:100%;margin-top:18px;font:inherit;font-size:16px;font-weight:700;color:#fff;background:var(--orange);
+  border:0;border-radius:12px;padding:15px;cursor:pointer;transition:.12s}
+button.cta:hover{background:var(--orange-deep)}
+button.cta:disabled{opacity:.45;cursor:not-allowed}
+.fine{font-size:12px;color:var(--faint);margin-top:14px;line-height:1.5}
+.err{color:#B42318;font-size:13px;margin-top:10px;font-weight:600;display:none}
+.done{display:none;text-align:center;padding:26px 0}
+.done .ok{width:56px;height:56px;border-radius:50%;background:var(--green-bg);color:var(--green);
+  display:flex;align-items:center;justify-content:center;margin:0 auto 16px}
+.done h2{font-size:22px;margin-bottom:8px}
+.done p{color:var(--muted);font-size:15px;max-width:46ch;margin:0 auto 8px}
+.foot{color:var(--faint);font-size:12px;text-align:center;margin-top:30px;line-height:1.6}
+.foot a{color:var(--muted)}
+</style>
+</head>
+<body>
+<div class=bar><div class=wrap><a href="https://zenatsublynk.github.io/sublynk/" aria-label="Sublynk home"><img src="https://app.sublynk.com/assets/logo-white-D7N9haAe.png" alt="Sublynk"></a></div></div>
+
+<main class=wrap>
+  <span class=glow aria-hidden=true></span>
+  <div id=form-view>
+    <div class=eyebrow>Network setup</div>
+    <h1>Get your subcontractor network set up on Sublynk</h1>
+    <p class=sub>A focused consulting engagement: we evaluate your contracts and subcontractor requirements, then stand up your network and bench in Sublynk so you are ready to onboard. One-time $500 fee.</p>
+
+    <div class=card>
+      <h2>What you get</h2>
+      <ul class=get>
+        <li><span class=n>1</span><b>Audit.</b> We review your contracts, subcontractor requirements, and current compliance setup.</li>
+        <li><span class=n>2</span><b>Plan.</b> We map the gaps and give you a clear plan to bridge them.</li>
+        <li><span class=n>3</span><b>Grow.</b> We set up your network and subcontractor bench in Sublynk, ready to onboard your subs and go.</li>
+      </ul>
+      <div class=fee><b>One-time $500 consulting fee.</b> We will email you an invoice, no card is entered or charged on this page. This just confirms you would like to move forward.</div>
+    </div>
+
+    <div class=card>
+      <h2>Confirm and get started</h2>
+      <form id=optin autocomplete=on novalidate>
+        <label class=fld><span>Full name</span><input type=text id=full_name autocomplete=name></label>
+        <label class=fld><span>Company / network name</span><input type=text id=company autocomplete=organization></label>
+        <label class=fld><span>Email</span><input type=email id=email autocomplete=email></label>
+        <label class=fld><span>Phone <span class=opt>(optional)</span></span><input type=tel id=phone autocomplete=tel inputmode=tel></label>
+        <div class=hp aria-hidden=true><label>Do not fill<input type=text id=website tabindex=-1 autocomplete=off></label></div>
+
+        <div class=consent>
+          <input type=checkbox id=consent>
+          <label for=consent id=consent-text></label>
+        </div>
+
+        <div class=err id=err></div>
+        <button type=submit class=cta id=submit disabled>Agree and get started</button>
+        <p class=fine id=fine></p>
+      </form>
+    </div>
+  </div>
+
+  <div id=done-view class=done>
+    <div class=ok><svg viewBox="0 0 24 24" fill=none stroke=currentColor stroke-width=2.5 stroke-linecap=round stroke-linejoin=round style="width:28px;height:28px"><path d="M20 6 9 17l-5-5"/></svg></div>
+    <h2>You are all set</h2>
+    <p>Thanks. We will email your invoice for the one-time $500 fee and start your audit right away. We will be in touch shortly.</p>
+  </div>
+
+  <p class=foot>
+    Sublynk, the vetted contractor network. This page confirms you would like to proceed; full terms are provided with your invoice.<br>
+    <a href="https://www.sublynk.com/privacypolicy">Privacy Policy</a> &middot; <a href="https://www.sublynk.com/terms-of-service">Terms of Service</a>
+  </p>
+</main>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="../app/config.js"></script>
+<script>
+const $=id=>document.getElementById(id);
+const VERSION='v1-2026-07-16';
+const AGREEMENT_TEXT =
+  'I would like to move forward with the Sublynk subcontractor network setup and evaluation described above '
++ '(audit of my contracts and subcontractor requirements, a plan to bridge the gaps, and setup of my network '
++ 'and bench in Sublynk), and I authorize Sublynk to send me an invoice for the one-time $500 consulting fee. '
++ 'No payment is collected on this page, and full terms are provided with the invoice. By checking this box I am agreeing electronically.';
+
+$('consent-text').innerHTML =
+  'I would like to move forward with the <b>Sublynk network setup and evaluation</b> above, and I authorize Sublynk to '
++ 'send an invoice for the <b>one-time $500 consulting fee</b>. No payment is collected here; full terms come with the '
++ 'invoice. By checking this box I am agreeing electronically.';
+$('fine').textContent = 'No card is entered or charged on this page. You will receive an invoice by email.';
+
+const fullName=$('full_name'), company=$('company'), email=$('email'), phone=$('phone'), consent=$('consent'), submit=$('submit'), err=$('err');
+const emailOK=()=>/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email.value.trim());
+function refresh(){ submit.disabled = !(fullName.value.trim() && company.value.trim() && emailOK() && consent.checked); }
+[fullName,company,email,phone].forEach(el=>el.addEventListener('input', refresh));
+consent.addEventListener('change', refresh);
+
+// Personalized links prefill: /setup?e=<email>&name=<name>&company=<company>&c=<ref>
+const params=new URLSearchParams(location.search);
+const CONTACT_REF=params.get('c')||null;
+if(params.get('e')) email.value=params.get('e');
+if(params.get('name')) fullName.value=params.get('name');
+if(params.get('company')) company.value=params.get('company');
+refresh();
+
+const sb = supabase.createClient(window.SUBLYNK.SUPABASE_URL, window.SUBLYNK.SUPABASE_ANON_KEY);
+
+$('optin').addEventListener('submit', async (ev)=>{
+  ev.preventDefault();
+  err.style.display='none';
+  if($('website').value){ return; }                       // honeypot
+  if(!fullName.value.trim()){ err.textContent='Please enter your full name.'; err.style.display='block'; return; }
+  if(!company.value.trim()){ err.textContent='Please enter your company or network name.'; err.style.display='block'; return; }
+  if(!emailOK()){ err.textContent='Please enter a valid email address.'; err.style.display='block'; return; }
+  if(!consent.checked){ err.textContent='Please check the box to confirm.'; err.style.display='block'; return; }
+
+  submit.disabled=true; submit.textContent='Submitting...';
+
+  const row={
+    full_name:fullName.value.trim(), company:company.value.trim(), email:email.value.trim(),
+    phone:phone.value.trim()||null, agreed:true, fee_usd:500,
+    agreement_version:VERSION, agreement_text:AGREEMENT_TEXT, source:'network-setup', contact_ref:CONTACT_REF
+  };
+
+  try {
+    let ok=false, lastErr=null;
+    for(let attempt=0; attempt<3 && !ok; attempt++){
+      if(attempt) await new Promise(r=>setTimeout(r, 800*attempt));
+      const { error } = await sb.from('consulting_agreements').insert(row);
+      if(!error){ ok=true; break; } lastErr=error;
+    }
+    if(!ok) throw lastErr || new Error('insert failed');
+    $('form-view').style.display='none';
+    $('done-view').style.display='block';
+    window.scrollTo({top:0,behavior:'smooth'});
+  } catch(e){
+    submit.disabled=false; submit.textContent='Agree and get started';
+    err.textContent='Could not save that. Check your connection (or turn off any ad blocker) and try again.';
+    err.style.display='block';
+    console.error('Submission error:', e && e.message);
+  }
+});
+</script>
+</body>
+</html>
