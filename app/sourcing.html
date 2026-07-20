@@ -1,0 +1,202 @@
+<!doctype html>
+<html lang=en>
+<head>
+<meta charset=utf-8>
+<meta name=viewport content="width=device-width,initial-scale=1">
+<title>Sublynk — AI Sourcing</title>
+<link rel=icon type="image/svg+xml" href="../og/favicon.svg">
+<link rel=icon type="image/png" href="../og/favicon.png">
+<link rel=preconnect href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel=stylesheet>
+<style>
+:root{--orange:#DD6336;--orange-deep:#c14d24;--navy:#0D142A;--panel:#141d33;--panel2:#0f172e;--bd:#24304d;--gray:#8b97a8;--ink:#e8edf4;--green:#43A46D}
+*{box-sizing:border-box;margin:0}
+body{font-family:Inter,-apple-system,'Segoe UI',Arial,sans-serif;background:var(--navy);color:var(--ink);-webkit-font-smoothing:antialiased}
+.topbar{background:#0a1020;border-bottom:1px solid var(--bd);display:flex;align-items:center;gap:12px;padding:0 22px;height:58px;position:sticky;top:0;z-index:5}
+.topbar img.logo{height:22px}
+.pill{font-size:12px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;padding:5px 12px;border-radius:999px;text-decoration:none;border:1px solid transparent;cursor:pointer}
+.pill.active{color:var(--orange);border-color:rgba(221,99,54,.4)}
+.pill.link{color:var(--gray)}.pill.link:hover{color:var(--ink)}
+.topbar .spacer{flex:1}
+.signout{background:none;border:1px solid var(--bd);color:var(--gray);font:inherit;font-size:12px;border-radius:8px;padding:6px 11px;cursor:pointer}
+.wrap{max-width:1320px;margin:0 auto;padding:22px 22px 40px}
+h1{font-size:20px;font-weight:800}.sub{color:var(--gray);font-size:13px;margin:3px 0 18px}
+.cards{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:16px}
+.card{background:var(--panel);border:1px solid var(--bd);border-top:3px solid var(--bd);border-radius:12px;padding:12px 18px;min-width:120px;cursor:pointer}
+.card:hover{border-color:#33415f}.card.act{border-top-color:var(--orange)}
+.card b{font-size:21px;font-weight:800;font-variant-numeric:tabular-nums}.card .l{font-size:11px;color:var(--gray);text-transform:uppercase;letter-spacing:.4px;margin-top:2px}
+.bar{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-bottom:14px}
+select,.search input{font:inherit;font-size:13px;padding:8px 11px;border:1px solid var(--bd);border-radius:9px;background:var(--panel);color:var(--ink);outline:none}
+select:focus,.search input:focus{border-color:var(--orange)}
+.search{position:relative}.search input{min-width:240px}
+button.mini{font:inherit;font-size:13px;font-weight:600;padding:7px 13px;border:1px solid var(--bd);border-radius:9px;background:var(--panel);color:var(--ink);cursor:pointer}
+button.mini:hover{border-color:#33415f}
+.tablecard{background:var(--panel);border:1px solid var(--bd);border-radius:14px;overflow:hidden}
+table{width:100%;border-collapse:collapse;font-size:13.5px}
+th,td{text-align:left;padding:10px 15px;border-bottom:1px solid #1c2740;vertical-align:middle}
+th{background:#111a30;color:var(--gray);font-size:11px;text-transform:uppercase;letter-spacing:.4px;font-weight:600}
+tbody tr.jobrow:hover td{background:#111a2e;cursor:pointer}td b{color:#fff;font-weight:600}
+a{color:var(--orange);text-decoration:none}a:hover{text-decoration:underline}
+.tag{font-size:11px;font-weight:700;padding:2px 9px;border-radius:999px;text-transform:capitalize;display:inline-block}
+.tag.roofing{background:rgba(221,99,54,.16);color:#e59b78}.tag.remodeling{background:rgba(0,142,255,.15);color:#6cb6ff}
+.tag.restoration{background:rgba(67,164,109,.16);color:#5fce8f}.tag.multi{background:rgba(139,151,168,.15);color:var(--gray)}
+.net{font-size:11px;font-weight:700;padding:2px 9px;border-radius:999px;background:rgba(139,151,168,.15);color:#b9c2d0;display:inline-block}
+.cand{font-weight:800;color:#fff;font-variant-numeric:tabular-nums}.cand small{font-weight:600;color:var(--gray)}
+.zero{color:#556}.muted{color:#556}
+.foot{display:flex;justify-content:space-between;align-items:center;margin-top:14px;color:var(--gray);font-size:13px}
+.viewbtn{font:inherit;font-size:12px;font-weight:600;padding:5px 10px;border:1px solid var(--bd);border-radius:8px;background:var(--panel2);color:var(--ink);cursor:pointer}
+.modal{position:fixed;inset:0;background:rgba(4,7,15,.66);display:none;align-items:flex-start;justify-content:center;z-index:20;padding:34px 16px;overflow:auto}
+.modal.open{display:flex}
+.sheet{background:var(--panel);border:1px solid var(--bd);border-radius:16px;max-width:1140px;width:100%;box-shadow:0 24px 70px rgba(0,0,0,.5)}
+.sheet .hd{display:flex;align-items:flex-start;gap:14px;padding:17px 20px;border-bottom:1px solid var(--bd);position:sticky;top:0;background:var(--panel);border-radius:16px 16px 0 0;z-index:2}
+.sheet .hd h2{font-size:15.5px;margin:0 0 3px}.sheet .hd .meta{font-size:12.5px;color:var(--gray)}
+.sheet .hd .actions{margin-left:auto;display:flex;gap:8px;align-items:center;flex:0 0 auto}
+.sheet .hd .x{cursor:pointer;font-size:22px;line-height:1;color:var(--gray);background:none;border:none;padding:2px 8px}
+.primary{font:inherit;font-size:12.5px;font-weight:700;padding:7px 12px;border:0;border-radius:9px;background:var(--orange);color:#fff;cursor:pointer}
+.primary:hover{background:var(--orange-deep)}
+.sheet .bd{max-height:64vh;overflow:auto}
+.stat-pill{font-size:10px;font-weight:700;padding:1px 7px;border-radius:999px;text-transform:uppercase;letter-spacing:.03em;margin-left:5px}
+.stat-pill.ok{background:rgba(67,164,109,.18);color:#5fce8f}.stat-pill.bad{background:rgba(224,116,95,.18);color:#e0745f}
+.score{font-weight:800;color:var(--orange);font-variant-numeric:tabular-nums}
+.consent{font-size:10px;font-weight:700;padding:1px 6px;border-radius:6px;background:rgba(67,164,109,.18);color:#5fce8f;margin-left:4px}
+</style>
+</head>
+<body>
+<header class=topbar>
+  <img class=logo src="../og/sublynk-logo-white.png" alt="Sublynk">
+  <a class="pill link" href="crm.html">CRM</a>
+  <span class="pill active">AI Sourcing</span>
+  <a class="pill link" href="sequencer.html">Sequencer</a>
+  <span class=spacer></span>
+  <button class=signout id=signout>Sign out</button>
+</header>
+<div class=wrap>
+  <h1>AI Sourcing</h1>
+  <div class=sub id=headline>Open network jobs matched to contractors in our CRM by city (zip-in-MSA) + trade</div>
+  <div class=cards id=cards></div>
+  <div class=bar>
+    <select id=fvertical><option value="">All trades</option><option value=roofing>Roofing</option><option value=restoration>Restoration</option><option value=remodeling>Remodeling</option></select>
+    <select id=fnetwork><option value="">All networks</option></select>
+    <select id=fstate><option value="">All states</option></select>
+    <select id=fmin>
+      <option value=1>Has candidates</option>
+      <option value=10>10+ candidates</option>
+      <option value=50>50+ candidates</option>
+      <option value=0>Include gaps (0)</option>
+    </select>
+    <label class=search><input id=q placeholder="Search job, location, network..."></label>
+    <button class=mini id=clear>Clear</button>
+  </div>
+  <div class=tablecard><table><thead><tr>
+    <th>Job</th><th>Network</th><th>Trade</th><th>Location (MSA)</th><th>Comp</th><th style="text-align:right">Candidates</th><th></th>
+  </tr></thead><tbody id=rows></tbody></table></div>
+  <div class=foot><span id=count></span></div>
+</div>
+<div class=modal id=modal><div class=sheet>
+  <div class=hd>
+    <div><h2 id=mtitle></h2><div class=meta id=mmeta></div></div>
+    <div class=actions><button class=primary id=mcsv>Export CSV</button><button class=x id=mclose>&times;</button></div>
+  </div>
+  <div class=bd><table><thead><tr>
+    <th>Contractor</th><th>Owner</th><th>Email</th><th>Phone</th><th>City</th><th>State</th><th>Credential</th><th>Trade</th><th style="text-align:right">Match</th>
+  </tr></thead><tbody id=mrows></tbody></table></div>
+</div></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="config.js"></script>
+<script>
+const sb = supabase.createClient(window.SUBLYNK.SUPABASE_URL, window.SUBLYNK.SUPABASE_ANON_KEY);
+const $=id=>document.getElementById(id); let curJob=null;
+function esc(s){return (s||'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]))}
+function n(x){return (x||0).toLocaleString()}
+function tradeTag(v){const key=/,/.test(v||'')?'multi':(v||'');return `<span class="tag ${esc(key)}">${esc(v||'-')}</span>`}
+const val=id=>$(id).value||null;
+
+// Auth guard: no session -> login. Everything below runs only for the signed-in owner.
+(async ()=>{
+  const { data } = await sb.auth.getSession();
+  if(!data.session){ location.replace('login.html'); return; }
+  $('signout').onclick=async()=>{ await sb.auth.signOut(); location.replace('login.html'); };
+  await facets(); load();
+})();
+
+async function facets(){
+  const { data:f, error } = await sb.rpc('sourcing_facets');
+  if(error||!f) return;
+  $('headline').textContent=`${n(f.matched_jobs)} of ${n(f.total_jobs)} open network jobs matched to ${n(f.leads)} contractors in our CRM (${n(f.pairs)} total matches), by city + trade`;
+  const cards=[['All matched',f.matched_jobs,'']].concat((f.verticals||[]).map(v=>[v.vertical,v.jobs,v.vertical]));
+  $('cards').innerHTML=cards.map(([l,c,v])=>`<div class=card data-v="${v||''}"><b>${n(c)}</b><div class=l>${esc(l)}${v?' jobs':''}</div></div>`).join('');
+  document.querySelectorAll('.card').forEach(c=>c.onclick=()=>{$('fvertical').value=c.dataset.v;load();});
+  (f.networks||[]).forEach(r=>{const o=document.createElement('option');o.value=r.name||'';o.textContent=`${r.name} (${n(r.jobs)})`;$('fnetwork').appendChild(o)});
+  (f.states||[]).forEach(r=>{const o=document.createElement('option');o.value=r.state;o.textContent=`${r.state} (${n(r.c)})`;$('fstate').appendChild(o)});
+}
+
+async function load(){
+  const { data:rows, error } = await sb.rpc('sourcing_jobs',
+    { p_vertical:val('fvertical'), p_network:val('fnetwork'), p_state:val('fstate'), p_min:Number($('fmin').value), p_q:($('q').value.trim()||null) });
+  if(error){ $('rows').innerHTML=`<tr><td colspan=7 class=muted style="padding:22px">${esc(error.message)}</td></tr>`; return; }
+  const list=rows||[];
+  $('rows').innerHTML=list.map(r=>`<tr class=jobrow data-id="${esc(r.id)}">
+    <td><b>${esc(r.title)}</b></td>
+    <td><span class=net>${esc(r.organization)}</span></td>
+    <td>${tradeTag(r.verticals)}</td>
+    <td>${esc(r.location_description)||'<span class=muted>&mdash;</span>'}</td>
+    <td>${esc(r.compensation)||'<span class=muted>&mdash;</span>'}</td>
+    <td style="text-align:right">${r.cand>0?`<span class=cand>${n(r.cand)}</span> <small>${n(r.cand_email)} email &middot; ${n(r.cand_phone)} ph</small>`:'<span class=zero>0</span>'}</td>
+    <td style="text-align:right">${r.cand>0?'<button class=viewbtn>View &rarr;</button>':''}</td></tr>`).join('')
+   || '<tr><td colspan=7 class=muted style="padding:22px;text-align:center">No jobs match these filters</td></tr>';
+  document.querySelectorAll('.jobrow').forEach(tr=>tr.onclick=()=>{if(tr.querySelector('button'))openJob(tr.dataset.id)});
+  const totalCand=list.reduce((s,r)=>s+(r.cand||0),0);
+  $('count').textContent=`${n(list.length)} jobs${list.length>=500?' (showing top 500)':''} · ${n(totalCand)} candidate matches in view`;
+  document.querySelectorAll('.card').forEach(c=>c.classList.toggle('act',c.dataset.v===$('fvertical').value&&c.dataset.v!==''));
+}
+
+async function openJob(id){
+  curJob=id;
+  const { data:d, error } = await sb.rpc('sourcing_candidates', { p_job_id:id, p_vertical:val('fvertical'), p_state:val('fstate'), p_limit:300 });
+  if(error||!d) return;
+  const j=d.job||{};
+  $('mtitle').textContent=j.title||'Candidates';
+  const shown=(d.total>d.rows.length)?`top <b>${n(d.rows.length)}</b> of <b>${n(d.total)}</b>`:`<b>${n(d.total||d.rows.length)}</b>`;
+  $('mmeta').innerHTML=`${esc(j.organization)} · ${esc(j.location_description)||''} · ${esc(j.compensation)||''} · ${shown} matched contractors`;
+  $('mrows').innerHTML=(d.rows||[]).map(r=>`<tr>
+    <td><b>${esc(r.company)}</b></td>
+    <td>${esc(r.owner_name)||'<span class=muted>&mdash;</span>'}</td>
+    <td>${r.email?`<a href="mailto:${esc(r.email)}">${esc(r.email)}</a>`:'<span class=muted>&mdash;</span>'}</td>
+    <td>${esc(r.phone)||'<span class=muted>&mdash;</span>'}${r.voice_consent?'<span class=consent>consent</span>':''}</td>
+    <td>${esc(r.city)||'<span class=muted>&mdash;</span>'}</td><td>${esc(r.state)||''}</td>
+    <td>${r.credential_label?`<b>${esc(r.credential_label)}</b>${r.credential_status?`<span class="stat-pill ${/active|certified/i.test(r.credential_status)?'ok':'bad'}">${esc(r.credential_status)}</span>`:''}`:'<span class=muted>&mdash;</span>'}</td>
+    <td>${tradeTag(r.vertical)}</td>
+    <td style="text-align:right"><span class=score>${r.score}</span></td></tr>`).join('')
+   || '<tr><td colspan=9 class=muted style="padding:20px;text-align:center">No candidates</td></tr>';
+  $('modal').classList.add('open');
+}
+
+// CSV export: pull the full (uncapped) candidate set for this job and download client-side.
+async function exportCsv(){
+  if(!curJob) return;
+  const btn=$('mcsv'); const label=btn.textContent; btn.textContent='Preparing...'; btn.disabled=true;
+  const { data:d, error } = await sb.rpc('sourcing_candidates', { p_job_id:curJob, p_vertical:val('fvertical'), p_state:val('fstate'), p_limit:10000 });
+  btn.textContent=label; btn.disabled=false;
+  if(error||!d){ return; }
+  const j=d.job||{};
+  const cols=['company','owner_name','email','phone','city','state','zip','vertical','credential_label','credential_status','voice_consent','sms_consent','score'];
+  const q=s=>{const v=(s===null||s===undefined)?'':String(s);return /[",\n]/.test(v)?'"'+v.replace(/"/g,'""')+'"':v;};
+  const header=cols.concat(['job_title','network','job_location']);
+  const lines=[header.join(',')].concat((d.rows||[]).map(r=>cols.map(c=>q(r[c])).concat([q(j.title),q(j.organization),q(j.location_description)]).join(',')));
+  const blob=new Blob([lines.join('\n')],{type:'text/csv'});
+  const url=URL.createObjectURL(blob);
+  const a=document.createElement('a');
+  a.href=url; a.download=((j.title||'candidates').replace(/[^A-Za-z0-9]+/g,'-').replace(/^-|-$/g,'').slice(0,50)||'candidates')+'.csv';
+  document.body.appendChild(a); a.click(); a.remove(); URL.revokeObjectURL(url);
+}
+
+$('mclose').onclick=()=>$('modal').classList.remove('open');
+$('modal').onclick=e=>{if(e.target===$('modal'))$('modal').classList.remove('open')};
+$('mcsv').onclick=exportCsv;
+let t; ['fvertical','fnetwork','fstate','fmin'].forEach(id=>$(id).onchange=load);
+$('q').oninput=()=>{clearTimeout(t);t=setTimeout(load,300)};
+$('clear').onclick=()=>{['fvertical','fnetwork','fstate'].forEach(i=>$(i).value='');$('fmin').value='1';$('q').value='';load()};
+document.addEventListener('keydown',e=>{if(e.key==='Escape')$('modal').classList.remove('open')});
+</script>
+</body>
+</html>
