@@ -95,6 +95,7 @@ button.cta:disabled{opacity:.45;cursor:not-allowed}
         <label class=fld><span>Company</span><input type=text id=company autocomplete=organization></label>
         <label class=fld><span>Email</span><input type=email id=email autocomplete=email></label>
         <label class=fld><span>Mobile number</span><input type=tel id=phone autocomplete=tel placeholder="(303) 555-0123" inputmode=tel></label>
+        <label class=fld><span>Zip code <span class=opt>so we can match jobs near you</span></span><input type=text id=zip autocomplete=postal-code inputmode=numeric maxlength=5 placeholder="80202"></label>
         <div class=hp aria-hidden=true><label>Do not fill<input type=text id=website tabindex=-1 autocomplete=off></label></div>
 
         <div style="margin-top:20px;margin-bottom:20px">
@@ -152,10 +153,11 @@ function normalize(raw){
 }
 
 const fullName=$('full_name'), company=$('company'), email=$('email');
-const phone=$('phone'), consent=$('consent'), submit=$('submit'), err=$('err');
+const phone=$('phone'), zip=$('zip'), consent=$('consent'), submit=$('submit'), err=$('err');
 const emailOK=()=>/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email.value.trim());
-function refresh(){ submit.disabled = !(fullName.value.trim() && company.value.trim() && emailOK() && normalize(phone.value) && consent.checked); }
-[fullName,company,email,phone].forEach(el=>el.addEventListener('input', refresh));
+const zipOK=()=>/^\d{5}$/.test(zip.value.trim());
+function refresh(){ submit.disabled = !(fullName.value.trim() && company.value.trim() && emailOK() && normalize(phone.value) && zipOK() && consent.checked); }
+[fullName,company,email,phone,zip].forEach(el=>el.addEventListener('input', refresh));
 consent.addEventListener('change', refresh);
 
 // Personalized links from outreach emails hard-link the contact and prefill:
@@ -165,6 +167,7 @@ const CONTACT_REF=params.get('c')||null;
 if(params.get('e')) email.value=params.get('e');
 if(params.get('name')) fullName.value=params.get('name');
 if(params.get('company')) company.value=params.get('company');
+if(params.get('zip')||params.get('z')) zip.value=(params.get('zip')||params.get('z'));
 refresh();
 
 const API_ENDPOINT = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
@@ -180,6 +183,7 @@ $('optin').addEventListener('submit', async (ev)=>{
   if(!emailOK()){ err.textContent='Please enter a valid email address.'; err.style.display='block'; return; }
   const norm=normalize(phone.value);
   if(!norm){ err.textContent='Please enter a valid US mobile number.'; err.style.display='block'; return; }
+  if(!zipOK()){ err.textContent='Please enter your 5-digit zip code.'; err.style.display='block'; return; }
   if(!consent.checked){ err.textContent='Please check the box to turn on job alerts.'; err.style.display='block'; return; }
 
   submit.disabled=true; submit.textContent='Turning on...';
@@ -189,6 +193,7 @@ $('optin').addEventListener('submit', async (ev)=>{
     company:company.value.trim(),
     email:email.value.trim(),
     phone:norm, phone_raw:phone.value.trim(),
+    zip:zip.value.trim(),
     consent:true,
     'cf-turnstile-response': document.querySelector('[name="cf-turnstile-response"]')?.value || '',
     contact_ref:CONTACT_REF

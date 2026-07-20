@@ -95,7 +95,7 @@ export default {
     if (url.includes('/api/consent')) {
       try {
         const data = await request.json();
-        const { full_name, company, email, phone, phone_raw, consent, 'cf-turnstile-response': turnstileToken } = data;
+        const { full_name, company, email, phone, phone_raw, consent, zip, 'cf-turnstile-response': turnstileToken } = data;
 
         if (!full_name?.trim() || !company?.trim() || !email?.trim() || !phone?.trim()) return json({ error: 'Missing required fields' }, 400);
         if (!consent) return json({ error: 'Consent not provided' }, 400);
@@ -116,6 +116,11 @@ export default {
         if (ten.length !== 10 || /^(\d)\1{9}$/.test(ten) || ten[0] === '0' || ten[0] === '1') return json({ error: 'Invalid US mobile number' }, 400);
         const phoneFormatted = `(${ten.slice(0, 3)}) ${ten.slice(3, 6)}-${ten.slice(6)}`;
 
+        // Zip: captured to power local job-matching. Lenient — store a clean 5-digit or null,
+        // never reject a valid consent over a bad zip.
+        const zipDigits = (zip || '').replace(/\D/g, '').slice(0, 5);
+        const zip5 = zipDigits.length === 5 ? zipDigits : null;
+
         const DISCLOSURE_VERSION = 'v1.2-2026-07-11';
         const DISCLOSURE_TEXT =
           'By checking this box and entering my mobile number, I give my express written consent for Sublynk to contact me at ' +
@@ -127,7 +132,7 @@ export default {
 
         const saved = await insertRow(env, 'consent_events', {
           full_name: full_name.trim(), company: company.trim(), email: email.trim(),
-          phone: phoneFormatted, phone_raw: phone_raw?.trim() || phone.trim(),
+          phone: phoneFormatted, phone_raw: phone_raw?.trim() || phone.trim(), zip: zip5,
           consent_calls: true, consent_sms: true, channels: 'calls+sms',
           disclosure_version: DISCLOSURE_VERSION, disclosure_text: DISCLOSURE_TEXT, networks_shown: '',
           page_url: pageUrl, user_agent: userAgent, source: 'job-alerts-optin', status: 'active',
@@ -136,7 +141,7 @@ export default {
         if (!saved.ok) { console.error('consent save failed:', saved.error); return json({ error: 'Could not save your consent. Please try again.' }, 500); }
 
         ctx.waitUntil(notifySlack(env, ALERTS.jobAlert,
-          `*New AI job-alert opt-in*\n${full_name.trim()} · ${company.trim()}\n${phoneFormatted} · ${email.trim()}`));
+          `*New AI job-alert opt-in*\n${full_name.trim()} · ${company.trim()}\n${phoneFormatted} · ${email.trim()}${zip5 ? ' · ' + zip5 : ''}`));
         return json({ success: true, message: 'Consent recorded successfully' });
       } catch (e) {
         console.error('consent error:', e);
