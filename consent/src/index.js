@@ -155,12 +155,18 @@ export default {
         if (!agreed) return json({ error: 'Agreement not confirmed' }, 400);
         if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim())) return json({ error: 'Invalid email address' }, 400);
 
-        const AGREEMENT_VERSION = 'v1-2026-07-16';
+        // Billing method the client selected. Default is charging the card on file (per Chris); invoice is the fallback.
+        const billing = data.billing_method === 'invoice' ? 'invoice' : 'card';
+        const billingText = billing === 'card'
+          ? 'charge the one-time $500 consulting fee to the card Sublynk has on file'
+          : 'send me an invoice for the one-time $500 consulting fee';
+
+        const AGREEMENT_VERSION = 'v2-2026-07-20';
         const AGREEMENT_TEXT =
           'I would like to move forward with the Sublynk subcontractor network setup and evaluation (audit of my contracts and ' +
           'subcontractor requirements, a plan to bridge the gaps, and setup of my network and bench in Sublynk), and I authorize ' +
-          'Sublynk to send me an invoice for the one-time $500 consulting fee. No payment is collected on this page, and full ' +
-          'terms are provided with the invoice. By checking this box I am agreeing electronically.';
+          'Sublynk to ' + billingText + '. No card details are entered on this page, and full terms are provided with the receipt ' +
+          'or invoice. By checking this box I am agreeing electronically.';
 
         const saved = await insertRow(env, 'consulting_agreements', {
           full_name: full_name.trim(), company: company.trim(), email: email.trim(),
@@ -170,8 +176,9 @@ export default {
         });
         if (!saved.ok) { console.error('agreement save failed:', saved.error); return json({ error: 'Could not save that. Please try again.' }, 500); }
 
+        const billingLine = billing === 'card' ? ':credit_card: Charge the $500 to the card on file' : ':email: Send a $500 invoice';
         ctx.waitUntil(notifySlack(env, ALERTS.subNetwork,
-          `*New sub-network setup agreement ($500)*\n${full_name.trim()} · ${company.trim()}\n${email.trim()}\nSend the invoice.`));
+          `*New sub-network setup agreement ($500)*\n${full_name.trim()} · ${company.trim()}\n${email.trim()}\n${billingLine}`));
         return json({ success: true, message: 'Agreement recorded successfully' });
       } catch (e) {
         console.error('agreement error:', e);

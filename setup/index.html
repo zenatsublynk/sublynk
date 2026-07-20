@@ -36,6 +36,11 @@ h2{font-size:15px;font-weight:800;color:var(--navy);margin-bottom:12px}
 .get b{color:var(--navy)}
 .fee{margin-top:16px;font-size:13.5px;color:var(--muted);background:var(--surface-2);border-radius:10px;padding:12px 14px}
 .fee b{color:var(--navy)}
+.bill{margin-top:18px}
+.bill .blabel{display:block;font-size:12.5px;font-weight:600;color:var(--navy);margin-bottom:8px}
+label.radio{display:flex;gap:10px;align-items:flex-start;font-size:13.5px;color:var(--ink);background:var(--surface-2);border:1px solid var(--border);border-radius:10px;padding:11px 13px;margin-top:8px;cursor:pointer}
+label.radio input{margin-top:2px;width:17px;height:17px;accent-color:var(--orange);flex:0 0 auto;cursor:pointer}
+label.radio.sel{border-color:var(--orange);box-shadow:0 0 0 3px rgba(221,99,54,.12)}
 label.fld{display:block;margin:14px 0 0}
 label.fld span{display:block;font-size:12.5px;font-weight:600;color:var(--navy);margin-bottom:5px}
 label.fld .opt{color:var(--faint);font-weight:400}
@@ -80,7 +85,7 @@ button.cta:disabled{opacity:.45;cursor:not-allowed}
         <li><span class=n>2</span><b>Plan.</b> We map the gaps and give you a clear plan to bridge them.</li>
         <li><span class=n>3</span><b>Grow.</b> We set up your network and subcontractor bench in Sublynk, ready to onboard your subs and go.</li>
       </ul>
-      <div class=fee><b>One-time $500 consulting fee.</b> We will email you an invoice, no card is entered or charged on this page. This just confirms you would like to move forward.</div>
+      <div class=fee><b>One-time $500 consulting fee.</b> By default we charge the card Sublynk already has on file. Prefer an invoice instead? Pick that option below. No card details are entered on this page.</div>
     </div>
 
     <div class=card>
@@ -91,6 +96,12 @@ button.cta:disabled{opacity:.45;cursor:not-allowed}
         <label class=fld><span>Email</span><input type=email id=email autocomplete=email></label>
         <label class=fld><span>Phone <span class=opt>(optional)</span></span><input type=tel id=phone autocomplete=tel inputmode=tel></label>
         <div class=hp aria-hidden=true><label>Do not fill<input type=text id=website tabindex=-1 autocomplete=off></label></div>
+
+        <div class=bill>
+          <span class=blabel>How should we handle the $500 fee?</span>
+          <label class=radio><input type=radio name=billing value=card checked> Charge the $500 to the card Sublynk has on file</label>
+          <label class=radio><input type=radio name=billing value=invoice> Email me an invoice for the $500 instead</label>
+        </div>
 
         <div class=consent>
           <input type=checkbox id=consent>
@@ -107,11 +118,11 @@ button.cta:disabled{opacity:.45;cursor:not-allowed}
   <div id=done-view class=done>
     <div class=ok><svg viewBox="0 0 24 24" fill=none stroke=currentColor stroke-width=2.5 stroke-linecap=round stroke-linejoin=round style="width:28px;height:28px"><path d="M20 6 9 17l-5-5"/></svg></div>
     <h2>You are all set</h2>
-    <p>Thanks. We will email your invoice for the one-time $500 fee and start your audit right away. We will be in touch shortly.</p>
+    <p id=done-msg>Thanks. We will start your audit right away and be in touch shortly.</p>
   </div>
 
   <p class=foot>
-    Sublynk, the vetted contractor network. This page confirms you would like to proceed; full terms are provided with your invoice.<br>
+    Sublynk, the vetted contractor network. This page confirms you would like to proceed; full terms are provided with your receipt or invoice.<br>
     <a href="https://www.sublynk.com/privacypolicy">Privacy Policy</a> &middot; <a href="https://www.sublynk.com/terms-of-service">Terms of Service</a>
   </p>
 </main>
@@ -125,15 +136,22 @@ const WORKER='https://sublynk-consent-worker.zen-426.workers.dev';
 
 $('consent-text').innerHTML =
   'I would like to move forward with the <b>Sublynk network setup and evaluation</b> above, and I authorize Sublynk to '
-+ 'send an invoice for the <b>one-time $500 consulting fee</b>. No payment is collected here; full terms come with the '
-+ 'invoice. By checking this box I am agreeing electronically.';
-$('fine').textContent = 'No card is entered or charged on this page. You will receive an invoice by email.';
++ 'collect the <b>one-time $500 consulting fee</b> by the method I select below (charge the card on file, or send an invoice). '
++ 'Full terms come with the receipt or invoice. By checking this box I am agreeing electronically.';
+$('fine').textContent = 'No card details are entered on this page. If you choose card on file, Sublynk charges the card already on record; otherwise we email an invoice.';
 
 const fullName=$('full_name'), company=$('company'), email=$('email'), phone=$('phone'), consent=$('consent'), submit=$('submit'), err=$('err');
 const emailOK=()=>/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email.value.trim());
 function refresh(){ submit.disabled = !(fullName.value.trim() && company.value.trim() && emailOK() && consent.checked); }
 [fullName,company,email,phone].forEach(el=>el.addEventListener('input', refresh));
 consent.addEventListener('change', refresh);
+
+// Billing method. Chris: default to charging the card on file; invoice stays as a fallback.
+const billingEls = [...document.querySelectorAll('input[name=billing]')];
+const billing = () => (billingEls.find(x=>x.checked)||{}).value || 'card';
+function markBilling(){ billingEls.forEach(x=>x.closest('label.radio').classList.toggle('sel', x.checked)); }
+billingEls.forEach(x=>x.addEventListener('change', markBilling));
+markBilling();
 
 // Personalized links prefill: /setup?e=<email>&name=<name>&company=<company>&c=<ref>
 const params=new URLSearchParams(location.search);
@@ -156,7 +174,7 @@ $('optin').addEventListener('submit', async (ev)=>{
 
   const payload={
     full_name:fullName.value.trim(), company:company.value.trim(), email:email.value.trim(),
-    phone:phone.value.trim()||null, agreed:true, contact_ref:CONTACT_REF
+    phone:phone.value.trim()||null, agreed:true, billing_method:billing(), contact_ref:CONTACT_REF
   };
 
   try {
@@ -172,6 +190,9 @@ $('optin').addEventListener('submit', async (ev)=>{
       } catch(e){ lastErr=e; }
     }
     if(!ok) throw lastErr || new Error('submit failed');
+    $('done-msg').textContent = billing()==='card'
+      ? 'Thanks. We will charge the one-time $500 fee to the card on file and start your audit right away. We will be in touch shortly.'
+      : 'Thanks. We will email your invoice for the one-time $500 fee and start your audit right away. We will be in touch shortly.';
     $('form-view').style.display='none';
     $('done-view').style.display='block';
     window.scrollTo({top:0,behavior:'smooth'});
