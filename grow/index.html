@@ -1,0 +1,207 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<title>Sublynk · One-Pager Book</title>
+<style>
+  :root{ --navy:#0d142a; --orange:#dd6336; --ink:#eaeefb; --muted:#8b95b5; --paper:#fff; }
+  *{box-sizing:border-box}
+  html,body{height:100%}
+  body{
+    margin:0; overflow:hidden; color:var(--ink);
+    background:
+      radial-gradient(1200px 700px at 50% -12%, #1a2650 0%, rgba(26,38,80,0) 62%),
+      linear-gradient(180deg,#0b1124 0%, #0a0f20 100%);
+    font-family:Inter,-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+    -webkit-font-smoothing:antialiased; display:flex; flex-direction:column;
+  }
+  header{display:flex;align-items:center;justify-content:space-between;padding:16px 22px;gap:14px;flex:0 0 auto}
+  .brand{display:flex;align-items:baseline;gap:9px;font-weight:800;letter-spacing:-.02em;font-size:19px}
+  .brand .dot{color:var(--orange)}
+  .brand small{font-weight:600;color:var(--muted);font-size:12px;letter-spacing:.08em;text-transform:uppercase}
+  .btn{appearance:none;border:1px solid rgba(255,255,255,.14);background:rgba(255,255,255,.05);color:var(--ink);
+    font:inherit;font-size:13px;font-weight:600;padding:8px 13px;border-radius:10px;cursor:pointer;transition:.15s}
+  .btn:hover{background:rgba(255,255,255,.12);border-color:rgba(255,255,255,.28)}
+  .btn:active{transform:translateY(1px)}
+  .stage{flex:1 1 auto;display:flex;align-items:center;justify-content:center;min-height:0;padding:4px 16px;position:relative}
+  .book-wrap{margin:auto;filter:drop-shadow(0 30px 46px rgba(0,0,0,.55))}
+  #book .page{background:var(--paper);overflow:hidden}
+  #book .page img{width:100%;height:100%;object-fit:contain;display:block;-webkit-user-drag:none;user-select:none}
+  /* covers (higher specificity than #book .page so the gradient wins) */
+  /* container-type lets cover type scale with the PAGE width (cqw), not the viewport,
+     so nothing overflows/overlaps at any book size. */
+  #book .page.cover{background:linear-gradient(158deg,#16264d,#0d142a);
+    color:#fff;display:flex;flex-direction:column;justify-content:flex-start;padding:11% 9% 7%;position:relative;
+    container-type:inline-size}
+  #book .page.cover::before{content:"";position:absolute;top:0;left:0;right:0;height:5px;background:var(--orange)}
+  #book .page.cover .top{display:flex;flex-direction:column;align-items:flex-start}
+  #book .page.cover .logo{width:clamp(112px,44cqw,220px);height:auto;flex:0 0 auto;align-self:flex-start;display:block;margin-bottom:7cqw}
+  #book .page.cover .eyebrow{font-size:clamp(9px,3cqw,13px);letter-spacing:.2em;text-transform:uppercase;color:var(--orange);font-weight:700}
+  #book .page.cover h1{font-size:clamp(20px,9.4cqw,40px);line-height:1.04;margin:2.6cqw 0 2.4cqw;letter-spacing:-.03em;font-weight:800;color:#fff;text-wrap:balance}
+  #book .page.cover p{color:#c7d0ee;font-size:clamp(12px,4cqw,17px);margin:0;max-width:24ch;line-height:1.5}
+  #book .page.cover .cta{margin-top:4.5cqw;align-self:flex-start;border:1px solid rgba(255,255,255,.32);border-radius:999px;padding:2.6cqw 4.4cqw;font-weight:700;font-size:clamp(11px,3.4cqw,14px)}
+  #book .page.cover .steps{list-style:none;margin:5.5cqw 0 0;padding:0;display:flex;flex-direction:column;gap:3.6cqw;width:100%}
+  #book .page.cover .steps li{display:flex;align-items:center;gap:3.2cqw}
+  #book .page.cover .steps .chk{flex:0 0 auto;width:7.6cqw;height:7.6cqw;min-width:26px;min-height:26px;max-width:40px;max-height:40px;
+    border-radius:50%;border:2px solid var(--orange);background:transparent;color:var(--orange);font-weight:800;font-family:inherit;
+    display:grid;place-items:center;font-size:clamp(12px,3.6cqw,17px);cursor:pointer;padding:0;transition:.15s}
+  #book .page.cover .steps .chk::before{content:attr(data-n)}
+  #book .page.cover .steps .chk:hover{background:rgba(221,99,54,.18)}
+  #book .page.cover .steps .chk.done{background:var(--orange);color:#0d142a}
+  #book .page.cover .steps .chk.done::before{content:"✓";font-size:clamp(13px,4cqw,18px);line-height:1}
+  #book .page.cover .steps a{color:#fff;text-decoration:none;font-weight:700;font-size:clamp(13px,4.1cqw,18px);line-height:1.25;
+    border-bottom:1px solid rgba(255,255,255,.28);padding-bottom:2px;transition:.15s}
+  #book .page.cover .steps a:hover{color:#ffd9c9;border-bottom-color:var(--orange)}
+  #book .page.cover .steps li.done a{text-decoration:line-through;opacity:.5;border-bottom-color:transparent}
+  #book .page.cover .bottom{position:absolute;left:0;right:0;bottom:0;padding:0 9% 7%;display:flex;align-items:flex-end;justify-content:space-between;gap:10px}
+  #book .page.cover .wm{font-weight:800;font-size:clamp(14px,4.3cqw,20px)}
+  #book .page.cover .wm .dot{color:var(--orange)}
+  #book .page.cover .foot{color:var(--muted);font-size:clamp(9px,2.9cqw,12px)}
+  footer{flex:0 0 auto;display:flex;align-items:center;justify-content:center;gap:16px;padding:10px 18px 18px}
+  .nav{width:44px;height:44px;border-radius:50%;display:grid;place-items:center;font-size:20px;padding:0}
+  .meter{min-width:220px;text-align:center}
+  .meter .lbl{font-weight:700;font-size:14px}
+  .meter .count{color:var(--muted);font-size:12px;margin-top:2px;font-variant-numeric:tabular-nums;letter-spacing:.05em}
+  .hint{position:absolute;bottom:6px;left:50%;transform:translateX(-50%);color:var(--muted);font-size:12px;
+    background:rgba(0,0,0,.32);padding:5px 12px;border-radius:999px;transition:opacity .6s;pointer-events:none}
+  .err{max-width:420px;text-align:center;color:#ffd7c7;line-height:1.6}
+  @media (max-width:560px){ .meter{min-width:150px} .brand small{display:none} }
+</style>
+</head>
+<body>
+  <header>
+    <div class="brand">Sublynk<span class="dot">.</span><small>One-Pager Book</small></div>
+    <button class="btn" id="fs">⛶ Present</button>
+  </header>
+
+  <div class="stage">
+    <div class="book-wrap"><div id="book">
+      <div class="page cover" data-density="hard">
+        <div class="top">
+          <img class="logo" src="assets/sublynk-logo-white.png" alt="Sublynk">
+          <div class="eyebrow">Growth Engine</div>
+          <h1>Growing with Sublynk</h1>
+          <p>Helping contractors get verified, go to market, and grow.</p>
+        </div>
+        <div class="bottom"><div class="wm">Sublynk<span class="dot">.</span></div><div class="foot">Flip →</div></div>
+      </div>
+      <div class="page"><img src="pages/01-certified.png" alt="Sublynk Certified one-pager"></div>
+      <div class="page"><img src="pages/02-subcontractor.png" alt="Subcontractor program one-pager"></div>
+      <div class="page"><img src="pages/03-submanagement.png" alt="Sub-management one-pager"></div>
+      <div class="page"><img src="pages/04-mutual-success.png" alt="Mutual Success Plan - Bench"></div>
+      <div class="page cover back" data-density="hard">
+        <div class="top">
+          <img class="logo" src="assets/sublynk-logo-white.png" alt="Sublynk">
+          <div class="eyebrow">Next steps</div>
+          <h1>Let's get you growing.</h1>
+          <ol class="steps">
+            <li><button class="chk" type="button" data-n="1" aria-label="Mark done"></button><a href="https://zenatsublynk.github.io/sublynk/consent/" target="_blank" rel="noopener">Opt in to AI job alerts</a></li>
+            <li><button class="chk" type="button" data-n="2" aria-label="Mark done"></button><a href="https://zenatsublynk.github.io/sublynk/setup/" target="_blank" rel="noopener">Authorize the $500 bench setup</a></li>
+            <li><button class="chk" type="button" data-n="3" aria-label="Mark done"></button><a href="https://calendar.app.google/BeExg667hGvdtqZQ8" target="_blank" rel="noopener">Complete your intake</a></li>
+          </ol>
+        </div>
+        <div class="bottom"><div class="wm">Sublynk<span class="dot">.</span></div><div class="foot"></div></div>
+      </div>
+    </div></div>
+    <div class="hint" id="hint">Use ← → or the arrow buttons to turn the page</div>
+  </div>
+
+  <footer>
+    <button class="btn nav" id="prev" aria-label="Previous">‹</button>
+    <div class="meter"><div class="lbl" id="lbl">Cover</div><div class="count" id="count">1 / 6</div></div>
+    <button class="btn nav" id="next" aria-label="Next">›</button>
+  </footer>
+
+<script src="vendor/page-flip.js"></script>
+<script>
+  var LABELS = ['Cover','Sublynk Certified','Subcontractor Program','Sub-Management','Mutual Success Plan','Back Cover'];
+  var RATIO = 594/768; // page width / height (US Letter)
+  var stage = document.querySelector('.stage');
+  var wrap = document.querySelector('.book-wrap');
+  var el = document.getElementById('book');
+  var lblEl = document.getElementById('lbl'), countEl = document.getElementById('count'), hint = document.getElementById('hint');
+  var PAGES_HTML = el.innerHTML;   // snapshot so we can rebuild on resize
+  var pf = null, total = 6, current = 0, checked = [false, false, false];
+
+  function fits(){
+    var r = stage.getBoundingClientRect();
+    var availH = Math.max(240, r.height - 12), availW = Math.max(200, r.width - 12);
+    var h = Math.min(availH, 940), w = h * RATIO;
+    if (w > availW){ w = availW; h = w / RATIO; }
+    return { w: Math.floor(w), h: Math.floor(h) };
+  }
+
+  function refresh(){
+    if (!pf) return;
+    var i = pf.getCurrentPageIndex();
+    current = i;
+    lblEl.textContent = LABELS[i] || ('Page ' + (i+1));
+    countEl.textContent = (i+1) + ' / ' + total;
+  }
+
+  function build(){
+    var sz = fits();
+    wrap.style.width = sz.w + 'px'; wrap.style.height = sz.h + 'px';
+    wrap.innerHTML = '<div id="book"></div>';        // fresh, attached #book each build (engine detaches the old one)
+    var el = wrap.firstElementChild;
+    el.innerHTML = PAGES_HTML;
+    pf = new St.PageFlip(el, {
+      width: sz.w, height: sz.h, size: 'fixed', usePortrait: true, showCover: true,
+      drawShadow: true, maxShadowOpacity: 0.5, flippingTime: 650, mobileScrollSupport: false,
+      useMouseEvents: false,   // no mouse drag/click flipping, so real clicks reach the links + checkboxes; flip via arrows/buttons
+    });
+    pf.loadFromHTML(el.querySelectorAll('.page'));
+    total = pf.getPageCount();
+    pf.on('flip', refresh);
+
+    // Restore any ticked steps after a rebuild (the click handler is delegated on document, see boot()).
+    [].forEach.call(el.querySelectorAll('.steps .chk'), function(btn, idx){
+      if (checked[idx]) { btn.classList.add('done'); btn.parentElement.classList.add('done'); }
+    });
+    if (current > 0) pf.turnToPage(Math.min(current, total - 1));
+    refresh();
+  }
+
+  function rebuild(){ try{ if (pf){ pf.destroy(); pf = null; } }catch(e){} build(); }
+
+  function boot(){
+    if (typeof St === 'undefined' || !St.PageFlip){
+      stage.innerHTML = '<div class="err">Could not load the page-flip engine (vendor/page-flip.js). Hard-refresh the page.</div>';
+      return;
+    }
+    build();
+
+    // Toggle a checklist step on pointerdown (capture) — fires before the flip engine's handlers
+    // and can't be swallowed by a later preventDefault on the click.
+    function toggleStep(e){
+      var btn = e.target && e.target.closest && e.target.closest('.steps .chk');
+      if (!btn) return;
+      e.preventDefault(); e.stopPropagation();
+      var li = btn.parentElement, idx = [].indexOf.call(li.parentElement.children, li);
+      checked[idx] = !checked[idx];
+      btn.classList.toggle('done', checked[idx]);
+      li.classList.toggle('done', checked[idx]);
+    }
+    document.addEventListener('pointerdown', toggleStep, true);
+
+    document.getElementById('prev').onclick = function(){ pf.flipPrev(); };
+    document.getElementById('next').onclick = function(){ pf.flipNext(); };
+    document.addEventListener('keydown', function(e){
+      if (e.key === 'ArrowLeft') pf.flipPrev();
+      else if (e.key === 'ArrowRight' || e.key === ' '){ e.preventDefault(); pf.flipNext(); }
+      else if (e.key === 'Home') pf.turnToPage(0);
+      else if (e.key === 'End') pf.turnToPage(total - 1);
+    });
+    document.getElementById('fs').onclick = function(){
+      if (!document.fullscreenElement){ if (document.documentElement.requestFullscreen) document.documentElement.requestFullscreen(); }
+      else if (document.exitFullscreen) document.exitFullscreen();
+    };
+    var t; window.addEventListener('resize', function(){ clearTimeout(t); t = setTimeout(rebuild, 220); });
+    document.addEventListener('fullscreenchange', function(){ setTimeout(rebuild, 120); });
+    setTimeout(function(){ hint.style.opacity = '0'; }, 4600);
+  }
+  window.addEventListener('load', boot);
+</script>
+</body>
+</html>
