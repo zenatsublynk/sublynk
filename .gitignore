@@ -1,0 +1,14 @@
+/outreach/
+/docs/
+/data/
+/venv/
+/cslb_env/
+.DS_Store
+data/primeforge_mailboxes.json
+*.env.local.txt
+sublynk.env.local.txt
+# Never commit data exports / PII to this public (Pages) repo
+*.csv
+roofing_phones_enriched.csv
+outreach/pf_send_counts.json
+outreach/pf_ramp.json
