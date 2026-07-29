@@ -104,7 +104,7 @@
         <div class="bottom"><div class="wm">Sublynk<span class="dot">.</span></div><div class="foot"></div></div>
       </div>
     </div></div>
-    <div class="hint" id="hint">Use ← → or the arrow buttons to turn the page</div>
+    <div class="hint" id="hint">Grab and drag a page to turn it, or use ← →</div>
   </div>
 
   <footer>
@@ -149,7 +149,7 @@
     pf = new St.PageFlip(el, {
       width: sz.w, height: sz.h, size: 'fixed', usePortrait: true, showCover: true,
       drawShadow: true, maxShadowOpacity: 0.5, flippingTime: 650, mobileScrollSupport: false,
-      useMouseEvents: false,   // no mouse drag/click flipping, so real clicks reach the links + checkboxes; flip via arrows/buttons
+      useMouseEvents: true,    // drag/hold to turn pages (the tactile flip). The back-cover checkboxes + links are guarded below so grabbing them doesn't start a flip.
     });
     pf.loadFromHTML(el.querySelectorAll('.page'));
     total = pf.getPageCount();
@@ -172,18 +172,28 @@
     }
     build();
 
-    // Toggle a checklist step on pointerdown (capture) — fires before the flip engine's handlers
-    // and can't be swallowed by a later preventDefault on the click.
-    function toggleStep(e){
-      var btn = e.target && e.target.closest && e.target.closest('.steps .chk');
-      if (!btn) return;
-      e.preventDefault(); e.stopPropagation();
-      var li = btn.parentElement, idx = [].indexOf.call(li.parentElement.children, li);
-      checked[idx] = !checked[idx];
-      btn.classList.toggle('done', checked[idx]);
-      li.classList.toggle('done', checked[idx]);
+    // The book is draggable (useMouseEvents:true). Keep the back-cover checkboxes + links fully
+    // interactive by stopping the flip engine (which binds mousedown/touchstart to start a drag,
+    // and click to flip) from grabbing any press that lands on one of them. This capture-phase
+    // guard on document fires before the engine's handlers on the book element, so stopPropagation
+    // here means "do not turn this press into a page turn." Everything else still drags/flips.
+    function guardInteractive(e){
+      var chk  = e.target && e.target.closest && e.target.closest('.steps .chk');
+      var link = e.target && e.target.closest && e.target.closest('.steps a');
+      if (!chk && !link) return;                 // normal page area -> let the engine flip
+      e.stopPropagation();
+      if (e.type === 'click' && chk){            // toggle the step on the real click
+        e.preventDefault();
+        var li = chk.parentElement, idx = [].indexOf.call(li.parentElement.children, li);
+        checked[idx] = !checked[idx];
+        chk.classList.toggle('done', checked[idx]);
+        li.classList.toggle('done', checked[idx]);
+      }
+      // links: stopPropagation only, so the native click + target="_blank" opens a new tab
     }
-    document.addEventListener('pointerdown', toggleStep, true);
+    ['mousedown','touchstart','click'].forEach(function(ev){
+      document.addEventListener(ev, guardInteractive, true);
+    });
 
     document.getElementById('prev').onclick = function(){ pf.flipPrev(); };
     document.getElementById('next').onclick = function(){ pf.flipNext(); };
