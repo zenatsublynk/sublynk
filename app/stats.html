@@ -1,0 +1,136 @@
+<!doctype html>
+<html lang=en>
+<head>
+<meta charset=utf-8>
+<meta name=viewport content="width=device-width,initial-scale=1">
+<title>Sublynk — Email Stats</title>
+<link rel=icon type="image/svg+xml" href="../og/favicon.svg">
+<link rel=icon type="image/png" href="../og/favicon.png">
+<link rel=preconnect href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel=stylesheet>
+<style>
+:root{--orange:#DD6336;--orange-deep:#c14d24;--navy:#0D142A;--panel:#141d33;--panel2:#0f172e;--bd:#24304d;--gray:#8b97a8;--ink:#e8edf4;--green:#43A46D}
+*{box-sizing:border-box;margin:0}
+body{font-family:Inter,-apple-system,'Segoe UI',Arial,sans-serif;background:var(--navy);color:var(--ink);-webkit-font-smoothing:antialiased}
+.topbar{background:#0a1020;border-bottom:1px solid var(--bd);display:flex;align-items:center;gap:12px;padding:0 22px;height:58px;position:sticky;top:0;z-index:5}
+.topbar img.logo{height:22px}
+.pill{font-size:12px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;padding:5px 12px;border-radius:999px;text-decoration:none;border:1px solid transparent;cursor:pointer}
+.pill.active{color:var(--orange);border-color:rgba(221,99,54,.4)}
+.pill.link{color:var(--gray)}.pill.link:hover{color:var(--ink)}
+.topbar .spacer{flex:1}
+.env{font-size:11px;color:var(--gray);display:flex;align-items:center;gap:6px}
+.env .dot{width:7px;height:7px;border-radius:50%;background:var(--green);box-shadow:0 0 0 3px rgba(67,164,109,.18)}
+.signout{background:none;border:1px solid var(--bd);color:var(--gray);font:inherit;font-size:12px;border-radius:8px;padding:6px 11px;cursor:pointer}
+.wrap{max-width:1320px;margin:0 auto;padding:22px 22px 40px}
+h1{font-size:20px;font-weight:800}.sub{color:var(--gray);font-size:13px;margin:3px 0 18px}
+.note{background:rgba(221,99,54,.1);border:1px solid rgba(221,99,54,.32);color:#eab8a6;font-size:12.5px;padding:10px 13px;border-radius:10px;margin-bottom:14px}
+.note b{color:#f0c9ba}
+.kpis{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:16px}
+.kpi{background:var(--panel);border:1px solid var(--bd);border-top:3px solid var(--bd);border-radius:12px;padding:13px 18px;min-width:130px;flex:1}
+.kpi.accent{border-top-color:var(--orange)}
+.kpi .n{font-size:22px;font-weight:800;font-variant-numeric:tabular-nums}
+.kpi .l{font-size:11px;color:var(--gray);text-transform:uppercase;letter-spacing:.4px;margin-top:3px}
+.kpi .r{font-size:12px;color:var(--gray);margin-top:4px;min-height:15px}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:16px}
+@media(max-width:760px){.grid2{grid-template-columns:1fr}}
+.panel{background:var(--panel);border:1px solid var(--bd);border-radius:14px;padding:16px 18px}
+.panel h3{font-size:13px;font-weight:700;margin:0 0 10px;color:var(--ink)}
+.rw{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:8px 0;border-bottom:1px solid #1c2740;font-size:13.5px;color:var(--gray)}
+.rw:last-child{border-bottom:0}
+.rw .k{flex:1}.rw b{color:var(--ink);font-weight:700;font-variant-numeric:tabular-nums;text-align:right}
+.bars{display:flex;align-items:flex-end;gap:5px;height:168px;padding-top:16px}
+.barwrap{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;height:100%}
+.barwrap em{font-size:10px;color:var(--gray);font-style:normal;margin-bottom:3px;font-variant-numeric:tabular-nums;min-height:12px}
+.stack{width:100%;max-width:34px;border-radius:4px 4px 0 0;overflow:hidden;display:flex;flex-direction:column;min-height:2px}
+.stack .seg13{background:#8ea3c4}
+.stack .segja{background:linear-gradient(180deg,#DD6336,#eaa079)}
+.barwrap span{font-size:10px;color:var(--gray);margin-top:5px;white-space:nowrap}
+.legend{display:flex;gap:16px;font-size:11px;color:var(--gray);margin-top:12px;justify-content:center}
+.legend i{display:inline-block;width:10px;height:10px;border-radius:3px;margin-right:5px;vertical-align:middle}
+.rangebtns{display:flex;gap:4px}
+.rangebtns button{font:inherit;font-size:12px;font-weight:600;padding:5px 11px;border:1px solid var(--bd);border-radius:8px;background:var(--panel2);color:var(--gray);cursor:pointer}
+.rangebtns button:hover{border-color:#33415f}
+.rangebtns button.on{background:var(--orange);color:#fff;border-color:var(--orange)}
+table{width:100%;border-collapse:collapse;font-size:13.5px}
+th,td{text-align:left;padding:8px 6px;border-bottom:1px solid #1c2740}
+th{color:var(--gray);font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.5px}
+.muted{color:#5a6478}
+</style>
+</head>
+<body>
+<header class=topbar>
+  <img class=logo src="../og/sublynk-logo-white.png" alt="Sublynk">
+  <a class="pill link" href="crm.html">CRM</a>
+  <a class="pill link" href="sourcing.html">AI Sourcing</a>
+  <a class="pill link" href="sequencer.html">Sequencer</a>
+  <span class="pill active">Stats</span>
+  <span class=spacer></span>
+  <span class=env><span class=dot></span> Email metrics · live</span>
+  <button class=signout id=signout>Sign out</button>
+</header>
+<div class=wrap>
+  <h1>Email Stats</h1>
+  <div class=sub>Sends, engagement, and list health across the restoration 13-touch and job-alert campaigns. Auto-refreshes every 15s.</div>
+  <div id=note></div>
+  <div class=kpis id=kpis></div>
+  <div class=grid2>
+    <div class=panel><h3>Sends by campaign</h3><div id=bycampaign></div></div>
+    <div class=panel><h3>List health</h3><div id=health></div></div>
+  </div>
+  <div class=panel style="margin-bottom:16px">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;gap:12px;flex-wrap:wrap">
+      <h3 id=chtitle style="margin:0">Emails sent, last 14 days</h3>
+      <div class=rangebtns id=rangebtns><button data-r="48h">48 hours</button><button data-r="7d">7 days</button><button data-r="14d" class=on>14 days</button></div>
+    </div>
+    <div class=bars id=bars></div>
+    <div class=legend><span><i style="background:#DD6336"></i>Job alerts</span><span><i style="background:#8ea3c4"></i>Restoration 13-touch</span></div>
+  </div>
+  <div class=panel><h3>Restoration 13-touch, sent per touch (cumulative, all-time)</h3><div id=bytouch></div></div>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="config.js"></script>
+<script>
+const sb = supabase.createClient(window.SUBLYNK.SUPABASE_URL, window.SUBLYNK.SUPABASE_ANON_KEY);
+const $=id=>document.getElementById(id);
+const n=x=>(Number(x)||0).toLocaleString();
+function rw(k,v){return `<div class=rw><span class=k>${k}</span><b>${v}</b></div>`;}
+let range='14d', timer=null;
+function shortLabel(l){ return l.indexOf(' ')>=0 ? l.split(' ')[1] : l; }
+
+// Auth guard: no session -> login. Everything below runs only for the signed-in owner.
+(async ()=>{
+  const { data } = await sb.auth.getSession();
+  if(!data.session){ location.replace('login.html'); return; }
+  $('signout').onclick=async()=>{ await sb.auth.signOut(); location.replace('login.html'); };
+  load(); timer=setInterval(load,15000);
+})();
+
+async function load(){
+  const { data:d, error } = await sb.rpc('stats_summary', { p_range: range });
+  if(error||!d){ if(error) $('note').innerHTML=`<div class=note>Could not load stats: ${(error.message||'').replace(/[<>]/g,'')}</div>`; return; }
+  $('chtitle').textContent='Emails sent, last '+({'48h':'48 hours','7d':'7 days','14d':'14 days'}[range]||'14 days');
+  $('kpis').innerHTML=[
+   ['Emails sent',n(d.sent_total),n(d.sent_13touch)+' 13-touch + '+n(d.sent_jobalerts)+' alerts',1],
+   ['Opens',n(d.opens),d.openRate+'%'],
+   ['Clicks',n(d.clicks),d.clickRate+'%'],
+   ['Replies',n(d.replies),d.replyRate+'%'],
+   ['Bounces',n(d.bounces),d.bounceRate+'%'],
+  ].map(a=>`<div class="kpi ${a[3]?'accent':''}"><div class=n>${a[1]}</div><div class=l>${a[0]}</div><div class=r>${a[2]||''}</div></div>`).join('');
+  $('note').innerHTML = d.tracking_events ? '' : `<div class=note><b>Heads up:</b> open + click tracking is live (pixel wired to the public tracker) and logs as newly-sent emails get opened. Reply + bounce tracking still need the info@ Apps Script tracker deployed. Reads 0 until the first event lands.</div>`;
+  $('bycampaign').innerHTML =
+    rw('Job alerts sent',n(d.jobalerts_sent))+rw('Job alerts open / click / reply / bounce',n(d.opens_ja)+' / '+n(d.clicks_ja)+' / '+n(d.replies_ja)+' / '+n(d.bounces_ja))
+    +rw('Job alerts still queued',n(d.jobalerts_queued))
+    +rw('13-touch sent (all-time)',n(d.sent_13touch))+rw('13-touch open / click / reply / bounce',n(d.opens_13)+' / '+n(d.clicks_13)+' / '+n(d.replies_13)+' / '+n(d.bounces_13));
+  $('health').innerHTML = rw('Contactable leads (have email)',n(d.contactable))+rw('Do-not-contact (protected)',n(d.do_not_contact))+rw('Unsubscribes logged',n(d.optouts));
+  const S=d.series||[]; S.forEach(x=>x.tot=(x.ja||0)+(x.t13||0)); const max=Math.max(1,...S.map(x=>x.tot)), step=Math.max(1,Math.ceil(S.length/14)), showN=S.length<=16;
+  $('bars').innerHTML=S.map((x,i)=>`<div class=barwrap title="${x.label}: ${x.ja} job alerts + ${x.t13} 13-touch"><em>${showN&&x.tot?x.tot:''}</em><div class=stack style="height:${Math.round(x.tot/max*82)}%">${x.t13?`<div class=seg13 style="flex:${x.t13}"></div>`:''}${x.ja?`<div class=segja style="flex:${x.ja}"></div>`:''}</div><span>${i%step===0?shortLabel(x.label):''}</span></div>`).join('');
+  $('bytouch').innerHTML = (d.by_touch&&d.by_touch.length)?('<table><thead><tr><th>Touch</th><th style="text-align:right">Sent</th></tr></thead><tbody>'+d.by_touch.map(t=>`<tr><td>Touch ${t.step_no}</td><td style="text-align:right"><b>${n(t.c)}</b></td></tr>`).join('')+'</tbody></table>'):'<span class=muted>No 13-touch sends recorded yet.</span>';
+}
+document.querySelectorAll('#rangebtns button').forEach(b=>b.onclick=()=>{
+  range=b.dataset.r;
+  document.querySelectorAll('#rangebtns button').forEach(x=>x.classList.toggle('on',x===b));
+  load();
+});
+</script>
+</body>
+</html>
