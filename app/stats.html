@@ -113,14 +113,18 @@ async function load(){
    ['Emails sent',n(d.sent_total),n(d.sent_13touch)+' 13-touch + '+n(d.sent_jobalerts)+' alerts',1],
    ['Opens',n(d.opens),d.openRate+'%'],
    ['Clicks',n(d.clicks),d.clickRate+'%'],
-   ['Replies',n(d.replies),d.replyRate+'%'],
+   ['Campaign replies',n(d.replies),d.replyRate+'%'],
+   ['Personal 1:1',n(d.replies_personal||0),'zen@ direct'],
    ['Bounces',n(d.bounces),d.bounceRate+'%'],
+   ['Job signups',n(d.job_signups||0),n(d.job_signups_attributed||0)+' from outbound',1],
   ].map(a=>`<div class="kpi ${a[3]?'accent':''}"><div class=n>${a[1]}</div><div class=l>${a[0]}</div><div class=r>${a[2]||''}</div></div>`).join('');
   $('note').innerHTML = d.tracking_events ? '' : `<div class=note><b>Heads up:</b> open + click tracking is live (pixel wired to the public tracker) and logs as newly-sent emails get opened. Reply + bounce tracking still need the info@ Apps Script tracker deployed. Reads 0 until the first event lands.</div>`;
   $('bycampaign').innerHTML =
     rw('Job alerts sent',n(d.jobalerts_sent))+rw('Job alerts open / click / reply / bounce',n(d.opens_ja)+' / '+n(d.clicks_ja)+' / '+n(d.replies_ja)+' / '+n(d.bounces_ja))
     +rw('Job alerts still queued',n(d.jobalerts_queued))
-    +rw('13-touch sent (all-time)',n(d.sent_13touch))+rw('13-touch open / click / reply / bounce',n(d.opens_13)+' / '+n(d.clicks_13)+' / '+n(d.replies_13)+' / '+n(d.bounces_13));
+    +rw('13-touch sent (all-time)',n(d.sent_13touch))+rw('13-touch open / click / reply / bounce',n(d.opens_13)+' / '+n(d.clicks_13)+' / '+n(d.replies_13)+' / '+n(d.bounces_13))
+    +rw('Personal 1:1 replies (zen@ direct, not in the cold rate)',n(d.replies_personal||0))
+    +rw('Job signups: from outbound / organic',n(d.job_signups_attributed||0)+' / '+n((d.job_signups||0)-(d.job_signups_attributed||0)));
   $('health').innerHTML = rw('Contactable leads (have email)',n(d.contactable))+rw('Do-not-contact (protected)',n(d.do_not_contact))+rw('Unsubscribes logged',n(d.optouts));
   const S=d.series||[]; S.forEach(x=>x.tot=(x.ja||0)+(x.t13||0)); const max=Math.max(1,...S.map(x=>x.tot)), step=Math.max(1,Math.ceil(S.length/14)), showN=S.length<=16;
   $('bars').innerHTML=S.map((x,i)=>`<div class=barwrap title="${x.label}: ${x.ja} job alerts + ${x.t13} 13-touch"><em>${showN&&x.tot?x.tot:''}</em><div class=stack style="height:${Math.round(x.tot/max*82)}%">${x.t13?`<div class=seg13 style="flex:${x.t13}"></div>`:''}${x.ja?`<div class=segja style="flex:${x.ja}"></div>`:''}</div><span>${i%step===0?shortLabel(x.label):''}</span></div>`).join('');
