@@ -108,6 +108,7 @@ button.cta:disabled{opacity:.45;cursor:not-allowed}
             <option value=hvac>HVAC</option>
             <option value=other>Other</option>
           </select>
+          <input type=text id=trade_other placeholder="Type your trade" autocomplete=off maxlength=80 style="display:none;margin-top:8px">
         </label>
         <div class=hp aria-hidden=true><label>Do not fill<input type=text id=website tabindex=-1 autocomplete=off></label></div>
 
@@ -166,12 +167,17 @@ function normalize(raw){
 }
 
 const fullName=$('full_name'), company=$('company'), email=$('email');
-const phone=$('phone'), zip=$('zip'), trade=$('trade'), consent=$('consent'), submit=$('submit'), err=$('err');
+const phone=$('phone'), zip=$('zip'), trade=$('trade'), tradeOther=$('trade_other'), consent=$('consent'), submit=$('submit'), err=$('err');
 const emailOK=()=>/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email.value.trim());
 const zipOK=()=>/^\d{5}$/.test(zip.value.trim());
-function refresh(){ submit.disabled = !(fullName.value.trim() && company.value.trim() && emailOK() && normalize(phone.value) && zipOK() && trade.value && consent.checked); }
+// "Other" needs a typed trade before we count it as complete.
+const tradeOK=()=>!!trade.value && (trade.value!=='other' || !!tradeOther.value.trim());
+function refresh(){ submit.disabled = !(fullName.value.trim() && company.value.trim() && emailOK() && normalize(phone.value) && zipOK() && tradeOK() && consent.checked); }
 [fullName,company,email,phone,zip].forEach(el=>el.addEventListener('input', refresh));
-trade.addEventListener('change', refresh);
+// Reveal the free-text box only when "Other" is chosen; clear it otherwise so a stale value never posts.
+function syncTradeOther(){ const on=trade.value==='other'; tradeOther.style.display=on?'block':'none'; if(!on) tradeOther.value=''; }
+trade.addEventListener('change', ()=>{ syncTradeOther(); if(trade.value==='other') tradeOther.focus(); refresh(); });
+tradeOther.addEventListener('input', refresh);
 consent.addEventListener('change', refresh);
 
 // Personalized links from outreach emails hard-link the contact and prefill:
@@ -183,6 +189,7 @@ if(params.get('name')) fullName.value=params.get('name');
 if(params.get('company')) company.value=params.get('company');
 if(params.get('zip')||params.get('z')) zip.value=(params.get('zip')||params.get('z'));
 if(params.get('trade')) trade.value=params.get('trade').toLowerCase();
+syncTradeOther();
 refresh();
 
 const API_ENDPOINT = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
@@ -200,6 +207,7 @@ $('optin').addEventListener('submit', async (ev)=>{
   if(!norm){ err.textContent='Please enter a valid US mobile number.'; err.style.display='block'; return; }
   if(!zipOK()){ err.textContent='Please enter your 5-digit zip code.'; err.style.display='block'; return; }
   if(!trade.value){ err.textContent='Please select your trade.'; err.style.display='block'; return; }
+  if(trade.value==='other' && !tradeOther.value.trim()){ err.textContent='Please type your trade.'; err.style.display='block'; return; }
   if(!consent.checked){ err.textContent='Please check the box to turn on job alerts.'; err.style.display='block'; return; }
 
   submit.disabled=true; submit.textContent='Turning on...';
@@ -211,6 +219,7 @@ $('optin').addEventListener('submit', async (ev)=>{
     phone:norm, phone_raw:phone.value.trim(),
     zip:zip.value.trim(),
     trade:trade.value,
+    trade_other: trade.value==='other' ? tradeOther.value.trim() : '',
     consent:true,
     'cf-turnstile-response': document.querySelector('[name="cf-turnstile-response"]')?.value || '',
     contact_ref:CONTACT_REF
