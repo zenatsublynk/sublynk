@@ -39,9 +39,10 @@ h2{font-size:15px;font-weight:800;color:var(--navy);margin-bottom:12px}
 label.fld{display:block;margin:14px 0 0}
 label.fld span{display:block;font-size:12.5px;font-weight:600;color:var(--navy);margin-bottom:5px}
 label.fld .opt{color:var(--faint);font-weight:400}
-input[type=text],input[type=tel],input[type=email]{width:100%;font:inherit;font-size:15px;padding:11px 13px;
+input[type=text],input[type=tel],input[type=email],select{width:100%;font:inherit;font-size:15px;padding:11px 13px;
   border:1px solid var(--border);border-radius:10px;background:#fff;color:var(--ink);outline:none}
-input:focus{border-color:var(--orange);box-shadow:0 0 0 3px rgba(221,99,54,.12)}
+input:focus,select:focus{border-color:var(--orange);box-shadow:0 0 0 3px rgba(221,99,54,.12)}
+select:invalid{color:var(--faint)}
 .hp{position:absolute;left:-9999px;height:0;overflow:hidden}
 .consent{display:flex;gap:11px;align-items:flex-start;margin-top:20px;background:var(--surface-2);
   border:1px solid var(--border);border-radius:12px;padding:14px 15px}
@@ -96,6 +97,18 @@ button.cta:disabled{opacity:.45;cursor:not-allowed}
         <label class=fld><span>Email</span><input type=email id=email autocomplete=email></label>
         <label class=fld><span>Mobile number</span><input type=tel id=phone autocomplete=tel placeholder="(303) 555-0123" inputmode=tel></label>
         <label class=fld><span>Zip code <span class=opt>so we can match jobs near you</span></span><input type=text id=zip autocomplete=postal-code inputmode=numeric maxlength=5 placeholder="80202"></label>
+        <label class=fld><span>Your trade <span class=opt>so we alert you to the right jobs</span></span>
+          <select id=trade required autocomplete=off>
+            <option value="" selected disabled>Select your trade</option>
+            <option value=roofing>Roofing</option>
+            <option value=restoration>Water, fire, or mold restoration</option>
+            <option value=remodeling>Remodeling or general contractor</option>
+            <option value=electrical>Electrical</option>
+            <option value=plumbing>Plumbing</option>
+            <option value=hvac>HVAC</option>
+            <option value=other>Other</option>
+          </select>
+        </label>
         <div class=hp aria-hidden=true><label>Do not fill<input type=text id=website tabindex=-1 autocomplete=off></label></div>
 
         <div style="margin-top:20px;margin-bottom:20px">
@@ -153,11 +166,12 @@ function normalize(raw){
 }
 
 const fullName=$('full_name'), company=$('company'), email=$('email');
-const phone=$('phone'), zip=$('zip'), consent=$('consent'), submit=$('submit'), err=$('err');
+const phone=$('phone'), zip=$('zip'), trade=$('trade'), consent=$('consent'), submit=$('submit'), err=$('err');
 const emailOK=()=>/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email.value.trim());
 const zipOK=()=>/^\d{5}$/.test(zip.value.trim());
-function refresh(){ submit.disabled = !(fullName.value.trim() && company.value.trim() && emailOK() && normalize(phone.value) && zipOK() && consent.checked); }
+function refresh(){ submit.disabled = !(fullName.value.trim() && company.value.trim() && emailOK() && normalize(phone.value) && zipOK() && trade.value && consent.checked); }
 [fullName,company,email,phone,zip].forEach(el=>el.addEventListener('input', refresh));
+trade.addEventListener('change', refresh);
 consent.addEventListener('change', refresh);
 
 // Personalized links from outreach emails hard-link the contact and prefill:
@@ -168,6 +182,7 @@ if(params.get('e')) email.value=params.get('e');
 if(params.get('name')) fullName.value=params.get('name');
 if(params.get('company')) company.value=params.get('company');
 if(params.get('zip')||params.get('z')) zip.value=(params.get('zip')||params.get('z'));
+if(params.get('trade')) trade.value=params.get('trade').toLowerCase();
 refresh();
 
 const API_ENDPOINT = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
@@ -184,6 +199,7 @@ $('optin').addEventListener('submit', async (ev)=>{
   const norm=normalize(phone.value);
   if(!norm){ err.textContent='Please enter a valid US mobile number.'; err.style.display='block'; return; }
   if(!zipOK()){ err.textContent='Please enter your 5-digit zip code.'; err.style.display='block'; return; }
+  if(!trade.value){ err.textContent='Please select your trade.'; err.style.display='block'; return; }
   if(!consent.checked){ err.textContent='Please check the box to turn on job alerts.'; err.style.display='block'; return; }
 
   submit.disabled=true; submit.textContent='Turning on...';
@@ -194,6 +210,7 @@ $('optin').addEventListener('submit', async (ev)=>{
     email:email.value.trim(),
     phone:norm, phone_raw:phone.value.trim(),
     zip:zip.value.trim(),
+    trade:trade.value,
     consent:true,
     'cf-turnstile-response': document.querySelector('[name="cf-turnstile-response"]')?.value || '',
     contact_ref:CONTACT_REF
