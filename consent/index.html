@@ -43,6 +43,15 @@ input[type=text],input[type=tel],input[type=email],select{width:100%;font:inheri
   border:1px solid var(--border);border-radius:10px;background:#fff;color:var(--ink);outline:none}
 input:focus,select:focus{border-color:var(--orange);box-shadow:0 0 0 3px rgba(221,99,54,.12)}
 select:invalid{color:var(--faint)}
+.tradehead{display:block;font-size:12.5px;font-weight:600;color:var(--navy);margin-bottom:5px}
+.tradehead .opt{color:var(--faint);font-weight:400}
+.tradehead .selcount{color:var(--orange-deep);font-weight:600}
+.trades{border:1px solid var(--border);border-radius:10px;background:#fff;max-height:280px;overflow-y:auto;padding:6px 4px}
+.trades .grp{font-size:10.5px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--faint);padding:12px 12px 4px}
+.trades .grp:first-child{padding-top:6px}
+.trades label.chk{display:flex;align-items:flex-start;gap:9px;padding:7px 12px;font-size:14px;color:var(--ink);cursor:pointer;border-radius:8px}
+.trades label.chk:hover{background:var(--surface-2)}
+.trades label.chk input{margin-top:2px;width:16px;height:16px;accent-color:var(--orange);flex:0 0 auto;cursor:pointer}
 .hp{position:absolute;left:-9999px;height:0;overflow:hidden}
 .consent{display:flex;gap:11px;align-items:flex-start;margin-top:20px;background:var(--surface-2);
   border:1px solid var(--border);border-radius:12px;padding:14px 15px}
@@ -97,19 +106,11 @@ button.cta:disabled{opacity:.45;cursor:not-allowed}
         <label class=fld><span>Email</span><input type=email id=email autocomplete=email></label>
         <label class=fld><span>Mobile number</span><input type=tel id=phone autocomplete=tel placeholder="(303) 555-0123" inputmode=tel></label>
         <label class=fld><span>Zip code <span class=opt>so we can match jobs near you</span></span><input type=text id=zip autocomplete=postal-code inputmode=numeric maxlength=5 placeholder="80202"></label>
-        <label class=fld><span>Your trade <span class=opt>so we alert you to the right jobs</span></span>
-          <select id=trade required autocomplete=off>
-            <option value="" selected disabled>Select your trade</option>
-            <option value=roofing>Roofing</option>
-            <option value=restoration>Water, fire, or mold restoration</option>
-            <option value=remodeling>Remodeling or general contractor</option>
-            <option value=electrical>Electrical</option>
-            <option value=plumbing>Plumbing</option>
-            <option value=hvac>HVAC</option>
-            <option value=other>Other</option>
-          </select>
-          <input type=text id=trade_other placeholder="Type your trade" autocomplete=off maxlength=80 style="display:none;margin-top:8px">
-        </label>
+        <div class=fld style="margin-top:14px">
+          <span class=tradehead>Your trades <span class=opt>pick every trade you do, so we only send matching jobs</span> <span class=selcount id=tradecount></span></span>
+          <div id=trades class=trades></div>
+          <input type=text id=trade_other placeholder="Other trade, type it in" autocomplete=off maxlength=80 style="display:none;margin-top:8px">
+        </div>
         <div class=hp aria-hidden=true><label>Do not fill<input type=text id=website tabindex=-1 autocomplete=off></label></div>
 
         <div style="margin-top:20px;margin-bottom:20px">
@@ -167,17 +168,48 @@ function normalize(raw){
 }
 
 const fullName=$('full_name'), company=$('company'), email=$('email');
-const phone=$('phone'), zip=$('zip'), trade=$('trade'), tradeOther=$('trade_other'), consent=$('consent'), submit=$('submit'), err=$('err');
+const phone=$('phone'), zip=$('zip'), tradeOther=$('trade_other'), consent=$('consent'), submit=$('submit'), err=$('err');
 const emailOK=()=>/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email.value.trim());
 const zipOK=()=>/^\d{5}$/.test(zip.value.trim());
-// "Other" needs a typed trade before we count it as complete.
-const tradeOK=()=>!!trade.value && (trade.value!=='other' || !!tradeOther.value.trim());
+
+// Trades a sub can pick, grouped by program (from the Network Setup Requirements template). Multi-select:
+// a firm checks every trade it does so we only send matching job alerts. Values are the canonical names.
+const TRADE_GROUPS = [
+  ['Mitigation & Emergency Response', ['Board Up & Tarping','Commercial Mitigation','Fire Mitigation','Tree Removal','Water Mitigation']],
+  ['Environmental & Hazmat', ['Asbestos Abatement','Lead Abatement','Mold Remediation','Trauma & Biohazard']],
+  ['Cleaning', ['Cleaning']],
+  ['Contents', ['Contents Off-site','Contents On-site']],
+  ['General Contracting & Reconstruction', ['General Contracting','Reconstruction','Commercial Reconstruction','Remodeling','Demolition']],
+  ['Mechanical, Electrical & Plumbing', ['Electrical','HVAC','Plumbing']],
+  ['Carpentry, Drywall & Interior Finishes', ['Cabinetry','Carpentry (Finish)','Carpentry (Rough)','Drywalling','Insulation']],
+  ['Painting', ['Painting']],
+  ['Flooring', ['Flooring']],
+  ['Roofing', ['Residential Roofing','Commercial Roofing']],
+  ['Exterior & Structural', ['Masonry (Veneer)','Masonry (Structural)','Stucco & Plaster','Window Install & Repair']],
+];
+const escq = s => String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+(function renderTrades(){
+  let h='';
+  for(const [grp,cats] of TRADE_GROUPS){
+    h += '<div class=grp>'+escq(grp)+'</div>';
+    for(const c of cats) h += '<label class=chk><input type=checkbox name=trade value="'+escq(c)+'"><span>'+escq(c)+'</span></label>';
+  }
+  h += '<div class=grp>Other</div><label class=chk><input type=checkbox id=trade_other_cb><span>Other (not listed)</span></label>';
+  $('trades').innerHTML=h;
+})();
+const otherCb=$('trade_other_cb');
+const tradeBoxes=()=>Array.from(document.querySelectorAll('#trades input[name=trade]'));
+const selectedTrades=()=>tradeBoxes().filter(b=>b.checked).map(b=>b.value);
+const otherText=()=> (otherCb.checked && tradeOther.value.trim()) ? tradeOther.value.trim() : '';
+const tradeOK=()=> selectedTrades().length>0 || !!otherText();
+function updateCount(){ const n=selectedTrades().length+(otherText()?1:0); $('tradecount').textContent = n?('· '+n+' selected'):''; }
 function refresh(){ submit.disabled = !(fullName.value.trim() && company.value.trim() && emailOK() && normalize(phone.value) && zipOK() && tradeOK() && consent.checked); }
 [fullName,company,email,phone,zip].forEach(el=>el.addEventListener('input', refresh));
-// Reveal the free-text box only when "Other" is chosen; clear it otherwise so a stale value never posts.
-function syncTradeOther(){ const on=trade.value==='other'; tradeOther.style.display=on?'block':'none'; if(!on) tradeOther.value=''; }
-trade.addEventListener('change', ()=>{ syncTradeOther(); if(trade.value==='other') tradeOther.focus(); refresh(); });
-tradeOther.addEventListener('input', refresh);
+$('trades').addEventListener('change', (e)=>{
+  if(e.target===otherCb){ tradeOther.style.display=otherCb.checked?'block':'none'; if(!otherCb.checked) tradeOther.value=''; else tradeOther.focus(); }
+  updateCount(); refresh();
+});
+tradeOther.addEventListener('input', ()=>{ updateCount(); refresh(); });
 consent.addEventListener('change', refresh);
 
 // Personalized links from outreach emails hard-link the contact and prefill:
@@ -188,8 +220,9 @@ if(params.get('e')) email.value=params.get('e');
 if(params.get('name')) fullName.value=params.get('name');
 if(params.get('company')) company.value=params.get('company');
 if(params.get('zip')||params.get('z')) zip.value=(params.get('zip')||params.get('z'));
-if(params.get('trade')) trade.value=params.get('trade').toLowerCase();
-syncTradeOther();
+const pfTrades=(params.get('trades')||params.get('trade')||'').toLowerCase().split(',').map(s=>s.trim()).filter(Boolean);
+if(pfTrades.length) tradeBoxes().forEach(b=>{ if(pfTrades.includes(b.value.toLowerCase())) b.checked=true; });
+updateCount();
 refresh();
 
 const API_ENDPOINT = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
@@ -206,8 +239,7 @@ $('optin').addEventListener('submit', async (ev)=>{
   const norm=normalize(phone.value);
   if(!norm){ err.textContent='Please enter a valid US mobile number.'; err.style.display='block'; return; }
   if(!zipOK()){ err.textContent='Please enter your 5-digit zip code.'; err.style.display='block'; return; }
-  if(!trade.value){ err.textContent='Please select your trade.'; err.style.display='block'; return; }
-  if(trade.value==='other' && !tradeOther.value.trim()){ err.textContent='Please type your trade.'; err.style.display='block'; return; }
+  if(!tradeOK()){ err.textContent='Please pick at least one trade (or check Other and type it in).'; err.style.display='block'; return; }
   if(!consent.checked){ err.textContent='Please check the box to turn on job alerts.'; err.style.display='block'; return; }
 
   submit.disabled=true; submit.textContent='Turning on...';
@@ -218,8 +250,8 @@ $('optin').addEventListener('submit', async (ev)=>{
     email:email.value.trim(),
     phone:norm, phone_raw:phone.value.trim(),
     zip:zip.value.trim(),
-    trade:trade.value,
-    trade_other: trade.value==='other' ? tradeOther.value.trim() : '',
+    trades: selectedTrades(),
+    trade_other: otherText(),
     consent:true,
     'cf-turnstile-response': document.querySelector('[name="cf-turnstile-response"]')?.value || '',
     contact_ref:CONTACT_REF
