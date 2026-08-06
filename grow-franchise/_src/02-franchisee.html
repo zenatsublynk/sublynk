@@ -1,0 +1,94 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><style>
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap');
+*{margin:0;padding:0;box-sizing:border-box;-webkit-print-color-adjust:exact!important;print-color-adjust:exact!important}
+:root{
+  --navy:#0d142a;--navy2:#16203c;--orange:#dd6336;--orange-d:#c25529;
+  --ink:#1a1512;--muted:#726c64;--paper:#faf6ef;--card:#ffffff;--line:#ece6db;
+  --pain:#fdeee6;--green:#2f9e6b;--soft:#fff3ec;
+}
+html,body{width:1403px;height:1815px;font-family:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
+  background:var(--paper);color:var(--ink);overflow:hidden;-webkit-font-smoothing:antialiased}
+.page{width:1403px;height:1815px;display:flex;flex-direction:column;position:relative}
+.pad{padding:0 74px}
+.tag{font-size:21px;font-weight:800;letter-spacing:.16em;text-transform:uppercase;color:var(--orange)}
+.tag b{color:var(--navy);font-weight:800}
+h1.hl{font-size:60px;font-weight:900;line-height:1.03;letter-spacing:-2px;color:var(--navy);margin:12px 0 0}
+h1.hl span{color:var(--orange)}
+.sub{font-size:27px;font-weight:500;line-height:1.3;color:#4a453f;margin-top:14px;max-width:22ch}
+.badge{background:var(--soft);color:var(--orange-d);font-size:18px;font-weight:800;letter-spacing:.12em;text-transform:uppercase;
+  padding:12px 22px;border-radius:30px;white-space:nowrap}
+/* pricebox */
+.pbox{border:2.5px solid var(--orange);border-radius:22px;padding:26px 28px;background:#fff}
+.pbox .p{font-size:74px;font-weight:900;letter-spacing:-2px;color:var(--navy);line-height:.95}
+.pbox .p span{font-size:30px;font-weight:700;color:var(--muted);letter-spacing:0}
+.pbox .rr{margin-top:14px;font-size:23px;font-weight:800;color:var(--orange-d);line-height:1.25}
+.pbox .rr b{color:var(--navy)}
+.pbox .fine{margin-top:12px;font-size:19px;font-weight:500;color:var(--muted);line-height:1.4}
+.pbox .bullet{margin-top:16px;padding-top:16px;border-top:1px solid var(--line);font-size:21px;font-weight:700;color:var(--navy);display:flex;align-items:center;gap:10px}
+.pbox .bullet::before{content:"";width:12px;height:12px;border-radius:50%;background:var(--green);flex:0 0 auto}
+/* header layout */
+.top{padding-top:46px}
+.hrow{display:flex;align-items:center;justify-content:space-between}
+.logo{height:50px;width:auto;display:block}
+.hbody{display:grid;grid-template-columns:1.55fr 1fr;gap:38px;align-items:start;margin-top:20px}
+/* pain */
+.pain{margin-top:22px;background:var(--pain);border-left:8px solid var(--orange);border-radius:0 14px 14px 0;padding:18px 28px}
+.pain .lab{font-size:18px;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:var(--orange-d)}
+.pain .txt{font-size:24px;font-weight:600;line-height:1.36;color:var(--navy);margin-top:7px}
+.pain .txt b{font-weight:800}
+/* eyebrow */
+.eyebrow{font-size:22px;font-weight:800;letter-spacing:.14em;text-transform:uppercase;color:var(--navy);opacity:.85}
+/* cards */
+.mid{margin-top:20px}
+.cards{display:grid;grid-template-columns:1fr 1fr;grid-template-rows:1fr 1fr;gap:18px;margin-top:14px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:22px 26px;box-shadow:0 2px 6px rgba(13,20,42,.05);display:flex;flex-direction:column}
+.card .ic{width:50px;height:50px;border-radius:14px;background:var(--soft);color:var(--orange);display:flex;align-items:center;justify-content:center;margin-bottom:12px}
+.card .ic svg{width:28px;height:28px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.card h3{font-size:29px;font-weight:800;color:var(--navy);line-height:1.1}
+.card .adv{font-size:22px;color:#57524b;line-height:1.36;margin-top:8px;flex:1}
+.card .ben{margin-top:12px;padding-top:12px;border-top:1px solid var(--line);font-size:22px;font-weight:800;color:var(--orange-d)}
+.card .ben .ar{color:var(--orange);font-weight:900;margin-right:8px}
+/* steps */
+.steps{margin-top:22px}
+.steps .shead{display:flex;align-items:center;justify-content:space-between}
+.pill{background:#e7f5ee;color:var(--green);font-size:22px;font-weight:800;padding:9px 20px;border-radius:30px;display:flex;align-items:center;gap:10px}
+.pill::before{content:"✓";font-weight:900}
+.srow{display:grid;grid-template-columns:1fr 1fr 1fr;gap:18px;margin-top:14px}
+.step{background:var(--navy);border-radius:18px;padding:22px 24px 24px;color:#fff}
+.step .n{width:44px;height:44px;border-radius:11px;background:var(--orange);color:#fff;font-size:24px;font-weight:900;display:flex;align-items:center;justify-content:center;margin-bottom:14px}
+.step h4{font-size:27px;font-weight:800;line-height:1.1}
+.step p{font-size:21px;color:#c7cede;line-height:1.36;margin-top:9px}
+/* footer */
+.footer{margin-top:auto;background:var(--navy);padding:26px 74px;display:flex;align-items:center;justify-content:space-between;gap:24px}
+.fcta{font-size:34px;font-weight:900;color:#fff;line-height:1.1;letter-spacing:-.5px}
+.fright{display:flex;align-items:center;gap:34px}
+.flink strong{display:block;font-size:15px;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);margin-bottom:3px}
+.flink span{font-size:20px;font-weight:700;color:#fff}
+.fbtn{background:var(--orange);color:#fff;font-size:24px;font-weight:800;padding:16px 30px;border-radius:10px;white-space:nowrap}
+</style></head>
+<body><div class="page">
+  <div class="top pad">
+    <div class="hrow"><img class="logo" src="file:///Users/jobs/Desktop/sublynk/demo/sublynk-color.png" alt="Sublynk"><div class="badge">For Franchisees</div></div>
+    <div class="hbody">
+      <div class="hleft">
+        <div class="tag">Get Vetted. Get Connected. <b>Start Growing.</b></div>
+        <h1 class="hl">Turn compliance into<br>your <span>growth engine.</span></h1>
+        <p class="sub">The franchisor (Corporate) who brought you on runs compliance on Sublynk. Here is what it means for you.</p>
+      </div>
+      <div class="hright"><div class="pbox"><div class="p">$100<span> / yr</span></div><div class="rr">Plus a background check. <b>No cut of your jobs.</b></div><div class="fine">One flat fee covers verification, brand agreements, and renewals. Want public leads too? Ask about Sublynk Certified.</div></div></div>
+    </div>
+  </div>
+  <div class="pad"><div class="pain"><div class="lab">The Problem Today</div><div class="txt">Corporate needs proof you are licensed, insured, and on-brand, and the old way drags on for weeks. You lose revenue while you wait, and one expired document can pause your location.</div></div></div>
+  <div class="mid pad"><div class="eyebrow">Why it's a no-brainer</div><div class="cards"><div class="card"><div class="ic"><svg viewBox="0 0 24 24"><path d="M13 2L4 14h7l-1 8 9-12h-7z"/></svg></div><h3>Cleared in minutes</h3><p class="adv">Get fully credentialed with Corporate in one sitting, not weeks stuck in the old tool.</p><p class="ben"><span class="ar">&rarr;</span>Start earning sooner</p></div><div class="card"><div class="ic"><svg viewBox="0 0 24 24"><path d="M12 3l7 3v5c0 4.4-3 7.4-7 9-4-1.6-7-4.6-7-9V6l7-3z"/><path d="M9 12l2 2 4-4"/></svg></div><h3>Verified at the source</h3><p class="adv">Insurance, license, and background confirmed with your broker and the board, not a PDF.</p><p class="ben"><span class="ar">&rarr;</span>Corporate approves you first</p></div><div class="card"><div class="ic"><svg viewBox="0 0 24 24"><rect x="8" y="8" width="12" height="12" rx="2"/><path d="M16 8V6a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h2"/></svg></div><h3>One profile, every brand</h3><p class="adv">No re-credentialing each renewal or when you open another location.</p><p class="ben"><span class="ar">&rarr;</span>Reuse it everywhere</p></div><div class="card"><div class="ic"><svg viewBox="0 0 24 24"><path d="M20 11a8 8 0 1 0-2.6 5.9"/><path d="M20 4v5h-5"/></svg></div><h3>Never miss a renewal</h3><p class="adv">We remind you and re-verify before anything expires, so you stay open for business.</p><p class="ben"><span class="ar">&rarr;</span>Never pause a location</p></div></div></div>
+  <div class="steps pad">
+    <div class="shead"><div class="eyebrow">Complete in 5 minutes</div><div class="pill">Most franchisees cleared the same business day</div></div>
+    <div class="srow"><div class="step"><div class="n">1</div><h4>Accept your invite</h4><p>Corporate sent an invite. One click creates your account.</p></div><div class="step"><div class="n">2</div><h4>Add credentials</h4><p>Add insurance, license &amp; background, plus your franchise agreement and W-9, in one workflow.</p></div><div class="step"><div class="n">3</div><h4>Get compliant</h4><p>Corporate is notified the moment you pass. We keep you current so you never fall off-brand.</p></div></div>
+  </div>
+  <div class="footer"><div class="fcta">Ready to grow<br>your location?</div>
+    <a class="fbtn">Get verified today &rarr;</a>
+    <div class="fright">
+      <div class="flink"><strong>Platform</strong><span>app.sublynk.com</span></div>
+      <div class="flink"><strong>Questions?</strong><span>info@sublynk.com</span></div>
+    </div>
+  </div>
+</div></body></html>
