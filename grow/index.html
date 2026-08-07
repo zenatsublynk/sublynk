@@ -26,8 +26,10 @@
   .btn:active{transform:translateY(1px)}
   .stage{flex:1 1 auto;display:flex;align-items:center;justify-content:center;min-height:0;padding:4px 16px;position:relative}
   .book-wrap{margin:auto;filter:drop-shadow(0 30px 46px rgba(0,0,0,.55))}
-  #book .page{background:var(--paper);overflow:hidden}
+  #book .page{background:var(--paper);overflow:hidden;position:relative}
   #book .page img{width:100%;height:100%;object-fit:contain;display:block;-webkit-user-drag:none;user-select:none}
+  /* invisible clickable band over the baked-in footer CTA of each interior page */
+  #book .page > .cta-ov{position:absolute;left:0;right:0;bottom:0;height:8%;z-index:6;cursor:pointer;display:block}
   /* covers (higher specificity than #book .page so the gradient wins) */
   /* container-type lets cover type scale with the PAGE width (cqw), not the viewport,
      so nothing overflows/overlaps at any book size. */
@@ -86,10 +88,10 @@
         </div>
         <div class="bottom"><div class="wm">Sublynk<span class="dot">.</span></div><div class="foot">Flip →</div></div>
       </div>
-      <div class="page"><img src="pages/01-certified.png" alt="Sublynk Certified one-pager"></div>
-      <div class="page"><img src="pages/02-subcontractor.png" alt="Subcontractor program one-pager"></div>
-      <div class="page"><img src="pages/03-submanagement.png" alt="Sub-management one-pager"></div>
-      <div class="page"><img src="pages/04-mutual-success.png" alt="Mutual Success Plan - Bench"></div>
+      <div class="page"><img src="pages/01-certified.png" alt="Sublynk Certified one-pager"><a class="cta-ov" href="https://app.sublynk.com/dashboard/company-profile/sublynk-certified" target="_blank" rel="noopener" aria-label="Get Sublynk Certified"></a></div>
+      <div class="page"><img src="pages/02-subcontractor.png" alt="Subcontractor program one-pager"><a class="cta-ov" href="https://app.sublynk.com/jobs/network/fortify-subcontractor-network" target="_blank" rel="noopener" aria-label="See job opportunities"></a></div>
+      <div class="page"><img src="pages/03-submanagement.png" alt="Sub-management one-pager"><a class="cta-ov" href="https://joinsublynk.com/setup/" target="_blank" rel="noopener" aria-label="Build your bench"></a></div>
+      <div class="page"><img src="pages/04-mutual-success.png" alt="Mutual Success Plan - Bench"><a class="cta-ov" href="https://joinsublynk.com/setup/" target="_blank" rel="noopener" aria-label="Start the launch"></a></div>
       <div class="page cover back" data-density="hard">
         <div class="top">
           <img class="logo" src="assets/sublynk-logo-white.png" alt="Sublynk">
@@ -181,7 +183,8 @@
     function guardInteractive(e){
       var chk  = e.target && e.target.closest && e.target.closest('.steps .chk');
       var link = e.target && e.target.closest && e.target.closest('.steps a');
-      if (!chk && !link) return;                 // normal page area -> let the engine flip
+      var cta  = e.target && e.target.closest && e.target.closest('.cta-ov');
+      if (!chk && !link && !cta) return;         // normal page area -> let the engine flip
       e.stopPropagation();
       if (e.type === 'click' && chk){            // toggle the step on the real click
         e.preventDefault();
