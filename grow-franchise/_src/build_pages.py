@@ -266,7 +266,7 @@ def page4():
            ("We build your bespoke network","You approve the workflow."),
            ("Send invites","A single workflow completed in 5 minutes."),
            ("Franchisees self-clear","Sublynk verifies at the source, plus continuous monitoring."),
-           ("Network goes live","See cleared, pending, and expiring in one view.")]
+           ("Free workshop","Hop on a 20-minute Google Meet and we complete your compliance flow together, click by click.")]
     stats=[("Say yes","Open the next location","A verified network means new locations launch faster while others scramble to comply."),
            ("Zero","Locations paused by paperwork","One lapsed COI stalls a location. We watch every renewal for you."),
            ("100 hrs","Given back to Corporate","Stop chasing PDFs. Your team grows the brand instead.")]
