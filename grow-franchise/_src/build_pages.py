@@ -167,8 +167,8 @@ p2 = dict(
  badge="For Franchisees",
  h1='Turn compliance into<br>your <span>growth engine.</span>',
  sub="The franchisor (Corporate) who brought you on runs compliance on Sublynk. Here is what it means for you.",
- price=dict(big="$100", unit="/ yr", rr="Plus a background check. <b>No cut of your jobs.</b>",
-            fine="One flat fee covers verification, brand agreements, and renewals. Want public leads too? Ask about Sublynk Certified."),
+ price=dict(big="$25–$35", unit="/ mo", rr="Billed as a contractor in your network. <b>No cut of your jobs.</b>",
+            fine="Franchisees are credentialed as contractors inside your corporate network — verification, brand agreements, and renewals included. Background checks pay-per-check."),
  pain="Corporate needs proof you are licensed, insured, and on-brand, and the old way drags on for weeks. You lose revenue while you wait, and one expired document can pause your location.",
  cards_eyebrow="Why it's a no-brainer",
  cards=[
