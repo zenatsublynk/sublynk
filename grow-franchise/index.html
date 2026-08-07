@@ -29,8 +29,11 @@
   .btn:active{transform:translateY(1px)}
   .stage{flex:1 1 auto;display:flex;align-items:center;justify-content:center;min-height:0;padding:4px 16px;position:relative}
   .book-wrap{margin:auto;filter:drop-shadow(0 30px 46px rgba(0,0,0,.55))}
-  #book .page{background:var(--paper);overflow:hidden;position:relative}
-  /* transparent clickable band over the footer CTA of each image page (the CTA text is baked into the PNG) */
+  #book .page{background:var(--paper);overflow:hidden}
+  /* transparent clickable band over the footer CTA of each image page (the CTA text is baked into the PNG).
+     The page (.stf__item) is already position:absolute via the flip engine, so it is the positioning context.
+     Do NOT set position:relative on .page: it out-specifies .stf__item and forces the engine's cloned
+     fold-page into normal flow (a mirror at the bottom while turning). */
   #book .page > .cta-ov{position:absolute;left:0;right:0;bottom:0;height:7.6%;z-index:6;cursor:pointer;display:block}
   #book .page img{width:100%;height:100%;object-fit:contain;display:block;-webkit-user-drag:none;user-select:none}
   /* covers (higher specificity than #book .page so the gradient wins) */
@@ -59,6 +62,12 @@
     border-bottom:1px solid rgba(255,255,255,.28);padding-bottom:2px;transition:.15s}
   #book .page.cover .steps a:hover{color:#ffd9c9;border-bottom-color:var(--orange)}
   #book .page.cover .steps li.done a{text-decoration:line-through;opacity:.5;border-bottom-color:transparent}
+  /* Back cover carries 5 next-step links; tighten its steps so they clear the watermark at any book size (cqw is scale-invariant). Scoped to .back so the front cover is untouched. */
+  #book .page.cover.back .logo{margin-bottom:4.5cqw}
+  #book .page.cover.back h1{font-size:clamp(19px,8.6cqw,36px);margin:2.2cqw 0 1.8cqw}
+  #book .page.cover.back .steps{margin-top:3.4cqw;gap:3cqw}
+  #book .page.cover.back .steps .chk{width:7cqw;height:7cqw;min-width:24px;min-height:24px;max-width:37px;max-height:37px;font-size:clamp(12px,3.4cqw,16px)}
+  #book .page.cover.back .steps a{font-size:clamp(12px,3.8cqw,16px);line-height:1.22}
   #book .page.cover .bottom{position:absolute;left:0;right:0;bottom:0;padding:0 9% 7%;display:flex;align-items:flex-end;justify-content:space-between;gap:10px}
   #book .page.cover .wm{font-weight:800;font-size:clamp(14px,4.3cqw,20px)}
   #book .page.cover .wm .dot{color:var(--orange)}
