@@ -183,7 +183,7 @@ p2 = dict(
   dict(h="Add credentials",d="Add insurance, license &amp; background, plus your franchise agreement and W-9, in one workflow."),
   dict(h="Get compliant",d="Corporate is notified the moment you pass. We keep you current so you never fall off-brand."),
  ],
- fcta="Ready to grow<br>your location?", fbtn="Get verified today &rarr;",
+ fcta="Get compliant to increase<br>your job opportunities", fbtn="Job Opportunities &rarr;",
 )
 
 # ---------------- PAGE 3: Franchisor / Corporate management ----------------
@@ -208,7 +208,7 @@ p3 = dict(
   dict(h="Invite your franchisees",d="One link. They credential themselves, verified at the source."),
   dict(h="Grow your network",d="Add locations, monitor compliance, and expand a brand you can dispatch on demand."),
  ],
- fcta="Ready to credential<br>your franchise?", fbtn="Book a demo &rarr;",
+ fcta="Ready to build<br>your bench?", fbtn="Build your bench &rarr;",
 )
 
 # ---------------- PAGE 4: Mutual Success Plan (distinct layout) ----------------
@@ -296,8 +296,8 @@ def page4():
     </div>
     <div class="fine">50 locations at ~2 hours each to chase and verify is roughly <b>100 coordinator hours a month</b>, handed back to growth. No lead fees. No cut of your jobs.</div>
   </div></div>
-  <div class="footer"><div class="fcta">Ready to launch<br>your franchise?</div>
-    <a class="fbtn">Start the launch &rarr;</a>
+  <div class="footer"><div class="fcta">Automate your<br>credentialing flow</div>
+    <a class="fbtn">Start setup &rarr;</a>
     <div class="fright">
       <div class="flink"><strong>Platform</strong><span>app.sublynk.com</span></div>
       <div class="flink"><strong>Your GTM contact</strong><span>info@sublynk.com</span></div>
