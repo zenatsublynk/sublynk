@@ -208,7 +208,7 @@ p3 = dict(
   dict(h="Invite your franchisees",d="One link. They credential themselves, verified at the source."),
   dict(h="Grow your network",d="Add locations, monitor compliance, and expand a brand you can dispatch on demand."),
  ],
- fcta="Ready to build<br>your bench?", fbtn="Build your bench &rarr;",
+ fcta="Ready to limit your<br>liability?", fbtn="Limit your liability &rarr;",
 )
 
 # ---------------- PAGE 4: Mutual Success Plan (distinct layout) ----------------
