@@ -62,7 +62,7 @@ def render_band(html, w, h):
 # page file -> (fcta, fbtn)
 JOBS = [
  ("02-subcontractor.png", "Ready to get to<br>work?",            "Job Opportunities &rarr;"),
- ("03-submanagement.png", "Ready to credential your<br>bench?",  "Build your bench &rarr;"),
+ ("03-submanagement.png", "Ready to limit your<br>liability?",  "Limit your liability &rarr;"),
 ]
 
 for fname, fcta, fbtn in JOBS:
