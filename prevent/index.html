@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Why vetting matters: the 2026 cost of unvetted contractors | Sublynk</title>
+<meta name="description" content="Contractor fraud is up 38% since 2023 and regulators are raising penalties fast. A sourced look at what is going wrong across the trades in 2026, and how a verified credential prevents each risk.">
+<meta property="og:title" content="The 2026 cost of unvetted contractors">
+<meta property="og:description" content="Fraud up 38%. EPA fines up to $46,989/day. Unlicensed penalties up 650% in California. Sourced industry risks, and how verified credentialing prevents them.">
+<meta property="og:type" content="article">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --navy:#0D142A; --navy-2:#141d3b; --orange:#DD6336; --orange-deep:#c4502a; --green:#2EB67D;
+    --ink:#1c2333; --muted:#5b6478; --faint:#8b93a7; --line:#e7e9f0; --surface:#f6f7fb; --card:#ffffff;
+  }
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{margin:0;font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,sans-serif;color:var(--ink);background:#fff;line-height:1.6;-webkit-font-smoothing:antialiased}
+  a{color:inherit}
+  .wrap{max-width:1080px;margin:0 auto;padding:0 22px}
+  /* top bar */
+  .bar{background:var(--navy);position:sticky;top:0;z-index:20}
+  .bar .wrap{display:flex;align-items:center;justify-content:space-between;height:60px}
+  .bar img{height:24px;display:block}
+  .bar .cta{background:var(--orange);color:#fff;text-decoration:none;font-size:13.5px;font-weight:700;padding:9px 16px;border-radius:9px;white-space:nowrap}
+  .bar .cta:hover{background:var(--orange-deep)}
+  /* hero */
+  .hero{background:linear-gradient(180deg,var(--navy) 0%,var(--navy-2) 100%);color:#fff;padding:66px 0 76px;position:relative;overflow:hidden}
+  .hero .eyebrow{display:inline-block;font-size:12px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--orange);background:rgba(221,99,54,.12);border:1px solid rgba(221,99,54,.3);padding:6px 13px;border-radius:999px;margin-bottom:22px}
+  .hero h1{font-size:clamp(30px,5.2vw,52px);line-height:1.08;font-weight:900;letter-spacing:-.02em;margin:0 0 20px;max-width:16ch;text-wrap:balance}
+  .hero p{font-size:clamp(16px,2.2vw,19px);color:#c3c9d8;max-width:62ch;margin:0 0 30px}
+  .hero .btns{display:flex;gap:12px;flex-wrap:wrap}
+  .btn{display:inline-flex;align-items:center;gap:8px;text-decoration:none;font-weight:700;font-size:15px;padding:13px 24px;border-radius:11px;transition:.15s}
+  .btn-o{background:var(--orange);color:#fff}.btn-o:hover{background:var(--orange-deep);transform:translateY(-1px)}
+  .btn-g{background:rgba(255,255,255,.08);color:#fff;border:1px solid rgba(255,255,255,.18)}.btn-g:hover{background:rgba(255,255,255,.14)}
+  /* stat band */
+  .stats{background:var(--navy-2);border-top:1px solid rgba(255,255,255,.07)}
+  .stats .grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:rgba(255,255,255,.07)}
+  .stat{background:var(--navy-2);padding:26px 20px;text-align:center}
+  .stat .n{font-size:clamp(24px,3.4vw,34px);font-weight:900;color:#fff;letter-spacing:-.02em;font-variant-numeric:tabular-nums}
+  .stat .n b{color:var(--orange)}
+  .stat .l{font-size:12.5px;color:#aab2c5;margin-top:6px;line-height:1.35}
+  @media(max-width:720px){.stats .grid{grid-template-columns:repeat(2,1fr)}}
+  /* intro */
+  .intro{padding:60px 0 8px;text-align:center}
+  .intro h2{font-size:clamp(24px,3.6vw,34px);font-weight:800;letter-spacing:-.02em;margin:0 auto 14px;max-width:20ch;text-wrap:balance}
+  .intro p{color:var(--muted);max-width:64ch;margin:0 auto;font-size:16.5px}
+  /* cards */
+  .cards{padding:40px 0 20px;display:grid;gap:20px}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:28px;display:grid;grid-template-columns:52px 1fr;gap:20px;box-shadow:0 1px 2px rgba(13,20,42,.04)}
+  .card .ic{width:52px;height:52px;border-radius:13px;background:rgba(221,99,54,.1);display:flex;align-items:center;justify-content:center;font-size:24px}
+  .card h3{margin:2px 0 6px;font-size:19px;font-weight:800;letter-spacing:-.01em}
+  .card .prob{color:var(--muted);font-size:15px;margin:0 0 14px}
+  .card .prob b{color:var(--ink);font-weight:700}
+  .card .fix{background:var(--surface);border-left:3px solid var(--green);border-radius:0 10px 10px 0;padding:12px 15px;font-size:14.5px;color:var(--ink)}
+  .card .fix b{color:var(--green);font-weight:700}
+  .card .src{margin-top:12px;font-size:12.5px;color:var(--faint)}
+  .card .src a{color:var(--faint);text-decoration:underline;text-underline-offset:2px}
+  .card .src a:hover{color:var(--orange)}
+  @media(max-width:640px){.card{grid-template-columns:1fr;padding:22px}.card .ic{width:46px;height:46px}}
+  /* closing CTA */
+  .close{background:var(--navy);color:#fff;border-radius:20px;padding:44px 32px;text-align:center;margin:44px 0 60px}
+  .close h2{font-size:clamp(23px,3.4vw,32px);font-weight:900;margin:0 auto 14px;max-width:24ch;letter-spacing:-.02em;text-wrap:balance}
+  .close p{color:#c3c9d8;max-width:58ch;margin:0 auto 26px;font-size:16px}
+  .close .btns{display:flex;gap:12px;justify-content:center;flex-wrap:wrap}
+  /* sources + footer */
+  .sources{border-top:1px solid var(--line);padding:34px 0}
+  .sources h4{font-size:12px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--faint);margin:0 0 14px}
+  .sources ul{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:1fr 1fr;gap:8px 26px}
+  .sources li{font-size:13px;color:var(--muted)}
+  .sources a{color:var(--muted);text-decoration:none;border-bottom:1px solid var(--line)}
+  .sources a:hover{color:var(--orange)}
+  .sources .note{grid-column:1/-1;font-size:12px;color:var(--faint);margin-top:14px;line-height:1.5}
+  @media(max-width:640px){.sources ul{grid-template-columns:1fr}}
+  footer.site{background:var(--navy);color:#93a;padding:26px 0}
+  footer.site .wrap{display:flex;flex-wrap:wrap;gap:10px 22px;align-items:center}
+  footer.site span,footer.site a{font-size:12.5px;color:#8891a6;text-decoration:none}
+  footer.site a:hover{color:var(--orange)}
+  footer.site img{height:20px;opacity:.9}
+</style>
+</head>
+<body>
+
+<div class="bar"><div class="wrap">
+  <a href="https://joinsublynk.com/" aria-label="Sublynk home"><img src="https://app.sublynk.com/assets/logo-white-D7N9haAe.png" alt="Sublynk"></a>
+  <a class="cta" href="https://cal.com/zen-at-sublynk/15min" target="_blank" rel="noopener">Schedule a demo</a>
+</div></div>
+
+<section class="hero"><div class="wrap">
+  <span class="eyebrow">2026 Industry Report</span>
+  <h1>The rising cost of an unvetted contractor</h1>
+  <p>Contractor fraud is up 38% since 2023, and regulators are raising penalties faster than at any point in a decade. Here is what is going wrong across the trades in 2026, with sources, and how one verified credential prevents each risk before it reaches a job.</p>
+  <div class="btns">
+    <a class="btn btn-o" href="https://cal.com/zen-at-sublynk/15min" target="_blank" rel="noopener">See how Sublynk vets contractors</a>
+    <a class="btn btn-g" href="https://app.sublynk.com/contractors" target="_blank" rel="noopener">Browse verified pros</a>
+  </div>
+</div></section>
+
+<section class="stats"><div class="wrap"><div class="grid">
+  <div class="stat"><div class="n"><b>+38%</b></div><div class="l">Contractor fraud reported, 2023 to 2025 (NICB)</div></div>
+  <div class="stat"><div class="n">$46,989</div><div class="l">Max EPA lead-safe (RRP) penalty per violation, per day, 2026</div></div>
+  <div class="stat"><div class="n">~$3B</div><div class="l">Estimated annual US roofing fraud (NICB)</div></div>
+  <div class="stat"><div class="n">$200<span style="color:var(--faint)">&rarr;</span>$1,500</div><div class="l">California minimum fine for unlicensed work, up 650% (SB 779)</div></div>
+  <div class="stat"><div class="n">$30B+</div><div class="l">Sitting in asbestos bankruptcy trusts, a measure of hazmat liability</div></div>
+  <div class="stat"><div class="n">80%+</div><div class="l">Of contractors report they cannot find qualified workers (AGC)</div></div>
+</div></div></section>
+
+<div class="wrap">
+  <section class="intro">
+    <h2>A name on a spreadsheet is not a credential</h2>
+    <p>Most networks still vet contractors by hand: a PDF here, a Google search there, a certificate that expired months ago. Meanwhile the risks below are real, current, and expensive. A Sublynk Certified profile carries a verified license, active insurance, and a background check on file, checked continuously, so these problems never make it onto your jobs.</p>
+  </section>
+
+  <section class="cards">
+
+    <div class="card">
+      <div class="ic">🎭</div>
+      <div>
+        <h3>Fraud is organized, and increasingly transnational</h3>
+        <p class="prob">Reported contractor fraud rose <b>38% from 2023 to 2025</b>, costing homeowners and insurers an estimated <b>$9B+ a year</b> in post-disaster scams. Federal investigators have even identified an organized transnational crew posing as contractors to defraud homeowners with fake credentials.</p>
+        <div class="fix"><b>Sublynk prevents this:</b> verified license, active insurance, identity, and a background check are confirmed at onboarding, so fabricated or stolen credentials are flagged before a contractor ever joins a network.</div>
+        <div class="src">Sources: <a href="https://www.nicb.org/news/news-releases/nicb-warns-americans-contractor-fraud-continues-rise-nationwide" target="_blank" rel="noopener">NICB</a>, <a href="https://www.nbcphiladelphia.com/news/local/contractor-killed-in-philly-was-part-of-transnational-criminal-group-dhs-says/4433282/" target="_blank" rel="noopener">NBC10 / DHS</a></div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="ic">🪪</div>
+      <div>
+        <h3>Unlicensed operators are everywhere, and getting caught</h3>
+        <p class="prob">Licensing boards run undercover sting operations that routinely catch a dozen or more unlicensed operators bidding real jobs in a single county. In California those citations now carry administrative fines up to <b>$15,000</b> plus misdemeanor charges, and homeowners who hire them have little legal recourse.</p>
+        <div class="fix"><b>Sublynk prevents this:</b> license validation gates entry to a network. Only contractors with a verified, active license in the right trade and state get in.</div>
+        <div class="src">Source: <a href="https://www.foxla.com/news/12-allegedly-unlicensed-contractors-arrested-riverside-county-sting-operation" target="_blank" rel="noopener">CSLB sting operations (FOX 11)</a></div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="ic">🌪️</div>
+      <div>
+        <h3>Storm chasers turn disasters into a roofing racket</h3>
+        <p class="prob">Roofing fraud costs US homeowners an estimated <b>~$3 billion a year</b>. After every major storm, unlicensed "storm chasers" flood the area, collect deposits or insurance checks, and disappear, often leaving a torn-apart roof behind.</p>
+        <div class="fix"><b>Sublynk prevents this:</b> networks can gate disaster and insurance work to verified, insured contractors only, and homeowners hiring from a Sublynk Certified profile know exactly who they are letting on the roof.</div>
+        <div class="src">Source: <a href="https://www.nicb.org/news/news-releases/nicb-warns-americans-contractor-fraud-continues-rise-nationwide" target="_blank" rel="noopener">NICB</a></div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="ic">⚠️</div>
+      <div>
+        <h3>EPA lead-safe penalties are now $46,989 a day</h3>
+        <p class="prob">As of January 12, 2026, the EPA can assess up to <b>$46,989 per violation, per day</b> when an uncertified renovator works on pre-1978 housing without proper lead-safe (RRP) practices. Missing certifications, poor dust containment, and false records are the common failures.</p>
+        <div class="fix"><b>Sublynk prevents this:</b> RRP and trade certifications are tracked with renewal dates, so a network can gate remodeling work to contractors who are currently certified, not expired.</div>
+        <div class="src">Sources: <a href="https://www.epa.gov/enforcement/lead-renovation-repair-and-painting-rule" target="_blank" rel="noopener">US EPA</a>, <a href="https://www.floridarealtors.org/news-media/news-articles/2026/01/epa-tightens-lead-paint-enforcement" target="_blank" rel="noopener">Florida Realtors</a></div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="ic">⚖️</div>
+      <div>
+        <h3>Licensing enforcement is escalating fast</h3>
+        <p class="prob">California's SB 779 raised the minimum fine for unlicensed work from <b>$200 to $1,500</b> (a 650% jump) effective July 1, 2026, lifted workers-comp violation fines to <b>$10,000 to $20,000</b>, and empowered the Attorney General to pursue contractors with unpaid wage judgments. At least four states, including a full overhaul in New Jersey, tightened licensing in 2026.</p>
+        <div class="fix"><b>Sublynk prevents this:</b> credentials and compliance status are tracked automatically and kept current across every state a network operates in, so tightening rules never turn into surprise penalties.</div>
+        <div class="src">Sources: <a href="https://news.bloomberglaw.com/legal-exchange-insights-and-commentary/california-law-raises-stakes-for-contractor-licensing-compliance" target="_blank" rel="noopener">Bloomberg Law</a>, <a href="https://www.cslb.ca.gov/Resources/IndustryBulletins/2025/New%20Laws.FINAL_links.pdf" target="_blank" rel="noopener">CSLB</a></div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="ic">☣️</div>
+      <div>
+        <h3>Hazmat work carries seven-figure liability</h3>
+        <p class="prob">More than <b>$30 billion</b> sits in asbestos bankruptcy trusts, a stark measure of the liability exposure when unqualified crews disturb hazardous materials. One uncertified crew on the wrong job can create a claim that outlives the project by decades.</p>
+        <div class="fix"><b>Sublynk prevents this:</b> abatement, mitigation, and hazmat certifications are verified, so networks can confirm only qualified, certified crews touch dangerous work.</div>
+        <div class="src">Source: <a href="https://www.mesothelioma.com/lawyer/compensation/trusts/" target="_blank" rel="noopener">Asbestos trust fund reporting</a></div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="ic">🧩</div>
+      <div>
+        <h3>The vetting gap under a labor shortage</h3>
+        <p class="prob">Over <b>80% of contractors</b> report they cannot find enough qualified workers and subs. Under that pressure, vetting slips: crews get hired on familiarity instead of fit, and prequalification data ages quickly as insurance and certifications lapse between jobs.</p>
+        <div class="fix"><b>Sublynk prevents this:</b> a pre-vetted pool with automatic annual renewal of insurance and credentials means a network can staff from contractors whose vetting is always current, without the manual chase.</div>
+        <div class="src">Source: <a href="https://www.agc.org/news/2026/01/08/contractors-have-dampened-expectations-2026-apart-data-centers-and-power-projects-amid-worries-about" target="_blank" rel="noopener">Associated General Contractors of America</a></div>
+      </div>
+    </div>
+
+  </section>
+
+  <section class="close">
+    <h2>Verify once. Trust everywhere.</h2>
+    <p>Every Sublynk Certified contractor carries a verified license, active insurance, and a background check on file, monitored continuously. That is the difference between a name on a spreadsheet and a credential you can actually trust.</p>
+    <div class="btns">
+      <a class="btn btn-o" href="https://cal.com/zen-at-sublynk/15min" target="_blank" rel="noopener">Schedule a demo</a>
+      <a class="btn btn-g" href="https://app.sublynk.com/contractors" target="_blank" rel="noopener">See a Certified profile</a>
+    </div>
+  </section>
+
+  <section class="sources">
+    <h4>Sources</h4>
+    <ul>
+      <li><a href="https://www.nicb.org/news/news-releases/nicb-warns-americans-contractor-fraud-continues-rise-nationwide" target="_blank" rel="noopener">NICB — Contractor Fraud Continues to Rise Nationwide (+38%)</a></li>
+      <li><a href="https://www.epa.gov/enforcement/lead-renovation-repair-and-painting-rule" target="_blank" rel="noopener">US EPA — Lead Renovation, Repair and Painting Rule</a></li>
+      <li><a href="https://www.floridarealtors.org/news-media/news-articles/2026/01/epa-tightens-lead-paint-enforcement" target="_blank" rel="noopener">Florida Realtors — EPA Tightens Lead Paint Enforcement</a></li>
+      <li><a href="https://news.bloomberglaw.com/legal-exchange-insights-and-commentary/california-law-raises-stakes-for-contractor-licensing-compliance" target="_blank" rel="noopener">Bloomberg Law — California SB 779 licensing penalties</a></li>
+      <li><a href="https://www.cslb.ca.gov/Resources/IndustryBulletins/2025/New%20Laws.FINAL_links.pdf" target="_blank" rel="noopener">CSLB — New Laws Affecting Contractors in 2026</a></li>
+      <li><a href="https://www.foxla.com/news/12-allegedly-unlicensed-contractors-arrested-riverside-county-sting-operation" target="_blank" rel="noopener">FOX 11 — Unlicensed contractor sting operation</a></li>
+      <li><a href="https://www.agc.org/news/2026/01/08/contractors-have-dampened-expectations-2026-apart-data-centers-and-power-projects-amid-worries-about" target="_blank" rel="noopener">AGC of America — 2026 Construction Outlook (workforce)</a></li>
+      <li><a href="https://www.nbcphiladelphia.com/news/local/contractor-killed-in-philly-was-part-of-transnational-criminal-group-dhs-says/4433282/" target="_blank" rel="noopener">NBC10 — DHS transnational contractor fraud group</a></li>
+    </ul>
+    <p class="note">Figures are drawn from public sources (NICB, US EPA, California CSLB, AGC of America) reported in 2025 and 2026. The ~$9B annual post-disaster fraud figure is an industry estimate, not a fixed audited total. This page summarizes reporting and links to each original source; it does not reproduce those articles.</p>
+  </section>
+</div>
+
+<footer class="site"><div class="wrap">
+  <a href="https://joinsublynk.com/"><img src="https://app.sublynk.com/assets/logo-white-D7N9haAe.png" alt="Sublynk"></a>
+  <span>5610 Ward Rd, STE 300, Arvada, CO 80002</span>
+  <span>&copy; 2026 Sublynk, Inc.</span>
+  <a href="https://www.sublynk.com/terms-of-service" target="_blank" rel="noopener" style="margin-left:auto">Terms of Service</a>
+  <a href="https://www.sublynk.com/privacypolicy" target="_blank" rel="noopener">Privacy Policy</a>
+</div></footer>
+
+</body>
+</html>
