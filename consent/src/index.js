@@ -120,28 +120,40 @@ async function sendToCustomerIO(env, allFields, norm) {
   } catch (e) { console.warn('CIO forms error:', e && e.message); }
 }
 
-// Fire a job-alert opt-in into Customer.io (223140) via the Forms API, so the "Job-alert opt-in
-// confirmation" automation can send the follow-up email that catches people who close the consent
-// tab before seeing the on-page next-step CTA. Reuses the same Track creds as the contact push, hits
-// a DISTINCT form slug (sublynk-jobalert-optin) so it triggers the confirmation automation, not the
-// website-contact auto-reply. Fire-and-forget; a CIO hiccup never affects the opt-in save or Slack.
+// Fire a job-alert opt-in into Customer.io (223140) as a DISTINCT custom event (jobalert_optin),
+// NOT a form submit. The "Website Contact · Auto-Reply" automation (campaign 5) triggers on ANY
+// form_submit with no form filter, so routing opt-ins through a CIO form would ALSO fire the contact
+// auto-reply (wrong email). Instead: (1) identify the person so the confirmation email's Liquid has
+// first_name/company, then (2) emit the jobalert_optin event, which the "Job Alerts · Opt-In
+// Confirmation" automation (campaign 6) triggers on. Reuses the same Track creds as the contact push.
+// Fire-and-forget; a CIO hiccup never affects the opt-in save or Slack.
 async function sendOptinToCIO(env, d) {
   if (!env.CIO_SITE_ID || !env.CIO_TRACK_KEY || !d.email) return;
-  const data = { email: d.email, first_name: d.first_name || '', name: d.name || '', company: d.company || '',
-                 trade: d.trade || '', zip: d.zip || '', source: 'job-alert-optin', job_alert_optin: 'true' };
-  const body = JSON.stringify({ data });
-  for (let attempt = 0; attempt < 3; attempt++) {
-    if (attempt) await new Promise((r) => setTimeout(r, 700 * attempt));
-    try {
-      const res = await fetch('https://track.customer.io/api/v1/forms/sublynk-jobalert-optin/submit', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json', Authorization: 'Basic ' + btoa(env.CIO_SITE_ID + ':' + env.CIO_TRACK_KEY) },
-        body,
-      });
-      if (res.ok) return;
-      console.warn(`CIO optin submit attempt ${attempt + 1} ->`, res.status, (await res.text()).slice(0, 200));
-    } catch (e) { console.warn(`CIO optin attempt ${attempt + 1} error:`, e && e.message); }
-  }
+  const auth = 'Basic ' + btoa(env.CIO_SITE_ID + ':' + env.CIO_TRACK_KEY);
+  const id = encodeURIComponent(d.email);                 // email is the workspace identifier
+  const attrs = { email: d.email, first_name: d.first_name || '', name: d.name || '', company: d.company || '',
+                  trade: d.trade || '', zip: d.zip || '', source: 'job-alert-optin', job_alert_optin: true };
+  const evt = { name: 'jobalert_optin', data: { first_name: d.first_name || '', company: d.company || '',
+                trade: d.trade || '', zip: d.zip || '' } };
+  const post = async (url, payload) => {
+    for (let attempt = 0; attempt < 3; attempt++) {
+      if (attempt) await new Promise((r) => setTimeout(r, 700 * attempt));
+      try {
+        const res = await fetch(url, {
+          method: payload.method,
+          headers: { 'Content-Type': 'application/json', Authorization: auth },
+          body: JSON.stringify(payload.body),
+        });
+        if (res.ok) return true;
+        console.warn(`CIO optin ${payload.label} attempt ${attempt + 1} ->`, res.status, (await res.text()).slice(0, 200));
+      } catch (e) { console.warn(`CIO optin ${payload.label} attempt ${attempt + 1} error:`, e && e.message); }
+    }
+    return false;
+  };
+  // 1) Identify (set attributes) BEFORE the event so the email's {{customer.first_name}} resolves.
+  await post(`https://track.customer.io/api/v1/customers/${id}`, { method: 'PUT', body: attrs, label: 'identify' });
+  // 2) Fire jobalert_optin -> triggers the Opt-In Confirmation automation (campaign 6).
+  await post(`https://track.customer.io/api/v1/customers/${id}/events`, { method: 'POST', body: evt, label: 'event' });
 }
 
 // Insert a row into a Supabase table via PostgREST (anon key + RLS insert). 3 retries.
@@ -203,6 +215,17 @@ async function handleTracking(u, request, env, ctx) {
     const target = u.searchParams.get('target') || '';
     ctx.waitUntil(insertRow(env, 'email_tracking', {
       event_type: 'click', enrollment_id: enrollmentId, token, timestamp: now,
+      ip_address: ip, user_agent: ua, target_url: target,
+    }));
+    return Response.redirect(/^https?:\/\//i.test(target) ? target : 'https://app.sublynk.com', 302);
+  }
+  // CTA click on a Sublynk page (e.g. the consent confirmation page's Create Account / Find Jobs).
+  // Distinct event_type so it never mixes into the email open/click metrics. Logs, then 302s to the
+  // UTM-tagged destination so the click is captured AND the user still lands where they intended.
+  if (kind === 'cta') {
+    const target = u.searchParams.get('target') || '';
+    ctx.waitUntil(insertRow(env, 'email_tracking', {
+      event_type: 'cta_click', enrollment_id: 'cta:' + (enrollmentId || 'unknown'), token, timestamp: now,
       ip_address: ip, user_agent: ua, target_url: target,
     }));
     return Response.redirect(/^https?:\/\//i.test(target) ? target : 'https://app.sublynk.com', 302);
