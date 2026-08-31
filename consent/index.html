@@ -845,6 +845,19 @@
       //   /consent?c=<ref>&e=<email>&name=<name>&company=<co>&zip=<zip>&trades=a,b
       const params = new URLSearchParams(location.search);
       const CONTACT_REF = params.get("c") || null;
+
+      // Meta ad attribution: capture the ad click id (fbclid) and Meta cookies so the server-side
+      // CompleteRegistration event can be tied back to the ad. There is no Meta pixel on this page, so
+      // we build _fbc from fbclid ourselves (fb.1.<ts>.<fbclid>) and persist it in case the opt-in is
+      // finished on a later visit. _fbp is only sent if some other pixel happened to set it.
+      const readCookie = (n) => (document.cookie.match(new RegExp("(?:^|; )" + n + "=([^;]*)")) || [])[1] || "";
+      const fbclid = params.get("fbclid");
+      if (fbclid) { try { localStorage.setItem("slk_fbc", "fb.1." + Date.now() + "." + fbclid); } catch (e) {} }
+      const FBC = readCookie("_fbc") || (() => { try { return localStorage.getItem("slk_fbc") || ""; } catch (e) { return ""; } })();
+      const FBP = readCookie("_fbp") || "";
+      // Traffic source for the #gtm alert: a fresh Meta ad click wins, then our personalized outreach
+      // link (?c=), then a returning visitor who still carries a Meta click id, else Direct.
+      const SOURCE = fbclid ? "Meta Ads" : (CONTACT_REF ? "Outbound" : (FBC ? "Meta Ads" : "Direct"));
       const setVal = (id, v) => { const el = document.getElementById(id); if (el && v) el.value = v; };
       setVal("email", params.get("e"));
       setVal("fullName", params.get("name"));
@@ -889,7 +902,10 @@
           trade_other: otherText(),
           consent: true,
           "cf-turnstile-response": document.querySelector('[name="cf-turnstile-response"]')?.value || "",
-          contact_ref: CONTACT_REF
+          contact_ref: CONTACT_REF,
+          fbc: FBC || null,
+          fbp: FBP || null,
+          source: SOURCE
         };
         submitBtn.disabled = true;
         submitBtn.textContent = "Turning on...";

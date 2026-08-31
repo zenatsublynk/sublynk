@@ -2,6 +2,11 @@ name = "sublynk-consent-worker"
 main = "src/index.js"
 compatibility_date = "2025-07-14"
 
+# Non-secret Meta Conversions API config (the access token is a secret, set via wrangler secret put).
+[vars]
+META_DATASET_ID = "931609069346666"
+META_GRAPH_VERSION = "v21.0"
+
 # sublynk.com is NOT on Cloudflare (it resolves on DigitalOcean nameservers), so a custom
 # route/domain there is not possible (Cloudflare requires an active zone you own). This
 # deploys to the account's default *.workers.dev subdomain instead -- no DNS changes needed.

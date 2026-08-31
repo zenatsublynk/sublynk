@@ -157,6 +157,90 @@ async function sendOptinToCIO(env, d) {
 }
 
 // Insert a row into a Supabase table via PostgREST (anon key + RLS insert). 3 retries.
+// ---- Meta Conversions API (server-side) ---------------------------------------------------
+// Send a CompleteRegistration event after a job-alert opt-in saves, so Meta can attribute the
+// signup to the ad that drove the click (per Chris's CAPI spec). No browser pixel: CAPI only.
+// PII (email/phone/name) is SHA-256 hashed for Meta advanced matching; IP, user agent, and the
+// _fbp/_fbc click cookies are passed through unhashed. Fire-and-forget via ctx.waitUntil so a Meta
+// outage never blocks or fails the opt-in. Never logs the access token or raw personal data.
+async function sha256Hex(value) {
+  const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(value));
+  return [...new Uint8Array(buf)].map((b) => b.toString(16).padStart(2, '0')).join('');
+}
+
+async function sendMetaRegistrationEvent(env, d) {
+  if (!env.META_ACCESS_TOKEN) return;                 // not configured -> skip silently (like Slack/CIO)
+  try {
+    const datasetId = env.META_DATASET_ID || '931609069346666';
+    const version = env.META_GRAPH_VERSION || 'v21.0';
+
+    const email = (d.email || '').trim().toLowerCase();
+    const digits = (d.phone || '').replace(/\D/g, '');
+    const phone = digits ? (digits.length === 10 ? '1' + digits : digits) : '';   // country code, digits only
+    const parts = (d.fullName || '').trim().split(/\s+/).filter(Boolean);
+    const first = (parts[0] || '').toLowerCase();
+    const last = parts.slice(1).join(' ').toLowerCase();
+
+    // Deterministic event_id: same person -> same id, so Meta dedupes retries AND rapid double submits
+    // to a single conversion (a per-DB-row id would let two submits double-count).
+    const seed = await sha256Hex(`${email}|${phone}`);
+    const eventId = `sublynk_registration_${seed.slice(0, 32)}`;
+
+    const user_data = {};
+    if (email) user_data.em = [await sha256Hex(email)];
+    if (phone) user_data.ph = [await sha256Hex(phone)];
+    if (first) user_data.fn = [await sha256Hex(first)];
+    if (last)  user_data.ln = [await sha256Hex(last)];
+    if (d.clientIp && d.clientIp !== 'unknown') user_data.client_ip_address = d.clientIp;
+    if (d.userAgent) user_data.client_user_agent = d.userAgent;
+    if (d.fbp) user_data.fbp = d.fbp;
+    if (d.fbc) user_data.fbc = d.fbc;
+
+    // Trades as non-PII snake_case tokens (matches the spec's water_mitigation / mold_remediation shape).
+    const contractor_trades = (d.trades || [])
+      .map((t) => String(t).toLowerCase().replace(/[^a-z0-9]+/g, '_').replace(/^_+|_+$/g, ''))
+      .filter(Boolean);
+
+    const payload = {
+      data: [{
+        event_name: 'CompleteRegistration',
+        event_time: Math.floor(Date.now() / 1000),
+        event_id: eventId,
+        action_source: 'website',
+        event_source_url: d.sourceUrl || 'https://joinsublynk.com/consent/',
+        user_data,
+        custom_data: {
+          content_name: 'SubLynk Contractor Registration',
+          registration_method: 'contractor_signup',
+          contractor_trades,
+        },
+      }],
+    };
+    if (env.META_TEST_EVENT_CODE) payload.test_event_code = env.META_TEST_EVENT_CODE;
+
+    const endpoint = `https://graph.facebook.com/${version}/${datasetId}/events`;
+    for (let attempt = 0; attempt < 3; attempt++) {
+      if (attempt) await new Promise((r) => setTimeout(r, 800 * attempt));
+      try {
+        const res = await fetch(endpoint, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${env.META_ACCESS_TOKEN}` },
+          body: JSON.stringify(payload),
+        });
+        const body = await res.json().catch(() => ({}));
+        if (res.ok) { console.log('Meta CAPI ok:', eventId, 'received', body.events_received ?? '', body.fbtrace_id || ''); return; }
+        // 4xx (bad token/permission/payload) will not fix on retry -> log once and stop. 5xx/network -> retry.
+        console.warn(`Meta CAPI HTTP ${res.status} (attempt ${attempt + 1}):`, JSON.stringify(body).slice(0, 300));
+        if (res.status >= 400 && res.status < 500) return;
+      } catch (e) {
+        console.warn(`Meta CAPI attempt ${attempt + 1} error:`, e.message || String(e));
+      }
+    }
+  } catch (e) {
+    console.warn('Meta CAPI unexpected error:', e.message || String(e));
+  }
+}
+
 async function insertRow(env, table, row) {
   let lastError = null;
   for (let attempt = 0; attempt < 3; attempt++) {
@@ -332,10 +416,17 @@ export default {
           return json({ error: 'Could not save your consent. Please try again.' }, 500);
         }
 
+        // Traffic source for the alert: prefer the front-end's computed label, else derive it from the
+        // Meta click id (fbc) / our personalized outreach link (contact_ref), else Direct.
+        const SOURCES = ['Meta Ads', 'Outbound', 'Direct'];
+        const source = SOURCES.includes(String(data.source || '').trim())
+          ? String(data.source).trim()
+          : (data.fbc ? 'Meta Ads' : (data.contact_ref ? 'Outbound' : 'Direct'));
         ctx.waitUntil(notifySlack(env, ALERTS.jobAlert, {
           title: 'New AI job-alert opt-in',
           subject: `*${full_name.trim()}*  ·  ${company.trim()}`,
           fields: [
+            { k: 'Source', v: source },
             { k: 'Phone', v: phoneFormatted },
             { k: 'Email', v: email.trim() },
             ...(zip5 ? [{ k: 'Zip', v: zip5 }] : []),
@@ -347,6 +438,14 @@ export default {
         ctx.waitUntil(sendOptinToCIO(env, {
           email: email.trim(), first_name: (full_name.trim().split(/\s+/)[0] || ''),
           name: full_name.trim(), company: company.trim(), trade: tradePrimary, zip: zip5,
+        }));
+        // Server-side Meta CompleteRegistration so ad spend can be attributed to this signup. Only the
+        // successfully-saved opt-in reaches here, matching the spec's "fire only after success" rule.
+        ctx.waitUntil(sendMetaRegistrationEvent(env, {
+          email: email.trim(), phone: ten, fullName: full_name.trim(), trades: tradesClean,
+          clientIp, userAgent, sourceUrl: pageUrl || 'https://joinsublynk.com/consent/',
+          fbp: (data.fbp || '').toString().trim() || null,
+          fbc: (data.fbc || '').toString().trim() || null,
         }));
         return json({ success: true, message: 'Consent recorded successfully' });
       } catch (e) {
