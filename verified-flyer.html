@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <script src="/assets/attribution.js"></script>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Verified Contractor Flyer · Sublynk</title>
+  <meta name="description" content="Make a print-ready flyer that shows your customers you're independently verified by Sublynk. Add your logo, license, and profile QR, then print or save as PDF.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/qrcode-generator@1.4.4/qrcode.js"></script>
+  <style>
+    :root{
+      --navy:#0D142A; --navy2:#0C152B; --orange:#DD6336; --orange2:#e8845a;
+      --ink:#111827; --muted:#6B7280; --line:#e7e5e4; --bg:#FAF8F5; --card:#ffffff;
+      --accent:#DD6336; /* customizable */
+    }
+    *{box-sizing:border-box}
+    html,body{margin:0;padding:0}
+    body{background:var(--bg);color:var(--ink);font-family:'Inter',-apple-system,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;-webkit-font-smoothing:antialiased}
+    a{color:var(--orange);text-decoration:none}
+
+    /* ---------- App shell (screen only) ---------- */
+    .top{background:var(--navy);color:#fff;padding:16px 24px;display:flex;align-items:center;gap:14px}
+    .top img{height:26px;display:block}
+    .top .t{font-weight:800;font-size:15px;letter-spacing:.2px}
+    .top .sub{color:#9aa3b2;font-size:13px;margin-left:auto}
+
+    .wrap{max-width:1240px;margin:0 auto;padding:26px 24px 60px;display:grid;grid-template-columns:340px 1fr;gap:28px;align-items:start}
+    @media (max-width:920px){ .wrap{grid-template-columns:1fr} }
+
+    .panel{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:22px;position:sticky;top:22px}
+    @media (max-width:920px){ .panel{position:static} }
+    .panel h2{margin:0 0 4px;font-size:12px;font-weight:800;letter-spacing:1.2px;text-transform:uppercase;color:var(--muted)}
+    .panel .hint{margin:0 0 18px;font-size:12.5px;color:var(--muted);line-height:1.5}
+    .field{margin-bottom:14px}
+    .field label{display:block;font-size:12px;font-weight:700;color:var(--ink);margin-bottom:5px}
+    .field input[type=text],.field input[type=url],.field input[type=tel]{width:100%;padding:10px 12px;border:1px solid #d6d3d1;border-radius:9px;font-size:14px;font-family:inherit;color:var(--ink);background:#fff}
+    .field input:focus{outline:none;border-color:var(--orange);box-shadow:0 0 0 3px rgba(221,99,54,.12)}
+    .row2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+    .logo-row{display:flex;align-items:center;gap:10px}
+    .logo-btn{display:inline-block;padding:9px 14px;background:var(--navy);color:#fff;border-radius:9px;font-size:13px;font-weight:700;cursor:pointer}
+    .logo-clear{font-size:12px;color:var(--muted);cursor:pointer;text-decoration:underline}
+    .swatches{display:flex;gap:8px;margin-top:2px}
+    .sw{width:26px;height:26px;border-radius:50%;cursor:pointer;border:2px solid #fff;box-shadow:0 0 0 1px #d6d3d1}
+    .sw.on{box-shadow:0 0 0 2px var(--ink)}
+    .actions{display:flex;gap:10px;margin-top:20px}
+    .btn{flex:1;text-align:center;padding:13px 16px;border-radius:10px;font-size:14px;font-weight:800;cursor:pointer;border:0;font-family:inherit}
+    .btn-primary{background:var(--orange);color:#fff}
+    .btn-ghost{background:#fff;color:var(--navy);border:1px solid #d6d3d1}
+    .tip{margin-top:14px;font-size:11.5px;color:var(--muted);line-height:1.5}
+
+    .stage{display:flex;justify-content:center}
+    .scaler{transform-origin:top center}
+
+    /* ---------- The flyer (US Letter) ---------- */
+    .flyer{
+      width:8.5in;height:11in;background:#fff;position:relative;overflow:hidden;
+      box-shadow:0 10px 40px rgba(13,20,42,.16);
+      display:flex;flex-direction:column;color:var(--ink);
+      -webkit-print-color-adjust:exact;print-color-adjust:exact;
+    }
+    .f-head{display:flex;align-items:center;gap:16px;padding:.5in .6in .34in}
+    .f-brand{display:flex;align-items:center;gap:13px;min-width:0}
+    .f-logo{height:.62in;max-width:3in;object-fit:contain;display:block}
+    .f-logo-fallback{width:.62in;height:.62in;border-radius:12px;background:var(--navy);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:900;font-size:22px;flex:none}
+    .f-name{font-weight:800;font-size:21px;color:var(--navy);line-height:1.1;letter-spacing:-.2px;overflow-wrap:anywhere}
+    .vbadge{margin-left:auto;flex:none;display:flex;flex-direction:column;align-items:flex-end;gap:5px}
+    .vbadge .lab{font-size:9px;font-weight:800;letter-spacing:1.6px;color:var(--muted);text-transform:uppercase}
+    .vpill{display:flex;align-items:center;gap:8px;background:var(--navy);border-radius:999px;padding:7px 13px 7px 9px}
+    .vpill .ck{width:18px;height:18px;border-radius:50%;background:#22c55e;color:#fff;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:900}
+    .vpill img{height:14px;display:block}
+
+    .f-hero{padding:0 .6in}
+    .f-kicker{display:inline-block;background:rgba(221,99,54,.12);color:var(--accent);font-size:11px;font-weight:800;letter-spacing:1.4px;text-transform:uppercase;padding:6px 12px;border-radius:999px}
+    .f-h1{font-size:46px;line-height:1.02;font-weight:900;color:var(--navy);letter-spacing:-1.4px;margin:14px 0 10px}
+    .f-h1 .accent{color:var(--accent)}
+    .f-sub{font-size:15.5px;line-height:1.5;color:#374151;max-width:6.5in}
+    .f-sub b{color:var(--navy)}
+
+    .f-grid{display:grid;grid-template-columns:1fr 1fr;gap:.16in;padding:.32in .6in .1in}
+    .bcard{border:1px solid var(--line);border-radius:14px;padding:16px 16px 15px;background:#fff}
+    .bcard .ic{width:30px;height:30px;border-radius:8px;background:rgba(221,99,54,.12);color:var(--accent);display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:900;margin-bottom:9px}
+    .bcard h3{margin:0 0 4px;font-size:15px;font-weight:800;color:var(--navy)}
+    .bcard p{margin:0;font-size:12.5px;line-height:1.45;color:var(--muted)}
+
+    .f-why{margin:.14in .6in 0;background:var(--navy);color:#fff;border-radius:14px;padding:16px 20px;display:flex;align-items:center;gap:14px}
+    .f-why .b{width:34px;height:34px;flex:none;border-radius:9px;background:rgba(255,255,255,.1);display:flex;align-items:center;justify-content:center;font-size:18px}
+    .f-why p{margin:0;font-size:13px;line-height:1.45}
+    .f-why b{color:var(--orange2)}
+
+    .f-verify{margin-top:auto;display:flex;align-items:center;gap:20px;padding:.3in .6in;background:linear-gradient(90deg,var(--accent),var(--orange2));color:#fff}
+    .qr{background:#fff;border-radius:12px;padding:9px;flex:none;line-height:0}
+    .qr img,.qr canvas,.qr table{width:1.35in;height:1.35in;display:block}
+    .f-verify .vtext .vk{font-size:11px;font-weight:800;letter-spacing:1.4px;text-transform:uppercase;opacity:.9}
+    .f-verify .vtext h3{margin:3px 0 6px;font-size:24px;font-weight:900;line-height:1.05;letter-spacing:-.4px}
+    .f-verify .vtext .url{font-size:14px;font-weight:700;word-break:break-all;background:rgba(255,255,255,.18);padding:5px 10px;border-radius:7px;display:inline-block}
+
+    .f-foot{display:flex;align-items:center;gap:14px;padding:.16in .6in;border-top:1px solid var(--line);font-size:12px;color:var(--muted)}
+    .f-foot .contact{display:flex;flex-wrap:wrap;gap:4px 16px}
+    .f-foot .contact span{font-weight:700;color:var(--navy)}
+    .f-foot .by{margin-left:auto;display:flex;align-items:center;gap:7px;white-space:nowrap;color:var(--muted);font-weight:600}
+    .f-foot .by img{height:13px;display:block;opacity:.9}
+
+    /* ---------- Print ---------- */
+    @media print{
+      @page{size:letter;margin:0}
+      .top,.wrap>.panel,.no-print{display:none !important}
+      body{background:#fff}
+      .wrap{display:block;padding:0;margin:0;max-width:none}
+      .stage{display:block}
+      .scaler{transform:none !important}
+      .flyer{box-shadow:none;width:8.5in;height:11in}
+    }
+  </style>
+</head>
+<body>
+  <div class="top no-print">
+    <img src="https://cdn.prod.website-files.com/66b4ce93806f21c9d05dc302/66bf8dfb6b8fef22f0d060ff_Sublynk%20Logo%20Hort%20White%403x.png" alt="Sublynk">
+    <span class="t">Verified Contractor Flyer</span>
+    <span class="sub">Customize it, then print or save as PDF for your customers</span>
+  </div>
+
+  <div class="wrap">
+    <!-- Customization panel -->
+    <div class="panel no-print">
+      <h2>Your details</h2>
+      <p class="hint">Add your business info. The flyer updates live. Everything is saved in this browser.</p>
+
+      <div class="field">
+        <label>Business name</label>
+        <input type="text" id="i_name" placeholder="AC INC Roofing" autocomplete="off">
+      </div>
+
+      <div class="field">
+        <label>What you do (optional)</label>
+        <input type="text" id="i_specialty" placeholder="Roofing &amp; Storm Restoration" autocomplete="off">
+      </div>
+
+      <div class="row2">
+        <div class="field">
+          <label>Phone</label>
+          <input type="tel" id="i_phone" placeholder="(555) 123-4567" autocomplete="off">
+        </div>
+        <div class="field">
+          <label>License # (optional)</label>
+          <input type="text" id="i_license" placeholder="Lic #123456" autocomplete="off">
+        </div>
+      </div>
+
+      <div class="field">
+        <label>Website</label>
+        <input type="text" id="i_web" placeholder="acincroofing.com" autocomplete="off">
+      </div>
+
+      <div class="field">
+        <label>Your Sublynk verified profile URL</label>
+        <input type="url" id="i_profile" placeholder="app.sublynk.com/c/ac-inc-roofing" autocomplete="off">
+      </div>
+
+      <div class="field">
+        <label>Your logo (optional)</label>
+        <div class="logo-row">
+          <label class="logo-btn" for="i_logo">Upload image</label>
+          <input type="file" id="i_logo" accept="image/*" style="display:none">
+          <span class="logo-clear" id="logoClear" style="display:none">remove</span>
+        </div>
+      </div>
+
+      <div class="field">
+        <label>Accent color</label>
+        <div class="swatches" id="swatches">
+          <span class="sw on" data-c="#DD6336" style="background:#DD6336"></span>
+          <span class="sw" data-c="#0D142A" style="background:#0D142A"></span>
+          <span class="sw" data-c="#1d4ed8" style="background:#1d4ed8"></span>
+          <span class="sw" data-c="#047857" style="background:#047857"></span>
+          <span class="sw" data-c="#b91c1c" style="background:#b91c1c"></span>
+        </div>
+      </div>
+
+      <div class="actions">
+        <button class="btn btn-primary" id="printBtn">Print / Save as PDF</button>
+        <button class="btn btn-ghost" id="resetBtn">Reset</button>
+      </div>
+      <p class="tip">Tip: in the print dialog choose <b>Save as PDF</b> to email it, or print on 8.5×11 paper. Set margins to <b>None</b> for a full-bleed flyer.</p>
+    </div>
+
+    <!-- Live flyer -->
+    <div class="stage">
+      <div class="scaler" id="scaler">
+        <div class="flyer" id="flyer">
+
+          <div class="f-head">
+            <div class="f-brand">
+              <img class="f-logo" id="fLogo" alt="" style="display:none">
+              <div class="f-logo-fallback" id="fLogoFallback">AC</div>
+              <div>
+                <div class="f-name" id="fName">Your Company</div>
+              </div>
+            </div>
+            <div class="vbadge">
+              <span class="lab">Independently verified</span>
+              <span class="vpill">
+                <span class="ck">&#10003;</span>
+                <img src="https://cdn.prod.website-files.com/66b4ce93806f21c9d05dc302/66bf8dfb6b8fef22f0d060ff_Sublynk%20Logo%20Hort%20White%403x.png" alt="Sublynk">
+              </span>
+            </div>
+          </div>
+
+          <div class="f-hero">
+            <span class="f-kicker" id="fKicker">Roofing &amp; Restoration</span>
+            <div class="f-h1">Hire with <span class="accent">confidence.</span></div>
+            <p class="f-sub"><b id="fNameInline">Your Company</b> is independently verified by Sublynk. Anyone can <i>say</i> they are licensed and insured. We prove it, at the source, and keep it current, so you know exactly who you are letting into your home.</p>
+          </div>
+
+          <div class="f-grid">
+            <div class="bcard">
+              <div class="ic">&#10003;</div>
+              <h3>License, verified</h3>
+              <p>Our contractor license is confirmed against official records, not just printed on a card.</p>
+            </div>
+            <div class="bcard">
+              <div class="ic">&#128737;</div>
+              <h3>Insurance you can trust</h3>
+              <p>Our proof of insurance is verified at the source and monitored, so coverage cannot quietly lapse mid-project.</p>
+            </div>
+            <div class="bcard">
+              <div class="ic">&#128100;</div>
+              <h3>Background-checked</h3>
+              <p>The people we send to your property have passed background screening.</p>
+            </div>
+            <div class="bcard">
+              <div class="ic">&#128260;</div>
+              <h3>Always current</h3>
+              <p>Sublynk re-checks our credentials before anything expires, so we stay compliant start to finish.</p>
+            </div>
+          </div>
+
+          <div class="f-why">
+            <span class="b">&#9888;</span>
+            <p>Hiring an unverified contractor can leave <b>you</b> on the hook for accidents, unlicensed work, and lapsed insurance. <b>Verified means you are protected.</b></p>
+          </div>
+
+          <div class="f-verify">
+            <div class="qr" id="qr"></div>
+            <div class="vtext">
+              <div class="vk">Don't take our word for it</div>
+              <h3>Scan to see our live verified profile</h3>
+              <span class="url" id="fUrl">app.sublynk.com</span>
+            </div>
+          </div>
+
+          <div class="f-foot">
+            <div class="contact" id="fContact">
+              <span id="fPhone">(555) 123-4567</span>
+              <span id="fWeb">yourcompany.com</span>
+              <span id="fLic" style="display:none"></span>
+            </div>
+            <div class="by">Verified by&nbsp;<b style="color:var(--navy);font-weight:800">Sublynk</b></div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    var $ = function(id){ return document.getElementById(id); };
+    var KEY = 'slk_flyer_v1';
+    var state = {
+      name:'', specialty:'', phone:'', license:'', web:'', profile:'', logo:'', accent:'#DD6336'
+    };
+
+    // ---- render ----
+    function initials(s){
+      var w = (s||'').trim().split(/\s+/).filter(Boolean);
+      if(!w.length) return 'AC';
+      return ((w[0][0]||'') + (w[1]?w[1][0]:(w[0][1]||''))).toUpperCase();
+    }
+    function cleanUrl(u){ return (u||'').replace(/^https?:\/\//i,'').replace(/\/$/,''); }
+
+    var qrLast = '';
+    function drawQR(url){
+      var box = $('qr');
+      if(url === qrLast) return; qrLast = url;
+      box.innerHTML = '';
+      try{
+        var full = /^https?:\/\//i.test(url) ? url : ('https://' + url);
+        var q = qrcode(0, 'M'); q.addData(full); q.make();
+        box.innerHTML = q.createImgTag(5, 0);
+        var img = box.querySelector('img'); if(img){ img.style.width='1.35in'; img.style.height='1.35in'; }
+      }catch(e){ box.style.display='none'; }
+    }
+
+    function render(){
+      document.documentElement.style.setProperty('--accent', state.accent);
+      var name = state.name.trim() || 'Your Company';
+      $('fName').textContent = name;
+      $('fNameInline').textContent = state.name.trim() || 'Our company';
+
+      // logo vs fallback initials
+      if(state.logo){
+        $('fLogo').src = state.logo; $('fLogo').style.display='block';
+        $('fLogoFallback').style.display='none';
+      }else{
+        $('fLogo').style.display='none';
+        $('fLogoFallback').style.display='flex';
+        $('fLogoFallback').textContent = initials(state.name);
+      }
+
+      // kicker (specialty)
+      var kick = $('fKicker');
+      if(state.specialty.trim()){ kick.textContent = state.specialty.trim(); kick.style.display='inline-block'; }
+      else{ kick.style.display='none'; }
+
+      // contact
+      $('fPhone').textContent = state.phone.trim() || '(555) 123-4567';
+      $('fPhone').style.display = state.phone.trim() ? 'inline' : 'none';
+      $('fWeb').textContent = cleanUrl(state.web) || 'yourcompany.com';
+      $('fWeb').style.display = state.web.trim() ? 'inline' : 'none';
+      var lic = $('fLic');
+      if(state.license.trim()){ lic.textContent = /lic/i.test(state.license)?state.license.trim():('License '+state.license.trim()); lic.style.display='inline'; }
+      else lic.style.display='none';
+
+      // verify url + QR
+      var prof = cleanUrl(state.profile) || 'app.sublynk.com';
+      $('fUrl').textContent = prof;
+      $('qr').style.display = 'block';
+      drawQR(state.profile.trim() || 'app.sublynk.com');
+    }
+
+    // ---- bindings ----
+    function bind(id, key){
+      var el = $(id);
+      el.value = state[key] || '';
+      el.addEventListener('input', function(){ state[key] = el.value; save(); render(); });
+    }
+    bind('i_name','name'); bind('i_specialty','specialty'); bind('i_phone','phone');
+    bind('i_license','license'); bind('i_web','web'); bind('i_profile','profile');
+
+    // logo upload
+    $('i_logo').addEventListener('change', function(e){
+      var f = e.target.files && e.target.files[0]; if(!f) return;
+      var r = new FileReader();
+      r.onload = function(){ state.logo = r.result; $('logoClear').style.display='inline'; save(); render(); };
+      r.readAsDataURL(f);
+    });
+    $('logoClear').addEventListener('click', function(){ state.logo=''; $('i_logo').value=''; this.style.display='none'; save(); render(); });
+
+    // swatches
+    Array.prototype.forEach.call(document.querySelectorAll('.sw'), function(s){
+      s.addEventListener('click', function(){
+        document.querySelectorAll('.sw').forEach(function(x){ x.classList.remove('on'); });
+        s.classList.add('on'); state.accent = s.getAttribute('data-c'); save(); render();
+      });
+    });
+
+    // actions
+    $('printBtn').addEventListener('click', function(){ window.print(); });
+    $('resetBtn').addEventListener('click', function(){
+      if(!confirm('Clear the flyer and start over?')) return;
+      state = { name:'', specialty:'', phone:'', license:'', web:'', profile:'', logo:'', accent:'#DD6336' };
+      try{ localStorage.removeItem(KEY); }catch(e){}
+      ['i_name','i_specialty','i_phone','i_license','i_web','i_profile'].forEach(function(id){ $(id).value=''; });
+      $('i_logo').value=''; $('logoClear').style.display='none';
+      document.querySelectorAll('.sw').forEach(function(x,i){ x.classList.toggle('on', i===0); });
+      render();
+    });
+
+    // persistence
+    function save(){ try{ localStorage.setItem(KEY, JSON.stringify(state)); }catch(e){} }
+    function load(){
+      try{ var s = JSON.parse(localStorage.getItem(KEY)||'null'); if(s) Object.assign(state, s); }catch(e){}
+      // Optional prefill via URL (?name=...&specialty=...&phone=...&license=...&web=...&profile=...&accent=%23DD6336)
+      try{
+        var qp = new URLSearchParams(location.search);
+        ['name','specialty','phone','license','web','profile','accent'].forEach(function(k){
+          if(qp.get(k)) state[k] = qp.get(k);
+        });
+      }catch(e){}
+      ['i_name','i_specialty','i_phone','i_license','i_web','i_profile'].forEach(function(id){
+        var k = id.slice(2); $(id).value = state[k] || '';
+      });
+      if(state.logo) $('logoClear').style.display='inline';
+      document.querySelectorAll('.sw').forEach(function(x){ x.classList.toggle('on', x.getAttribute('data-c')===state.accent); });
+    }
+
+    // fit the flyer preview to the available width
+    function fit(){
+      var stage = document.querySelector('.stage');
+      var flyerW = 8.5 * 96; // px at 96dpi
+      var avail = stage.clientWidth - 4;
+      var scale = Math.min(1, avail / flyerW);
+      var sc = $('scaler');
+      sc.style.transform = 'scale(' + scale + ')';
+      sc.style.height = (11 * 96 * scale) + 'px';
+      sc.style.width = flyerW + 'px';
+    }
+    window.addEventListener('resize', fit);
+
+    load(); render(); fit();
+  </script>
+</body>
+</html>
