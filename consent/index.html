@@ -1,6 +1,7 @@
 <!doctype html>
 <html lang="en">
 <head>
+  <script src="/assets/attribution.js"></script>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
   <meta name="description" content="Turn on automated job alerts from the Sublynk Certified Network. We call or text you when a real job near you matches your trade." />
@@ -844,19 +845,29 @@
       // Personalized outreach links prefill fields + hard-link the contact for attribution:
       //   /consent?c=<ref>&e=<email>&name=<name>&company=<co>&zip=<zip>&trades=a,b
       const params = new URLSearchParams(location.search);
-      const CONTACT_REF = params.get("c") || null;
+      const readStore = (k) => { try { return localStorage.getItem(k) || ""; } catch (e) { return ""; } };
+      // Outbound link id from this URL, or persisted from an earlier page by attribution.js.
+      const CONTACT_REF = params.get("c") || readStore("slk_ref") || null;
 
-      // Meta ad attribution: capture the ad click id (fbclid) and Meta cookies so the server-side
-      // CompleteRegistration event can be tied back to the ad. There is no Meta pixel on this page, so
-      // we build _fbc from fbclid ourselves (fb.1.<ts>.<fbclid>) and persist it in case the opt-in is
-      // finished on a later visit. _fbp is only sent if some other pixel happened to set it.
+      // Meta ad attribution. attribution.js (on every page) installs the Meta Pixel, which sets the
+      // _fbc cookie the moment a Meta click lands anywhere on the domain, and also mirrors fbclid into
+      // localStorage (slk_fbc). Here we read whichever survived, so the opt-in ties back to the ad even
+      // when the visitor landed on the root/flipbook first. _fbp comes from the pixel too.
       const readCookie = (n) => (document.cookie.match(new RegExp("(?:^|; )" + n + "=([^;]*)")) || [])[1] || "";
       const fbclid = params.get("fbclid");
       if (fbclid) { try { localStorage.setItem("slk_fbc", "fb.1." + Date.now() + "." + fbclid); } catch (e) {} }
-      const FBC = readCookie("_fbc") || (() => { try { return localStorage.getItem("slk_fbc") || ""; } catch (e) { return ""; } })();
+      const FBC = readCookie("_fbc") || readStore("slk_fbc");
       const FBP = readCookie("_fbp") || "";
-      // Traffic source for the #gtm alert: a fresh Meta ad click wins, then our personalized outreach
-      // link (?c=), then a returning visitor who still carries a Meta click id, else Direct.
+      // UTMs / first-touch landing + referrer, from this URL or persisted by attribution.js.
+      const UTM_SOURCE = params.get("utm_source") || readStore("slk_utm_source") || null;
+      const UTM_MEDIUM = params.get("utm_medium") || readStore("slk_utm_medium") || null;
+      const UTM_CAMPAIGN = params.get("utm_campaign") || readStore("slk_utm_campaign") || null;
+      const UTM_CONTENT = params.get("utm_content") || readStore("slk_utm_content") || null;
+      const UTM_TERM = params.get("utm_term") || readStore("slk_utm_term") || null;
+      const LANDING_URL = readStore("slk_landing") || null;
+      const FT_REFERRER = readStore("slk_referrer") || (document.referrer || "") || null;
+      // Traffic source for the #gtm alert + DB: a fresh Meta ad click wins, then our personalized
+      // outreach link (?c=), then a returning visitor still carrying a Meta click id, else Direct.
       const SOURCE = fbclid ? "Meta Ads" : (CONTACT_REF ? "Outbound" : (FBC ? "Meta Ads" : "Direct"));
       const setVal = (id, v) => { const el = document.getElementById(id); if (el && v) el.value = v; };
       setVal("email", params.get("e"));
@@ -905,7 +916,14 @@
           contact_ref: CONTACT_REF,
           fbc: FBC || null,
           fbp: FBP || null,
-          source: SOURCE
+          source: SOURCE,
+          utm_source: UTM_SOURCE,
+          utm_medium: UTM_MEDIUM,
+          utm_campaign: UTM_CAMPAIGN,
+          utm_content: UTM_CONTENT,
+          utm_term: UTM_TERM,
+          landing_url: LANDING_URL,
+          referrer: FT_REFERRER
         };
         submitBtn.disabled = true;
         submitBtn.textContent = "Turning on...";

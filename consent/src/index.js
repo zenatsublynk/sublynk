@@ -387,6 +387,15 @@ export default {
           'and message frequency varies. I can opt out anytime by replying STOP to a text, pressing 9 on a call, or clicking ' +
           'unsubscribe, and reply HELP for help. I have read and agree to the Sublynk Privacy Policy and Terms of Service, and by checking this box I am signing electronically.';
 
+        // Traffic source: prefer the front-end's computed label, else derive from the Meta click id
+        // (fbc) / our personalized outreach link (contact_ref), else Direct. Stored on the row so we can
+        // query Meta vs Outbound vs Direct directly instead of reading #gtm one message at a time.
+        const SOURCES = ['Meta Ads', 'Outbound', 'Direct'];
+        const trafficSource = SOURCES.includes(String(data.source || '').trim())
+          ? String(data.source).trim()
+          : (data.fbc ? 'Meta Ads' : (data.contact_ref ? 'Outbound' : 'Direct'));
+        const clip = (v, n) => (v == null ? null : (String(v).slice(0, n) || null));
+
         const saved = await insertRow(env, 'consent_events', {
           full_name: full_name.trim(), company: company.trim(), email: email.trim(),
           phone: phoneFormatted, phone_raw: phone_raw?.trim() || phone.trim(), zip: zip5,
@@ -395,6 +404,12 @@ export default {
           disclosure_version: DISCLOSURE_VERSION, disclosure_text: DISCLOSURE_TEXT, networks_shown: '',
           page_url: pageUrl, user_agent: userAgent, source: 'job-alerts-optin', status: 'active',
           contact_ref: data.contact_ref || null, ip: clientIp,
+          traffic_source: trafficSource,
+          fbc: clip(data.fbc, 255), fbp: clip(data.fbp, 255),
+          utm_source: clip(data.utm_source, 200), utm_medium: clip(data.utm_medium, 200),
+          utm_campaign: clip(data.utm_campaign, 200), utm_content: clip(data.utm_content, 200),
+          utm_term: clip(data.utm_term, 200),
+          landing_url: clip(data.landing_url, 500), referrer: clip(data.referrer, 500),
         });
         if (!saved.ok) {
           console.error('consent save failed:', saved.error);
@@ -416,17 +431,11 @@ export default {
           return json({ error: 'Could not save your consent. Please try again.' }, 500);
         }
 
-        // Traffic source for the alert: prefer the front-end's computed label, else derive it from the
-        // Meta click id (fbc) / our personalized outreach link (contact_ref), else Direct.
-        const SOURCES = ['Meta Ads', 'Outbound', 'Direct'];
-        const source = SOURCES.includes(String(data.source || '').trim())
-          ? String(data.source).trim()
-          : (data.fbc ? 'Meta Ads' : (data.contact_ref ? 'Outbound' : 'Direct'));
         ctx.waitUntil(notifySlack(env, ALERTS.jobAlert, {
           title: 'New AI job-alert opt-in',
           subject: `*${full_name.trim()}*  ·  ${company.trim()}`,
           fields: [
-            { k: 'Source', v: source },
+            { k: 'Source', v: trafficSource },
             { k: 'Phone', v: phoneFormatted },
             { k: 'Email', v: email.trim() },
             ...(zip5 ? [{ k: 'Zip', v: zip5 }] : []),
