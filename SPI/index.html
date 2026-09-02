@@ -52,7 +52,7 @@
   #gate.hide{opacity:0;pointer-events:none;transition:opacity .85s ease}
   .g-scan{position:absolute;inset:0;pointer-events:none;background:repeating-linear-gradient(0deg,rgba(80,150,110,.045) 0px,rgba(80,150,110,.045) 1px,transparent 2px,transparent 4px)}
   .g-vig{position:absolute;inset:0;pointer-events:none;box-shadow:inset 0 0 200px rgba(0,0,0,.7)}
-  .g-box{position:relative;width:min(92vw,432px);border:1px solid #23405f;border-radius:6px;background:rgba(8,16,28,.86);box-shadow:0 0 0 1px rgba(120,180,220,.06),0 30px 90px rgba(0,0,0,.65),inset 0 0 44px rgba(20,60,90,.16);padding:28px 30px 22px;text-align:center}
+  .g-box{position:relative;width:min(92vw,432px);border:1px solid #23405f;border-radius:6px;background:rgba(8,16,28,.86);box-shadow:0 0 0 1px rgba(120,180,220,.06),0 30px 90px rgba(0,0,0,.65),inset 0 0 44px rgba(20,60,90,.16);padding:28px 30px 22px;text-align:center;overflow:hidden}
   .g-seal{width:82px;height:82px;margin:0 auto 12px}
   .g-cls{display:inline-block;font-family:var(--sc);letter-spacing:.32em;font-size:11px;color:#e06a63;border:1.5px solid #8a2b22;border-radius:3px;padding:3px 12px}
   .g-title{font-family:var(--sc);font-size:21px;letter-spacing:.14em;color:#e9dcbf;margin:15px 0 4px}
@@ -69,6 +69,35 @@
   #gate.deny .g-box{animation:gshake .42s}
   @keyframes gshake{0%,100%{transform:translateX(0)}20%{transform:translateX(-8px)}40%{transform:translateX(8px)}60%{transform:translateX(-5px)}80%{transform:translateX(5px)}}
   .g-seal svg text{fill:#cba96a}
+
+  /* ---- self-destruct burn ---- */
+  .g-warn{color:#ff8a2a !important}
+  #gate.burning .g-vig{box-shadow:inset 0 0 220px rgba(150,35,0,.55);transition:box-shadow .6s}
+  .burn{position:absolute;left:-3%;right:-3%;bottom:0;height:235%;pointer-events:none;z-index:5;mix-blend-mode:screen;
+    background:linear-gradient(to top,
+      #100704 0%, #1c0d05 34%, #7a2c06 40%, #d85a12 43.5%, #ff8018 46%, #ffc255 48.5%, #fff3cc 50.2%, #ffc255 52%, #ff8018 54.5%, #cc5310 57.5%, #7a2e06 61%,
+      rgba(150,64,14,.42) 66%, transparent 74%);
+    transform:translateY(100%)}
+  .burn.b2{mix-blend-mode:normal;opacity:.55;filter:blur(2px);
+    background:linear-gradient(to top, transparent 44%, #ff7a1e 47%, #ffd06a 49.5%, #ff8a20 52%, transparent 58%)}
+  #gate.burning .burn{animation:burnup 2.7s ease-in forwards}
+  @keyframes burnup{from{transform:translateY(100%)}to{transform:translateY(-72%)}}
+  #gate.burning .g-box{animation:boxburn 2.9s ease-in forwards}
+  @keyframes boxburn{
+    0%{}
+    22%{box-shadow:0 0 46px rgba(255,120,20,.5),0 0 130px rgba(255,80,0,.35);border-color:#8a4a12}
+    60%{box-shadow:0 0 64px rgba(255,95,10,.55),0 0 170px rgba(255,60,0,.4);filter:brightness(.82) contrast(1.06);border-color:#6a2e06}
+    100%{box-shadow:0 0 22px rgba(120,40,0,.3);filter:brightness(.32) saturate(.32);border-color:#1c0f06;transform:perspective(760px) rotateX(2deg) skewX(-1.6deg) scale(.975)}
+  }
+  .smoke{position:absolute;bottom:34%;width:74px;height:74px;border-radius:50%;z-index:6;opacity:0;pointer-events:none;filter:blur(9px);
+    background:radial-gradient(rgba(150,140,130,.5),rgba(80,72,64,.14) 60%,transparent 72%)}
+  #gate.burning .smoke{animation:smokeup 2.7s ease-out forwards}
+  @keyframes smokeup{0%{opacity:0;transform:translateY(20px) scale(.4)}22%{opacity:.55}100%{opacity:0;transform:translateY(-220px) scale(2.5)}}
+  .g-dead{position:absolute;inset:0;z-index:8;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:9px;background:rgba(6,4,2,.74);opacity:0;animation:deadin .9s ease .1s forwards}
+  @keyframes deadin{to{opacity:1}}
+  .g-dead .skull{font-size:38px;color:#c96b3a;filter:drop-shadow(0 0 10px rgba(255,90,10,.5))}
+  .g-dead .d1{font-family:var(--sc);letter-spacing:.2em;font-size:15px;color:#e07a3c}
+  .g-dead .d2{font-family:var(--type);letter-spacing:.16em;font-size:9px;color:#8a6450}
 
   /* ================= COVER ================= */
   .leaf.cover{background:
@@ -431,7 +460,33 @@ function revealBook(){
       setTimeout(function(){ try{ sessionStorage.setItem('spi_ok','1'); }catch(e){} revealBook(); gate.classList.add('hide'); setTimeout(function(){ gate.style.display='none'; }, 900); }, 700);
     });
   }
-  function deny(){ gate.classList.add('deny'); gLog.innerHTML += '\n<span class="err">&gt; ACCESS DENIED &mdash; INVALID CREDENTIAL</span>'; gPass.value=''; setTimeout(function(){ gate.classList.remove('deny'); }, 520); }
+  var attempts=0;
+  function deny(){
+    attempts++;
+    if(attempts>=3){ destruct(); return; }
+    gate.classList.add('deny');
+    gLog.innerHTML += '\n<span class="err">&gt; ACCESS DENIED &mdash; INVALID CREDENTIAL &middot; ATTEMPT '+attempts+' OF 3</span>';
+    gPass.value='';
+    setTimeout(function(){ gate.classList.remove('deny'); }, 520);
+  }
+  function destruct(){
+    gBtn.disabled=true; gPass.disabled=true; gPass.value='';
+    gate.classList.add('deny'); setTimeout(function(){ gate.classList.remove('deny'); }, 460);
+    gLog.innerHTML += '\n<span class="err g-warn">&gt; INTRUSION DETECTED &middot; 3 FAILED ATTEMPTS</span>';
+    setTimeout(function(){ gLog.innerHTML += '\n<span class="err g-warn">&gt; SECURITY LOCKOUT &middot; INCINERATING TERMINAL &#9760;</span>'; }, 560);
+    setTimeout(function(){
+      var box=document.querySelector('.g-box');
+      var burn=document.createElement('div'); burn.className='burn'; box.appendChild(burn);
+      var burn2=document.createElement('div'); burn2.className='burn b2'; box.appendChild(burn2);
+      for(var i=0;i<5;i++){ var s=document.createElement('div'); s.className='smoke'; s.style.left=(8+i*19)+'%'; s.style.animationDelay=(0.25+i*0.28)+'s'; box.appendChild(s); }
+      gate.classList.add('burning');
+      setTimeout(function(){
+        var d=document.createElement('div'); d.className='g-dead';
+        d.innerHTML='<div class="skull">&#9760;</div><div class="d1">TERMINAL DESTROYED</div><div class="d2">REFRESH TO RE-ATTEMPT</div>';
+        gate.appendChild(d);
+      }, 2500);
+    }, 1200);
+  }
   gForm.addEventListener('submit', function(e){ e.preventDefault(); var v=(gPass.value||'').trim(); if(v && v.toUpperCase()===want()){ grant(); } else { deny(); } });
   var ok=false; try{ ok = sessionStorage.getItem('spi_ok')==='1'; }catch(e){}
   if(ok){ gate.style.display='none'; revealBook(); } else { setTimeout(function(){ gPass.focus(); }, 350); }
