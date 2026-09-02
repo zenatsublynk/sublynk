@@ -67,36 +67,36 @@
       display:flex;flex-direction:column;color:var(--ink);
       -webkit-print-color-adjust:exact;print-color-adjust:exact;
     }
-    .f-head{display:flex;align-items:center;gap:16px;padding:.5in .6in .34in}
+    .f-head{display:flex;align-items:center;gap:16px;padding:.42in .6in .2in}
     .f-brand{display:flex;align-items:center;gap:13px;min-width:0}
     .f-logo{height:.62in;max-width:3in;object-fit:contain;display:block}
     .f-logo-fallback{width:.62in;height:.62in;border-radius:12px;background:#eef1f6;color:var(--navy);border:1px solid #e2e6ee;display:flex;align-items:center;justify-content:center;font-weight:900;font-size:22px;flex:none}
     .f-name{font-weight:800;font-size:21px;color:var(--navy);line-height:1.1;letter-spacing:-.2px;overflow-wrap:anywhere}
     .vbadge{margin-left:auto;flex:none;display:flex;flex-direction:column;align-items:center;gap:5px}
-    .vbadge .lab{font-size:8px;font-weight:800;letter-spacing:1.5px;color:var(--muted);text-transform:uppercase}
     .vbadge .coin{width:.98in;height:.98in;display:block}
+    .vbadge .stamp{margin-top:5px;font-size:8px;font-weight:800;letter-spacing:1.3px;color:var(--navy);text-transform:uppercase;border:1.5px solid var(--navy);border-radius:4px;padding:3px 7px;transform:rotate(-4deg);opacity:.85}
 
     .f-hero{padding:0 .6in}
     .f-kicker{display:inline-block;background:rgba(221,99,54,.12);color:var(--accent);font-size:11px;font-weight:800;letter-spacing:1.4px;text-transform:uppercase;padding:6px 12px;border-radius:999px}
-    .f-h1{font-size:46px;line-height:1.02;font-weight:900;color:var(--navy);letter-spacing:-1.4px;margin:14px 0 10px}
+    .f-h1{font-size:43px;line-height:1.02;font-weight:900;color:var(--navy);letter-spacing:-1.3px;margin:10px 0 8px}
     .f-h1 .accent{color:var(--accent)}
     .f-sub{font-size:15.5px;line-height:1.5;color:#374151;max-width:6.5in}
     .f-sub b{color:var(--navy)}
 
-    .f-grid{display:grid;grid-template-columns:1fr 1fr;gap:.16in;padding:.32in .6in .1in}
+    .f-grid{display:grid;grid-template-columns:1fr 1fr;gap:.15in;padding:.24in .6in .06in}
     .bcard{border:1px solid var(--line);border-radius:14px;padding:16px 16px 15px;background:#fff}
     .bcard .ic{width:30px;height:30px;border-radius:8px;background:rgba(221,99,54,.12);color:var(--accent);display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:900;margin-bottom:9px}
     .bcard h3{margin:0 0 4px;font-size:15px;font-weight:800;color:var(--navy)}
     .bcard p{margin:0;font-size:12.5px;line-height:1.45;color:var(--muted)}
 
-    .f-why{margin:.14in .6in 0;background:var(--navy);color:#fff;border-radius:14px;padding:16px 20px;display:flex;align-items:center;gap:14px}
-    .f-why .b{width:34px;height:34px;flex:none;border-radius:9px;background:rgba(255,255,255,.1);display:flex;align-items:center;justify-content:center;font-size:18px}
+    .f-why{margin:.1in .6in 0;background:var(--navy);color:#fff;border-radius:14px;padding:13px 20px;display:flex;align-items:center;gap:14px}
+    .f-why .b{width:34px;height:34px;flex:none;border-radius:9px;background:rgba(239,68,68,.18);color:#ff6b6b;display:flex;align-items:center;justify-content:center;font-size:19px}
     .f-why p{margin:0;font-size:13px;line-height:1.45}
     .f-why b{color:var(--orange2)}
 
-    .f-verify{margin-top:auto;display:flex;align-items:center;gap:20px;padding:.3in .6in;background:linear-gradient(90deg,var(--accent),var(--orange2));color:#fff}
+    .f-verify{margin-top:auto;display:flex;align-items:center;gap:20px;padding:.19in .6in;background:linear-gradient(90deg,var(--accent),var(--orange2));color:#fff}
     .qr{background:#fff;border-radius:12px;padding:9px;flex:none;line-height:0}
-    .qr img,.qr canvas,.qr table{width:1.35in;height:1.35in;display:block}
+    .qr img,.qr canvas,.qr table{width:1.2in;height:1.2in;display:block}
     .f-verify .vtext .vk{font-size:11px;font-weight:800;letter-spacing:1.4px;text-transform:uppercase;opacity:.9}
     .f-verify .vtext h3{margin:3px 0 6px;font-size:24px;font-weight:900;line-height:1.05;letter-spacing:-.4px}
     .f-verify .vtext .url{font-size:14px;font-weight:700;word-break:break-all;background:rgba(255,255,255,.18);padding:5px 10px;border-radius:7px;display:inline-block}
@@ -210,8 +210,8 @@
               </div>
             </div>
             <div class="vbadge">
-              <span class="lab">Independently verified</span>
               <img class="coin" src="/og/sublynk-certified-coin.svg" alt="Sublynk Certified">
+              <span class="stamp">Independently Verified</span>
             </div>
           </div>
 
@@ -245,7 +245,7 @@
           </div>
 
           <div class="f-why">
-            <span class="b">&#9888;</span>
+            <span class="b">&#9888;&#xFE0E;</span>
             <p>Hiring an unverified contractor can leave <b>you</b> on the hook for accidents, unlicensed work, and lapsed insurance. <b>Verified means you are protected.</b></p>
           </div>
 
@@ -299,7 +299,7 @@
         var full = /^https?:\/\//i.test(url) ? url : ('https://' + url);
         var q = qrcode(0, 'M'); q.addData(full); q.make();
         box.innerHTML = q.createImgTag(5, 0);
-        var img = box.querySelector('img'); if(img){ img.style.width='1.35in'; img.style.height='1.35in'; }
+        var img = box.querySelector('img'); if(img){ img.style.width='1.2in'; img.style.height='1.2in'; }
       }catch(e){ box.style.display='none'; }
     }
 
