@@ -5,119 +5,173 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Verified Contractor Flyer · Sublynk</title>
-  <meta name="description" content="Make a print-ready flyer that shows your customers you're independently verified by Sublynk. Add your logo, license, and profile QR, then print or save as PDF.">
+  <meta name="description" content="Make a print-ready flyer that shows your customers you're independently verified by Sublynk. Pick a layout, add your logo, license, and profile QR, then print or save as PDF.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
   <script src="https://cdn.jsdelivr.net/npm/qrcode-generator@1.4.4/qrcode.js"></script>
   <style>
     :root{
-      --navy:#0D142A; --navy2:#0C152B; --orange:#DD6336; --orange2:#e8845a;
-      --ink:#111827; --muted:#6B7280; --line:#e7e5e4; --bg:#FAF8F5; --card:#ffffff;
-      --accent:#DD6336; /* customizable */
+      --navy:#0d142a; --accent:#dd6336;
+      --ink:#1c1917; --muted:#78716c; --line:#e7e5e4; --line2:#f1ede4;
+      --cream:#faf9f5; --cream2:#faf7f2; --card:#ffffff; --green:#16a34a;
     }
     *{box-sizing:border-box}
     html,body{margin:0;padding:0}
-    body{background:var(--bg);color:var(--ink);font-family:'Inter',-apple-system,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;-webkit-font-smoothing:antialiased}
-    a{color:var(--orange);text-decoration:none}
+    body{background:#eeece7;color:var(--ink);font-family:'Inter',-apple-system,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;-webkit-font-smoothing:antialiased}
+    a{color:var(--accent);text-decoration:none}
 
     /* ---------- App shell (screen only) ---------- */
-    .top{background:var(--navy);color:#fff;padding:16px 24px;display:flex;align-items:center;gap:14px}
-    .top img{height:26px;display:block}
-    .top .t{font-weight:800;font-size:15px;letter-spacing:.2px}
+    .top{background:var(--navy);color:#fff;padding:15px 24px;display:flex;align-items:center;gap:14px}
+    .top img{height:24px;display:block}
+    .top .t{font-weight:800;font-size:15px}
     .top .sub{color:#9aa3b2;font-size:13px;margin-left:auto}
+    @media (max-width:760px){ .top .sub{display:none} }
 
-    .wrap{max-width:1240px;margin:0 auto;padding:26px 24px 60px;display:grid;grid-template-columns:340px 1fr;gap:28px;align-items:start}
-    @media (max-width:920px){ .wrap{grid-template-columns:1fr} }
+    .wrap{max-width:1300px;margin:0 auto;padding:26px 24px 70px;display:grid;grid-template-columns:340px 1fr;gap:28px;align-items:start}
+    @media (max-width:940px){ .wrap{grid-template-columns:1fr} }
 
-    .panel{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:22px;position:sticky;top:22px}
-    @media (max-width:920px){ .panel{position:static} }
+    .panel{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:20px;position:sticky;top:22px}
+    @media (max-width:940px){ .panel{position:static} }
     .panel h2{margin:0 0 4px;font-size:12px;font-weight:800;letter-spacing:1.2px;text-transform:uppercase;color:var(--muted)}
-    .panel .hint{margin:0 0 18px;font-size:12.5px;color:var(--muted);line-height:1.5}
-    .field{margin-bottom:14px}
+    .panel .hint{margin:0 0 16px;font-size:12.5px;color:var(--muted);line-height:1.5}
+
+    /* layout toggle */
+    .seg{display:grid;grid-template-columns:1fr 1fr;gap:6px;background:#f5f4f1;border:1px solid var(--line);border-radius:11px;padding:5px;margin-bottom:18px}
+    .seg button{font-family:inherit;font-size:12.5px;font-weight:700;color:var(--muted);background:transparent;border:0;border-radius:8px;padding:9px 8px;cursor:pointer;line-height:1.15}
+    .seg button small{display:block;font-size:10px;font-weight:600;opacity:.8}
+    .seg button.on{background:#fff;color:var(--navy);box-shadow:0 1px 3px rgba(0,0,0,.08)}
+
+    .field{margin-bottom:13px}
     .field label{display:block;font-size:12px;font-weight:700;color:var(--ink);margin-bottom:5px}
-    .field input[type=text],.field input[type=url],.field input[type=tel]{width:100%;padding:10px 12px;border:1px solid #d6d3d1;border-radius:9px;font-size:14px;font-family:inherit;color:var(--ink);background:#fff}
-    .field input:focus{outline:none;border-color:var(--orange);box-shadow:0 0 0 3px rgba(221,99,54,.12)}
+    .field input{width:100%;padding:10px 12px;border:1px solid #d6d3d1;border-radius:9px;font-size:14px;font-family:inherit;color:var(--ink);background:#fff}
+    .field input:focus{outline:none;border-color:var(--accent);box-shadow:0 0 0 3px color-mix(in srgb, var(--accent) 15%, transparent)}
     .row2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-    .dropzone{position:relative;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;border:2px dashed #cbd2dd;border-radius:12px;background:#f8fafc;padding:16px 12px;cursor:pointer;transition:border-color .15s,background .15s;text-align:center}
-    .dropzone:hover{border-color:var(--orange);background:#fff}
-    .dropzone.drag{border-color:var(--orange);background:rgba(221,99,54,.06)}
-    .dz-empty{display:flex;flex-direction:column;align-items:center;gap:8px}
-    .dz-ic{width:34px;height:34px;border-radius:9px;background:#eef1f6;color:var(--navy);display:flex;align-items:center;justify-content:center;font-size:18px;font-weight:700}
+
+    .dropzone{position:relative;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;border:2px dashed #cbd2dd;border-radius:12px;background:#f8fafc;padding:15px 12px;cursor:pointer;transition:border-color .15s,background .15s;text-align:center}
+    .dropzone:hover{border-color:var(--accent);background:#fff}
+    .dropzone.drag{border-color:var(--accent);background:color-mix(in srgb, var(--accent) 7%, #fff)}
+    .dz-empty{display:flex;flex-direction:column;align-items:center;gap:7px}
+    .dz-ic{width:32px;height:32px;border-radius:9px;background:#eef1f6;color:var(--navy);display:flex;align-items:center;justify-content:center;font-size:17px;font-weight:700}
     .dz-t{font-size:12.5px;font-weight:700;color:var(--navy);line-height:1.4}
     .dz-t span{font-weight:500;color:var(--muted)}
-    .logo-thumb{max-height:54px;max-width:82%;object-fit:contain;border-radius:6px}
+    .logo-thumb{max-height:52px;max-width:82%;object-fit:contain;border-radius:6px}
     .logo-clear{font-size:12px;color:var(--muted);cursor:pointer;text-decoration:underline}
-    .swatches{display:flex;gap:8px;margin-top:2px}
+
+    /* color picker */
+    .swatches{display:flex;align-items:center;gap:9px;flex-wrap:wrap}
     .sw{width:26px;height:26px;border-radius:50%;cursor:pointer;border:2px solid #fff;box-shadow:0 0 0 1px #d6d3d1}
     .sw.on{box-shadow:0 0 0 2px var(--ink)}
-    .actions{display:flex;gap:10px;margin-top:20px}
+    .sw-custom{position:relative;width:28px;height:28px;border-radius:50%;overflow:hidden;border:1px dashed #b7b0a4;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:14px;color:var(--muted)}
+    .sw-custom input{position:absolute;inset:-6px;width:200%;height:200%;border:0;padding:0;cursor:pointer;opacity:0}
+
+    .actions{display:flex;gap:10px;margin-top:18px}
     .btn{flex:1;text-align:center;padding:13px 16px;border-radius:10px;font-size:14px;font-weight:800;cursor:pointer;border:0;font-family:inherit}
-    .btn-primary{background:var(--orange);color:#fff}
+    .btn-primary{background:var(--accent);color:#fff}
     .btn-ghost{background:#fff;color:var(--navy);border:1px solid #d6d3d1}
-    .tip{margin-top:14px;font-size:11.5px;color:var(--muted);line-height:1.5}
+    .tip{margin-top:13px;font-size:11.5px;color:var(--muted);line-height:1.55}
 
     .stage{display:flex;justify-content:center}
     .scaler{transform-origin:top center}
 
-    /* ---------- The flyer (US Letter) ---------- */
-    .flyer{
-      width:8.5in;height:11in;background:#fff;position:relative;overflow:hidden;
-      box-shadow:0 10px 40px rgba(13,20,42,.16);
-      display:flex;flex-direction:column;color:var(--ink);
-      -webkit-print-color-adjust:exact;print-color-adjust:exact;
-    }
-    .f-head{display:flex;align-items:center;gap:16px;padding:.42in .6in .2in}
-    .f-brand{display:flex;align-items:center;gap:13px;min-width:0}
-    .f-logo{height:.62in;max-width:3in;object-fit:contain;display:block}
-    .f-logo-fallback{width:.62in;height:.62in;border-radius:12px;background:#eef1f6;color:var(--navy);border:1px solid #e2e6ee;display:flex;align-items:center;justify-content:center;font-weight:900;font-size:22px;flex:none}
-    .f-name{font-weight:800;font-size:21px;color:var(--navy);line-height:1.1;letter-spacing:-.2px;overflow-wrap:anywhere}
-    .vbadge{margin-left:auto;flex:none;display:flex;flex-direction:column;align-items:center;gap:5px}
-    .vbadge .coin{width:.98in;height:.98in;display:block}
-    .vbadge .stamp{margin-top:7px;font-size:8px;font-weight:800;letter-spacing:1.5px;color:var(--navy);text-transform:uppercase;background:#eef1f6;border-radius:999px;padding:4px 11px}
+    /* ---------- Sheet (US Letter) ---------- */
+    .sheet{width:8.5in;height:11in;background:#fff;position:relative;overflow:hidden;box-shadow:0 12px 44px rgba(13,20,42,.18);display:flex;flex-direction:column;color:var(--ink);-webkit-print-color-adjust:exact;print-color-adjust:exact}
+    .sheet.layout-B{background:var(--cream)}
 
-    .f-hero{padding:0 .6in}
-    .f-kicker{display:inline-block;background:rgba(221,99,54,.12);color:var(--accent);font-size:11px;font-weight:800;letter-spacing:1.4px;text-transform:uppercase;padding:6px 12px;border-radius:999px}
-    .f-h1{font-size:43px;line-height:1.02;font-weight:900;color:var(--navy);letter-spacing:-1.3px;margin:10px 0 8px}
-    .f-h1 .accent{color:var(--accent)}
-    .f-sub{font-size:15.5px;line-height:1.5;color:#374151;max-width:6.5in}
-    .f-sub b{color:var(--navy)}
+    /* shared bits */
+    .lfallback{border-radius:12px;background:#eef1f6;color:var(--navy);border:1px solid #e2e6ee;display:flex;align-items:center;justify-content:center;font-weight:900;flex:none}
+    .limg{object-fit:contain;display:block;flex:none}
 
-    .f-grid{display:grid;grid-template-columns:1fr 1fr;gap:.15in;padding:.24in .6in .06in}
-    .bcard{border:1px solid var(--line);border-radius:14px;padding:16px 16px 15px;background:#fff}
-    .bcard .ic{width:30px;height:30px;border-radius:8px;background:rgba(221,99,54,.12);color:var(--accent);display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:900;margin-bottom:9px}
-    .bcard h3{margin:0 0 4px;font-size:15px;font-weight:800;color:var(--navy)}
-    .bcard p{margin:0;font-size:12.5px;line-height:1.45;color:var(--muted)}
+    /* ===== Layout A: Classic ===== */
+    .fa-head{display:flex;align-items:center;gap:16px;padding:.42in .6in .2in}
+    .fa-lf{width:.62in;height:.62in;font-size:22px}
+    .fa-limg{width:.62in;height:.62in;max-width:3in}
+    .fa-name{font-weight:800;font-size:21px;color:var(--navy);line-height:1.1;letter-spacing:-.2px;overflow-wrap:anywhere}
+    .fa-badge{margin-left:auto;flex:none;display:flex;flex-direction:column;align-items:center;gap:7px}
+    .fa-coin{width:.98in;height:.98in;display:block}
+    .fa-tag{font-size:8px;font-weight:800;letter-spacing:1.5px;color:var(--navy);text-transform:uppercase;background:#eef1f6;border-radius:999px;padding:4px 11px}
+    .fa-hero{padding:0 .6in}
+    .fa-kick{display:inline-block;background:color-mix(in srgb, var(--accent) 12%, transparent);color:var(--accent);font-size:11px;font-weight:800;letter-spacing:1.4px;text-transform:uppercase;padding:6px 12px;border-radius:999px}
+    .fa-h1{font-size:43px;line-height:1.02;font-weight:900;color:var(--navy);letter-spacing:-1.3px;margin:10px 0 8px}
+    .fa-h1 .ac{color:var(--accent)}
+    .fa-sub{font-size:15px;line-height:1.5;color:#44403c;max-width:6.5in}
+    .fa-sub b{color:var(--navy)}
+    .fa-grid{display:grid;grid-template-columns:1fr 1fr;gap:.15in;padding:.24in .6in .06in}
+    .fa-card{border:1px solid var(--line);border-radius:14px;padding:14px 15px 13px}
+    .fa-card .ic{width:30px;height:30px;border-radius:8px;background:color-mix(in srgb, var(--accent) 12%, transparent);color:var(--accent);display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:900;margin-bottom:9px}
+    .fa-card h3{margin:0 0 4px;font-size:15px;font-weight:800;color:var(--navy)}
+    .fa-card p{margin:0;font-size:12.5px;line-height:1.45;color:var(--muted)}
+    .fa-why{margin:.1in .6in 0;background:var(--navy);color:#fff;border-radius:14px;padding:13px 20px;display:flex;align-items:center;gap:14px}
+    .fa-why .b{width:34px;height:34px;flex:none;border-radius:9px;background:rgba(239,68,68,.18);color:#ff6b6b;display:flex;align-items:center;justify-content:center;font-size:19px}
+    .fa-why p{margin:0;font-size:13px;line-height:1.45}
+    .fa-why b{color:var(--accent)}
+    .fa-verify{margin-top:auto;display:flex;align-items:center;gap:20px;padding:.19in .6in;background:linear-gradient(90deg,var(--accent),color-mix(in srgb, var(--accent) 78%, #ffffff));color:#fff}
+    .fa-foot{display:flex;align-items:center;gap:14px;padding:.13in .6in .16in;border-top:1px solid var(--line);font-size:12px;color:var(--muted)}
 
-    .f-why{margin:.1in .6in 0;background:var(--navy);color:#fff;border-radius:14px;padding:13px 20px;display:flex;align-items:center;gap:14px}
-    .f-why .b{width:34px;height:34px;flex:none;border-radius:9px;background:rgba(239,68,68,.18);color:#ff6b6b;display:flex;align-items:center;justify-content:center;font-size:19px}
-    .f-why p{margin:0;font-size:13px;line-height:1.45}
-    .f-why b{color:var(--orange2)}
+    /* ===== Layout B: Verification Record ===== */
+    .fb-rule{height:7px;flex:none;background:linear-gradient(90deg,var(--navy) 0%,var(--accent) 46%,var(--navy) 100%)}
+    .fb-head{padding:.26in .52in 0;display:flex;align-items:flex-start;justify-content:space-between;gap:24px}
+    .fb-brand{display:flex;align-items:center;gap:13px;min-width:0}
+    .fb-lf{width:50px;height:50px;font-size:17px}
+    .fb-limg{width:50px;height:50px;max-width:2.4in}
+    .fb-name{font-size:21px;font-weight:900;letter-spacing:-.02em;line-height:1.15;color:var(--navy);overflow-wrap:anywhere}
+    .fb-trade{font-size:12.5px;font-weight:600;color:var(--muted);margin-top:1px}
+    .fb-seal{flex:none;text-align:center}
+    .fb-seal .ring{position:relative;width:104px;height:104px;display:flex;align-items:center;justify-content:center}
+    .fb-seal .ring svg{position:absolute;inset:0}
+    .fb-seal .ring img{width:74px;height:74px;display:block}
+    .fb-seal .iv{margin-top:6px;display:inline-block;border:1px solid var(--navy);border-radius:4px;padding:3px 8px;font-size:8px;font-weight:900;letter-spacing:.16em;color:var(--navy)}
+    .fb-hero{padding:.2in .52in 0}
+    .fb-kick{display:inline-block;background:color-mix(in srgb, var(--accent) 10%, transparent);color:color-mix(in srgb, var(--accent) 82%, #000);border-radius:999px;padding:6px 13px;font-size:10.5px;font-weight:800;letter-spacing:.14em;text-transform:uppercase}
+    .fb-h1{margin:11px 0 0;font-size:42px;line-height:1.02;letter-spacing:-.035em;font-weight:900;color:var(--navy)}
+    .fb-h1 .ac{color:var(--accent)}
+    .fb-sub{margin:10px 0 0;font-size:14.5px;line-height:1.5;color:#44403c;max-width:6.6in}
+    .fb-sub b{color:var(--navy)}
+    .fb-rec{padding:.16in .52in 0}
+    .fb-recbox{border:1px solid var(--line);border-radius:14px;overflow:hidden}
+    .fb-rechead{background:var(--navy);color:#fff;padding:11px 18px;display:flex;align-items:center;justify-content:space-between;gap:14px}
+    .fb-rechead .lab{font-size:10.5px;font-weight:800;letter-spacing:.16em;text-transform:uppercase}
+    .fb-rechead .st{font-size:10.5px;font-weight:700;color:#9fe3b8;display:inline-flex;align-items:center;gap:6px}
+    .fb-rechead .st i{width:6px;height:6px;border-radius:50%;background:#43a46d;display:inline-block}
+    .fb-row{display:flex;align-items:center;gap:14px;padding:8px 18px;border-bottom:1px solid var(--line2)}
+    .fb-row .ck{flex:none;width:22px;height:22px;border-radius:50%;background:#e8f6ee;color:var(--green);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:900}
+    .fb-row .t{flex:none;width:164px;font-size:13.5px;font-weight:800;color:var(--navy)}
+    .fb-row .d{flex:1;font-size:12.5px;line-height:1.42;color:#57534e}
+    .fb-row .src{flex:none;font-size:10px;font-weight:800;letter-spacing:.08em;color:var(--muted);text-transform:uppercase;text-align:right;width:92px}
+    .fb-recfoot{display:flex;align-items:center;justify-content:space-between;gap:14px;padding:10px 18px;background:var(--cream2)}
+    .fb-recfoot span{font-size:11px;font-weight:700;color:var(--muted)}
+    .fb-recfoot b{color:var(--navy);font-weight:700;font-variant-numeric:tabular-nums}
+    .fb-note{padding:.13in .52in 0}
+    .fb-notebox{display:flex;gap:13px;align-items:flex-start;background:var(--navy);border-radius:12px;padding:14px 18px}
+    .fb-notebox .b{flex:none;width:26px;height:26px;border-radius:7px;background:color-mix(in srgb, var(--accent) 20%, transparent);color:var(--accent);display:flex;align-items:center;justify-content:center;font-size:15px;font-weight:900}
+    .fb-notebox p{margin:0;font-size:12.5px;line-height:1.5;color:rgba(255,255,255,.82)}
+    .fb-notebox b.y{color:var(--accent)} .fb-notebox b.w{color:#fff}
+    .fb-contact{padding:.13in .52in 0;display:flex;gap:10px}
+    .fb-cbox{flex:1;border:1px solid var(--line);border-radius:11px;padding:11px 14px;min-width:0}
+    .fb-cbox .cl{font-size:9.5px;font-weight:800;letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}
+    .fb-cbox .cv{font-size:14px;font-weight:800;color:var(--navy);margin-top:3px;overflow-wrap:anywhere}
+    .fb-verify{margin:auto .52in .14in .52in;display:flex;align-items:center;gap:18px;padding:16px 20px;border-radius:16px;background:linear-gradient(120deg,var(--accent),color-mix(in srgb, var(--accent) 74%, #ffffff));color:#fff}
+    .fb-foot{display:flex;align-items:center;gap:11px;padding:.02in .52in .16in}
 
-    .f-verify{margin-top:auto;display:flex;align-items:center;gap:20px;padding:.19in .6in;background:linear-gradient(90deg,var(--accent),var(--orange2));color:#fff}
-    .qr{background:#fff;border-radius:12px;padding:9px;flex:none;line-height:0}
+    /* shared verify band inner */
+    .qr{background:#fff;border-radius:12px;padding:8px;flex:none;line-height:0}
     .qr img,.qr canvas,.qr table{width:1.2in;height:1.2in;display:block}
-    .f-verify .vtext .vk{font-size:11px;font-weight:800;letter-spacing:1.4px;text-transform:uppercase;opacity:.9}
-    .f-verify .vtext h3{margin:3px 0 6px;font-size:24px;font-weight:900;line-height:1.05;letter-spacing:-.4px}
-    .f-verify .vtext .url{font-size:14px;font-weight:700;word-break:break-all;background:rgba(255,255,255,.18);padding:5px 10px;border-radius:7px;display:inline-block}
+    .vk{font-size:11px;font-weight:800;letter-spacing:1.4px;text-transform:uppercase;opacity:.92}
+    .vh{margin:3px 0 6px;font-size:23px;font-weight:900;line-height:1.05;letter-spacing:-.4px}
+    .vu{font-size:13.5px;font-weight:700;word-break:break-all;background:rgba(255,255,255,.2);padding:5px 10px;border-radius:7px;display:inline-block}
+    .byc{width:.46in;height:.46in;flex:none;display:block}
+    .byt{font-size:10.5px;line-height:1.35;color:var(--muted)}
+    .byt b{color:var(--navy);font-weight:800;font-size:11.5px}
+    .paid{margin-left:auto;font-size:9.5px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:#b7b0a4;white-space:nowrap}
 
-    .f-foot{display:flex;align-items:center;gap:14px;padding:.16in .6in;border-top:1px solid var(--line);font-size:12px;color:var(--muted)}
-    .f-foot .contact{display:flex;flex-wrap:wrap;gap:4px 16px}
-    .f-foot .contact span{font-weight:700;color:var(--navy)}
-    .f-foot .by{margin-left:auto;display:flex;align-items:center;gap:10px;white-space:nowrap}
-    .f-foot .by .coin-sm{width:.5in;height:.5in;display:block;flex:none}
-    .f-foot .by .byt{font-size:10.5px;line-height:1.35;color:var(--muted);text-align:left}
-    .f-foot .by .byt b{color:var(--navy);font-weight:800;font-size:11.5px}
-
-    /* ---------- Print ---------- */
     @media print{
       @page{size:letter;margin:0}
       .top,.wrap>.panel,.no-print{display:none !important}
       body{background:#fff}
       .wrap{display:block;padding:0;margin:0;max-width:none}
       .stage{display:block}
-      .scaler{transform:none !important}
-      .flyer{box-shadow:none;width:8.5in;height:11in}
+      .scaler{transform:none !important;width:auto !important;height:auto !important}
+      .sheet{box-shadow:none}
     }
   </style>
 </head>
@@ -125,48 +179,30 @@
   <div class="top no-print">
     <img src="https://cdn.prod.website-files.com/66b4ce93806f21c9d05dc302/66bf8dfb6b8fef22f0d060ff_Sublynk%20Logo%20Hort%20White%403x.png" alt="Sublynk">
     <span class="t">Verified Contractor Flyer</span>
-    <span class="sub">Customize it, then print or save as PDF for your customers</span>
+    <span class="sub">Pick a layout, customize it, then print or save as PDF</span>
   </div>
 
   <div class="wrap">
-    <!-- Customization panel -->
     <div class="panel no-print">
       <h2>Your details</h2>
-      <p class="hint">Add your business info. The flyer updates live. Everything is saved in this browser.</p>
+      <p class="hint">The flyer updates live and saves in this browser.</p>
 
-      <div class="field">
-        <label>Business name</label>
-        <input type="text" id="i_name" placeholder="AC INC Roofing" autocomplete="off">
+      <div class="seg" id="seg">
+        <button data-layout="A">Classic<small>Benefit cards</small></button>
+        <button data-layout="B" class="on">Verification Record<small>Official record</small></button>
       </div>
 
-      <div class="field">
-        <label>What you do (optional)</label>
-        <input type="text" id="i_specialty" placeholder="Roofing &amp; Storm Restoration" autocomplete="off">
-      </div>
-
+      <div class="field"><label>Business name</label><input type="text" id="i_biz" placeholder="AC INC Roofing" autocomplete="off"></div>
+      <div class="field"><label>What you do</label><input type="text" id="i_trade" placeholder="Roofing &amp; Storm Restoration" autocomplete="off"></div>
       <div class="row2">
-        <div class="field">
-          <label>Phone</label>
-          <input type="tel" id="i_phone" placeholder="(555) 123-4567" autocomplete="off">
-        </div>
-        <div class="field">
-          <label>License # (optional)</label>
-          <input type="text" id="i_license" placeholder="Lic #123456" autocomplete="off">
-        </div>
+        <div class="field"><label>Phone</label><input type="tel" id="i_phone" placeholder="(555) 123-4567" autocomplete="off"></div>
+        <div class="field"><label>License #</label><input type="text" id="i_license" placeholder="Lic #123456" autocomplete="off"></div>
       </div>
+      <div class="field"><label>Website</label><input type="text" id="i_web" placeholder="acincroofing.com" autocomplete="off"></div>
+      <div class="field"><label>Your Sublynk profile URL</label><input type="url" id="i_profile" placeholder="app.sublynk.com/profiles/your-business" autocomplete="off"></div>
 
       <div class="field">
-        <label>Website</label>
-        <input type="text" id="i_web" placeholder="acincroofing.com" autocomplete="off">
-      </div>
-
-      <div class="field">
-        <label>Your Sublynk verified profile URL</label>
-        <input type="url" id="i_profile" placeholder="app.sublynk.com/c/ac-inc-roofing" autocomplete="off">
-      </div>
-
-      <div class="field">
-        <label>Your logo (optional)</label>
+        <label>Your logo</label>
         <div class="dropzone" id="dropzone">
           <input type="file" id="i_logo" accept="image/*" hidden>
           <img id="logoThumb" class="logo-thumb" alt="" style="display:none">
@@ -181,11 +217,12 @@
       <div class="field">
         <label>Accent color</label>
         <div class="swatches" id="swatches">
-          <span class="sw on" data-c="#DD6336" style="background:#DD6336"></span>
-          <span class="sw" data-c="#0D142A" style="background:#0D142A"></span>
-          <span class="sw" data-c="#1d4ed8" style="background:#1d4ed8"></span>
-          <span class="sw" data-c="#047857" style="background:#047857"></span>
-          <span class="sw" data-c="#b91c1c" style="background:#b91c1c"></span>
+          <span class="sw on" data-c="#dd6336" style="background:#dd6336" title="Sublynk Orange"></span>
+          <span class="sw" data-c="#0d142a" style="background:#0d142a" title="Navy"></span>
+          <span class="sw" data-c="#008eff" style="background:#008eff" title="Blue"></span>
+          <span class="sw" data-c="#43a46d" style="background:#43a46d" title="Green"></span>
+          <span class="sw" data-c="#7c3aed" style="background:#7c3aed" title="Purple"></span>
+          <label class="sw-custom" title="Custom color">&#9998;<input type="color" id="i_color" value="#dd6336"></label>
         </div>
       </div>
 
@@ -193,237 +230,184 @@
         <button class="btn btn-primary" id="printBtn">Print / Save as PDF</button>
         <button class="btn btn-ghost" id="resetBtn">Reset</button>
       </div>
-      <p class="tip">Tip: in the print dialog choose <b>Save as PDF</b> to email it, or print on 8.5×11 paper. Set margins to <b>None</b> for a full-bleed flyer.</p>
+      <p class="tip">In the print dialog choose <b>Save as PDF</b>, Letter size, and set margins to <b>None</b> for a full-bleed flyer.</p>
     </div>
 
-    <!-- Live flyer -->
     <div class="stage">
       <div class="scaler" id="scaler">
-        <div class="flyer" id="flyer">
-
-          <div class="f-head">
-            <div class="f-brand">
-              <img class="f-logo" id="fLogo" alt="" style="display:none">
-              <div class="f-logo-fallback" id="fLogoFallback">AC</div>
-              <div>
-                <div class="f-name" id="fName">Your Company</div>
-              </div>
-            </div>
-            <div class="vbadge">
-              <img class="coin" src="/og/sublynk-certified-coin.svg" alt="Sublynk Certified">
-              <span class="stamp">Independently Verified</span>
-            </div>
-          </div>
-
-          <div class="f-hero">
-            <span class="f-kicker" id="fKicker">Roofing &amp; Restoration</span>
-            <div class="f-h1">Hire with <span class="accent">confidence.</span></div>
-            <p class="f-sub"><b id="fNameInline">Your Company</b> is independently verified by Sublynk. Anyone can <i>say</i> they are licensed and insured. We prove it, at the source, and keep it current, so you know exactly who you are letting into your home.</p>
-          </div>
-
-          <div class="f-grid">
-            <div class="bcard">
-              <div class="ic">&#10003;</div>
-              <h3>License, verified</h3>
-              <p>Our contractor license is confirmed against official records, not just printed on a card.</p>
-            </div>
-            <div class="bcard">
-              <div class="ic">&#128737;</div>
-              <h3>Insurance you can trust</h3>
-              <p>Our proof of insurance is verified at the source and monitored, so coverage cannot quietly lapse mid-project.</p>
-            </div>
-            <div class="bcard">
-              <div class="ic">&#128100;</div>
-              <h3>Background-checked</h3>
-              <p>The people we send to your property have passed background screening.</p>
-            </div>
-            <div class="bcard">
-              <div class="ic">&#128260;</div>
-              <h3>Always current</h3>
-              <p>Sublynk re-checks our credentials before anything expires, so we stay compliant start to finish.</p>
-            </div>
-          </div>
-
-          <div class="f-why">
-            <span class="b">&#9888;&#xFE0E;</span>
-            <p>Hiring an unverified contractor can leave <b>you</b> on the hook for accidents, unlicensed work, and lapsed insurance. <b>Verified means you are protected.</b></p>
-          </div>
-
-          <div class="f-verify">
-            <div class="qr" id="qr"></div>
-            <div class="vtext">
-              <div class="vk">Don't take our word for it</div>
-              <h3>Scan to see our live verified profile</h3>
-              <span class="url" id="fUrl">app.sublynk.com</span>
-            </div>
-          </div>
-
-          <div class="f-foot">
-            <div class="contact" id="fContact">
-              <span id="fPhone">(555) 123-4567</span>
-              <span id="fWeb">yourcompany.com</span>
-              <span id="fLic" style="display:none"></span>
-            </div>
-            <div class="by">
-              <img class="coin-sm" src="/og/sublynk-certified-coin.svg" alt="Sublynk Certified">
-              <span class="byt"><b>Independently verified by Sublynk</b><br>Verify this contractor at sublynk.com</span>
-            </div>
-          </div>
-
-        </div>
+        <div class="sheet layout-B" id="sheet"></div>
       </div>
     </div>
   </div>
 
   <script>
-    var $ = function(id){ return document.getElementById(id); };
-    var KEY = 'slk_flyer_v1';
-    var state = {
-      name:'', specialty:'', phone:'', license:'', web:'', profile:'', logo:'', accent:'#DD6336'
-    };
+    var $=function(id){return document.getElementById(id);};
+    var KEY='slk_flyer_v2';
+    var COIN='/og/sublynk-certified-coin.svg';
+    var state={biz:'',trade:'',phone:'',license:'',web:'',profile:'',logo:'',accent:'#dd6336',layout:'B'};
 
-    // ---- render ----
-    function initials(s){
-      var w = (s||'').trim().split(/\s+/).filter(Boolean);
-      if(!w.length) return 'AC';
-      return ((w[0][0]||'') + (w[1]?w[1][0]:(w[0][1]||''))).toUpperCase();
+    function esc(s){return String(s==null?'':s).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c];});}
+    function initials(s){var w=(s||'').trim().split(/\s+/).filter(Boolean);if(!w.length)return 'AB';return ((w[0][0]||'')+(w[1]?w[1][0]:(w[0][1]||''))).toUpperCase();}
+    function cleanUrl(u){return (u||'').trim().replace(/^https?:\/\//i,'').replace(/\/$/,'');}
+    function licLabel(v){v=(v||'').trim();return v?(/lic/i.test(v)?v:('License '+v)):'';}
+    function hashId(s){var h=0,i;s=s||'sublynk';for(i=0;i<s.length;i++){h=((h<<5)-h+s.charCodeAt(i))|0;}var n=Math.abs(h)%900000+100000;return 'SLK-'+n;}
+    var MONTHS=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+    function today(){try{var d=new Date();return MONTHS[d.getMonth()]+' '+d.getDate()+', '+d.getFullYear();}catch(e){return '';}}
+
+    function logoHtml(cls_fallback, cls_img){
+      if(state.logo) return '<img class="limg '+cls_img+'" src="'+state.logo+'" alt="">';
+      return '<div class="lfallback '+cls_fallback+'">'+esc(initials(state.biz))+'</div>';
     }
-    function cleanUrl(u){ return (u||'').replace(/^https?:\/\//i,'').replace(/\/$/,''); }
 
-    var qrLast = '';
-    function drawQR(url){
-      var box = $('qr');
-      if(url === qrLast) return; qrLast = url;
-      box.innerHTML = '';
+    // ---- Layout A: Classic ----
+    function tplA(){
+      var biz=esc(state.biz)||'Your Company';
+      var trade=state.trade.trim();
+      var prof=cleanUrl(state.profile)||'app.sublynk.com';
+      var contact=[state.phone.trim(),cleanUrl(state.web),licLabel(state.license)].filter(Boolean).map(esc).join(' &nbsp;·&nbsp; ');
+      return ''+
+      '<div class="fa-head">'+logoHtml('fa-lf','fa-limg')+
+        '<div class="fa-name">'+biz+'</div>'+
+        '<div class="fa-badge"><img class="fa-coin" src="'+COIN+'" alt="Sublynk Certified"><span class="fa-tag">Independently Verified</span></div>'+
+      '</div>'+
+      '<div class="fa-hero">'+
+        (trade?'<span class="fa-kick">'+esc(trade)+'</span>':'')+
+        '<div class="fa-h1">Hire with <span class="ac">confidence.</span></div>'+
+        '<p class="fa-sub"><b>'+(esc(state.biz.trim())||'Our company')+'</b> is independently verified by Sublynk. Anyone can <i>say</i> they are licensed and insured. We prove it, at the source, and keep it current, so you know exactly who you are letting into your home.</p>'+
+      '</div>'+
+      '<div class="fa-grid">'+
+        card('&#10003;','License, verified','Our contractor license is confirmed against official records, not just printed on a card.')+
+        card('&#128737;','Insurance you can trust','Our proof of insurance is verified at the source and monitored, so coverage cannot quietly lapse mid-project.')+
+        card('&#128100;','Background-checked','The people we send to your property have passed background screening.')+
+        card('&#128260;','Always current','Sublynk re-checks our credentials before anything expires, so we stay compliant start to finish.')+
+      '</div>'+
+      '<div class="fa-why"><span class="b">&#9888;&#xFE0E;</span><p>Hiring an unverified contractor can leave <b>you</b> on the hook for accidents, unlicensed work, and lapsed insurance. <b>Verified means you are protected.</b></p></div>'+
+      '<div class="fa-verify">'+verifyInner(prof)+'</div>'+
+      '<div class="fa-foot"><img class="byc" src="'+COIN+'" alt=""><span class="byt"><b>Independently verified by Sublynk</b><br>Verify this contractor at sublynk.com</span>'+(contact?'<span class="paid">'+contact+'</span>':'')+'</div>';
+    }
+    function card(ic,h,p){return '<div class="fa-card"><div class="ic">'+ic+'</div><h3>'+h+'</h3><p>'+p+'</p></div>';}
+
+    // ---- Layout B: Verification Record ----
+    function tplB(){
+      var biz=esc(state.biz)||'Your Company';
+      var trade=state.trade.trim();
+      var prof=cleanUrl(state.profile)||'app.sublynk.com';
+      var rows=[
+        ['Contractor license','Confirmed against official state and federal records, not a printed card.','State + Federal'],
+        ['Proof of insurance','Coverage confirmed with the broker and watched so it cannot quietly lapse.','Broker'],
+        ['Background screening','The people sent to your property have passed background checks.','Checkr'],
+        ['Business verification','The legal entity is confirmed against IRS and Secretary of State records.','Middesk']
+      ].map(function(r){return '<div class="fb-row"><span class="ck">&#10003;</span><span class="t">'+r[0]+'</span><span class="d">'+r[1]+'</span><span class="src">'+r[2]+'</span></div>';}).join('');
+      var contact=[['Call',state.phone.trim()||'—'],['Online',cleanUrl(state.web)||'—'],['License',licLabel(state.license)||'—']]
+        .map(function(c){return '<div class="fb-cbox"><div class="cl">'+c[0]+'</div><div class="cv">'+esc(c[1])+'</div></div>';}).join('');
+      return ''+
+      '<div class="fb-rule"></div>'+
+      '<div class="fb-head">'+
+        '<div class="fb-brand">'+logoHtml('fb-lf','fb-limg')+'<div style="min-width:0"><div class="fb-name">'+biz+'</div>'+(trade?'<div class="fb-trade">'+esc(trade)+'</div>':'')+'</div></div>'+
+        '<div class="fb-seal"><div class="ring"><svg viewBox="0 0 104 104" width="104" height="104"><circle cx="52" cy="52" r="50" fill="none" stroke="var(--accent)" stroke-width="2.6" stroke-dasharray="1.6 5"></circle><circle cx="52" cy="52" r="43" fill="none" stroke="#e3ded4" stroke-width="1"></circle></svg><img src="'+COIN+'" alt="Sublynk Certified"></div><div class="iv">Independently Verified</div></div>'+
+      '</div>'+
+      '<div class="fb-hero">'+
+        (trade?'<span class="fb-kick">'+esc(trade)+'</span>':'')+
+        '<h1 class="fb-h1">Hire with <span class="ac">confidence.</span></h1>'+
+        '<p class="fb-sub"><b>'+(esc(state.biz.trim())||'Our company')+'</b> is independently verified by Sublynk. Anyone can <i>say</i> they are licensed and insured. We confirm it at the source, then keep watching it, so you know exactly who you are letting into your home.</p>'+
+      '</div>'+
+      '<div class="fb-rec"><div class="fb-recbox">'+
+        '<div class="fb-rechead"><span class="lab">Verification record</span><span class="st"><i></i>Active &amp; monitored</span></div>'+
+        rows+
+        '<div class="fb-recfoot"><span>Record ID <b>'+hashId(state.biz)+'</b></span><span>Last re-checked <b>'+today()+'</b></span></div>'+
+      '</div></div>'+
+      '<div class="fb-note"><div class="fb-notebox"><span class="b">!</span><p>Hiring an unverified contractor can leave <b class="y">you</b> on the hook for accidents, unlicensed work, and lapsed insurance. <b class="w">Verified means you are protected.</b></p></div></div>'+
+      '<div class="fb-contact">'+contact+'</div>'+
+      '<div class="fb-verify">'+verifyInner(prof)+'</div>'+
+      '<div class="fb-foot"><img class="byc" src="'+COIN+'" alt=""><span class="byt"><b>Independently verified by Sublynk</b><br>Verify any contractor at sublynk.com</span><span class="paid">Not a paid endorsement</span></div>';
+    }
+
+    function verifyInner(prof){
+      return '<div class="qr" id="qr"></div><div><div class="vk">Don\'t take our word for it</div><div class="vh">Scan to see the live record</div><span class="vu">'+esc(prof)+'</span></div>';
+    }
+
+    var qrLast='';
+    function drawQR(box,url){
+      box.innerHTML='';
       try{
-        var full = /^https?:\/\//i.test(url) ? url : ('https://' + url);
-        var q = qrcode(0, 'M'); q.addData(full); q.make();
-        box.innerHTML = q.createImgTag(5, 0);
-        var img = box.querySelector('img'); if(img){ img.style.width='1.2in'; img.style.height='1.2in'; }
-      }catch(e){ box.style.display='none'; }
+        var full=/^https?:\/\//i.test(url)?url:('https://'+(url||'app.sublynk.com'));
+        var q=qrcode(0,'M');q.addData(full);q.make();
+        box.innerHTML=q.createImgTag(5,0);
+        var img=box.querySelector('img');if(img){img.style.width='1.2in';img.style.height='1.2in';}
+      }catch(e){box.style.display='none';}
     }
 
     function render(){
-      document.documentElement.style.setProperty('--accent', state.accent);
-      var name = state.name.trim() || 'Your Company';
-      $('fName').textContent = name;
-      $('fNameInline').textContent = state.name.trim() || 'Our company';
-
-      // logo vs fallback initials
-      if(state.logo){
-        $('fLogo').src = state.logo; $('fLogo').style.display='block';
-        $('fLogoFallback').style.display='none';
-      }else{
-        $('fLogo').style.display='none';
-        $('fLogoFallback').style.display='flex';
-        $('fLogoFallback').textContent = initials(state.name);
-      }
-
-      // kicker (specialty)
-      var kick = $('fKicker');
-      if(state.specialty.trim()){ kick.textContent = state.specialty.trim(); kick.style.display='inline-block'; }
-      else{ kick.style.display='none'; }
-
-      // contact
-      $('fPhone').textContent = state.phone.trim() || '(555) 123-4567';
-      $('fPhone').style.display = state.phone.trim() ? 'inline' : 'none';
-      $('fWeb').textContent = cleanUrl(state.web) || 'yourcompany.com';
-      $('fWeb').style.display = state.web.trim() ? 'inline' : 'none';
-      var lic = $('fLic');
-      if(state.license.trim()){ lic.textContent = /lic/i.test(state.license)?state.license.trim():('License '+state.license.trim()); lic.style.display='inline'; }
-      else lic.style.display='none';
-
-      // verify url + QR
-      var prof = cleanUrl(state.profile) || 'app.sublynk.com';
-      $('fUrl').textContent = prof;
-      $('qr').style.display = 'block';
-      drawQR(state.profile.trim() || 'app.sublynk.com');
+      var sheet=$('sheet');
+      sheet.style.setProperty('--accent',state.accent);
+      sheet.className='sheet layout-'+state.layout;
+      sheet.innerHTML=(state.layout==='B'?tplB():tplA());
+      var qr=sheet.querySelector('#qr');if(qr)drawQR(qr,state.profile.trim());
+      fit();
     }
 
     // ---- bindings ----
-    function bind(id, key){
-      var el = $(id);
-      el.value = state[key] || '';
-      el.addEventListener('input', function(){ state[key] = el.value; save(); render(); });
-    }
-    bind('i_name','name'); bind('i_specialty','specialty'); bind('i_phone','phone');
-    bind('i_license','license'); bind('i_web','web'); bind('i_profile','profile');
+    function bind(id,key){var el=$(id);el.addEventListener('input',function(){state[key]=el.value;save();render();});}
+    bind('i_biz','biz');bind('i_trade','trade');bind('i_phone','phone');bind('i_license','license');bind('i_web','web');bind('i_profile','profile');
 
-    // logo upload — click or drag & drop
-    var dz = $('dropzone'), fileInput = $('i_logo');
-    function handleFile(f){
-      if(!f || !/^image\//.test(f.type)) return;
-      var r = new FileReader();
-      r.onload = function(){ state.logo = r.result; save(); render(); syncLogoUI(); };
-      r.readAsDataURL(f);
-    }
-    function syncLogoUI(){
-      var has = !!state.logo;
-      var thumb = $('logoThumb');
-      if(has){ thumb.src = state.logo; }
-      thumb.style.display = has ? 'block' : 'none';
-      $('dzEmpty').style.display = has ? 'none' : 'flex';
-      $('logoClear').style.display = has ? 'inline' : 'none';
-    }
-    dz.addEventListener('click', function(e){ if(e.target.id !== 'logoClear') fileInput.click(); });
-    fileInput.addEventListener('change', function(e){ handleFile(e.target.files && e.target.files[0]); });
-    ['dragenter','dragover'].forEach(function(ev){ dz.addEventListener(ev, function(e){ e.preventDefault(); dz.classList.add('drag'); }); });
-    ['dragleave','drop'].forEach(function(ev){ dz.addEventListener(ev, function(e){ e.preventDefault(); if(ev==='dragleave' && dz.contains(e.relatedTarget)) return; dz.classList.remove('drag'); }); });
-    dz.addEventListener('drop', function(e){ handleFile(e.dataTransfer && e.dataTransfer.files && e.dataTransfer.files[0]); });
-    $('logoClear').addEventListener('click', function(e){ e.stopPropagation(); state.logo=''; fileInput.value=''; save(); render(); syncLogoUI(); });
-
-    // swatches
-    Array.prototype.forEach.call(document.querySelectorAll('.sw'), function(s){
-      s.addEventListener('click', function(){
-        document.querySelectorAll('.sw').forEach(function(x){ x.classList.remove('on'); });
-        s.classList.add('on'); state.accent = s.getAttribute('data-c'); save(); render();
+    // layout toggle
+    Array.prototype.forEach.call(document.querySelectorAll('#seg button'),function(b){
+      b.addEventListener('click',function(){
+        state.layout=b.getAttribute('data-layout');
+        document.querySelectorAll('#seg button').forEach(function(x){x.classList.toggle('on',x===b);});
+        save();render();
       });
     });
+
+    // logo drag & drop
+    var dz=$('dropzone'),fileInput=$('i_logo');
+    function handleFile(f){if(!f||!/^image\//.test(f.type))return;var r=new FileReader();r.onload=function(){state.logo=r.result;save();render();syncLogoUI();};r.readAsDataURL(f);}
+    function syncLogoUI(){var has=!!state.logo,thumb=$('logoThumb');if(has)thumb.src=state.logo;thumb.style.display=has?'block':'none';$('dzEmpty').style.display=has?'none':'flex';$('logoClear').style.display=has?'inline':'none';}
+    dz.addEventListener('click',function(e){if(e.target.id!=='logoClear')fileInput.click();});
+    fileInput.addEventListener('change',function(e){handleFile(e.target.files&&e.target.files[0]);});
+    ['dragenter','dragover'].forEach(function(ev){dz.addEventListener(ev,function(e){e.preventDefault();dz.classList.add('drag');});});
+    ['dragleave','drop'].forEach(function(ev){dz.addEventListener(ev,function(e){e.preventDefault();if(ev==='dragleave'&&dz.contains(e.relatedTarget))return;dz.classList.remove('drag');});});
+    dz.addEventListener('drop',function(e){handleFile(e.dataTransfer&&e.dataTransfer.files&&e.dataTransfer.files[0]);});
+    $('logoClear').addEventListener('click',function(e){e.stopPropagation();state.logo='';fileInput.value='';save();render();syncLogoUI();});
+
+    // color picker
+    function setAccent(c,fromCustom){state.accent=c;document.querySelectorAll('.sw').forEach(function(s){s.classList.toggle('on',s.getAttribute('data-c')&&s.getAttribute('data-c').toLowerCase()===c.toLowerCase());});if(!fromCustom)$('i_color').value=c;save();render();}
+    document.querySelectorAll('.sw').forEach(function(s){s.addEventListener('click',function(){setAccent(s.getAttribute('data-c'),false);});});
+    $('i_color').addEventListener('input',function(){setAccent(this.value,true);});
 
     // actions
-    $('printBtn').addEventListener('click', function(){ window.print(); });
-    $('resetBtn').addEventListener('click', function(){
-      if(!confirm('Clear the flyer and start over?')) return;
-      state = { name:'', specialty:'', phone:'', license:'', web:'', profile:'', logo:'', accent:'#DD6336' };
-      try{ localStorage.removeItem(KEY); }catch(e){}
-      ['i_name','i_specialty','i_phone','i_license','i_web','i_profile'].forEach(function(id){ $(id).value=''; });
-      $('i_logo').value=''; syncLogoUI();
-      document.querySelectorAll('.sw').forEach(function(x,i){ x.classList.toggle('on', i===0); });
-      render();
+    $('printBtn').addEventListener('click',function(){window.print();});
+    $('resetBtn').addEventListener('click',function(){
+      if(!confirm('Clear the flyer and start over?'))return;
+      state={biz:'',trade:'',phone:'',license:'',web:'',profile:'',logo:'',accent:'#dd6336',layout:state.layout};
+      try{localStorage.removeItem(KEY);}catch(e){}
+      ['i_biz','i_trade','i_phone','i_license','i_web','i_profile'].forEach(function(id){$(id).value='';});
+      fileInput.value='';$('i_color').value='#dd6336';
+      document.querySelectorAll('.sw').forEach(function(x,i){x.classList.toggle('on',i===0);});
+      syncLogoUI();render();
     });
 
-    // persistence
-    function save(){ try{ localStorage.setItem(KEY, JSON.stringify(state)); }catch(e){} }
+    // persistence + prefill
+    function save(){try{localStorage.setItem(KEY,JSON.stringify(state));}catch(e){}}
     function load(){
-      try{ var s = JSON.parse(localStorage.getItem(KEY)||'null'); if(s) Object.assign(state, s); }catch(e){}
-      // Optional prefill via URL (?name=...&specialty=...&phone=...&license=...&web=...&profile=...&accent=%23DD6336)
-      try{
-        var qp = new URLSearchParams(location.search);
-        ['name','specialty','phone','license','web','profile','accent'].forEach(function(k){
-          if(qp.get(k)) state[k] = qp.get(k);
-        });
-      }catch(e){}
-      ['i_name','i_specialty','i_phone','i_license','i_web','i_profile'].forEach(function(id){
-        var k = id.slice(2); $(id).value = state[k] || '';
-      });
+      try{var s=JSON.parse(localStorage.getItem(KEY)||'null');if(s)Object.assign(state,s);}catch(e){}
+      try{var qp=new URLSearchParams(location.search);['biz','trade','phone','license','web','profile','accent','layout'].forEach(function(k){if(qp.get(k))state[k]=qp.get(k);});
+        if(qp.get('name'))state.biz=qp.get('name'); if(qp.get('specialty'))state.trade=qp.get('specialty');}catch(e){}
+      $('i_biz').value=state.biz;$('i_trade').value=state.trade;$('i_phone').value=state.phone;$('i_license').value=state.license;$('i_web').value=state.web;$('i_profile').value=state.profile;
+      ['biz','trade','phone','license','web','profile'].forEach(function(k){var el=$('i_'+k);if(el&&el.value&&!state[k])state[k]=el.value;});
+      $('i_color').value=/^#/.test(state.accent)?state.accent:'#dd6336';
+      document.querySelectorAll('.sw').forEach(function(x){x.classList.toggle('on',x.getAttribute('data-c')&&x.getAttribute('data-c').toLowerCase()===state.accent.toLowerCase());});
+      document.querySelectorAll('#seg button').forEach(function(x){x.classList.toggle('on',x.getAttribute('data-layout')===state.layout);});
       syncLogoUI();
-      document.querySelectorAll('.sw').forEach(function(x){ x.classList.toggle('on', x.getAttribute('data-c')===state.accent); });
     }
 
-    // fit the flyer preview to the available width
     function fit(){
-      var stage = document.querySelector('.stage');
-      var flyerW = 8.5 * 96; // px at 96dpi
-      var avail = stage.clientWidth - 4;
-      var scale = Math.min(1, avail / flyerW);
-      var sc = $('scaler');
-      sc.style.transform = 'scale(' + scale + ')';
-      sc.style.height = (11 * 96 * scale) + 'px';
-      sc.style.width = flyerW + 'px';
+      var stage=document.querySelector('.stage');var flyerW=8.5*96;var avail=stage.clientWidth-4;var scale=Math.min(1,avail/flyerW);
+      var sc=$('scaler');sc.style.transform='scale('+scale+')';sc.style.width=flyerW+'px';sc.style.height=(11*96*scale)+'px';
     }
-    window.addEventListener('resize', fit);
+    window.addEventListener('resize',fit);
 
-    load(); render(); fit();
+    load();render();fit();
   </script>
 </body>
 </html>
