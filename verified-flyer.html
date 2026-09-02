@@ -39,8 +39,14 @@
     .field input[type=text],.field input[type=url],.field input[type=tel]{width:100%;padding:10px 12px;border:1px solid #d6d3d1;border-radius:9px;font-size:14px;font-family:inherit;color:var(--ink);background:#fff}
     .field input:focus{outline:none;border-color:var(--orange);box-shadow:0 0 0 3px rgba(221,99,54,.12)}
     .row2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-    .logo-row{display:flex;align-items:center;gap:10px}
-    .logo-btn{display:inline-block;padding:9px 14px;background:var(--navy);color:#fff;border-radius:9px;font-size:13px;font-weight:700;cursor:pointer}
+    .dropzone{position:relative;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;border:2px dashed #cbd2dd;border-radius:12px;background:#f8fafc;padding:16px 12px;cursor:pointer;transition:border-color .15s,background .15s;text-align:center}
+    .dropzone:hover{border-color:var(--orange);background:#fff}
+    .dropzone.drag{border-color:var(--orange);background:rgba(221,99,54,.06)}
+    .dz-empty{display:flex;flex-direction:column;align-items:center;gap:8px}
+    .dz-ic{width:34px;height:34px;border-radius:9px;background:#eef1f6;color:var(--navy);display:flex;align-items:center;justify-content:center;font-size:18px;font-weight:700}
+    .dz-t{font-size:12.5px;font-weight:700;color:var(--navy);line-height:1.4}
+    .dz-t span{font-weight:500;color:var(--muted)}
+    .logo-thumb{max-height:54px;max-width:82%;object-fit:contain;border-radius:6px}
     .logo-clear{font-size:12px;color:var(--muted);cursor:pointer;text-decoration:underline}
     .swatches{display:flex;gap:8px;margin-top:2px}
     .sw{width:26px;height:26px;border-radius:50%;cursor:pointer;border:2px solid #fff;box-shadow:0 0 0 1px #d6d3d1}
@@ -64,13 +70,11 @@
     .f-head{display:flex;align-items:center;gap:16px;padding:.5in .6in .34in}
     .f-brand{display:flex;align-items:center;gap:13px;min-width:0}
     .f-logo{height:.62in;max-width:3in;object-fit:contain;display:block}
-    .f-logo-fallback{width:.62in;height:.62in;border-radius:12px;background:var(--navy);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:900;font-size:22px;flex:none}
+    .f-logo-fallback{width:.62in;height:.62in;border-radius:12px;background:#eef1f6;color:var(--navy);border:1px solid #e2e6ee;display:flex;align-items:center;justify-content:center;font-weight:900;font-size:22px;flex:none}
     .f-name{font-weight:800;font-size:21px;color:var(--navy);line-height:1.1;letter-spacing:-.2px;overflow-wrap:anywhere}
-    .vbadge{margin-left:auto;flex:none;display:flex;flex-direction:column;align-items:flex-end;gap:5px}
-    .vbadge .lab{font-size:9px;font-weight:800;letter-spacing:1.6px;color:var(--muted);text-transform:uppercase}
-    .vpill{display:flex;align-items:center;gap:8px;background:var(--navy);border-radius:999px;padding:7px 13px 7px 9px}
-    .vpill .ck{width:18px;height:18px;border-radius:50%;background:#22c55e;color:#fff;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:900}
-    .vpill img{height:14px;display:block}
+    .vbadge{margin-left:auto;flex:none;display:flex;flex-direction:column;align-items:center;gap:5px}
+    .vbadge .lab{font-size:8px;font-weight:800;letter-spacing:1.5px;color:var(--muted);text-transform:uppercase}
+    .vbadge .coin{width:.98in;height:.98in;display:block}
 
     .f-hero{padding:0 .6in}
     .f-kicker{display:inline-block;background:rgba(221,99,54,.12);color:var(--accent);font-size:11px;font-weight:800;letter-spacing:1.4px;text-transform:uppercase;padding:6px 12px;border-radius:999px}
@@ -100,8 +104,10 @@
     .f-foot{display:flex;align-items:center;gap:14px;padding:.16in .6in;border-top:1px solid var(--line);font-size:12px;color:var(--muted)}
     .f-foot .contact{display:flex;flex-wrap:wrap;gap:4px 16px}
     .f-foot .contact span{font-weight:700;color:var(--navy)}
-    .f-foot .by{margin-left:auto;display:flex;align-items:center;gap:7px;white-space:nowrap;color:var(--muted);font-weight:600}
-    .f-foot .by img{height:13px;display:block;opacity:.9}
+    .f-foot .by{margin-left:auto;display:flex;align-items:center;gap:10px;white-space:nowrap}
+    .f-foot .by .coin-sm{width:.5in;height:.5in;display:block;flex:none}
+    .f-foot .by .byt{font-size:10.5px;line-height:1.35;color:var(--muted);text-align:left}
+    .f-foot .by .byt b{color:var(--navy);font-weight:800;font-size:11.5px}
 
     /* ---------- Print ---------- */
     @media print{
@@ -161,10 +167,14 @@
 
       <div class="field">
         <label>Your logo (optional)</label>
-        <div class="logo-row">
-          <label class="logo-btn" for="i_logo">Upload image</label>
-          <input type="file" id="i_logo" accept="image/*" style="display:none">
-          <span class="logo-clear" id="logoClear" style="display:none">remove</span>
+        <div class="dropzone" id="dropzone">
+          <input type="file" id="i_logo" accept="image/*" hidden>
+          <img id="logoThumb" class="logo-thumb" alt="" style="display:none">
+          <div class="dz-empty" id="dzEmpty">
+            <span class="dz-ic">&#8682;</span>
+            <span class="dz-t">Drag &amp; drop your logo<br><span>or click to browse</span></span>
+          </div>
+          <span class="logo-clear" id="logoClear" style="display:none">Remove logo</span>
         </div>
       </div>
 
@@ -201,10 +211,7 @@
             </div>
             <div class="vbadge">
               <span class="lab">Independently verified</span>
-              <span class="vpill">
-                <span class="ck">&#10003;</span>
-                <img src="https://cdn.prod.website-files.com/66b4ce93806f21c9d05dc302/66bf8dfb6b8fef22f0d060ff_Sublynk%20Logo%20Hort%20White%403x.png" alt="Sublynk">
-              </span>
+              <img class="coin" src="/og/sublynk-certified-coin.svg" alt="Sublynk Certified">
             </div>
           </div>
 
@@ -257,7 +264,10 @@
               <span id="fWeb">yourcompany.com</span>
               <span id="fLic" style="display:none"></span>
             </div>
-            <div class="by">Verified by&nbsp;<b style="color:var(--navy);font-weight:800">Sublynk</b></div>
+            <div class="by">
+              <img class="coin-sm" src="/og/sublynk-certified-coin.svg" alt="Sublynk Certified">
+              <span class="byt"><b>Independently verified by Sublynk</b><br>Verify this contractor at sublynk.com</span>
+            </div>
           </div>
 
         </div>
@@ -339,14 +349,28 @@
     bind('i_name','name'); bind('i_specialty','specialty'); bind('i_phone','phone');
     bind('i_license','license'); bind('i_web','web'); bind('i_profile','profile');
 
-    // logo upload
-    $('i_logo').addEventListener('change', function(e){
-      var f = e.target.files && e.target.files[0]; if(!f) return;
+    // logo upload — click or drag & drop
+    var dz = $('dropzone'), fileInput = $('i_logo');
+    function handleFile(f){
+      if(!f || !/^image\//.test(f.type)) return;
       var r = new FileReader();
-      r.onload = function(){ state.logo = r.result; $('logoClear').style.display='inline'; save(); render(); };
+      r.onload = function(){ state.logo = r.result; save(); render(); syncLogoUI(); };
       r.readAsDataURL(f);
-    });
-    $('logoClear').addEventListener('click', function(){ state.logo=''; $('i_logo').value=''; this.style.display='none'; save(); render(); });
+    }
+    function syncLogoUI(){
+      var has = !!state.logo;
+      var thumb = $('logoThumb');
+      if(has){ thumb.src = state.logo; }
+      thumb.style.display = has ? 'block' : 'none';
+      $('dzEmpty').style.display = has ? 'none' : 'flex';
+      $('logoClear').style.display = has ? 'inline' : 'none';
+    }
+    dz.addEventListener('click', function(e){ if(e.target.id !== 'logoClear') fileInput.click(); });
+    fileInput.addEventListener('change', function(e){ handleFile(e.target.files && e.target.files[0]); });
+    ['dragenter','dragover'].forEach(function(ev){ dz.addEventListener(ev, function(e){ e.preventDefault(); dz.classList.add('drag'); }); });
+    ['dragleave','drop'].forEach(function(ev){ dz.addEventListener(ev, function(e){ e.preventDefault(); if(ev==='dragleave' && dz.contains(e.relatedTarget)) return; dz.classList.remove('drag'); }); });
+    dz.addEventListener('drop', function(e){ handleFile(e.dataTransfer && e.dataTransfer.files && e.dataTransfer.files[0]); });
+    $('logoClear').addEventListener('click', function(e){ e.stopPropagation(); state.logo=''; fileInput.value=''; save(); render(); syncLogoUI(); });
 
     // swatches
     Array.prototype.forEach.call(document.querySelectorAll('.sw'), function(s){
@@ -363,7 +387,7 @@
       state = { name:'', specialty:'', phone:'', license:'', web:'', profile:'', logo:'', accent:'#DD6336' };
       try{ localStorage.removeItem(KEY); }catch(e){}
       ['i_name','i_specialty','i_phone','i_license','i_web','i_profile'].forEach(function(id){ $(id).value=''; });
-      $('i_logo').value=''; $('logoClear').style.display='none';
+      $('i_logo').value=''; syncLogoUI();
       document.querySelectorAll('.sw').forEach(function(x,i){ x.classList.toggle('on', i===0); });
       render();
     });
@@ -382,7 +406,7 @@
       ['i_name','i_specialty','i_phone','i_license','i_web','i_profile'].forEach(function(id){
         var k = id.slice(2); $(id).value = state[k] || '';
       });
-      if(state.logo) $('logoClear').style.display='inline';
+      syncLogoUI();
       document.querySelectorAll('.sw').forEach(function(x){ x.classList.toggle('on', x.getAttribute('data-c')===state.accent); });
     }
 
