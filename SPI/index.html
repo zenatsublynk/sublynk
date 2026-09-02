@@ -1,0 +1,441 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>SPI · Sublynk Prevention Intelligence — Case Files</title>
+<meta name="description" content="The SPI Case Files: real prevention cases from the Sublynk Prevention Intelligence. Names, companies, and networks redacted. Facts, timelines, and verification preserved.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IM+Fell+English:ital@0;1&family=IM+Fell+English+SC&family=Courier+Prime:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+<script src="vendor/page-flip.js"></script>
+<style>
+  :root{
+    --paper:#f4ecdb; --paper2:#efe5cf; --ink:#2c2519; --faint:#8c7d61; --accent:#8a5a2b;
+    --cloth:#223350; --cloth2:#141f36; --gold:#cba96a; --gold2:#e9dcbf;
+    --red:#8a2b22; --green:#3f5d33; --navy:#26324a; --bar:#17120d;
+    --serif:"IM Fell English",Georgia,"Times New Roman",serif;
+    --sc:"IM Fell English SC","IM Fell English",Georgia,serif;
+    --type:"Courier Prime","Courier New",monospace;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;height:100%}
+  body{background:#12151d radial-gradient(120% 90% at 50% 0%,#1b2233 0%,#0b0e15 100%) no-repeat;color:var(--ink);font-family:var(--serif);overflow:hidden}
+
+  /* ---- stage ---- */
+  #stage{position:fixed;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;opacity:0;transition:opacity 1s ease}
+  #stage.on{opacity:1}
+  .hint{opacity:0;transition:opacity 1s ease}
+  .hint.on{opacity:1}
+  #scaler{transform-origin:center center}
+  #book{ }
+  .leaf{background:var(--paper);overflow:hidden;color:var(--ink)}
+  .leaf .content, .leaf .cov-in{position:absolute;inset:0}
+  /* aged paper texture + gutter shadow */
+  .paper{background:
+     radial-gradient(120% 80% at 12% 0%, rgba(120,90,40,.10), transparent 55%),
+     radial-gradient(120% 80% at 90% 100%, rgba(90,60,20,.12), transparent 55%),
+     var(--paper);
+     box-shadow:inset 0 0 60px rgba(60,42,20,.28);}
+  .leaf.left .content{box-shadow:inset -10px 0 22px -12px rgba(60,42,20,.5), inset 0 0 60px rgba(60,42,20,.28)}
+  .leaf.right .content{box-shadow:inset 10px 0 22px -12px rgba(60,42,20,.5), inset 0 0 60px rgba(60,42,20,.28)}
+
+  /* ---- controls ---- */
+  .bar{display:flex;align-items:center;gap:16px;color:#e7dcc4;font-family:var(--sc);letter-spacing:.06em}
+  .bar button{font-family:var(--sc);font-size:15px;letter-spacing:.08em;color:#2c2519;background:var(--gold2);border:1px solid var(--gold);border-radius:4px;padding:7px 16px;cursor:pointer}
+  .bar button:disabled{opacity:.35;cursor:default}
+  .bar .pg{font-size:13px;color:#c9bfa6;min-width:78px;text-align:center}
+  .hint{position:fixed;bottom:10px;left:0;right:0;text-align:center;color:#7d715a;font-family:var(--sc);font-size:12px;letter-spacing:.1em}
+
+  /* ---- FBI-style access terminal ---- */
+  #gate{position:fixed;inset:0;z-index:100;background:radial-gradient(120% 90% at 50% 10%,#0a1322 0%,#05070c 100%);display:flex;align-items:center;justify-content:center;font-family:var(--type);color:#cfe3d6;overflow:hidden}
+  #gate.hide{opacity:0;pointer-events:none;transition:opacity .85s ease}
+  .g-scan{position:absolute;inset:0;pointer-events:none;background:repeating-linear-gradient(0deg,rgba(80,150,110,.045) 0px,rgba(80,150,110,.045) 1px,transparent 2px,transparent 4px)}
+  .g-vig{position:absolute;inset:0;pointer-events:none;box-shadow:inset 0 0 200px rgba(0,0,0,.7)}
+  .g-box{position:relative;width:min(92vw,432px);border:1px solid #23405f;border-radius:6px;background:rgba(8,16,28,.86);box-shadow:0 0 0 1px rgba(120,180,220,.06),0 30px 90px rgba(0,0,0,.65),inset 0 0 44px rgba(20,60,90,.16);padding:28px 30px 22px;text-align:center}
+  .g-seal{width:82px;height:82px;margin:0 auto 12px}
+  .g-cls{display:inline-block;font-family:var(--sc);letter-spacing:.32em;font-size:11px;color:#e06a63;border:1.5px solid #8a2b22;border-radius:3px;padding:3px 12px}
+  .g-title{font-family:var(--sc);font-size:21px;letter-spacing:.14em;color:#e9dcbf;margin:15px 0 4px}
+  .g-sub{font-size:9px;letter-spacing:.16em;color:#6f8ba0;text-transform:uppercase}
+  .g-log{text-align:left;font-size:11px;line-height:1.75;color:#4fd08a;margin:16px 0 14px;white-space:pre-wrap;min-height:74px}
+  .g-log b{color:#8fe3b3}
+  .g-log .err{color:#ff6b6b}
+  .g-lab{display:block;text-align:left;font-size:8.5px;letter-spacing:.16em;color:#7fa0b6;margin-bottom:6px}
+  #gPass{width:100%;background:#060c15;border:1px solid #2b4a6b;border-radius:4px;color:#6fe3a6;font-family:var(--type);font-size:15px;letter-spacing:.34em;padding:12px 14px;caret-color:#6fe3a6}
+  #gPass:focus{outline:none;border-color:#4fd08a;box-shadow:0 0 0 3px rgba(79,208,138,.15)}
+  #gBtn{margin-top:11px;width:100%;font-family:var(--sc);font-size:14px;letter-spacing:.14em;color:#05131a;background:#4fd08a;border:0;border-radius:4px;padding:12px;cursor:pointer}
+  #gBtn:disabled{opacity:.5;cursor:default}
+  .g-foot{margin-top:15px;font-size:8px;letter-spacing:.14em;color:#546a7d}
+  #gate.deny .g-box{animation:gshake .42s}
+  @keyframes gshake{0%,100%{transform:translateX(0)}20%{transform:translateX(-8px)}40%{transform:translateX(8px)}60%{transform:translateX(-5px)}80%{transform:translateX(5px)}}
+  .g-seal svg text{fill:#cba96a}
+
+  /* ================= COVER ================= */
+  .leaf.cover{background:
+     linear-gradient(135deg,#2c3d5e 0%,#20304e 52%,#141f36 100%);
+     color:var(--gold2)}
+  .cov-in{padding:9% 11%;display:flex;flex-direction:column;align-items:center;text-align:center}
+  .cov-frame{position:absolute;inset:20px;border:2px solid var(--gold);border-radius:3px;box-shadow:inset 0 0 0 4px rgba(203,169,106,.25)}
+  .cov-frame:after{content:"";position:absolute;inset:6px;border:1px solid rgba(203,169,106,.5)}
+  .cov-eyebrow{font-family:var(--sc);letter-spacing:.34em;font-size:12px;color:var(--gold);margin-top:6%}
+  .cov-title{font-family:var(--sc);font-size:62px;letter-spacing:.12em;line-height:1;margin:14px 0 0;color:var(--gold2);text-shadow:0 1px 0 rgba(0,0,0,.35)}
+  .cov-title small{display:block;font-size:15px;letter-spacing:.24em;margin-top:14px;color:var(--gold)}
+  .cov-files{font-family:var(--sc);letter-spacing:.4em;font-size:20px;margin-top:20px;color:var(--gold2)}
+  .cov-rule{width:56%;height:1px;background:linear-gradient(90deg,transparent,var(--gold),transparent);margin:16px 0}
+  .cov-conf{margin-top:auto;font-family:var(--type);font-weight:700;letter-spacing:.28em;font-size:12px;color:#e7c9a1;border:1.5px solid #b98a63;border-radius:3px;padding:6px 14px;transform:rotate(-3deg)}
+  .cov-vol{font-family:var(--sc);letter-spacing:.3em;font-size:12px;color:var(--gold);margin-top:16px}
+
+  /* seal */
+  .seal{width:172px;height:172px;margin:2% 0}
+  .seal text{font-family:var(--sc);fill:var(--gold2)}
+
+  /* ================= CASE FILE ================= */
+  .cf{position:absolute;inset:0;padding:26px 34px 22px;display:flex;flex-direction:column;font-family:var(--type);font-size:10.5px;color:var(--ink)}
+  .cf-top{display:flex;justify-content:space-between;align-items:flex-end;border-bottom:2px solid var(--ink);padding-bottom:6px}
+  .cf-agency{font-family:var(--sc);font-size:15px;letter-spacing:.06em}
+  .cf-agency b{display:block;font-family:var(--type);font-weight:700;font-size:9.5px;letter-spacing:.18em;color:var(--faint)}
+  .cf-no{font-weight:700;letter-spacing:.06em;text-align:right;font-size:12px}
+  .cf-no small{display:block;font-weight:400;color:var(--faint);font-size:9.5px;letter-spacing:.14em}
+  .cf-band{display:flex;justify-content:space-between;gap:10px;margin:8px 0 9px}
+  .cf-class{background:var(--ink);color:var(--paper);font-weight:700;letter-spacing:.1em;padding:4px 9px;font-size:10.5px}
+  .cf-status{color:var(--red);font-weight:700;letter-spacing:.05em;font-size:10.5px;align-self:center;text-align:right}
+  .cf-meta{width:100%;border-collapse:collapse;margin-bottom:10px}
+  .cf-meta td{border-bottom:1px dotted #b9a884;padding:2.5px 2px;vertical-align:top}
+  .cf-meta td.k{width:34%;color:var(--faint);font-weight:700;font-size:9.5px;letter-spacing:.12em;text-transform:uppercase}
+  .cf-h{font-family:var(--sc);font-size:11.5px;letter-spacing:.05em;margin:8px 0 3px;padding-bottom:2px;border-bottom:1px solid #c8b791}
+  .cf p{margin:0 0 3px;line-height:1.4}
+  .cf .tl{list-style:none;margin:0;padding:0}
+  .cf .tl li{display:flex;gap:10px;padding:1px 0;line-height:1.36}
+  .cf .tl .d{flex:none;width:88px;font-weight:700;color:var(--accent)}
+  .cf-prev{margin-top:auto;background:rgba(63,93,51,.14);border:1.5px solid var(--green);border-radius:3px;padding:8px 12px;font-family:var(--sc);color:#33481f;display:flex;gap:13px;align-items:center}
+  .cf-prev .pv-txt{flex:1;font-size:11px;line-height:1.34}
+  .cf-prev .pv-txt b{font-family:var(--type);font-weight:700;letter-spacing:.1em;color:var(--green)}
+  .cf-prev .pv-basis{display:block;font-family:var(--type);font-size:8.5px;color:#69784f;margin-top:3px}
+  .cf-prev .pv-cost{flex:none;text-align:right;border-left:1px solid rgba(63,93,51,.32);padding-left:13px}
+  .cf-prev .pv-lab{display:block;font-family:var(--type);font-size:7.5px;font-weight:700;letter-spacing:.09em;text-transform:uppercase;color:#5c6b48}
+  .cf-prev .pv-fig{display:block;font-family:var(--serif);font-weight:700;font-size:27px;color:var(--green);line-height:1.02;margin-top:1px}
+  .cf-foot{display:flex;justify-content:space-between;margin-top:9px;color:var(--faint);font-size:9px;letter-spacing:.1em}
+
+  /* redaction bars */
+  .rd{display:inline-block;height:.92em;background:var(--bar);border-radius:1px;vertical-align:-.14em;box-shadow:inset 0 0 4px rgba(0,0,0,.6)}
+
+  /* rubber stamps */
+  .stamp{position:absolute;font-family:var(--sc);font-weight:700;letter-spacing:.08em;text-transform:uppercase;border:3px double currentColor;border-radius:5px;padding:5px 12px;font-size:17px;opacity:.72;pointer-events:none;mix-blend-mode:multiply}
+  .stamp.red{color:var(--red);transform:rotate(-11deg)}
+  .stamp.green{color:var(--green)}
+  .stamp.navy{color:var(--navy)}
+  .stamp.s1{top:30px;right:34px;transform:rotate(9deg)}
+  .stamp.s2{bottom:112px;right:40px}
+
+  /* interior title / closing */
+  .mid{position:absolute;inset:0;padding:9% 11%;display:flex;flex-direction:column;text-align:center;align-items:center}
+  .mid .k{font-family:var(--sc);letter-spacing:.3em;font-size:12px;color:var(--accent)}
+  .mid h1{font-family:var(--sc);font-size:34px;letter-spacing:.02em;margin:12px 0 0;line-height:1.1}
+  .mid .lead{font-family:var(--type);font-size:12.5px;line-height:1.7;color:#4a4031;margin-top:16px;text-align:left;max-width:88%}
+  .mid .note{margin-top:auto;font-family:var(--type);font-size:11px;line-height:1.6;color:#6b5f49;border-top:1px solid #c8b791;padding-top:12px;text-align:left}
+  .mid .orn{font-size:22px;color:var(--accent);margin:14px 0}
+  .mid .sig{margin-top:20px;align-self:flex-start;text-align:left}
+  .mid .sig .sig-name{display:block;font-family:var(--serif);font-style:italic;font-size:23px;color:var(--ink);line-height:1}
+  .mid .sig .sig-role{display:block;font-family:var(--sc);font-size:10px;letter-spacing:.13em;color:var(--faint);margin-top:4px;border-top:1px solid #c8b791;padding-top:5px}
+  .mid .total{margin-top:22px;background:rgba(63,93,51,.12);border:1.5px solid var(--green);border-radius:6px;padding:14px 30px;text-align:center;align-self:center}
+  .mid .total-lab{display:block;font-family:var(--type);font-size:9px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:#5c6b48}
+  .mid .total-fig{display:block;font-family:var(--serif);font-weight:700;font-size:48px;color:var(--green);line-height:1;margin:5px 0 3px}
+  .mid .total-sub{display:block;font-family:var(--sc);font-size:10.5px;color:var(--faint);letter-spacing:.03em}
+</style>
+</head>
+<body>
+  <div id="stage">
+    <div class="bar">
+      <button id="prev">‹ Prev</button>
+      <span class="pg" id="pg">Cover</span>
+      <button id="next">Next ›</button>
+    </div>
+    <div id="scaler"><div id="book"></div></div>
+  </div>
+  <div class="hint">Drag a corner or use the buttons to turn the page</div>
+
+  <div id="gate">
+    <div class="g-scan"></div><div class="g-vig"></div>
+    <div class="g-box">
+      <div class="g-seal" id="gSeal"></div>
+      <div class="g-cls">CLASSIFIED &middot; RESTRICTED</div>
+      <div class="g-title">SECURE ACCESS TERMINAL</div>
+      <div class="g-sub">Sublynk Prevention Intelligence &middot; Office of Prevention</div>
+      <pre class="g-log" id="gLog">&gt; ESTABLISHING SECURE CHANNEL ......... <b>OK</b>
+&gt; CIPHER AES-256-GCM ................... <b>READY</b>
+&gt; CLEARANCE REQUIRED TO DECRYPT FILES</pre>
+      <form id="gForm" autocomplete="off">
+        <label class="g-lab">ENTER ACCESS CODE</label>
+        <input id="gPass" type="password" autocomplete="off" spellcheck="false" placeholder="&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;">
+        <button type="submit" id="gBtn">AUTHENTICATE &#9656;</button>
+      </form>
+      <div class="g-foot">AUTHORIZED PERSONNEL ONLY &middot; ALL ACCESS ATTEMPTS ARE LOGGED</div>
+    </div>
+  </div>
+
+<script>
+/* ---------- SPI gold seal (reused) ---------- */
+function seal(size){
+  return '<svg class="seal" viewBox="0 0 200 200" style="width:'+size+'px;height:'+size+'px">'+
+    '<defs><path id="arcT" d="M100,100 m-74,0 a74,74 0 1,1 148,0"/><path id="arcB" d="M100,100 m-64,0 a64,64 0 1,0 128,0"/></defs>'+
+    '<circle cx="100" cy="100" r="88" fill="none" stroke="var(--gold)" stroke-width="2"/>'+
+    '<circle cx="100" cy="100" r="80" fill="none" stroke="var(--gold)" stroke-width="1"/>'+
+    '<text font-size="9" letter-spacing="1.5"><textPath href="#arcT" startOffset="50%" text-anchor="middle">SUBLYNK PREVENTION INTELLIGENCE</textPath></text>'+
+    '<text font-size="9.4" letter-spacing="2.6"><textPath href="#arcB" startOffset="50%" text-anchor="middle">OFFICE OF PREVENTION</textPath></text>'+
+    '<circle cx="100" cy="100" r="49" fill="#f4ecdb"/>'+
+    '<circle cx="100" cy="100" r="49" fill="none" stroke="var(--gold)" stroke-width="1.5"/>'+
+    '<image href="/og/sublynk-certified-coin.svg" x="56" y="56" width="88" height="88"/>'+
+  '</svg>';
+}
+
+/* ---------- redaction bar of a given width (in ch) ---------- */
+function rd(ch){ return '<span class="rd" style="width:'+ch+'ch"></span>'; }
+
+/* ---------- pages ---------- */
+var COVER =
+  '<div class="cov-frame"></div><div class="cov-in">'+
+    '<div class="cov-eyebrow">CONFIDENTIAL &nbsp;&middot;&nbsp; PREVENTION DIVISION</div>'+
+    seal(150)+
+    '<div class="cov-title">SPI<small>SUBLYNK PREVENTION INTELLIGENCE</small></div>'+
+    '<div class="cov-rule"></div>'+
+    '<div class="cov-files">CASE FILES</div>'+
+    '<div class="cov-vol">VOLUME I &nbsp;&middot;&nbsp; PREVENTION IS THE PRODUCT</div>'+
+    '<div class="cov-conf">DO NOT DISTRIBUTE &middot; REDACTED</div>'+
+  '</div>';
+
+var INTRO =
+  '<div class="mid">'+
+    '<div class="k">OFFICE OF PREVENTION</div>'+
+    '<h1>Real cases.<br>Redacted to protect.</h1>'+
+    '<div class="orn">&#10086;</div>'+
+    '<p class="lead">Every credential a contractor claims &mdash; a license, an insurance policy, a background screen, a federal certification &mdash; is verified by Sublynk <b>at the source</b>. When something is forged, hidden, or borrowed, we find it before it reaches a home.'+
+    '<br><br>The files that follow are true accounts of what our verification caught. Names, companies, and networks have been redacted. The facts, dates, and findings are authentic.</p>'+
+    '<div class="sig"><span class="sig-name">Brad Turner</span><span class="sig-role">Director &middot; Sublynk Prevention Intelligence</span></div>'+
+    '<div class="note">This dossier is a Sublynk publication. &ldquo;SPI&rdquo; is the Sublynk Prevention Intelligence, an internal designation. It is not affiliated with any government agency. Personal identities and business names are withheld to protect the parties involved.</div>'+
+  '</div>';
+
+function caseFile(o){
+  var meta='';
+  o.meta.forEach(function(r){ meta+='<tr><td class="k">'+r[0]+'</td><td>'+r[1]+'</td></tr>'; });
+  var tl='';
+  o.timeline.forEach(function(t){ tl+='<li><span class="d">'+t[0]+'</span><span>'+t[1]+'</span></li>'; });
+  var sects='';
+  (o.sections||[]).forEach(function(s){ sects+='<div class="cf-h">'+s[0]+'</div><p>'+s[1]+'</p>'; });
+  return '<div class="cf">'+
+    '<div class="cf-top"><div class="cf-agency">Sublynk Prevention Intelligence<b>OFFICE OF PREVENTION &middot; CASE RECORD</b></div>'+
+      '<div class="cf-no">'+o.no+'<small>'+o.opened+'</small></div></div>'+
+    '<div class="cf-band"><span class="cf-class">'+o.cls+'</span><span class="cf-status">'+o.status+'</span></div>'+
+    '<table class="cf-meta">'+meta+'</table>'+
+    '<div class="cf-h">Allegation</div><p>'+o.allegation+'</p>'+
+    '<div class="cf-h">Timeline &amp; findings</div><ul class="tl">'+tl+'</ul>'+
+    sects+
+    '<div class="cf-prev"><div class="pv-txt"><b>PREVENTED &mdash;</b> '+o.prevented+'<span class="pv-basis">Exposure basis: '+o.basis+'.</span></div>'+
+      '<div class="pv-cost"><span class="pv-lab">Cost avoided &middot; est.</span><span class="pv-fig">'+o.cost+'</span></div></div>'+
+    '<div class="cf-foot"><span>SUBLYNK PREVENTION INTELLIGENCE &middot; FILE '+o.pg+'</span><span>REVIEWED &middot; B. TURNER, DIRECTOR</span></div>'+
+    o.stamps+
+  '</div>';
+}
+
+var CASES = [
+  caseFile({
+    no:'FILE No. SPI&#8209;2026&#8209;041', opened:'OPENED 10 APR 2026', pg:'041',
+    cls:'FORGED FEDERAL CREDENTIAL', status:'DISPOSITION: REJECTED &middot; THREAT PREVENTED',
+    meta:[
+      ['Subject entity', rd(13)+' Restoration / '+rd(7)+' LLC'],
+      ['Credential', 'EPA Lead Firm Certification (federal)'],
+      ['Network(s) at risk', rd(11)],
+      ['Verifying body', 'U.S. Environmental Protection Agency'],
+    ],
+    allegation:'The firm submitted a counterfeit EPA Certified Firm Certificate to satisfy federal lead-safe requirements for restoration work.',
+    timeline:[
+      ['ON SUBMIT','Certificate uploaded to Sublynk for verification.'],
+      ['VERIFY','Two independent EPA sources confirmed the document was not created or issued by the EPA.'],
+      ['VERIFY','The EPA advised it had never issued a certificate in the firm&rsquo;s name.'],
+      ['TRACE','The certificate&rsquo;s federal registration number traced to a different, unrelated company.'],
+    ],
+    sections:[['Disposition','Certificate rejected. The firm was barred from lead-safe work across our networks and the record was preserved.']],
+    prevented:'A firm holding no valid federal lead certification was stopped before performing lead-paint work in occupied homes.',
+    cost:'$1.25M', basis:'EPA lead penalties plus a lead-exposure bodily-injury claim',
+    stamps:'<div class="stamp red s1">Forged</div>'
+  }),
+  caseFile({
+    no:'FILE No. SPI&#8209;2026&#8209;039', opened:'OPENED 10 APR 2026', pg:'039',
+    cls:'CONCEALED CRIMINAL HISTORY', status:'DISPOSITION: PRESERVED &middot; NETWORKS ALERTED',
+    meta:[
+      ['Subject', rd(15)+'  (contractor)'],
+      ['Credential', 'Background screening'],
+      ['Network(s) at risk', rd(9)+' &nbsp;&amp;&nbsp; '+rd(8)],
+      ['Verifying body', 'Accredited background-screening provider'],
+    ],
+    allegation:'The contractor concealed disqualifying criminal history and repeatedly deleted the report to evade detection.',
+    timeline:[
+      ['SCREEN','Background report returned two convictions: misdemeanor theft (1999) and misdemeanor assault (2000).'],
+      ['REJECT','Report rejected. Subject deleted it and uploaded a &ldquo;clear&rdquo; report from a different vendor.'],
+      ['RECOVER','Sublynk un-archived the original report. Subject deleted it a second time.'],
+      ['LOCK','Sublynk un-archived it again and locked the record so it could not be removed.'],
+      ['NOTIFY','Both affected networks were formally notified &mdash; case tickets 18632 and 18652.'],
+    ],
+    prevented:'An individual with a concealed assault and theft history &mdash; actively working to hide it &mdash; was stopped from entering homes under insured restoration networks.',
+    cost:'$2.0M', basis:'negligent-hiring liability for an assault or theft in an occupied home',
+    stamps:'<div class="stamp navy s1">Recovered</div>'
+  }),
+  caseFile({
+    no:'FILE No. SPI&#8209;2025&#8209;113', opened:'OPENED 01 DEC 2025', pg:'113',
+    cls:'FORGED CREDENTIAL &middot; ENFORCEMENT ENGAGED', status:'DISPOSITION: REJECTED &middot; REFERRED TO FEDERAL ENFORCEMENT',
+    meta:[
+      ['Subject entity', rd(9)+' Turnkey Services / '+rd(6)+' Restoration'],
+      ['Candidate', rd(11)],
+      ['Credential', 'EPA Lead Firm Certification (renewal)'],
+      ['Verifying body', 'U.S. EPA &middot; Region '+rd(2)+' Enforcement'],
+    ],
+    allegation:'The firm submitted a forged EPA Lead Firm renewal certificate.',
+    timeline:[
+      ['~15 NOV 25','Certificate uploaded. Automated EPA verification failed.'],
+      ['ANALYSIS','The number matched a valid, still-active firm certificate; the submitted renewal document itself was forged.'],
+      ['VERIFY','Sublynk contacted the EPA directly. The EPA confirmed in writing the document was not issued by the agency.'],
+      ['ESCALATE','An EPA Enforcement Officer contacted Sublynk to learn how the document was obtained; confirmed the firm was not active on our networks and stated the EPA would follow up.'],
+    ],
+    sections:[['Disposition','Certificate rejected and documented (case refs 11500, 11457). The matter was referred to federal enforcement.']],
+    prevented:'A forged federal certificate was intercepted at submission and escalated to the U.S. EPA.',
+    cost:'$900K', basis:'federal penalties and lead-safe liability, with enforcement exposure',
+    stamps:'<div class="stamp red s1">Forged</div>'
+  }),
+  caseFile({
+    no:'FILE No. SPI&#8209;2025&#8209;098', opened:'OPENED 15 OCT 2025', pg:'098',
+    cls:'FORGED INDUSTRY CERTIFICATION', status:'DISPOSITION: REJECTED &middot; THREAT PREVENTED',
+    meta:[
+      ['Subject entity', rd(9)+' Restoration'],
+      ['Candidate', rd(10)],
+      ['Credential', 'IICRC &mdash; WRT, AMRT, ASD (claimed)'],
+      ['Verifying body', 'IICRC (live verification)'],
+    ],
+    allegation:'The contractor submitted an IICRC certificate claiming three restoration certifications.',
+    timeline:[
+      ['13 OCT 25','Certificate uploaded. Automated IICRC verification failed.'],
+      ['VERIFY','Sublynk opened a live verification with the IICRC.'],
+      ['FINDING','The IICRC confirmed that only one of the three listed certifications was valid.'],
+    ],
+    sections:[['Disposition','Certificate rejected. The contractor and the affected networks were notified.']],
+    prevented:'A contractor claiming water, mold, and structural-drying certifications it did not hold was stopped before touching insured restoration work.',
+    cost:'$650K', basis:'failed mold and water remediation: bodily-injury and property claims plus rework',
+    stamps:'<div class="stamp red s1">Forged</div>'
+  }),
+  caseFile({
+    no:'FILE No. SPI&#8209;2025&#8209;047', opened:'OPENED 03 JUN 2025', pg:'047',
+    cls:'FRAUDULENT USE OF ANOTHER&rsquo;S LICENSES', status:'DISPOSITION: SUBSTANTIATED &middot; CREDENTIALS PROTECTED',
+    meta:[
+      ['Subject &mdash; holder', rd(13)+'  (former employee)'],
+      ['Subject &mdash; firm', rd(11)+'  (owner '+rd(9)+')'],
+      ['Credentials', 'State Mold License, IICRC, EPA RRP'],
+      ['Network at risk', rd(9)],
+    ],
+    allegation:'A firm used a former employee&rsquo;s professional licenses, without authorization, to appear compliant with an insured network.',
+    timeline:[
+      ['~07 MAY 25','Former employee asked Sublynk to remove his credentials from the firm, stating he no longer worked there.'],
+      ['07 MAY 25','Sublynk verified his identity and credentials (government ID, state license, IICRC card).'],
+      ['~12 MAY 25','Firm given time to respond; none received. Credentials removed &mdash; firm now out of compliance.'],
+      ['29 MAY 25','Firm re-submitted the former employee&rsquo;s credentials.'],
+      ['02 JUN 25','Firm stated the employee still worked there; the employee stated he did not, and asked that his credentials not be used.'],
+    ],
+    sections:[['Conclusion','On the evidence, the firm misrepresented the individual&rsquo;s employment to borrow his licenses and reach compliant status. The credentials were protected and removed.']],
+    prevented:'A firm fraudulently borrowing another person&rsquo;s professional licenses to win insured work was caught &mdash; and the individual&rsquo;s licenses were protected.',
+    cost:'$400K', basis:'unlicensed work with voided insurance coverage; regulatory and civil exposure',
+    stamps:'<div class="stamp navy s1">Substantiated</div>'
+  }),
+];
+
+var CLOSING =
+  '<div class="mid">'+
+    seal(120)+
+    '<div class="k" style="margin-top:18px">CASE FILES &middot; VOLUME I</div>'+
+    '<h1>Prevention is<br>the product.</h1>'+
+    '<p class="lead" style="text-align:center">Forged certificates. Hidden convictions. Borrowed licenses. Every one of these reached the front door of the restoration industry &mdash; and every one was stopped at verification.'+
+    '<br><br>This is what Sublynk does before a contractor ever steps onto a property.</p>'+
+    '<div class="total"><span class="total-lab">Estimated exposure prevented &middot; Volume I</span><span class="total-fig">$5.2M+</span><span class="total-sub">across five case files &mdash; estimates, for illustration</span></div>'+
+    '<div class="note" style="text-align:center;border:0;margin-top:18px">Sublynk &middot; verify at the source &middot; sublynk.com</div>'+
+  '</div>';
+
+var BACK =
+  '<div class="cov-frame"></div><div class="cov-in">'+
+    '<div style="margin:auto 0">'+seal(120)+
+    '<div class="cov-title" style="font-size:30px;margin-top:20px">SPI</div>'+
+    '<div class="cov-vol" style="margin-top:10px">SUBLYNK PREVENTION INTELLIGENCE</div></div>'+
+    '<div class="cov-conf" style="transform:none;margin-bottom:4%">sublynk.com</div>'+
+  '</div>';
+
+/* ---------- assemble leaves ---------- */
+var LEAVES = [
+  {cls:'cover', html:COVER},
+  {cls:'', html:INTRO, paper:true, mid:true},
+];
+CASES.forEach(function(c){ LEAVES.push({cls:'', html:c, paper:true}); });
+LEAVES.push({cls:'', html:CLOSING, paper:true, mid:true});
+LEAVES.push({cls:'cover', html:BACK});
+
+var book=document.getElementById('book');
+var PAGES_HTML = LEAVES.map(function(L){
+  var density = L.cls==='cover' ? ' data-density="hard"' : '';
+  var inner = '<div class="content'+(L.paper?' paper':'')+'">'+L.html+'</div>';
+  return '<div class="leaf '+L.cls+'"'+density+'>'+inner+'</div>';
+}).join('');
+
+/* ---------- flip init + responsive ---------- */
+var PW=470, PH=748, pf=null;
+function fit(){
+  var availW=window.innerWidth-40, availH=window.innerHeight-130;
+  var scale=Math.min(1.15, availW/(PW*2), availH/PH);
+  document.getElementById('scaler').style.transform='scale('+scale+')';
+}
+function init(){
+  pf=new St.PageFlip(book,{width:PW,height:PH,size:'fixed',usePortrait:false,showCover:true,drawShadow:true,maxShadowOpacity:.5,flippingTime:700,mobileScrollSupport:false,useMouseEvents:true});
+  pf.loadFromHTML(book.querySelectorAll('.leaf'));
+  pf.on('flip',refresh); refresh();
+  var p=parseInt(new URLSearchParams(location.search).get('p'),10);
+  if(p>0){ try{ pf.turnToPage(Math.min(p,pf.getPageCount()-1)); }catch(e){} refresh(); }
+}
+var NAMES=['Cover','Office of Prevention'];
+function label(i,total){
+  if(i<=0) return 'Cover';
+  if(i>=total-1) return 'Back cover';
+  return 'Page '+i+' of '+(total-1);
+}
+function refresh(){
+  var i=pf.getCurrentPageIndex(), total=pf.getPageCount();
+  document.getElementById('pg').textContent=label(i,total);
+  document.getElementById('prev').disabled=(i<=0);
+  document.getElementById('next').disabled=(i>=total-1);
+}
+document.getElementById('prev').onclick=function(){pf&&pf.flipPrev();};
+document.getElementById('next').onclick=function(){pf&&pf.flipNext();};
+document.addEventListener('keydown',function(e){ if(e.key==='ArrowLeft')pf&&pf.flipPrev(); if(e.key==='ArrowRight')pf&&pf.flipNext(); });
+window.addEventListener('resize',fit);
+
+/* ---------- access gate ---------- */
+var revealed=false;
+function revealBook(){
+  if(revealed) return; revealed=true;
+  document.getElementById('stage').classList.add('on');
+  var h=document.querySelector('.hint'); if(h) h.classList.add('on');
+  book.innerHTML = PAGES_HTML;
+  try{ fit(); init(); }catch(e){ /* flip is resilient; refresh recovers on first turn */ }
+}
+(function(){
+  var CODE='QlJBRFRVUk5FUg==';
+  function want(){ try{ return atob(CODE).toUpperCase(); }catch(e){ return ''; } }
+  var gate=document.getElementById('gate'), gLog=document.getElementById('gLog'), gForm=document.getElementById('gForm'), gPass=document.getElementById('gPass'), gBtn=document.getElementById('gBtn');
+  document.getElementById('gSeal').innerHTML = seal(82);
+  function type(lines, done){ var i=0; (function nx(){ if(i>=lines.length){ done&&done(); return; } gLog.innerHTML += '\n'+lines[i]; i++; setTimeout(nx, 340+Math.random()*260); })(); }
+  function grant(){
+    gBtn.disabled=true; gPass.disabled=true;
+    type(['&gt; CREDENTIAL ACCEPTED ................ <b>OK</b>','&gt; DERIVING KEY &middot; PBKDF2 ............ <b>OK</b>','&gt; DECRYPTING CASE FILES [<b>&#9608;&#9608;&#9608;&#9608;&#9608;&#9608;&#9608;&#9608;&#9608;&#9608;</b>] 100%','&gt; ACCESS GRANTED &middot; WELCOME, DIRECTOR.'], function(){
+      setTimeout(function(){ try{ sessionStorage.setItem('spi_ok','1'); }catch(e){} revealBook(); gate.classList.add('hide'); setTimeout(function(){ gate.style.display='none'; }, 900); }, 700);
+    });
+  }
+  function deny(){ gate.classList.add('deny'); gLog.innerHTML += '\n<span class="err">&gt; ACCESS DENIED &mdash; INVALID CREDENTIAL</span>'; gPass.value=''; setTimeout(function(){ gate.classList.remove('deny'); }, 520); }
+  gForm.addEventListener('submit', function(e){ e.preventDefault(); var v=(gPass.value||'').trim(); if(v && v.toUpperCase()===want()){ grant(); } else { deny(); } });
+  var ok=false; try{ ok = sessionStorage.getItem('spi_ok')==='1'; }catch(e){}
+  if(ok){ gate.style.display='none'; revealBook(); } else { setTimeout(function(){ gPass.focus(); }, 350); }
+})();
+</script>
+</body>
+</html>
