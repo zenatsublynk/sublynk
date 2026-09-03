@@ -417,6 +417,21 @@
               </div>
             </section>
 
+            <section class="question" id="qLicenses" data-step="1b" data-field="licenses" data-conditional="licenses">
+              <div class="question-kicker">Licensing</div>
+              <h2>Do you hold state and federal licenses?</h2>
+              <p class="question-sub">The work you picked is often license-required. Networks match you to jobs faster when they know your licensing up front.</p>
+              <div class="trade-grid category-mode" id="licenseChoice">
+                <button type="button" class="trade-group-card" data-lic="yes" aria-pressed="false"><span class="group-card-copy"><strong>Yes</strong><small>I hold state and federal licenses</small></span><span class="group-card-check">✓</span></button>
+                <button type="button" class="trade-group-card" data-lic="no" aria-pressed="false"><span class="group-card-copy"><strong>No</strong><small>Not licensed at this time</small></span><span class="group-card-check">✓</span></button>
+              </div>
+              <div class="field-error" id="licError" role="alert"></div>
+              <div class="actions">
+                <button class="btn btn-back js-only" type="button" data-back>Back</button>
+                <button class="btn btn-primary js-only" type="button" id="licNext" data-next disabled>Continue</button>
+              </div>
+            </section>
+
             <section class="question" id="q2" data-step="1" data-field="zip">
               <div class="question-kicker">Your service area</div>
               <h2>Where should we look for work?</h2>
@@ -627,8 +642,16 @@
       const success = document.getElementById("successState");
       const tradeOther = document.getElementById("tradeOther");
       let step = 0;
-      const answers = { tradeGroups: [] };
+      const answers = { tradeGroups: [], licenses: null };
       const tradeNext = questions[0].querySelector("[data-next]");
+
+      // Conditional follow-up: only ask about state/federal licensing when a license-heavy category
+      // is picked. isActive() gates the step; nextActive/prevActive skip it during navigation.
+      const LICENSE_TRIGGERS = ["Environmental & Hazmat", "General Contracting & Reconstruction", "Mechanical, Electrical & Plumbing", "Roofing"];
+      const licenseNeeded = () => answers.tradeGroups.some((g) => LICENSE_TRIGGERS.includes(g));
+      const isActive = (i) => (questions[i].dataset.conditional === "licenses" ? licenseNeeded() : true);
+      const nextActive = (from) => { let n = Math.min(from, questions.length - 1); while (n < questions.length - 1 && !isActive(n)) n++; return n; };
+      const prevActive = (from) => { let n = Math.max(from, 0); while (n > 0 && !isActive(n)) n--; return n; };
 
       function renderCategoryChoices() {
         grid.className = "trade-grid category-mode";
@@ -650,6 +673,16 @@
         if (pressed) answers.tradeGroups = answers.tradeGroups.filter((x) => x !== groupName);
         else answers.tradeGroups.push(groupName);
         updateTradeState();
+      });
+
+      const licenseChoice = document.getElementById("licenseChoice");
+      if (licenseChoice) licenseChoice.addEventListener("click", (event) => {
+        const btn = event.target.closest("[data-lic]");
+        if (!btn) return;
+        answers.licenses = btn.dataset.lic;
+        licenseChoice.querySelectorAll("[data-lic]").forEach((b) => b.setAttribute("aria-pressed", String(b === btn)));
+        const ln = document.getElementById("licNext"); if (ln) ln.disabled = false;
+        document.getElementById("licError").textContent = "";
       });
 
       const otherSelected = () => answers.tradeGroups.includes(OTHER);
@@ -763,9 +796,11 @@
         step = Math.max(0, Math.min(questions.length - 1, nextStep));
         questions.forEach((q, index) => q.classList.toggle("active", index === step));
         document.body.classList.toggle("journey-started", step > 0);
-        const pct = Math.round(((step + 1) / questions.length) * 100);
+        let total = 0, pos = 0;
+        questions.forEach((q, i) => { if (isActive(i)) { total++; if (i <= step) pos++; } });
+        const pct = Math.round((pos / total) * 100);
         progressBar.style.width = pct + "%";
-        progressLabel.textContent = "Question " + (step + 1) + " of " + questions.length;
+        progressLabel.textContent = "Question " + pos + " of " + total;
         progressPercent.textContent = pct + "%";
         // Leaflet mis-renders if its container was hidden; refresh when the ZIP step shows.
         if (questions[step].dataset.field === "zip") {
@@ -815,6 +850,10 @@
           if (!token || !token.value) { consentError.textContent = "Please complete the verification below the box."; return false; }
           return true;
         }
+        if (field === "licenses") {
+          if (!answers.licenses) { document.getElementById("licError").textContent = "Choose Yes or No."; return false; }
+          return true;
+        }
         const input = q.querySelector("input");
         const value = input.value.trim();
         if (field === "zip") {
@@ -829,15 +868,15 @@
       document.addEventListener("click", (event) => {
         const next = event.target.closest("[data-next]");
         const back = event.target.closest("[data-back]");
-        if (next && validate(step)) showStep(step + 1);
-        if (back) showStep(step - 1, false);
+        if (next && validate(step)) showStep(nextActive(step + 1));
+        if (back) showStep(prevActive(step - 1), false);
       });
 
       questions.forEach((q, index) => {
         q.addEventListener("keydown", (event) => {
           if (event.key === "Enter" && !event.isComposing && event.target.tagName === "INPUT" && event.target.type !== "checkbox" && event.target.type !== "range") {
             event.preventDefault();
-            if (index < questions.length - 1 && validate(index)) showStep(index + 1);
+            if (index < questions.length - 1 && validate(index)) showStep(nextActive(index + 1));
           }
         });
       });
@@ -911,6 +950,7 @@
           service_zip_count: area.count,
           trades: selectedTrades(),
           trade_other: otherText(),
+          licenses: licenseNeeded() ? answers.licenses : null,
           consent: true,
           "cf-turnstile-response": document.querySelector('[name="cf-turnstile-response"]')?.value || "",
           contact_ref: CONTACT_REF,

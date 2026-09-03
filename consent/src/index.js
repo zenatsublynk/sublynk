@@ -339,7 +339,7 @@ export default {
     if (url.includes('/api/consent')) {
       try {
         const data = await request.json();
-        const { full_name, company, email, phone, phone_raw, consent, zip, trades, trade, trade_other, 'cf-turnstile-response': turnstileToken } = data;
+        const { full_name, company, email, phone, phone_raw, consent, zip, trades, trade, trade_other, licenses, 'cf-turnstile-response': turnstileToken } = data;
 
         if (!full_name?.trim() || !company?.trim() || !email?.trim() || !phone?.trim()) return json({ error: 'Missing required fields' }, 400);
         if (!consent) return json({ error: 'Consent not provided' }, 400);
@@ -378,6 +378,13 @@ export default {
         const tradePrimary = tradesClean[0] || (String(trade || '').trim() || null) || (tradeOtherClean ? 'other' : null);
         const tradeLabel = [tradesStr, tradeOtherClean ? `Other: ${tradeOtherClean}` : ''].filter(Boolean).join(' · ');
 
+        // State/federal licensing: asked as a conditional follow-up only when the contractor picks a
+        // licensed category (GC/Recon, Mechanical/Electrical/Plumbing, Environmental/Hazmat, Roofing).
+        // Store 'yes'/'no' or null; never reject a consent over it.
+        const licensesClean = ['yes', 'no'].includes(String(licenses || '').trim().toLowerCase())
+          ? String(licenses).trim().toLowerCase() : null;
+        const licenseLabel = licensesClean ? (licensesClean === 'yes' ? 'Yes' : 'No') : null;
+
         const DISCLOSURE_VERSION = 'v1.2-2026-07-11';
         const DISCLOSURE_TEXT =
           'By checking this box and entering my mobile number, I give my express written consent for Sublynk to contact me at ' +
@@ -400,6 +407,7 @@ export default {
           full_name: full_name.trim(), company: company.trim(), email: email.trim(),
           phone: phoneFormatted, phone_raw: phone_raw?.trim() || phone.trim(), zip: zip5,
           trade: tradePrimary, trades: tradesStr, trade_other: tradeOtherClean,
+          holds_state_federal_licenses: licensesClean,
           consent_calls: true, consent_sms: true, channels: 'calls+sms',
           disclosure_version: DISCLOSURE_VERSION, disclosure_text: DISCLOSURE_TEXT, networks_shown: '',
           page_url: pageUrl, user_agent: userAgent, source: 'job-alerts-optin', status: 'active',
@@ -424,6 +432,8 @@ export default {
               { k: 'Email', v: email.trim() },
               ...(zip5 ? [{ k: 'Zip', v: zip5 }] : []),
               ...(tradeLabel ? [{ k: 'Trades', v: tradeLabel }] : []),
+            ...(licenseLabel ? [{ k: 'State/Federal licensed', v: licenseLabel }] : []),
+              ...(licenseLabel ? [{ k: 'State/Federal licensed', v: licenseLabel }] : []),
               { k: 'DB error', v: String(saved.error || '').slice(0, 140) },
             ],
             context: '❗ TCPA consent NOT recorded in the database — record it manually and follow up now',
@@ -440,6 +450,7 @@ export default {
             { k: 'Email', v: email.trim() },
             ...(zip5 ? [{ k: 'Zip', v: zip5 }] : []),
             ...(tradeLabel ? [{ k: 'Trades', v: tradeLabel }] : []),
+            ...(licenseLabel ? [{ k: 'State/Federal licensed', v: licenseLabel }] : []),
           ],
           context: '📞 TCPA consent captured · calls + SMS',
         }));
