@@ -432,7 +432,6 @@ export default {
               { k: 'Email', v: email.trim() },
               ...(zip5 ? [{ k: 'Zip', v: zip5 }] : []),
               ...(tradeLabel ? [{ k: 'Trades', v: tradeLabel }] : []),
-            ...(licenseLabel ? [{ k: 'State/Federal licensed', v: licenseLabel }] : []),
               ...(licenseLabel ? [{ k: 'State/Federal licensed', v: licenseLabel }] : []),
               { k: 'DB error', v: String(saved.error || '').slice(0, 140) },
             ],
