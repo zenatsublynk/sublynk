@@ -18,7 +18,6 @@ body{font-family:var(--font);-webkit-font-smoothing:antialiased}
 a{color:inherit}
 .app-shell{min-height:100svh;display:grid;grid-template-columns:minmax(380px,42%) minmax(0,1fr)}
 .context-rail{min-height:100svh;position:relative;display:flex;flex-direction:column;overflow:hidden;padding:clamp(28px,4vw,58px);background:var(--navy);color:#fff}
-.rail-glow{position:absolute;inset:0;background:radial-gradient(700px 380px at 12% 8%,rgba(221,99,54,.28),transparent 60%),radial-gradient(600px 400px at 90% 100%,rgba(0,142,255,.16),transparent 60%);z-index:0}
 .rail-top,.rail-copy,.credential-card,.rail-proof{position:relative;z-index:1}
 .rail-top{display:flex;align-items:center;justify-content:space-between;gap:20px}
 .rail-logo{display:block;width:142px;max-width:44%;height:auto}
@@ -76,7 +75,6 @@ a{color:inherit}
 </style></head>
 <body><main class="app-shell">
 <aside class="context-rail">
-      <div class="rail-glow"></div>
       <div class="rail-top">
         <img class="rail-logo" src="https://app.sublynk.com/assets/logo-white-D7N9haAe.png" alt="Sublynk"/>
         <span class="verified-pill"><span class="verified-dot"></span>SUBLYNK CERTIFIED</span>
