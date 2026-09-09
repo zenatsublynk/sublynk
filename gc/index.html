@@ -19,8 +19,8 @@ a{color:inherit}
 .app-shell{min-height:100svh;display:grid;grid-template-columns:minmax(380px,42%) minmax(0,1fr)}
 .context-rail{min-height:100svh;position:relative;display:flex;flex-direction:column;overflow:hidden;padding:clamp(28px,4vw,58px);background:var(--navy);color:#fff}
 .rail-top,.rail-copy,.credential-card,.rail-proof,.rail-media{position:relative;z-index:1}
-.rail-media{margin-top:30px;border-radius:20px;overflow:hidden;border:1px solid rgba(255,255,255,.14);aspect-ratio:16/10;max-width:540px;background:rgba(255,255,255,.05)}
-.ba-img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:0;transition:opacity .7s ease}
+.rail-media{margin-top:30px;border-radius:20px;overflow:hidden;border:1px solid rgba(255,255,255,.14);aspect-ratio:6/5;max-width:540px;background:#0a1020}
+.ba-img{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;opacity:0;transition:opacity .7s ease}
 .ba-img.on{opacity:1}
 @media (max-width:900px){.rail-media{display:none}}
 .rail-top{display:flex;align-items:center;justify-content:space-between;gap:20px}
@@ -69,6 +69,20 @@ a{color:inherit}
 .btn-ghost:hover{border-color:#cfc6bc}
 .foot{margin:26px 0 0;color:var(--faint);font-size:12px;line-height:1.6}
 .foot a{color:var(--orange-deep)}
+.activity-ticker{position:fixed;right:20px;bottom:20px;z-index:60;width:330px;max-width:calc(100vw - 40px);pointer-events:none;display:none}
+body.ticker-on .activity-ticker{display:block}
+.ticker-card{display:flex;align-items:center;gap:12px;padding:12px 14px;border-radius:14px;background:rgba(255,255,255,.97);border:1px solid var(--border);box-shadow:0 16px 44px rgba(13,20,42,.17);transform:translateY(16px) scale(.97);opacity:0;transition:transform .5s cubic-bezier(.22,.61,.36,1),opacity .45s ease}
+.ticker-card.in{transform:translateY(0) scale(1);opacity:1}
+.ticker-ico{width:40px;height:40px;border-radius:12px;flex:0 0 auto;display:grid;place-items:center;color:#fff}
+.ticker-ico svg{width:21px;height:21px}
+.ico-orange{background:var(--orange)}.ico-navy{background:var(--navy)}.ico-blue{background:var(--blue)}.ico-green{background:var(--green)}
+.ticker-body{min-width:0}
+.ticker-text{font-size:13px;line-height:1.35;color:var(--navy)}
+.ticker-text b{font-weight:750}
+.ticker-meta{margin-top:3px;font-size:11px;color:var(--faint);font-weight:600;display:flex;align-items:center;gap:6px}
+.ticker-live{width:6px;height:6px;border-radius:50%;background:var(--green);box-shadow:0 0 0 3px rgba(47,125,84,.16)}
+@media (max-width:900px){.activity-ticker{right:12px;bottom:12px;width:290px}.ticker-card{padding:10px 12px}.ticker-ico{width:36px;height:36px}}
+@media (prefers-reduced-motion:reduce){.ticker-card{transition:opacity .25s ease;transform:none}}
 @media (max-width:900px){
   .app-shell{display:block}
   .context-rail{min-height:auto;padding:26px 20px 30px}
@@ -111,4 +125,40 @@ a{color:inherit}
   <div class="actions"><a class="btn btn-primary" href="https://calendar.app.google/sZmwrBB99rCTv1Fa6">Book a call with me →</a></div>
   <p class="foot">Not sure this is you? <a href="https://calendar.app.google/sZmwrBB99rCTv1Fa6">Grab 15 minutes</a> and I'll help you pick the right path. &middot; Get verified. Get connected. Win work.</p>
 </div></section>
+<div id="activityTicker" class="activity-ticker" aria-hidden="true"></div>
+<script>(()=>{var el=document.getElementById("activityTicker");if(!el)return;
+var R=a=>a[Math.floor(Math.random()*a.length)];
+var cities=["Denver","Austin","Dallas","Houston","Phoenix","Tampa","Orlando","Charlotte","Nashville","Atlanta","Kansas City","Columbus","Sacramento","Las Vegas","San Antonio","Raleigh","Jacksonville","Indianapolis","Salt Lake City","Boise","Fort Worth","Cincinnati","St. Louis","Memphis","Chicago","Portland","Seattle","Minneapolis","Miami","New Orleans","Louisville","Richmond","Birmingham","Tucson","Omaha","Tulsa"];
+var nets=["Accuserve","DKI Services","Fortify","Remi"];
+var pre=["Summit","BluePeak","Ironclad","Apex","Cornerstone","Titan","Vanguard","Redline","Northstar","Legacy","Frontline","Precision","Elite","Anchor","Pioneer","Rapid","ProShield","Everest","Sterling","Guardian","Cardinal","Granite","Meridian","Highland","Riverside","Oakwood","Keystone","Patriot","Evergreen","Coastal","Heartland","Liberty","Monarch","Paragon","Reliant","Beacon","Dominion","Ridgeline"];
+var suf=["Restoration","Roofing","Mitigation","Contracting","Reconstruction","Construction","Restoration Group","Exteriors","Builders","Renovations","Property Services","Roofing & Restoration","Home Services","Remediation","Contractors","Construction Group"];
+var places=["Denver, CO","Austin, TX","Dallas, TX","Houston, TX","Phoenix, AZ","Tampa, FL","Orlando, FL","Charlotte, NC","Nashville, TN","Atlanta, GA","Kansas City, MO","Columbus, OH","Sacramento, CA","Las Vegas, NV","San Antonio, TX","Raleigh, NC","Jacksonville, FL","Indianapolis, IN","Salt Lake City, UT","Fort Worth, TX","Cincinnati, OH","St. Louis, MO","Memphis, TN","Chicago, IL","Portland, OR","Seattle, WA","Miami, FL","Louisville, KY","Richmond, VA"];
+var co=()=>R(pre)+" "+R(suf);
+var I={userplus:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M19 8v6M22 11h-6"/></svg>',link:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7 0l2-2a5 5 0 0 0-7-7l-1 1"/><path d="M14 11a5 5 0 0 0-7 0l-2 2a5 5 0 0 0 7 7l1-1"/></svg>',shield:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10"/><path d="m9 12 2 2 4-4"/></svg>',clipboard:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="8" y="2" width="8" height="4" rx="1"/><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><path d="m9 14 2 2 4-4"/></svg>',usercheck:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="m16 11 2 2 4-4"/></svg>',verified:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="m8.5 12 2.5 2.5 4.5-5"/></svg>',brief:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>',cert:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/><path d="m9 15 2 2 4-4"/></svg>',target:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1"/></svg>',mail:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m2 6 10 7 10-7"/></svg>'};
+var T=[
+  ()=>({c:"ico-orange",i:"userplus", t:"<b>"+co()+"</b> in "+R(cities)+" joined Sublynk"}),
+  ()=>({c:"ico-navy",  i:"clipboard",t:"<b>"+co()+"</b> started credentialing their subs"}),
+  ()=>({c:"ico-orange",i:"userplus", t:"<b>"+co()+"</b> added a sub to their bench"}),
+  ()=>({c:"ico-green", i:"shield",   t:"<b>"+co()+"</b> verified a sub's COI"}),
+  ()=>({c:"ico-green", i:"usercheck",t:"<b>"+co()+"</b>'s sub passed a background check"}),
+  ()=>({c:"ico-green", i:"clipboard",t:"<b>"+co()+"</b> cleared compliance for their network"}),
+  ()=>({c:"ico-navy",  i:"mail",     t:"<b>"+co()+"</b> invited a sub to their network"}),
+  ()=>({c:"ico-blue",  i:"target",   t:"<b>"+co()+"</b> dispatched a compliant crew in "+R(places)}),
+  ()=>({c:"ico-navy",  i:"brief",    t:"<b>"+co()+"</b> is managing subs on Sublynk"}),
+  ()=>({c:"ico-blue",  i:"link",     t:"<b>"+co()+"</b> expanded their bench in "+R(places)}),
+  ()=>({c:"ico-orange",i:"verified", t:"<b>"+co()+"</b> raised their closing ratio with Sublynk"}),
+  ()=>({c:"ico-green", i:"cert",     t:"<b>"+co()+"</b> renewed a sub's license on file"}),
+  ()=>({c:"ico-green", i:"clipboard",t:"<b>"+co()+"</b>'s bench is fully compliant"})
+];
+function offsetMs(){var r=Math.random();if(r<0.55)return Math.random()*4000;if(r<0.80)return 5000+Math.random()*5000;if(r<0.95)return 10000+Math.random()*50000;return 60000+Math.random()*180000;}
+function relTime(ms){var s=Math.max(0,Math.round((Date.now()-ms)/1000));if(s<5)return "just now";if(s<60)return s+"s ago";return Math.floor(s/60)+"m ago";}
+var recent=[],curTime=0;
+setInterval(function(){var t=el.querySelector(".ticker-time");if(t&&curTime)t.textContent=relTime(curTime);},1000);
+function tick(){var idx;do{idx=Math.floor(Math.random()*T.length);}while(recent.includes(idx)&&T.length>3);recent.push(idx);if(recent.length>2)recent.shift();
+var ev=T[idx]();curTime=Date.now()-offsetMs();
+el.innerHTML='<div class="ticker-card"><div class="ticker-ico '+ev.c+'">'+I[ev.i]+'</div><div class="ticker-body"><div class="ticker-text">'+ev.t+'</div><div class="ticker-meta"><span class="ticker-live"></span><span class="ticker-time">'+relTime(curTime)+'</span></div></div></div>';
+var card=el.firstElementChild;requestAnimationFrame(function(){requestAnimationFrame(function(){card.classList.add("in");});});
+setTimeout(function(){card.classList.remove("in");setTimeout(tick,500+Math.random()*700);},2900+Math.random()*1500);}
+document.body.classList.add("ticker-on");setTimeout(tick,900);
+})();</script>
 </main><script>(function(){var imgs=["https://joinsublynk.com/assets/asbestos-before-after.jpg", "https://joinsublynk.com/assets/board-up-before-after.jpg", "https://joinsublynk.com/assets/cabinetry-before-after.jpg", "https://joinsublynk.com/assets/carpentry-before-after.jpg", "https://joinsublynk.com/assets/cleaning-before-after.jpg", "https://joinsublynk.com/assets/commercial-mitigation-before-after.jpg", "https://joinsublynk.com/assets/drywall-painting-before-after.jpg", "https://joinsublynk.com/assets/electrical-before-after.jpg", "https://joinsublynk.com/assets/exterior-before-after.jpg", "https://joinsublynk.com/assets/flooring-before-after.jpg", "https://joinsublynk.com/assets/general-contracting-before-after.jpg", "https://joinsublynk.com/assets/hvac-before-after.jpg", "https://joinsublynk.com/assets/masonry-before-after.jpg", "https://joinsublynk.com/assets/mold-remediation-before-after.jpg", "https://joinsublynk.com/assets/packout-before-after.jpg", "https://joinsublynk.com/assets/plumbing-before-after.jpg", "https://joinsublynk.com/assets/reconstruction-before-after.jpg", "https://joinsublynk.com/assets/restoration-before-after.jpg", "https://joinsublynk.com/assets/roofing-before-after.jpg", "https://joinsublynk.com/assets/water-mitigation-before-after.jpg"];imgs.forEach(function(u){var p=new Image();p.src=u;});var a=document.getElementById('ba0'),b=document.getElementById('ba1');if(!a||!b)return;function pick(ex){var i;do{i=Math.floor(Math.random()*imgs.length);}while(imgs[i]===ex&&imgs.length>1);return imgs[i];}var cur=pick(null);a.src=cur;a.classList.add('on');var top=a,bot=b;setInterval(function(){var nx=pick(cur);cur=nx;bot.onload=function(){bot.classList.add('on');top.classList.remove('on');var t=top;top=bot;bot=t;};bot.src=nx;},2000);})();</script></body></html>
