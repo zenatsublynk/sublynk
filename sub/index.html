@@ -18,7 +18,11 @@ body{font-family:var(--font);-webkit-font-smoothing:antialiased}
 a{color:inherit}
 .app-shell{min-height:100svh;display:grid;grid-template-columns:minmax(380px,42%) minmax(0,1fr)}
 .context-rail{min-height:100svh;position:relative;display:flex;flex-direction:column;overflow:hidden;padding:clamp(28px,4vw,58px);background:var(--navy);color:#fff}
-.rail-top,.rail-copy,.credential-card,.rail-proof{position:relative;z-index:1}
+.rail-top,.rail-copy,.credential-card,.rail-proof,.rail-media{position:relative;z-index:1}
+.rail-media{margin-top:30px;border-radius:20px;overflow:hidden;border:1px solid rgba(255,255,255,.14);aspect-ratio:16/10;max-width:540px;background:rgba(255,255,255,.05)}
+.ba-img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:0;transition:opacity .7s ease}
+.ba-img.on{opacity:1}
+@media (max-width:900px){.rail-media{display:none}}
 .rail-top{display:flex;align-items:center;justify-content:space-between;gap:20px}
 .rail-logo{display:block;width:142px;max-width:44%;height:auto}
 .verified-pill{display:inline-flex;align-items:center;gap:7px;min-height:34px;padding:7px 11px;border:1px solid rgba(255,255,255,.18);border-radius:999px;color:rgba(255,255,255,.8);font-size:11px;font-weight:700;letter-spacing:.04em;white-space:nowrap}
@@ -79,6 +83,7 @@ a{color:inherit}
         <img class="rail-logo" src="https://app.sublynk.com/assets/logo-white-D7N9haAe.png" alt="Sublynk"/>
         <span class="verified-pill"><span class="verified-dot"></span>SUBLYNK CERTIFIED</span>
       </div>
+      <div class="rail-media"><img id="ba0" class="ba-img" alt="Before and after"><img id="ba1" class="ba-img" alt="Before and after"></div>
       <div class="rail-copy">
         <div class="eyebrow">For subcontractors</div>
         <h1>Get verified once. Get found for work.</h1>
@@ -106,4 +111,4 @@ a{color:inherit}
   <div class="actions"><a class="btn btn-primary" href="https://app.sublynk.com/dashboard">Get verified →</a><a class="btn btn-ghost" href="https://joinsublynk.com/consent">Get job alerts →</a></div>
   <p class="foot">Get verified. Get connected. Win work.</p>
 </div></section>
-</main></body></html>
+</main><script>(function(){var imgs=["https://joinsublynk.com/assets/asbestos-before-after.jpg", "https://joinsublynk.com/assets/board-up-before-after.jpg", "https://joinsublynk.com/assets/cabinetry-before-after.jpg", "https://joinsublynk.com/assets/carpentry-before-after.jpg", "https://joinsublynk.com/assets/cleaning-before-after.jpg", "https://joinsublynk.com/assets/commercial-mitigation-before-after.jpg", "https://joinsublynk.com/assets/drywall-painting-before-after.jpg", "https://joinsublynk.com/assets/electrical-before-after.jpg", "https://joinsublynk.com/assets/exterior-before-after.jpg", "https://joinsublynk.com/assets/flooring-before-after.jpg", "https://joinsublynk.com/assets/general-contracting-before-after.jpg", "https://joinsublynk.com/assets/hvac-before-after.jpg", "https://joinsublynk.com/assets/masonry-before-after.jpg", "https://joinsublynk.com/assets/mold-remediation-before-after.jpg", "https://joinsublynk.com/assets/packout-before-after.jpg", "https://joinsublynk.com/assets/plumbing-before-after.jpg", "https://joinsublynk.com/assets/reconstruction-before-after.jpg", "https://joinsublynk.com/assets/restoration-before-after.jpg", "https://joinsublynk.com/assets/roofing-before-after.jpg", "https://joinsublynk.com/assets/water-mitigation-before-after.jpg"];imgs.forEach(function(u){var p=new Image();p.src=u;});var a=document.getElementById('ba0'),b=document.getElementById('ba1');if(!a||!b)return;function pick(ex){var i;do{i=Math.floor(Math.random()*imgs.length);}while(imgs[i]===ex&&imgs.length>1);return imgs[i];}var cur=pick(null);a.src=cur;a.classList.add('on');var top=a,bot=b;setInterval(function(){var nx=pick(cur);cur=nx;bot.onload=function(){bot.classList.add('on');top.classList.remove('on');var t=top;top=bot;bot=t;};bot.src=nx;},2000);})();</script></body></html>
