@@ -33,6 +33,11 @@ const ALERTS = {
   heardAbout: { username: 'How They Heard', icon_url: '', color: '#E0A500' },
 };
 
+// Zen asked to be @-mentioned on the alerts she personally actions (website contact + sub-network setup).
+// Slack reliably notifies on a mention placed in the top-level message text (mentions buried inside an
+// attachment's blocks do not always ping), so notifySlack prepends `spec.mention` there when present.
+const MENTION_ZEN = '<@U0B3PS8LPLZ>';
+
 // Fire-and-forget Slack notification to the #gtm incoming webhook. Never throws.
 // `alert` is one of the ALERTS entries; `text` is Slack mrkdwn for the body.
 // We set the webhook username/icon override (renders as the avatar where the workspace allows it)
@@ -66,7 +71,7 @@ async function notifySlack(env, alert, spec) {
       body: JSON.stringify({
         username: alert.username,
         icon_url: alert.icon_url,
-        text: `${alert.username}: ${s.title}${s.subject ? ' — ' + s.subject.replace(/\*/g, '') : ''}`, // notification fallback (required with blocks/attachments)
+        text: `${s.mention ? s.mention + ' ' : ''}${alert.username}: ${s.title}${s.subject ? ' — ' + s.subject.replace(/\*/g, '') : ''}`, // notification fallback (required with blocks/attachments); leading mention pings the assignee
         attachments: [{ color: s.color || alert.color || '#DD6336', blocks }],
       }),
     });
@@ -132,9 +137,9 @@ async function sendOptinToCIO(env, d) {
   const auth = 'Basic ' + btoa(env.CIO_SITE_ID + ':' + env.CIO_TRACK_KEY);
   const id = encodeURIComponent(d.email);                 // email is the workspace identifier
   const attrs = { email: d.email, first_name: d.first_name || '', name: d.name || '', company: d.company || '',
-                  trade: d.trade || '', zip: d.zip || '', source: 'job-alert-optin', job_alert_optin: true };
+                  trade: d.trade || '', zip: d.zip || '', contractor_type: d.contractor_type || '', source: 'job-alert-optin', job_alert_optin: true };
   const evt = { name: 'jobalert_optin', data: { first_name: d.first_name || '', company: d.company || '',
-                trade: d.trade || '', zip: d.zip || '' } };
+                trade: d.trade || '', zip: d.zip || '', contractor_type: d.contractor_type || '' } };
   const post = async (url, payload) => {
     for (let attempt = 0; attempt < 3; attempt++) {
       if (attempt) await new Promise((r) => setTimeout(r, 700 * attempt));
@@ -335,11 +340,43 @@ export default {
     const pageUrl = request.headers.get('referer') || '';
     const userAgent = request.headers.get('user-agent') || '';
 
+    // ------------------------------------------------ /api/tradesly-result (call disposition postback FROM Tradesly)
+    // Tradesly POSTs each completed AI-voice call's outcome here; we store it in public.tradesly_calls so the
+    // LeadLynk Tradesly funnel updates automatically (no more manual recap-CSV import). Shared-secret gated:
+    // the caller must present TRADESLY_WEBHOOK_TOKEN via ?token= or an X-Webhook-Token header, else 401.
+    // Tradesly's exact payload shape is not documented to us yet, so we extract fields tolerantly and always
+    // store the full raw JSON in `raw` — the first real postback reveals the schema and we refine from there.
+    if (url.includes('/api/tradesly-result')) {
+      const u2 = new URL(request.url);
+      const tok = u2.searchParams.get('token') || request.headers.get('x-webhook-token') || '';
+      if (!env.TRADESLY_WEBHOOK_TOKEN || tok !== env.TRADESLY_WEBHOOK_TOKEN) return json({ error: 'unauthorized' }, 401);
+      let d; try { d = await request.json(); } catch { d = {}; }
+      const bags = [d, d.call, d.lead, d.data, d.payload, d.result, d.event].filter((x) => x && typeof x === 'object');
+      const pick = (...keys) => { for (const b of bags) for (const k of keys) { const v = b[k]; if (v != null && v !== '') return v; } return null; };
+      const phoneRaw = pick('phone', 'to', 'number', 'lead_phone', 'contact_phone', 'customer_phone', 'phone_number') || '';
+      const dig = String(phoneRaw).replace(/\D/g, ''); const ten = dig.length === 11 && dig[0] === '1' ? dig.slice(1) : dig;
+      const durV = pick('duration', 'duration_sec', 'call_duration', 'length', 'talk_time'); const durN = parseInt(durV, 10);
+      const row = {
+        phone: phoneRaw ? String(phoneRaw) : null,
+        phone10: ten.length === 10 ? ten : null,
+        disposition: pick('disposition', 'status', 'call_status', 'outcome', 'result', 'call_outcome'),
+        outcome: pick('summary', 'sentiment', 'notes'),
+        duration_sec: Number.isFinite(durN) ? durN : null,
+        recording_url: pick('recording_url', 'recording', 'recording_link', 'audio_url'),
+        campaign: pick('campaign', 'campaign_name', 'list', 'agent'),
+        called_at: pick('called_at', 'call_time', 'completed_at', 'ended_at', 'timestamp', 'created_at'),
+        received_at: new Date().toISOString(),
+        raw: d,
+      };
+      const r = await insertRow(env, 'tradesly_calls', row);
+      return json({ ok: r.ok, stored: r.ok, phone10: row.phone10, disposition: row.disposition }, r.ok ? 200 : 502);
+    }
+
     // ---------------------------------------------------------------- /api/consent (job alerts)
     if (url.includes('/api/consent')) {
       try {
         const data = await request.json();
-        const { full_name, company, email, phone, phone_raw, consent, zip, trades, trade, trade_other, licenses, 'cf-turnstile-response': turnstileToken } = data;
+        const { full_name, company, email, phone, phone_raw, consent, zip, trades, trade, trade_other, licenses, contractor_type, 'cf-turnstile-response': turnstileToken } = data;
 
         if (!full_name?.trim() || !company?.trim() || !email?.trim() || !phone?.trim()) return json({ error: 'Missing required fields' }, 400);
         if (!consent) return json({ error: 'Consent not provided' }, 400);
@@ -385,6 +422,13 @@ export default {
           ? String(licenses).trim().toLowerCase() : null;
         const licenseLabel = licensesClean ? (licensesClean === 'yes' ? 'Yes' : 'No') : null;
 
+        // Self-reported at opt-in: are they a general contractor (runs jobs, hires subs) or a
+        // subcontractor (gets hired). Drives GC-vs-Sub audience labeling. Defaults to 'contractor'
+        // (the form's default selection). Never reject a consent over it.
+        const contractorTypeClean = ['contractor', 'subcontractor'].includes(String(contractor_type || '').trim().toLowerCase())
+          ? String(contractor_type).trim().toLowerCase() : 'contractor';
+        const contractorTypeLabel = contractorTypeClean === 'subcontractor' ? 'Subcontractor' : 'Contractor';
+
         const DISCLOSURE_VERSION = 'v1.2-2026-07-11';
         const DISCLOSURE_TEXT =
           'By checking this box and entering my mobile number, I give my express written consent for Sublynk to contact me at ' +
@@ -407,7 +451,7 @@ export default {
           full_name: full_name.trim(), company: company.trim(), email: email.trim(),
           phone: phoneFormatted, phone_raw: phone_raw?.trim() || phone.trim(), zip: zip5,
           trade: tradePrimary, trades: tradesStr, trade_other: tradeOtherClean,
-          holds_state_federal_licenses: licensesClean,
+          holds_state_federal_licenses: licensesClean, contractor_type: contractorTypeClean,
           consent_calls: true, consent_sms: true, channels: 'calls+sms',
           disclosure_version: DISCLOSURE_VERSION, disclosure_text: DISCLOSURE_TEXT, networks_shown: '',
           page_url: pageUrl, user_agent: userAgent, source: 'job-alerts-optin', status: 'active',
@@ -428,6 +472,7 @@ export default {
             title: '⚠️ Job-alert opt-in FAILED to save — capture by hand',
             subject: `*${full_name.trim()}*  ·  ${company.trim()}`,
             fields: [
+              { k: 'Type', v: contractorTypeLabel },
               { k: 'Phone', v: phoneFormatted },
               { k: 'Email', v: email.trim() },
               ...(zip5 ? [{ k: 'Zip', v: zip5 }] : []),
@@ -445,6 +490,7 @@ export default {
           subject: `*${full_name.trim()}*  ·  ${company.trim()}`,
           fields: [
             { k: 'Source', v: trafficSource },
+            { k: 'Type', v: contractorTypeLabel },
             { k: 'Phone', v: phoneFormatted },
             { k: 'Email', v: email.trim() },
             ...(zip5 ? [{ k: 'Zip', v: zip5 }] : []),
@@ -457,6 +503,7 @@ export default {
         ctx.waitUntil(sendOptinToCIO(env, {
           email: email.trim(), first_name: (full_name.trim().split(/\s+/)[0] || ''),
           name: full_name.trim(), company: company.trim(), trade: tradePrimary, zip: zip5,
+          contractor_type: contractorTypeClean,
         }));
         // Server-side Meta CompleteRegistration so ad spend can be attributed to this signup. Only the
         // successfully-saved opt-in reaches here, matching the spec's "fire only after success" rule.
@@ -523,6 +570,7 @@ export default {
 
         const billingLabel = billing === 'card' ? '💳 Charge card on file' : '📧 Send invoice';
         ctx.waitUntil(notifySlack(env, ALERTS.subNetwork, {
+          mention: MENTION_ZEN,
           title: 'Sub-network setup agreement · $500',
           subject: `*${full_name.trim()}*  ·  ${company.trim()}`,
           fields: [
@@ -643,6 +691,7 @@ export default {
 
         ctx.waitUntil(sendToCustomerIO(env, data, { email, name, phone, company, role, interest, networkSize, subject, message, pageUrl }));
         ctx.waitUntil(notifySlack(env, ALERTS.contact, {
+          mention: MENTION_ZEN,
           title: subject ? `New website contact · ${subject}` : 'New website contact',
           subject: primary ? `*${primary}*${name && company ? '  ·  ' + company : ''}` : '',
           fields: contactFields,

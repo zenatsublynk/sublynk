@@ -209,6 +209,14 @@
 
     .field-card { margin-top: 32px; padding: 24px; border: 1px solid var(--border); border-radius: var(--radius-md); background: white; box-shadow: 0 8px 30px rgba(13,20,42,.045); }
     .field-label { display: block; margin-bottom: 8px; color: var(--navy); font-size: 13px; font-weight: 700; }
+    .type-choice { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+    .type-opt { position: relative; display: flex; flex-direction: column; gap: 3px; padding: 14px 16px; border: 1px solid var(--border); border-radius: var(--radius-md); background: white; cursor: pointer; transition: border-color .15s, background .15s, box-shadow .15s; }
+    .type-opt input { position: absolute; opacity: 0; pointer-events: none; }
+    .type-opt strong { color: var(--navy); font-size: 15px; font-weight: 700; }
+    .type-opt small { color: var(--muted); font-size: 12px; line-height: 1.4; }
+    .type-opt:hover { border-color: var(--orange); }
+    .type-opt:has(input:checked) { border-color: var(--orange); background: #fff8f5; box-shadow: 0 0 0 1px var(--orange); }
+    @media (max-width: 380px) { .type-choice { grid-template-columns: 1fr; } }
     .text-input {
       width: 100%; height: 58px; border: 1px solid var(--border); border-radius: 14px; padding: 0 16px;
       background: #fff; color: var(--ink); outline: none; font-size: 16px; transition: border-color .16s, box-shadow .16s;
@@ -467,6 +475,14 @@
                 <label class="field-label" for="fullName">Full name</label>
                 <input class="text-input" id="fullName" name="full_name" autocomplete="name" placeholder="First and last name" />
                 <div class="field-error" role="alert"></div>
+              </div>
+              <div class="field-card">
+                <label class="field-label">Which best describes you?</label>
+                <div class="type-choice" role="radiogroup" aria-label="Contractor or subcontractor">
+                  <label class="type-opt"><input type="radio" name="contractor_type" value="contractor" checked><strong>Contractor</strong><small>I run jobs and hire subs</small></label>
+                  <label class="type-opt"><input type="radio" name="contractor_type" value="subcontractor"><strong>Subcontractor</strong><small>I get hired for the work</small></label>
+                </div>
+                <div class="field-error" id="typeError" role="alert"></div>
               </div>
               <div class="actions"><button class="btn btn-back js-only" type="button" data-back>Back</button><button class="btn btn-primary js-only" type="button" data-next>Continue</button><a class="btn btn-back static-only" href="#q2">Back</a><a class="btn btn-primary static-only" href="#q4">Continue</a></div>
             </section>
@@ -854,6 +870,17 @@
           if (!answers.licenses) { document.getElementById("licError").textContent = "Choose Yes or No."; return false; }
           return true;
         }
+        if (field === "full_name") {
+          const nameInput = document.getElementById("fullName");
+          if (!nameInput.value.trim()) { error.textContent = "This field is required."; nameInput.focus(); return false; }
+          const typeErr = document.getElementById("typeError");
+          if (typeErr) typeErr.textContent = "";
+          if (!document.querySelector('input[name="contractor_type"]:checked')) {
+            if (typeErr) typeErr.textContent = "Choose contractor or subcontractor.";
+            return false;
+          }
+          return true;
+        }
         const input = q.querySelector("input");
         const value = input.value.trim();
         if (field === "zip") {
@@ -939,6 +966,7 @@
         const phoneVal = document.getElementById("phone").value;
         const payload = {
           full_name: document.getElementById("fullName").value.trim(),
+          contractor_type: (document.querySelector('input[name="contractor_type"]:checked') || {}).value || "contractor",
           company: document.getElementById("company").value.trim(),
           email: document.getElementById("email").value.trim(),
           phone: normalize(phoneVal),
