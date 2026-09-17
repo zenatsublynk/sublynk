@@ -498,6 +498,7 @@ export default {
               ...(zip5 ? [{ k: 'Zip', v: zip5 }] : []),
               ...(tradeLabel ? [{ k: 'Trades', v: tradeLabel }] : []),
               ...(licenseLabel ? [{ k: 'State/Federal licensed', v: licenseLabel }] : []),
+              { k: 'Direct contact by networks', v: contractorContact ? '✅ Yes — calls + email' : '⚠️ No' },
               { k: 'DB error', v: String(saved.error || '').slice(0, 140) },
             ],
             context: '❗ TCPA consent NOT recorded in the database — record it manually and follow up now',
@@ -516,9 +517,10 @@ export default {
             ...(zip5 ? [{ k: 'Zip', v: zip5 }] : []),
             ...(tradeLabel ? [{ k: 'Trades', v: tradeLabel }] : []),
             ...(licenseLabel ? [{ k: 'State/Federal licensed', v: licenseLabel }] : []),
-            { k: 'Direct contact opt-in', v: contractorContact ? '✅ Yes' : 'No' },
+            { k: 'Direct contact by networks', v: contractorContact ? '✅ Yes — calls + email' : '⚠️ No' },
           ],
-          context: '📞 TCPA consent captured · calls + SMS',
+          context: '📞 TCPA consent · Sublynk calls + SMS'
+            + (contractorContact ? '  ·  🤝 consented to be contacted directly by verified networks (calls + email)' : ''),
         }));
         // Fire the opt-in into CIO so the confirmation email goes out (catches tab-closers).
         ctx.waitUntil(sendOptinToCIO(env, {
