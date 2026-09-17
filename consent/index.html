@@ -231,6 +231,13 @@
     .consent-box span { color: #443f3a; font-size: 12px; line-height: 1.62; }
     .consent-box a { color: var(--orange-deep); }
     .fine-print { margin: 12px 0 0; color: var(--faint); font-size: 11px; line-height: 1.5; }
+    /* Second, optional opt-in: let verified contractors/networks reach the applicant directly. */
+    .consent-section { margin-top: 18px; padding: 19px; border: 1px solid var(--border); border-radius: 16px; background: white; }
+    .consent-section-title { margin: 0; color: var(--navy); font-size: 15px; font-weight: 800; }
+    .consent-section-sub { margin: 6px 0 14px; color: var(--muted); font-size: 13px; line-height: 1.55; }
+    .consent-inline { display: flex; align-items: flex-start; gap: 13px; cursor: pointer; }
+    .consent-inline input { width: 19px; height: 19px; margin: 2px 0 0; accent-color: var(--orange); flex: 0 0 auto; }
+    .consent-inline span { color: #443f3a; font-size: 12px; line-height: 1.62; }
 
     .actions { display: flex; align-items: center; gap: 12px; margin-top: 30px; }
     .btn { min-height: 52px; display: inline-flex; align-items: center; justify-content: center; border-radius: 999px; padding: 0 24px; font-weight: 750; line-height: 1.2; text-align: center; cursor: pointer; transition: transform .16s, background .16s, border-color .16s; }
@@ -512,9 +519,9 @@
             </section>
 
             <section class="question" id="q6" data-step="5" data-field="phone_consent">
-              <div class="question-kicker">Job alerts</div>
-              <h2>Where should we send matching job alerts?</h2>
-              <p class="question-sub">Enter your mobile number and review how Sublynk may contact you about available work.</p>
+              <div class="question-kicker">Mobile number</div>
+              <h2>Where should we send new job alerts?</h2>
+              <p class="question-sub">Enter your mobile number and review how Sublynk and hiring contractors will contact you about available work.</p>
               <div class="field-card">
                 <label class="field-label" for="phone">Mobile number</label>
                 <input class="text-input" id="phone" name="phone" type="tel" inputmode="tel" autocomplete="tel" placeholder="(303) 555-0123" />
@@ -525,9 +532,17 @@
                 <span>By checking this box and entering my mobile number, I give my <strong>express written consent</strong> for Sublynk to contact me at that number with recurring job-alert <strong>calls and text messages</strong> about jobs matched to me, including by <strong>automatic telephone dialing system, autodialer, and artificial, prerecorded, or AI-generated voice</strong>. Consent is <strong>not a condition</strong> of using Sublynk or receiving any job. Message and data rates may apply and frequency varies. I can opt out anytime (reply STOP, press 9, or unsubscribe; reply HELP for help). I have read and agree to the <a href="https://www.sublynk.com/privacypolicy" target="_blank" rel="noopener">Privacy Policy</a> and <a href="https://www.sublynk.com/terms-of-service" target="_blank" rel="noopener">Terms of Service</a>, and by checking this box I am signing electronically.</span>
               </label>
               <p class="fine-print">Recurring automated calls and texts, usually a few times a month. Message and data rates may apply. Reply STOP to cancel, HELP for help.</p>
+              <div class="consent-section">
+                <h3 class="consent-section-title">Let contractors reach you about jobs</h3>
+                <p class="consent-section-sub">Verified contractors and networks who have jobs contact you directly.</p>
+                <label class="consent-inline">
+                  <input id="contractorContact" name="contractor_contact" type="checkbox" />
+                  <span>Yes, let verified contractors and networks contact me directly at the phone and email address I have provided about jobs.</span>
+                </label>
+              </div>
               <div class="cf-turnstile" data-sitekey="0x4AAAAAAD13rYQe-WdQeIpS" data-theme="light" style="margin-top:18px"></div>
               <div class="field-error" id="consentError" role="alert"></div>
-              <div class="actions"><button class="btn btn-back js-only" type="button" data-back>Back</button><button class="btn btn-primary js-only" type="submit" id="submitBtn">Turn on job alerts</button><a class="btn btn-back static-only" href="#q5">Back</a></div>
+              <div class="actions"><button class="btn btn-back js-only" type="button" data-back>Back</button><button class="btn btn-primary js-only" type="submit" id="submitBtn" disabled>Turn on job alerts</button><a class="btn btn-back static-only" href="#q5">Back</a></div>
             </section>
           </form>
 
@@ -862,6 +877,7 @@
           consentError.textContent = "";
           if (!normalize(phoneInput.value)) { phoneError.textContent = "Enter a valid 10-digit U.S. mobile number."; phoneInput.focus(); return false; }
           if (!document.getElementById("consent").checked) { consentError.textContent = "Check the box to turn on job alerts."; return false; }
+          if (!document.getElementById("contractorContact").checked) { consentError.textContent = "Also check the box to let contractors reach you about jobs."; return false; }
           const token = document.querySelector('[name="cf-turnstile-response"]');
           if (!token || !token.value) { consentError.textContent = "Please complete the verification below the box."; return false; }
           return true;
@@ -980,6 +996,7 @@
           trade_other: otherText(),
           licenses: licenseNeeded() ? answers.licenses : null,
           consent: true,
+          contractor_contact: !!document.getElementById("contractorContact")?.checked,
           "cf-turnstile-response": document.querySelector('[name="cf-turnstile-response"]')?.value || "",
           contact_ref: CONTACT_REF,
           fbc: FBC || null,
@@ -1024,6 +1041,18 @@
           console.error("Consent submission error:", e.message);
         }
       });
+
+      // Both consents are MANDATORY: keep the submit CTA unclickable until the TCPA box AND the
+      // "let contractors reach you" box are BOTH checked. (Phone + Turnstile are still enforced by
+      // validate() on click.)
+      const consentCb = document.getElementById("consent");
+      const contractorCb = document.getElementById("contractorContact");
+      const submitGateBtn = document.getElementById("submitBtn");
+      function updateConsentGate() {
+        if (submitGateBtn) submitGateBtn.disabled = !(consentCb.checked && contractorCb.checked);
+      }
+      [consentCb, contractorCb].forEach((cb) => cb && cb.addEventListener("change", updateConsentGate));
+      updateConsentGate();
 
       renderCategoryChoices();
       showStep(0, false);

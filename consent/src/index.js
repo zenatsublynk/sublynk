@@ -137,9 +137,10 @@ async function sendOptinToCIO(env, d) {
   const auth = 'Basic ' + btoa(env.CIO_SITE_ID + ':' + env.CIO_TRACK_KEY);
   const id = encodeURIComponent(d.email);                 // email is the workspace identifier
   const attrs = { email: d.email, first_name: d.first_name || '', name: d.name || '', company: d.company || '',
-                  trade: d.trade || '', zip: d.zip || '', contractor_type: d.contractor_type || '', source: 'job-alert-optin', job_alert_optin: true };
+                  trade: d.trade || '', zip: d.zip || '', contractor_type: d.contractor_type || '',
+                  phone: d.phone || '', source: 'job-alert-optin', job_alert_optin: true };
   const evt = { name: 'jobalert_optin', data: { first_name: d.first_name || '', company: d.company || '',
-                trade: d.trade || '', zip: d.zip || '', contractor_type: d.contractor_type || '' } };
+                trade: d.trade || '', zip: d.zip || '', contractor_type: d.contractor_type || '', phone: d.phone || '' } };
   const post = async (url, payload) => {
     for (let attempt = 0; attempt < 3; attempt++) {
       if (attempt) await new Promise((r) => setTimeout(r, 700 * attempt));
@@ -246,7 +247,11 @@ async function sendMetaRegistrationEvent(env, d) {
   }
 }
 
-async function insertRow(env, table, row) {
+// `dropOnMissing` names OPTIONAL columns that a newer Worker may send before its DB migration has
+// landed. If PostgREST rejects the insert because such a column isn't in the schema cache yet, we
+// strip it and retry instead of failing a real consent — so the Worker is safe to deploy before or
+// after the column is added (the value is simply not persisted until the column exists).
+async function insertRow(env, table, row, dropOnMissing = []) {
   let lastError = null;
   for (let attempt = 0; attempt < 3; attempt++) {
     if (attempt) await new Promise((r) => setTimeout(r, 800 * attempt));
@@ -263,8 +268,14 @@ async function insertRow(env, table, row) {
         signal: ctrl.signal,
       });
       if (res.ok) return { ok: true };
-      lastError = `HTTP ${res.status}: ${(await res.text()).slice(0, 200)}`;
-      console.warn(`insert ${table} attempt ${attempt + 1} -> ${lastError}`);
+      const body = (await res.text()).slice(0, 300);
+      lastError = `HTTP ${res.status}: ${body}`;
+      // Forward-compat: drop any optional column the schema cache doesn't know yet, then retry.
+      let stripped = false;
+      for (const col of dropOnMissing) {
+        if (col in row && body.includes(col)) { delete row[col]; stripped = true; }
+      }
+      console.warn(`insert ${table} attempt ${attempt + 1} -> ${lastError}${stripped ? ' (stripped unknown optional column, retrying)' : ''}`);
     } catch (e) {
       lastError = e.name === 'AbortError' ? 'timed out after 8s (PostgREST/DB slow or reloading schema cache)' : (e.message || String(e));
       console.warn(`insert ${table} attempt ${attempt + 1} error: ${lastError}`);
@@ -376,7 +387,7 @@ export default {
     if (url.includes('/api/consent')) {
       try {
         const data = await request.json();
-        const { full_name, company, email, phone, phone_raw, consent, zip, trades, trade, trade_other, licenses, contractor_type, 'cf-turnstile-response': turnstileToken } = data;
+        const { full_name, company, email, phone, phone_raw, consent, contractor_contact, zip, trades, trade, trade_other, licenses, contractor_type, 'cf-turnstile-response': turnstileToken } = data;
 
         if (!full_name?.trim() || !company?.trim() || !email?.trim() || !phone?.trim()) return json({ error: 'Missing required fields' }, 400);
         if (!consent) return json({ error: 'Consent not provided' }, 400);
@@ -429,6 +440,14 @@ export default {
           ? String(contractor_type).trim().toLowerCase() : 'contractor';
         const contractorTypeLabel = contractorTypeClean === 'subcontractor' ? 'Subcontractor' : 'Contractor';
 
+        // Second, OPTIONAL opt-in shown on the same step (does not gate submit): let verified
+        // contractors and networks contact the applicant directly at the phone + email provided.
+        // Stored as its own boolean so we can honor / query it separately from the TCPA job-alert
+        // consent. Exact wording on file for audit (mirrors consent/index.html's checkbox label):
+        //   "Yes, let verified contractors and networks contact me directly at the phone and email
+        //    address I have provided about jobs."
+        const contractorContact = contractor_contact === true;
+
         const DISCLOSURE_VERSION = 'v1.2-2026-07-11';
         const DISCLOSURE_TEXT =
           'By checking this box and entering my mobile number, I give my express written consent for Sublynk to contact me at ' +
@@ -453,6 +472,7 @@ export default {
           trade: tradePrimary, trades: tradesStr, trade_other: tradeOtherClean,
           holds_state_federal_licenses: licensesClean, contractor_type: contractorTypeClean,
           consent_calls: true, consent_sms: true, channels: 'calls+sms',
+          consent_contractor_contact: contractorContact,
           disclosure_version: DISCLOSURE_VERSION, disclosure_text: DISCLOSURE_TEXT, networks_shown: '',
           page_url: pageUrl, user_agent: userAgent, source: 'job-alerts-optin', status: 'active',
           contact_ref: data.contact_ref || null, ip: clientIp,
@@ -462,7 +482,7 @@ export default {
           utm_campaign: clip(data.utm_campaign, 200), utm_content: clip(data.utm_content, 200),
           utm_term: clip(data.utm_term, 200),
           landing_url: clip(data.landing_url, 500), referrer: clip(data.referrer, 500),
-        });
+        }, ['consent_contractor_contact']);
         if (!saved.ok) {
           console.error('consent save failed:', saved.error);
           // Never silently lose a real opt-in: alert #gtm with the full details so CS can record the
@@ -496,6 +516,7 @@ export default {
             ...(zip5 ? [{ k: 'Zip', v: zip5 }] : []),
             ...(tradeLabel ? [{ k: 'Trades', v: tradeLabel }] : []),
             ...(licenseLabel ? [{ k: 'State/Federal licensed', v: licenseLabel }] : []),
+            { k: 'Direct contact opt-in', v: contractorContact ? '✅ Yes' : 'No' },
           ],
           context: '📞 TCPA consent captured · calls + SMS',
         }));
@@ -504,6 +525,7 @@ export default {
           email: email.trim(), first_name: (full_name.trim().split(/\s+/)[0] || ''),
           name: full_name.trim(), company: company.trim(), trade: tradePrimary, zip: zip5,
           contractor_type: contractorTypeClean,
+          phone: ten ? ('+1' + ten) : '',   // E.164 for CIO/Twilio SMS
         }));
         // Server-side Meta CompleteRegistration so ad spend can be attributed to this signup. Only the
         // successfully-saved opt-in reaches here, matching the spec's "fire only after success" rule.
