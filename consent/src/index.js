@@ -555,18 +555,20 @@ export default {
         if (!agreed) return json({ error: 'Agreement not confirmed' }, 400);
         if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim())) return json({ error: 'Invalid email address' }, 400);
 
-        // Billing method the client selected. Default is charging the card on file (per Chris); invoice is the fallback.
+        // Billing method the client selected for the one-time $500. Default is charging the card on
+        // file (per Chris); invoice is the fallback. The recurring $50/mo always goes on the card on file.
         const billing = data.billing_method === 'invoice' ? 'invoice' : 'card';
         const billingText = billing === 'card'
-          ? 'charge the one-time $500 consulting fee to the card Sublynk has on file'
-          : 'send me an invoice for the one-time $500 consulting fee';
+          ? 'charge the one-time $500 setup fee to the card Sublynk has on file'
+          : 'send me an invoice for the one-time $500 setup fee';
 
-        const AGREEMENT_VERSION = 'v2-2026-07-20';
+        const AGREEMENT_VERSION = 'v3-2026-10-02';
         const AGREEMENT_TEXT =
-          'I would like to move forward with the Sublynk subcontractor network setup and evaluation (audit of my contracts and ' +
-          'subcontractor requirements, a plan to bridge the gaps, and setup of my network and bench in Sublynk), and I authorize ' +
-          'Sublynk to ' + billingText + '. No card details are entered on this page, and full terms are provided with the receipt ' +
-          'or invoice. By checking this box I am agreeing electronically.';
+          'I would like to move forward with the Sublynk subcontractor network setup: custom compliance rulesets and enforcement, ' +
+          'a subcontractor bench built and credentialed at scale, and nationwide recruiting with access to subcontractors who have ' +
+          'opted in for assignments. I authorize Sublynk to ' + billingText + ', and to begin my $50/month Sublynk subscription ' +
+          'charged to the card Sublynk has on file. I can cancel the subscription at any time. No card details are entered on this ' +
+          'page, and full terms are provided with the receipt or invoice. By checking this box I am agreeing electronically.';
 
         const saved = await insertRow(env, 'consulting_agreements', {
           full_name: full_name.trim(), company: company.trim(), email: email.trim(),
@@ -579,7 +581,7 @@ export default {
           // Never silently lose a $500 setup agreement on a DB hiccup: alert #gtm with the full details
           // (incl. billing choice) so it can be recorded + billed by hand even though the insert failed.
           ctx.waitUntil(notifySlack(env, ALERTS.cancelSave, {
-            title: '⚠️ $500 setup agreement FAILED to save — record + bill by hand',
+            title: '⚠️ Setup agreement ($500 + $50/mo) FAILED to save — record + bill by hand',
             subject: `*${full_name.trim()}*  ·  ${company.trim()}`,
             fields: [
               { k: 'Email', v: email.trim() },
@@ -587,7 +589,7 @@ export default {
               { k: 'Billing', v: billing === 'card' ? '💳 Charge card on file' : '📧 Send invoice' },
               { k: 'DB error', v: String(saved.error || '').slice(0, 140) },
             ],
-            context: '❗ $500 consulting agreement NOT recorded in the DB — follow up now',
+            context: '❗ $500 setup + $50/mo agreement NOT recorded in the DB — follow up now',
           }));
           return json({ error: 'Could not save that. Please try again.' }, 500);
         }
@@ -595,13 +597,14 @@ export default {
         const billingLabel = billing === 'card' ? '💳 Charge card on file' : '📧 Send invoice';
         ctx.waitUntil(notifySlack(env, ALERTS.subNetwork, {
           mention: MENTION_ZEN,
-          title: 'Sub-network setup agreement · $500',
+          title: 'Sub-network setup · $500 setup + $50/mo',
           subject: `*${full_name.trim()}*  ·  ${company.trim()}`,
           fields: [
             { k: 'Email', v: email.trim() },
+            ...(phone?.trim() ? [{ k: 'Phone', v: phone.trim() }] : []),
             { k: 'Billing', v: billingLabel },
           ],
-          context: '🖊️ signed electronically · one-time $500 setup + evaluation',
+          context: '🖊️ signed electronically · $500 one-time setup + $50/mo subscription (recurring, card on file)',
         }));
         return json({ success: true, message: 'Agreement recorded successfully' });
       } catch (e) {

@@ -1,208 +1,2448 @@
-<!doctype html>
-<html lang=en>
+<!DOCTYPE html>
+<html lang="en">
 <head>
-<meta charset=utf-8>
-<meta name=viewport content="width=device-width,initial-scale=1">
-<title>Sublynk network setup</title>
-<meta name=robots content="noindex">
-<link rel=icon type="image/svg+xml" href="../og/favicon.svg">
-<link rel=icon type="image/png" href="../og/favicon.png">
-<link rel=preconnect href="https://fonts.googleapis.com">
-<link rel=preconnect href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel=stylesheet>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sublynk network setup &amp; onboarding</title>
+<link rel="preconnect" href="https://rsms.me/">
+<link rel="stylesheet" href="https://rsms.me/inter/inter.css">
+<script src="https://cdn.sheetjs.com/xlsx-0.20.3/package/dist/xlsx.full.min.js"></script>
 <style>
-:root{--orange:#DD6336;--orange-deep:#B44A22;--navy:#0D142A;--ink:#0C0A09;--paper:#FAF8F5;
-  --surface:#fff;--surface-2:#F3EFE9;--muted:#6E6862;--faint:#938C84;--border:#E8E3DC;--green:#2F7D54;--green-bg:#E6F1E9}
-*{box-sizing:border-box;margin:0}
-body{font-family:Inter,-apple-system,'Segoe UI',Arial,sans-serif;background:var(--paper);color:var(--ink);
-  -webkit-font-smoothing:antialiased;line-height:1.6}
-.bar{background:var(--navy);padding:13px 0;position:sticky;top:0;z-index:10}
-.wrap{max-width:640px;margin:0 auto;padding:0 22px}
-.bar a{display:inline-flex;align-items:center}
-.bar img{height:24px;width:auto;display:block}
-main{padding:30px 0 60px;position:relative;overflow:hidden}
-.glow{position:absolute;top:0;left:50%;transform:translateX(-50%);width:620px;height:300px;max-width:96%;background:var(--orange);opacity:.07;filter:blur(120px);border-radius:50%;pointer-events:none;z-index:0}
-main>:not(.glow){position:relative;z-index:1}
-.eyebrow{font-size:12px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--orange-deep)}
-h1{font-size:30px;line-height:1.15;font-weight:800;letter-spacing:-.02em;color:var(--navy);margin:8px 0 10px;text-wrap:balance}
-.sub{font-size:17px;color:var(--muted);max-width:54ch}
-.card{background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:22px 22px;margin-top:22px;
-  box-shadow:0 1px 3px rgba(13,20,42,.05)}
-h2{font-size:15px;font-weight:800;color:var(--navy);margin-bottom:12px}
-.get{list-style:none}
-.get li{position:relative;padding-left:34px;margin:14px 0;font-size:14.5px;color:var(--ink)}
-.get li .n{position:absolute;left:0;top:0;width:24px;height:24px;border-radius:7px;background:var(--navy);color:#fff;
-  font-size:12px;font-weight:800;display:flex;align-items:center;justify-content:center}
-.get b{color:var(--navy)}
-.fee{margin-top:16px;font-size:13.5px;color:var(--muted);background:var(--surface-2);border-radius:10px;padding:12px 14px}
-.fee b{color:var(--navy)}
-.bill{margin-top:18px}
-.bill .blabel{display:block;font-size:12.5px;font-weight:600;color:var(--navy);margin-bottom:8px}
-label.radio{display:flex;gap:10px;align-items:flex-start;font-size:13.5px;color:var(--ink);background:var(--surface-2);border:1px solid var(--border);border-radius:10px;padding:11px 13px;margin-top:8px;cursor:pointer}
-label.radio input{margin-top:2px;width:17px;height:17px;accent-color:var(--orange);flex:0 0 auto;cursor:pointer}
-label.radio.sel{border-color:var(--orange);box-shadow:0 0 0 3px rgba(221,99,54,.12)}
-label.fld{display:block;margin:14px 0 0}
-label.fld span{display:block;font-size:12.5px;font-weight:600;color:var(--navy);margin-bottom:5px}
-label.fld .opt{color:var(--faint);font-weight:400}
-input[type=text],input[type=tel],input[type=email]{width:100%;font:inherit;font-size:15px;padding:11px 13px;
-  border:1px solid var(--border);border-radius:10px;background:#fff;color:var(--ink);outline:none}
-input:focus{border-color:var(--orange);box-shadow:0 0 0 3px rgba(221,99,54,.12)}
-.hp{position:absolute;left:-9999px;height:0;overflow:hidden}
-.consent{display:flex;gap:11px;align-items:flex-start;margin-top:20px;background:var(--surface-2);
-  border:1px solid var(--border);border-radius:12px;padding:14px 15px}
-.consent input{margin-top:3px;width:18px;height:18px;accent-color:var(--orange);flex:0 0 auto;cursor:pointer}
-.consent label{font-size:13px;color:var(--ink);line-height:1.55}
-.consent a{color:var(--orange-deep)}
-button.cta{width:100%;margin-top:18px;font:inherit;font-size:16px;font-weight:700;color:#fff;background:var(--orange);
-  border:0;border-radius:12px;padding:15px;cursor:pointer;transition:.12s}
-button.cta:hover{background:var(--orange-deep)}
-button.cta:disabled{opacity:.45;cursor:not-allowed}
-.fine{font-size:12px;color:var(--faint);margin-top:14px;line-height:1.5}
-.err{color:#B42318;font-size:13px;margin-top:10px;font-weight:600;display:none}
-.done{display:none;text-align:center;padding:26px 0}
-.done .ok{width:56px;height:56px;border-radius:50%;background:var(--green-bg);color:var(--green);
-  display:flex;align-items:center;justify-content:center;margin:0 auto 16px}
-.done h2{font-size:22px;margin-bottom:8px}
-.done p{color:var(--muted);font-size:15px;max-width:46ch;margin:0 auto 8px}
-.foot{color:var(--faint);font-size:12px;text-align:center;margin-top:30px;line-height:1.6}
-.foot a{color:var(--muted)}
+:root {
+  --orange: #DD6438;
+  --orange-light: #f0a070;
+  --navy: #0C152B;
+  --green: #16A34A;
+  --ink: #111827;
+  --bg: #FAF8F5;
+  --panel: #f5f5f4;
+  --red: #DC2626;
+  --border: #d6d3d1;
+  --border-light: #e7e5e4;
+  --text-muted: #6b7280;
+  --radius: 10px;
+  --shadow: 0 1px 3px rgba(0,0,0,.08), 0 1px 2px rgba(0,0,0,.04);
+  --shadow-lg: 0 10px 25px rgba(0,0,0,.08);
+}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { font-family: 'Inter', 'Inter Variable', system-ui, sans-serif; font-size: 15px; -webkit-font-smoothing: antialiased; }
+body { background: var(--bg); color: var(--ink); min-height: 100vh; }
+
+/* Header */
+.header { background: var(--navy); padding: 20px 24px; display: flex; align-items: center; gap: 14px; }
+.header-logo { font-size: 22px; font-weight: 700; color: #fff; letter-spacing: -.5px; }
+.header-logo span { color: var(--orange); }
+.header-sub { color: rgba(255,255,255,.55); font-size: 13px; margin-left: auto; }
+
+/* Progress */
+.progress-wrap { background: #fff; border-bottom: 1px solid var(--border-light); padding: 18px 24px; position: sticky; top: 0; z-index: 50; }
+.progress-bar { display: flex; align-items: center; justify-content: center; gap: 0; max-width: 900px; margin: 0 auto; }
+.step-ind { display: flex; align-items: center; gap: 0; cursor: pointer; }
+.step-circle { width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 600; border: 2px solid var(--border); color: var(--text-muted); background: #fff; transition: all .25s; flex-shrink: 0; }
+.step-circle svg { display: none; }
+.step-label { font-size: 11px; color: var(--text-muted); margin-top: 4px; text-align: center; white-space: nowrap; transition: color .25s; }
+.step-ind.active .step-circle { background: var(--orange); border-color: var(--orange); color: #fff; }
+.step-ind.active .step-label { color: var(--orange); font-weight: 600; }
+.step-ind.done .step-circle { background: var(--green); border-color: var(--green); color: #fff; }
+.step-ind.done .step-circle span { display: none; }
+.step-ind.done .step-circle svg { display: block; }
+.step-ind.done .step-label { color: var(--green); }
+.step-connector { width: 32px; height: 2px; background: var(--border-light); margin: 0 4px; margin-bottom: 18px; flex-shrink: 1; transition: background .25s; }
+.step-connector.done { background: var(--green); }
+.step-ind-wrap { display: flex; flex-direction: column; align-items: center; }
+
+/* Container */
+.container { max-width: 780px; margin: 0 auto; padding: 28px 20px 100px; }
+
+/* Card */
+.card { background: #fff; border-radius: var(--radius); box-shadow: var(--shadow); padding: 32px 28px; }
+.card-title { font-size: 20px; font-weight: 700; color: var(--navy); margin-bottom: 4px; }
+.card-desc { font-size: 14px; color: var(--text-muted); margin-bottom: 24px; line-height: 1.5; }
+
+/* Form */
+.field { margin-bottom: 18px; }
+.field-row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+.field-row-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 14px; }
+label.field-label { display: block; font-size: 13px; font-weight: 600; color: var(--ink); margin-bottom: 5px; }
+label.field-label .req { color: var(--red); margin-left: 2px; }
+label.field-label .opt { color: var(--text-muted); font-weight: 400; font-size: 12px; margin-left: 4px; }
+input[type="text"], input[type="email"], input[type="tel"], input[type="url"], input[type="date"], input[type="number"],
+select, textarea {
+  width: 100%; padding: 10px 12px; border: 1.5px solid var(--border); border-radius: 8px;
+  font-family: inherit; font-size: 14px; color: var(--ink); background: #fff;
+  transition: border-color .2s, box-shadow .2s; outline: none;
+}
+input:focus, select:focus, textarea:focus { border-color: var(--orange); box-shadow: 0 0 0 3px rgba(221,100,56,.12); }
+textarea { resize: vertical; min-height: 80px; }
+select { cursor: pointer; appearance: none; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' fill='%236b7280' viewBox='0 0 16 16'%3E%3Cpath d='M8 11L3 6h10z'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 12px center; padding-right: 32px; }
+.field-error { font-size: 12px; color: var(--red); margin-top: 4px; display: none; }
+.field.has-error input, .field.has-error select, .field.has-error textarea { border-color: var(--red); }
+.field.has-error .field-error { display: block; }
+.field-hint { font-size: 11px; color: var(--text-muted); margin-top: 3px; }
+.field-hint.secure { color: var(--green); }
+
+/* Radio group */
+.radio-group { display: flex; flex-wrap: wrap; gap: 8px 16px; }
+.radio-label { display: flex; align-items: center; gap: 6px; font-size: 13px; color: var(--ink); cursor: pointer; padding: 4px 0; }
+.radio-label input[type="radio"] { width: 16px; height: 16px; accent-color: var(--orange); cursor: pointer; flex-shrink: 0; }
+
+/* Toggle */
+.toggle-row { display: flex; align-items: center; justify-content: space-between; padding: 14px 16px; border: 1.5px solid var(--border-light); border-radius: 10px; margin-bottom: 8px; transition: border-color .2s, background .2s; }
+.toggle-row.active { border-color: var(--orange); background: rgba(221,100,56,.03); }
+.toggle-info { flex: 1; }
+.toggle-title { font-size: 14px; font-weight: 600; color: var(--ink); }
+.toggle-sub { font-size: 12px; color: var(--text-muted); margin-top: 2px; }
+.toggle-switch { position: relative; width: 44px; height: 24px; flex-shrink: 0; margin-left: 12px; }
+.toggle-switch input { opacity: 0; width: 0; height: 0; position: absolute; }
+.toggle-track { position: absolute; inset: 0; background: var(--border); border-radius: 12px; cursor: pointer; transition: background .25s; }
+.toggle-track::after { content: ''; position: absolute; top: 3px; left: 3px; width: 18px; height: 18px; background: #fff; border-radius: 50%; transition: transform .25s; box-shadow: 0 1px 3px rgba(0,0,0,.15); }
+.toggle-switch input:checked + .toggle-track { background: var(--orange); }
+.toggle-switch input:checked + .toggle-track::after { transform: translateX(20px); }
+.toggle-expand { max-height: 0; overflow: hidden; transition: max-height .35s ease, padding .35s ease; padding: 0 16px; }
+.toggle-expand.open { max-height: 2000px; padding: 16px 16px 8px; }
+.toggle-expand .field { margin-bottom: 14px; }
+.toggle-expand .field:last-child { margin-bottom: 6px; }
+
+/* Insurance coverage card */
+.ins-coverage { border: 1.5px solid var(--border-light); border-radius: 10px; margin-bottom: 10px; overflow: hidden; transition: border-color .2s; }
+.ins-coverage.active { border-color: var(--orange); }
+.ins-header { display: flex; align-items: center; justify-content: space-between; padding: 14px 16px; cursor: default; }
+.ins-header .toggle-title { font-size: 14px; }
+.ins-body { padding: 0 16px 16px; display: none; }
+.ins-body.open { display: block; }
+.ins-body .field-row { margin-bottom: 10px; }
+.ins-body .field { margin-bottom: 10px; }
+.ins-endorsements { padding-top: 8px; border-top: 1px solid var(--border-light); margin-top: 8px; }
+.ins-endorsements-label { font-size: 12px; font-weight: 600; color: var(--text-muted); text-transform: uppercase; letter-spacing: .5px; margin-bottom: 6px; }
+
+/* Custom limit input */
+.custom-limit { display: none; margin-top: 6px; }
+.custom-limit.show { display: block; }
+
+/* Category cards */
+.cat-card { border: 1.5px solid var(--border-light); border-radius: 10px; margin-bottom: 12px; overflow: hidden; transition: border-color .2s; }
+.cat-card.expanded { border-color: var(--orange); }
+.cat-header { display: flex; align-items: center; justify-content: space-between; padding: 14px 16px; background: #fff; }
+.cat-header-left { display: flex; align-items: center; gap: 10px; flex: 1; }
+.cat-name { font-size: 15px; font-weight: 600; color: var(--ink); }
+.cat-badge { font-size: 11px; font-weight: 600; color: var(--orange); background: rgba(221,100,56,.08); padding: 2px 8px; border-radius: 4px; }
+.cat-actions { display: flex; align-items: center; gap: 6px; }
+.cat-toggle-btn { background: none; border: 1px solid var(--border); color: var(--text-muted); font-size: 12px; padding: 4px 10px; border-radius: 6px; cursor: pointer; font-family: inherit; transition: all .2s; }
+.cat-toggle-btn:hover { border-color: var(--orange); color: var(--orange); }
+.cat-remove-btn { background: none; border: none; color: var(--text-muted); font-size: 18px; cursor: pointer; padding: 2px 6px; border-radius: 4px; line-height: 1; transition: all .2s; }
+.cat-remove-btn:hover { color: var(--red); background: rgba(220,38,38,.08); }
+.cat-body { display: none; padding: 0 16px 16px; border-top: 1px solid var(--border-light); }
+.cat-card.expanded .cat-body { display: block; padding-top: 16px; }
+.cat-section-label { font-size: 12px; font-weight: 600; color: var(--text-muted); text-transform: uppercase; letter-spacing: .5px; margin-bottom: 8px; margin-top: 14px; }
+.cat-section-label:first-child { margin-top: 0; }
+
+/* Call Guide */
+.call-guide-fab {
+  position: fixed; bottom: 24px; right: 24px; z-index: 900;
+  display: flex; align-items: center; gap: 8px;
+  background: var(--navy); color: #fff; border: none;
+  padding: 12px 20px; border-radius: 40px; cursor: pointer;
+  font-family: inherit; font-size: 13px; font-weight: 600;
+  box-shadow: 0 4px 20px rgba(12,21,43,.25);
+  transition: all .25s ease;
+}
+.call-guide-fab:hover { transform: translateY(-2px); box-shadow: 0 6px 28px rgba(12,21,43,.35); }
+.call-guide-fab.open { border-radius: 14px 14px 0 0; transform: none; box-shadow: none; }
+.call-guide-fab svg { flex-shrink: 0; }
+.call-guide-panel {
+  position: fixed; bottom: 0; right: 24px; z-index: 899;
+  width: 380px; max-height: 70vh;
+  background: #fff; border-radius: 14px 14px 0 0;
+  box-shadow: 0 -4px 30px rgba(0,0,0,.12);
+  transform: translateY(100%); opacity: 0;
+  transition: transform .3s ease, opacity .25s ease;
+  display: flex; flex-direction: column;
+  overflow: hidden;
+}
+.call-guide-panel.open { transform: translateY(0); opacity: 1; }
+.call-guide-body { overflow-y: auto; padding: 0 0 16px; flex: 1; }
+.call-guide-body::-webkit-scrollbar { width: 4px; }
+.call-guide-body::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
+.cg-section { border-bottom: 1px solid var(--border-light); }
+.cg-section:last-child { border-bottom: none; }
+.cg-section-header {
+  display: flex; align-items: center; gap: 10px;
+  padding: 14px 18px; cursor: pointer; transition: background .15s;
+  user-select: none;
+}
+.cg-section-header:hover { background: var(--panel); }
+.cg-section-step {
+  width: 24px; height: 24px; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 11px; font-weight: 700; flex-shrink: 0;
+  background: var(--panel); color: var(--text-muted);
+  transition: all .2s;
+}
+.cg-section.active .cg-section-step { background: var(--orange); color: #fff; }
+.cg-section-title { font-size: 13px; font-weight: 600; color: var(--ink); flex: 1; }
+.cg-section.active .cg-section-title { color: var(--orange); }
+.cg-chevron {
+  transition: transform .2s; color: var(--text-muted); flex-shrink: 0;
+}
+.cg-section.expanded .cg-chevron { transform: rotate(180deg); }
+.cg-section-body {
+  max-height: 0; overflow: hidden;
+  transition: max-height .3s ease, padding .2s ease;
+  padding: 0 18px;
+}
+.cg-section.expanded .cg-section-body {
+  max-height: 600px; padding: 0 18px 16px;
+}
+.cg-tip {
+  display: flex; align-items: flex-start; gap: 8px;
+  padding: 6px 0; font-size: 13px; line-height: 1.5; color: #374151;
+}
+.cg-tip-icon { flex-shrink: 0; margin-top: 3px; color: var(--orange); }
+.cg-tip-label {
+  font-size: 10px; font-weight: 700; text-transform: uppercase;
+  letter-spacing: .6px; color: var(--text-muted);
+  margin: 12px 0 4px; padding-top: 8px;
+  border-top: 1px solid var(--border-light);
+}
+.cg-tip-label:first-child { margin-top: 0; border-top: none; padding-top: 0; }
+
+/* Checkboxes */
+.checkbox-group { display: flex; flex-direction: column; gap: 8px; }
+.checkbox-group.grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.checkbox-group.grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; }
+.cb-label { display: flex; align-items: center; gap: 8px; font-size: 14px; color: var(--ink); cursor: pointer; padding: 6px 0; }
+.cb-label input[type="checkbox"] { width: 18px; height: 18px; accent-color: var(--orange); cursor: pointer; flex-shrink: 0; }
+
+/* File upload */
+.upload-zone { border: 2px dashed var(--border); border-radius: var(--radius); padding: 28px 20px; text-align: center; cursor: pointer; transition: border-color .2s, background .2s; position: relative; }
+.upload-zone:hover, .upload-zone.drag-over { border-color: var(--orange); background: rgba(221,100,56,.04); }
+.upload-zone input[type="file"] { position: absolute; inset: 0; opacity: 0; cursor: pointer; }
+.upload-icon { margin-bottom: 8px; color: var(--text-muted); }
+.upload-text { font-size: 13px; color: var(--text-muted); }
+.upload-text strong { color: var(--orange); }
+.upload-hint { font-size: 11px; color: var(--text-muted); margin-top: 4px; }
+.file-preview { display: flex; align-items: center; gap: 10px; padding: 10px 12px; background: var(--panel); border-radius: 8px; margin-top: 8px; }
+.file-preview .file-name { font-size: 13px; font-weight: 500; flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.file-preview .file-size { font-size: 12px; color: var(--text-muted); }
+.file-preview .file-remove { background: none; border: none; color: var(--red); cursor: pointer; font-size: 18px; line-height: 1; padding: 2px 6px; border-radius: 4px; }
+.file-preview .file-remove:hover { background: rgba(220,38,38,.08); }
+
+/* Callout */
+.callout { background: #FFF7ED; border: 1px solid #FDBA74; border-radius: 8px; padding: 14px 16px; font-size: 13px; color: #9A3412; display: flex; gap: 10px; align-items: flex-start; margin-bottom: 20px; }
+.callout svg { flex-shrink: 0; margin-top: 1px; }
+.callout.info { background: #EFF6FF; border-color: #93C5FD; color: #1E40AF; }
+
+/* Buttons */
+.btn-row { display: flex; justify-content: space-between; margin-top: 28px; gap: 12px; }
+.btn { padding: 11px 28px; border-radius: 8px; font-family: inherit; font-size: 14px; font-weight: 600; cursor: pointer; border: none; transition: all .2s; display: inline-flex; align-items: center; gap: 8px; }
+.btn-primary { background: var(--orange); color: #fff; }
+.btn-primary:hover { background: #c7552e; }
+.btn-secondary { background: var(--panel); color: var(--ink); border: 1.5px solid var(--border); }
+.btn-secondary:hover { background: #e7e5e4; }
+.btn-green { background: var(--green); color: #fff; }
+.btn-green:hover { background: #15803d; }
+.btn-sm { padding: 6px 14px; font-size: 12px; }
+
+/* Review */
+.review-section { margin-bottom: 24px; }
+.review-section-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px; padding-bottom: 8px; border-bottom: 2px solid var(--panel); }
+.review-section-title { font-size: 15px; font-weight: 700; color: var(--navy); }
+.review-grid { display: grid; grid-template-columns: 180px 1fr; gap: 6px 16px; font-size: 13px; }
+.review-label { color: var(--text-muted); font-weight: 500; padding: 4px 0; }
+.review-value { color: var(--ink); padding: 4px 0; word-break: break-word; }
+
+/* Success */
+.success-overlay { position: fixed; inset: 0; background: rgba(12,21,43,.6); display: flex; align-items: center; justify-content: center; z-index: 100; opacity: 0; pointer-events: none; transition: opacity .3s; }
+.success-overlay.show { opacity: 1; pointer-events: auto; }
+.success-card { background: #fff; border-radius: 16px; padding: 48px 40px; text-align: center; max-width: 440px; width: 90%; box-shadow: var(--shadow-lg); transform: scale(.9); transition: transform .3s; }
+.success-overlay.show .success-card { transform: scale(1); }
+.success-icon { width: 64px; height: 64px; background: #DCFCE7; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 20px; }
+.success-title { font-size: 22px; font-weight: 700; color: var(--navy); margin-bottom: 8px; }
+.success-text { font-size: 14px; color: var(--text-muted); line-height: 1.6; }
+
+/* Resume banner */
+.resume-banner { background: #EFF6FF; border: 1px solid #93C5FD; border-radius: 8px; padding: 14px 18px; display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 20px; font-size: 13px; color: #1E40AF; }
+.resume-banner .btn { font-size: 12px; padding: 6px 16px; }
+
+/* Confetti canvas */
+#confetti-canvas { position: fixed; inset: 0; z-index: 200; pointer-events: none; }
+
+/* Step transitions */
+.step-content { display: none; animation: fadeSlideIn .35s ease; }
+.step-content.active { display: block; }
+@keyframes fadeSlideIn { from { opacity: 0; transform: translateX(20px); } to { opacity: 1; transform: translateX(0); } }
+
+/* Conditional show */
+.cond-hide { display: none; }
+.cond-hide.show { display: block; }
+
+/* Divider */
+.divider { border: none; border-top: 1px solid var(--border-light); margin: 22px 0; }
+
+/* Print */
+@media print {
+  .header, .progress-wrap, .btn-row, .resume-banner, .btn { display: none !important; }
+  .container { padding: 0; max-width: 100%; }
+  .card { box-shadow: none; border: 1px solid #ddd; }
+  .review-grid { font-size: 11px; }
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .card { padding: 24px 18px; }
+  .field-row, .field-row-3, .checkbox-group.grid, .checkbox-group.grid-3 { grid-template-columns: 1fr; }
+  .step-label { font-size: 9px; }
+  .step-connector { width: 12px; }
+  .review-grid { grid-template-columns: 1fr; }
+  .review-label { font-weight: 600; padding-bottom: 0; }
+  .radio-group { flex-direction: column; }
+}
+</style>
+<style id="gate-css">
+/* ---- $500 setup gate: a consent-style walkthrough, hidden once onboarding begins ---- */
+body:not(.intake-active) .progress-wrap,
+body:not(.intake-active) .container:not(#setupGate) { display:none; }
+body.intake-active #setupGate { display:none; }
+/* hide intake's floating helpers until onboarding begins */
+body:not(.intake-active) .call-guide-fab,
+body:not(.intake-active) .call-guide-panel,
+body:not(.intake-active) #programsToggleBtn { display:none !important; }
+
+/* consent design tokens, scoped to the gate */
+#setupGate{ --g-radius-md:18px; --g-shadow:0 8px 30px rgba(13,20,42,.045); position:relative; max-width:640px; padding-top:40px; padding-bottom:72px; }
+#setupGate .glow{ position:absolute; top:-30px; left:50%; transform:translateX(-50%); width:620px; height:280px; max-width:96%; background:var(--orange); opacity:.07; filter:blur(120px); border-radius:50%; pointer-events:none; z-index:0; }
+#setupGate > :not(.glow){ position:relative; z-index:1; }
+#setupGate .kicker{ margin-bottom:12px; color:#b44a22; font-size:12px; font-weight:800; letter-spacing:.11em; text-transform:uppercase; }
+#setupGate h1{ margin:0; color:var(--navy); font-size:clamp(30px,5.2vw,44px); line-height:1.07; letter-spacing:-.035em; font-weight:700; text-wrap:balance; }
+#setupGate .sub{ margin:16px 0 0; color:var(--text-muted); font-size:16px; line-height:1.6; max-width:52ch; }
+#setupGate .price-row{ display:flex; flex-wrap:wrap; gap:8px; margin-top:18px; }
+#setupGate .chip{ display:inline-flex; align-items:center; gap:7px; padding:8px 13px; border-radius:999px; background:#fff; border:1px solid var(--border-light); font-size:12.5px; font-weight:700; color:var(--navy); box-shadow:var(--g-shadow); }
+#setupGate .chip b{ color:var(--orange); }
+
+#setupGate .fcard{ margin-top:30px; padding:24px; border:1px solid var(--border-light); border-radius:var(--g-radius-md); background:#fff; box-shadow:var(--g-shadow); }
+#setupGate .fcard-title{ font-size:13px; font-weight:800; letter-spacing:.06em; text-transform:uppercase; color:var(--text-muted); margin-bottom:16px; }
+#setupGate .getlist{ list-style:none; display:flex; flex-direction:column; gap:18px; }
+#setupGate .getlist li{ display:flex; gap:13px; align-items:flex-start; }
+#setupGate .check{ flex:0 0 auto; width:24px; height:24px; border-radius:50%; display:grid; place-items:center; background:rgba(47,125,84,.12); color:var(--green); font-size:13px; font-weight:900; margin-top:1px; }
+#setupGate .gl-body{ font-size:14.5px; color:var(--ink); line-height:1.5; }
+#setupGate .gl-body b{ color:var(--navy); }
+
+#setupGate .gold{ margin-top:18px; display:flex; gap:13px; align-items:flex-start; padding:18px 20px; border-radius:var(--g-radius-md); background:linear-gradient(180deg,#fff6ef,#fdeee2); border:1px solid #f3d9c7; }
+#setupGate .gold .star{ flex:0 0 auto; width:28px; height:28px; border-radius:50%; display:grid; place-items:center; background:var(--orange); color:#fff; font-size:15px; }
+#setupGate .gold .gtitle{ font-size:13px; font-weight:800; letter-spacing:.04em; text-transform:uppercase; color:var(--orange); margin-bottom:4px; }
+#setupGate .gold .gbody{ font-size:14.5px; color:var(--ink); line-height:1.5; }
+#setupGate .gold .gbody b{ color:var(--navy); }
+
+#setupGate .field{ margin-bottom:16px; }
+#setupGate .blabel{ display:block; font-size:12.5px; font-weight:700; color:var(--navy); margin:18px 0 6px; }
+#setupGate label.radio{ display:flex; gap:10px; align-items:flex-start; font-size:13.5px; color:var(--ink); background:var(--panel); border:1.5px solid var(--border-light); border-radius:12px; padding:12px 13px; margin-top:8px; cursor:pointer; transition:border-color .15s, box-shadow .15s; }
+#setupGate label.radio input{ margin-top:2px; width:17px; height:17px; accent-color:var(--orange); flex:0 0 auto; cursor:pointer; }
+#setupGate label.radio.sel{ border-color:var(--orange); box-shadow:0 0 0 3px rgba(221,100,56,.12); }
+#setupGate .hp{ position:absolute; left:-9999px; height:0; overflow:hidden; }
+#setupGate .consent{ display:flex; gap:11px; align-items:flex-start; margin-top:20px; background:var(--panel); border:1.5px solid var(--border-light); border-radius:12px; padding:14px 15px; }
+#setupGate .consent input{ margin-top:3px; width:18px; height:18px; accent-color:var(--orange); flex:0 0 auto; cursor:pointer; }
+#setupGate .consent label{ font-size:13px; color:var(--ink); line-height:1.55; }
+#setupGate button.cta{ width:100%; margin-top:22px; min-height:54px; font:inherit; font-size:16px; font-weight:750; color:#fff; background:var(--orange); border:1px solid var(--orange); border-radius:999px; padding:0 24px; cursor:pointer; transition:transform .16s, background .16s; box-shadow:0 8px 22px rgba(221,99,54,.2); }
+#setupGate button.cta:hover{ background:#b44a22; border-color:#b44a22; transform:translateY(-1px); }
+#setupGate button.cta:disabled{ opacity:.42; cursor:not-allowed; transform:none; box-shadow:none; }
+#setupGate .fine{ font-size:12px; color:var(--text-muted); margin-top:14px; line-height:1.5; }
+#setupGate .err{ color:var(--red); font-size:13px; margin-top:10px; font-weight:600; display:none; }
 </style>
 </head>
 <body>
-<div class=bar><div class=wrap><a href="https://zenatsublynk.github.io/sublynk/" aria-label="Sublynk home"><img src="https://app.sublynk.com/assets/logo-white-D7N9haAe.png" alt="Sublynk"></a></div></div>
 
-<main class=wrap>
-  <span class=glow aria-hidden=true></span>
-  <div id=form-view>
-    <div class=eyebrow>Network setup</div>
-    <h1>Get your subcontractor network set up on Sublynk</h1>
-    <p class=sub>A focused consulting engagement: we evaluate your contracts and subcontractor requirements, then stand up your network and bench in Sublynk so you are ready to onboard. One-time $500 fee.</p>
+<div class="header">
+  <div class="header-logo">Sub<span>lynk</span></div>
+  <div class="header-sub">GC Onboarding Intake</div>
+</div>
 
-    <div class=card>
-      <h2>What you get</h2>
-      <ul class=get>
-        <li><span class=n>1</span><b>Audit.</b> We review your contracts, subcontractor requirements, and current compliance setup.</li>
-        <li><span class=n>2</span><b>Plan.</b> We map the gaps and give you a clear plan to bridge them.</li>
-        <li><span class=n>3</span><b>Grow.</b> We set up your network and subcontractor bench in Sublynk, ready to onboard your subs and go.</li>
-      </ul>
-      <div class=fee><b>One-time $500 consulting fee.</b> By default we charge the card Sublynk already has on file. Prefer an invoice instead? Pick that option below. No card details are entered on this page.</div>
-    </div>
+<div id="setupGate" class="container">
+  <span class="glow" aria-hidden="true"></span>
+  <div class="kicker">Network setup</div>
+  <h1>Build your bench and put subs to work.</h1>
+  <p class="sub">We stand up your network in Sublynk, credential your subs at scale, then connect you to contractors nationwide who already want the work.</p>
 
-    <div class=card>
-      <h2>Confirm and get started</h2>
-      <form id=optin autocomplete=on novalidate>
-        <label class=fld><span>Full name</span><input type=text id=full_name autocomplete=name></label>
-        <label class=fld><span>Company / network name</span><input type=text id=company autocomplete=organization></label>
-        <label class=fld><span>Email</span><input type=email id=email autocomplete=email></label>
-        <label class=fld><span>Phone <span class=opt>(optional)</span></span><input type=tel id=phone autocomplete=tel inputmode=tel></label>
-        <div class=hp aria-hidden=true><label>Do not fill<input type=text id=website tabindex=-1 autocomplete=off></label></div>
+  <div class="price-row">
+    <span class="chip"><b>$500</b> one-time setup</span>
+    <span class="chip"><b>$50</b>/mo subscription</span>
+  </div>
 
-        <div class=bill>
-          <span class=blabel>How should we handle the $500 fee?</span>
-          <label class=radio><input type=radio name=billing value=card checked> Charge the $500 to the card Sublynk has on file</label>
-          <label class=radio><input type=radio name=billing value=invoice> Email me an invoice for the $500 instead</label>
-        </div>
-
-        <div class=consent>
-          <input type=checkbox id=consent>
-          <label for=consent id=consent-text></label>
-        </div>
-
-        <div class=err id=err></div>
-        <button type=submit class=cta id=submit disabled>Agree and get started</button>
-        <p class=fine id=fine></p>
-      </form>
+  <div class="fcard">
+    <div class="fcard-title">What you get</div>
+    <ul class="getlist">
+      <li>
+        <span class="check">&#10003;</span>
+        <span class="gl-body"><b>Your rules, enforced.</b> Custom rulesets for COI, background checks, business verification, agreements, and licenses &amp; certs, verified at the state and federal level, never county.</span>
+      </li>
+      <li>
+        <span class="check">&#10003;</span>
+        <span class="gl-body"><b>A bench built to scale.</b> Your one-time $500 puts our engineers on your bench, so subs credential themselves and get verified automatically.</span>
+      </li>
+      <li>
+        <span class="check">&#10003;</span>
+        <span class="gl-body"><b>Recruit nationwide, every trade.</b> Your $50/mo recruits and attracts subs across the country and automates every verification.</span>
+      </li>
+    </ul>
+    <div class="gold">
+      <span class="star">&#9733;</span>
+      <div>
+        <div class="gtitle">The best part</div>
+        <div class="gbody">Connect instantly with <b>opt-in subs who already raised their hand</b>, ready to say yes to assignments and join your network. No cold recruiting.</div>
+      </div>
     </div>
   </div>
 
-  <div id=done-view class=done>
-    <div class=ok><svg viewBox="0 0 24 24" fill=none stroke=currentColor stroke-width=2.5 stroke-linecap=round stroke-linejoin=round style="width:28px;height:28px"><path d="M20 6 9 17l-5-5"/></svg></div>
-    <h2>You are all set</h2>
-    <p id=done-msg>Thanks. We will start your audit right away and be in touch shortly.</p>
+  <div class="fcard">
+    <div class="fcard-title">Confirm and start onboarding</div>
+    <form id="g_form" autocomplete="on" novalidate>
+      <div class="field"><label class="field-label" for="g_full_name">Full name</label><input type="text" id="g_full_name" autocomplete="name"></div>
+      <div class="field"><label class="field-label" for="g_company">Company / network name</label><input type="text" id="g_company" autocomplete="organization"></div>
+      <div class="field"><label class="field-label" for="g_email">Email</label><input type="email" id="g_email" autocomplete="email"></div>
+      <div class="field"><label class="field-label" for="g_phone">Phone <span class="opt">(optional)</span></label><input type="tel" id="g_phone" autocomplete="tel" inputmode="tel"></div>
+      <div class="hp" aria-hidden="true"><label>Do not fill<input type="text" id="g_website" tabindex="-1" autocomplete="off"></label></div>
+
+      <span class="blabel">How should we handle the $500 setup fee?</span>
+      <label class="radio"><input type="radio" name="g_billing" value="card" checked> Charge the $500 to the card Sublynk has on file</label>
+      <label class="radio"><input type="radio" name="g_billing" value="invoice"> Email me an invoice for the $500 instead</label>
+
+      <div class="consent">
+        <input type="checkbox" id="g_consent">
+        <label for="g_consent" id="g_consent_text"></label>
+      </div>
+
+      <div class="err" id="g_err"></div>
+      <button type="submit" class="cta" id="g_submit" disabled>Agree and start onboarding &rarr;</button>
+      <p class="fine" id="g_fine"></p>
+    </form>
+  </div>
+</div>
+
+<div class="progress-wrap">
+  <div class="progress-bar" id="progressBar"></div>
+</div>
+
+<div class="container">
+  <div id="resumeBanner" class="resume-banner" style="display:none;">
+    <span>You have a saved draft. Resume where you left off?</span>
+    <div style="display:flex;gap:8px;">
+      <button class="btn btn-primary btn-sm" onclick="restoreSaved()">Resume</button>
+      <button class="btn btn-secondary btn-sm" onclick="clearSaved()">Start Fresh</button>
+    </div>
   </div>
 
-  <p class=foot>
-    Sublynk, the vetted contractor network. This page confirms you would like to proceed; full terms are provided with your receipt or invoice.<br>
-    <a href="https://www.sublynk.com/privacypolicy">Privacy Policy</a> &middot; <a href="https://www.sublynk.com/terms-of-service">Terms of Service</a>
-  </p>
-</main>
+  <!-- STEP 1: Organization Info -->
+  <div class="step-content active" data-step="1">
+    <div class="card">
+      <h2 class="card-title">Organization Info</h2>
+      <p class="card-desc">Tell us about your company so we can set up your Sublynk account.</p>
+
+      <div class="field-row">
+        <div class="field">
+          <label class="field-label">Legal Business Name <span class="req">*</span></label>
+          <input type="text" id="legalName" data-required="true" placeholder="e.g. ABC Restoration LLC">
+          <div class="field-error">Legal business name is required.</div>
+        </div>
+        <div class="field">
+          <label class="field-label">DBA <span class="opt">(optional)</span></label>
+          <input type="text" id="dba" placeholder="Doing business as...">
+          <div class="field-hint">Leave blank if you do not have a DBA, and we will use your legal name.</div>
+        </div>
+      </div>
+
+      <div class="field-row">
+        <div class="field">
+          <label class="field-label">Tax ID Number (EIN) <span class="req">*</span></label>
+          <input type="text" id="taxId" data-required="true" placeholder="XX-XXXXXXX" maxlength="11">
+          <div class="field-hint secure">Stored securely &mdash; never shared externally.</div>
+          <div class="field-error">Tax ID is required.</div>
+        </div>
+        <div class="field">
+          <label class="field-label">Website URL <span class="opt">(optional)</span></label>
+          <input type="url" id="website" placeholder="https://yourcompany.com">
+        </div>
+      </div>
+
+      <div class="field">
+        <label class="field-label">Tax Classification <span class="req">*</span></label>
+        <div class="radio-group" id="taxClassGroup">
+          <label class="radio-label"><input type="radio" name="taxClass" value="Individual"> Individual</label>
+          <label class="radio-label"><input type="radio" name="taxClass" value="Sole Proprietor"> Sole Proprietor</label>
+          <label class="radio-label"><input type="radio" name="taxClass" value="Single Member LLC"> Single Member LLC</label>
+          <label class="radio-label"><input type="radio" name="taxClass" value="C Corporation"> C Corporation</label>
+          <label class="radio-label"><input type="radio" name="taxClass" value="S Corporation"> S Corporation</label>
+          <label class="radio-label"><input type="radio" name="taxClass" value="Partnership"> Partnership</label>
+          <label class="radio-label"><input type="radio" name="taxClass" value="Trust"> Trust</label>
+          <label class="radio-label"><input type="radio" name="taxClass" value="Estate"> Estate</label>
+          <label class="radio-label"><input type="radio" name="taxClass" value="LLC Partnership"> LLC Partnership</label>
+          <label class="radio-label"><input type="radio" name="taxClass" value="LLC C Corporation"> LLC C Corporation</label>
+          <label class="radio-label"><input type="radio" name="taxClass" value="LLC S Corporation"> LLC S Corporation</label>
+        </div>
+        <div class="field-error" id="taxClassError" style="display:none;">Tax classification is required.</div>
+      </div>
+
+      <hr class="divider">
+
+      <div class="field">
+        <label class="field-label">Address Line 1 <span class="req">*</span></label>
+        <input type="text" id="address1" data-required="true" placeholder="123 Main Street">
+        <div class="field-error">Address is required.</div>
+      </div>
+      <div class="field">
+        <label class="field-label">Address Line 2 <span class="opt">optional</span></label>
+        <input type="text" id="address2" placeholder="Suite, Unit, Building, etc.">
+        <div class="field-error"></div>
+      </div>
+      <div class="field-row-3">
+        <div class="field">
+          <label class="field-label">City <span class="req">*</span></label>
+          <input type="text" id="city" data-required="true" placeholder="City">
+          <div class="field-error">City is required.</div>
+        </div>
+        <div class="field">
+          <label class="field-label">State <span class="req">*</span></label>
+          <select id="state" data-required="true"><option value="">Select...</option></select>
+          <div class="field-error">Required.</div>
+        </div>
+        <div class="field">
+          <label class="field-label">Zipcode <span class="req">*</span></label>
+          <input type="text" id="zip" data-required="true" placeholder="00000" maxlength="10">
+          <div class="field-error">Required.</div>
+        </div>
+      </div>
+
+      <div class="field">
+        <label class="field-label">Primary Email Address <span class="req">*</span></label>
+        <input type="email" id="primaryEmail" data-required="true" placeholder="email@company.com">
+        <div class="field-error">Valid email is required.</div>
+      </div>
+
+      <div class="btn-row" style="justify-content:flex-end;">
+        <button class="btn btn-primary" onclick="goNext()">Continue <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M9 18l6-6-6-6"/></svg></button>
+      </div>
+    </div>
+  </div>
+
+  <!-- STEP 2: Certificate Holder & Description -->
+  <div class="step-content" data-step="2">
+    <div class="card">
+      <h2 class="card-title">Insurance &mdash; Certificate Holder &amp; Description</h2>
+      <p class="card-desc">Tell us who should appear on Certificates of Insurance and what description of operations language is required.</p>
+
+      <div class="field">
+        <label class="field-label">Required Certificate Holder <span class="req">*</span></label>
+        <textarea id="certHolder" data-required="true" placeholder="Enter the full name, address, and any specific language that must appear in the Certificate Holder field on your subcontractors' COIs." rows="4"></textarea>
+        <div class="field-error">Certificate holder information is required.</div>
+      </div>
+
+      <div class="field">
+        <label class="field-label">Required Description of Operations <span class="req">*</span></label>
+        <textarea id="descOps" data-required="true" placeholder="Enter any specific language or requirements that must appear in the Description of Operations field on the COI." rows="4"></textarea>
+        <div class="field-error">Description of operations is required.</div>
+      </div>
+
+      <div class="btn-row">
+        <button class="btn btn-secondary" onclick="goPrev()"><svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M15 18l-6-6 6-6"/></svg> Back</button>
+        <button class="btn btn-primary" onclick="goNext()">Continue <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M9 18l6-6-6-6"/></svg></button>
+      </div>
+    </div>
+  </div>
+
+  <!-- STEP 3: Insurance Requirements -->
+  <div class="step-content" data-step="3">
+    <div class="card">
+      <h2 class="card-title">Insurance Requirements</h2>
+      <p class="card-desc">Toggle on the insurance types you require from subcontractors, then set the minimum limits and endorsements for each.</p>
+
+      <div id="insuranceToggles"></div>
+
+      <hr class="divider">
+
+      <div class="field">
+        <label class="field-label">Do you have any other lines of insurance not mentioned above?</label>
+        <div class="radio-group">
+          <label class="radio-label"><input type="radio" name="otherInsurance" value="No" checked onchange="toggleCond('otherInsDetail',false)"> No</label>
+          <label class="radio-label"><input type="radio" name="otherInsurance" value="Yes" onchange="toggleCond('otherInsDetail',true)"> Yes</label>
+        </div>
+      </div>
+      <div class="cond-hide" id="otherInsDetail">
+        <div class="field">
+          <label class="field-label">Please describe</label>
+          <textarea id="otherInsText" placeholder="Describe additional insurance requirements..."></textarea>
+        </div>
+      </div>
+
+      <div class="field">
+        <label class="field-label">Do you have a Sample COI to share?</label>
+        <div class="radio-group">
+          <label class="radio-label"><input type="radio" name="sampleCoi" value="No" checked onchange="toggleCond('coiUploadArea',false)"> No</label>
+          <label class="radio-label"><input type="radio" name="sampleCoi" value="Yes" onchange="toggleCond('coiUploadArea',true)"> Yes</label>
+          <label class="radio-label"><input type="radio" name="sampleCoi" value="Maybe" onchange="toggleCond('coiUploadArea',true)"> Maybe</label>
+        </div>
+      </div>
+      <div class="cond-hide" id="coiUploadArea">
+        <div class="field">
+          <label class="field-label">Upload Sample COI</label>
+          <div class="upload-zone" id="zone_coi" ondragover="dzOver(event)" ondragleave="dzLeave(event)" ondrop="dzDropCoiMulti(event)">
+            <input type="file" accept=".pdf,.png,.jpg,.jpeg,.doc,.docx" multiple onchange="handleCoiUploadMulti(event)">
+            <div class="upload-icon"><svg width="32" height="32" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M12 16V4m0 0l-4 4m4-4l4 4M4 17v2a1 1 0 001 1h14a1 1 0 001-1v-2"/></svg></div>
+            <div class="upload-text">Drop COI here or <strong>click to browse</strong></div>
+            <div class="upload-hint">PDF, image, or Word document &mdash; multiple files allowed</div>
+          </div>
+          <div id="preview_coi"></div>
+        </div>
+      </div>
+
+      <div class="btn-row">
+        <button class="btn btn-secondary" onclick="goPrev()"><svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M15 18l-6-6 6-6"/></svg> Back</button>
+        <button class="btn btn-primary" onclick="goNext()">Continue <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M9 18l6-6-6-6"/></svg></button>
+      </div>
+    </div>
+  </div>
+
+  <!-- STEP 4: Programs & Certifications -->
+  <div class="step-content" data-step="4">
+    <div class="card">
+      <h2 class="card-title">Service Categories &amp; Programs</h2>
+      <p class="card-desc">Define the service categories your subs perform. Each category can have its own insurance requirements and credentials.</p>
+
+      <div style="background: linear-gradient(135deg, #FFF3EF, #fff8f5); border: 2px solid #DD6438; border-radius: 12px; padding: 20px 24px; margin-bottom: 24px;">
+        <div style="display:flex; align-items:flex-start; gap:12px;">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#DD6438" stroke-width="2" style="flex-shrink:0; margin-top:2px;"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+          <div>
+            <p style="font-weight:700; color:#0C152B; font-size:15px; margin-bottom:4px;">Select Programs</p>
+            <p style="color:#374151; font-size:14px; line-height:1.6;">Toggle on the programs your subs perform. Each program expands to show its service categories. Selected categories get their own insurance and credential requirements below.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Program Toggles -->
+      <div id="programToggles"></div>
+      <div class="field-error" id="progError" style="display:none;">Please select at least one program and service category.</div>
+
+      <!-- Category Cards Container -->
+      <div id="categoriesContainer"></div>
+
+      <hr class="divider" style="margin: 24px 0;">
+
+      <div class="field">
+        <label class="field-label">Do you require any certifications beyond what's legally required?</label>
+        <div class="radio-group">
+          <label class="radio-label"><input type="radio" name="extraCerts" value="No" checked onchange="toggleCond('extraCertsDetail',false)"> No</label>
+          <label class="radio-label"><input type="radio" name="extraCerts" value="Yes" onchange="toggleCond('extraCertsDetail',true)"> Yes</label>
+          <label class="radio-label"><input type="radio" name="extraCerts" value="Maybe" onchange="toggleCond('extraCertsDetail',false)"> Maybe</label>
+        </div>
+      </div>
+      <div class="cond-hide" id="extraCertsDetail">
+        <div class="field">
+          <label class="field-label">Please explain what certifications are required</label>
+          <textarea id="extraCertsText" placeholder="Describe additional certification requirements..."></textarea>
+        </div>
+      </div>
+
+      <div class="btn-row">
+        <button class="btn btn-secondary" onclick="goPrev()"><svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M15 18l-6-6 6-6"/></svg> Back</button>
+        <button class="btn btn-primary" onclick="goNext()">Continue <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M9 18l6-6-6-6"/></svg></button>
+      </div>
+    </div>
+  </div>
+
+  <!-- STEP 5: Background Checks -->
+  <div class="step-content" data-step="5">
+    <div class="card">
+      <h2 class="card-title">Background Checks</h2>
+
+      <div style="background: linear-gradient(135deg, #FFF3EF, #fff8f5); border: 2px solid #DD6438; border-radius: 12px; padding: 20px 24px; margin-bottom: 24px;">
+        <div style="display:flex; align-items:flex-start; gap:12px;">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#DD6438" stroke-width="2" style="flex-shrink:0; margin-top:2px;"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+          <div>
+            <p style="font-weight:700; color:#0C152B; font-size:15px; margin-bottom:4px;">Sublynk Minimum Requirement</p>
+            <p style="color:#374151; font-size:14px; line-height:1.6;">Sublynk requires a minimum of one background check for an owner of every subcontractor organization, regardless of any additional requirements.</p>
+          </div>
+        </div>
+      </div>
+
+      <p class="card-desc">Configure additional screening requirements beyond the Sublynk minimum.</p>
+
+      <div class="toggle-row" id="bgToggleRow" style="border:none;padding:14px 0;margin-bottom:0;">
+        <div class="toggle-info"><div class="toggle-title">Do you want to enforce additional background check requirements?</div></div>
+        <label class="toggle-switch"><input type="checkbox" id="tog_bgcheck" onchange="toggleExpand('bgcheck')"><span class="toggle-track"></span></label>
+      </div>
+      <div class="toggle-expand" id="exp_bgcheck">
+
+        <div class="field">
+          <label class="field-label">Who must have a background check?</label>
+          <div class="checkbox-group">
+            <label class="cb-label"><input type="checkbox" id="bg_owners"> All owners</label>
+            <label class="cb-label"><input type="checkbox" id="bg_creds"> All credential holders</label>
+            <label class="cb-label"><input type="checkbox" id="bg_employees"> All employees</label>
+          </div>
+        </div>
+
+        <div class="field">
+          <label class="field-label">How long is a background check valid?</label>
+          <div class="radio-group">
+            <label class="radio-label"><input type="radio" name="bgValidity" value="1 year"> 1 year</label>
+            <label class="radio-label"><input type="radio" name="bgValidity" value="2 years"> 2 years</label>
+            <label class="radio-label"><input type="radio" name="bgValidity" value="3 years" checked> 3 years</label>
+          </div>
+        </div>
+
+        <div class="field">
+          <label class="field-label">Screening Requirements</label>
+          <div class="checkbox-group grid">
+            <label class="cb-label"><input type="checkbox" id="scr_ssn"> SSN Trace</label>
+            <label class="cb-label"><input type="checkbox" id="scr_sex"> Sex Offender Search</label>
+            <label class="cb-label"><input type="checkbox" id="scr_ofac"> Global Watchlist (OFAC)</label>
+            <label class="cb-label"><input type="checkbox" id="scr_natcrim"> National Criminal Search</label>
+            <label class="cb-label"><input type="checkbox" id="scr_fedcrim"> Federal Criminal Search</label>
+            <label class="cb-label"><input type="checkbox" id="scr_county"> County Criminal Search</label>
+            <label class="cb-label"><input type="checkbox" id="scr_mvr"> Motor Vehicle Report</label>
+            <label class="cb-label"><input type="checkbox" id="scr_countycivil"> County Civil Search</label>
+            <label class="cb-label"><input type="checkbox" id="scr_fedcivil"> Federal Civil Search</label>
+            <label class="cb-label"><input type="checkbox" id="scr_credit"> Credit Report</label>
+            <label class="cb-label"><input type="checkbox" id="scr_edu"> Education Verification</label>
+            <label class="cb-label"><input type="checkbox" id="scr_emp"> Employment Verification</label>
+            <label class="cb-label"><input type="checkbox" id="scr_drug" onchange="toggleCond('drugSubstances',this.checked)"> Drug Screening</label>
+          </div>
+        </div>
+
+        <div class="cond-hide" id="drugSubstances">
+          <div class="field">
+            <label class="field-label">Drug Screening &mdash; Select Substances</label>
+            <div class="checkbox-group grid-3">
+              <label class="cb-label"><input type="checkbox" id="drug_cocaine"> Cocaine</label>
+              <label class="cb-label"><input type="checkbox" id="drug_amphet"> Amphetamines</label>
+              <label class="cb-label"><input type="checkbox" id="drug_opiates"> Opiates</label>
+              <label class="cb-label"><input type="checkbox" id="drug_pcp"> PCP</label>
+              <label class="cb-label"><input type="checkbox" id="drug_barb"> Barbiturates</label>
+              <label class="cb-label"><input type="checkbox" id="drug_benzo"> Benzodiazepines</label>
+              <label class="cb-label"><input type="checkbox" id="drug_meth"> Methadone</label>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="btn-row">
+        <button class="btn btn-secondary" onclick="goPrev()"><svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M15 18l-6-6 6-6"/></svg> Back</button>
+        <button class="btn btn-primary" onclick="goNext()">Continue <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M9 18l6-6-6-6"/></svg></button>
+      </div>
+    </div>
+  </div>
+
+  <!-- STEP 6: Contracts -->
+  <div class="step-content" data-step="6">
+    <div class="card">
+      <h2 class="card-title">Contracts</h2>
+      <p class="card-desc">Upload your contract templates in Word format (.doc/.docx) so we can build signable templates in PandaDoc.</p>
+
+      <div class="callout">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#9A3412" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+        <span><strong>Please upload Word documents, not PDFs.</strong> This allows us to templatize contracts for electronic signing.</span>
+      </div>
+
+      <div class="field">
+        <label class="field-label">Do you require counter signatures?</label>
+        <div class="radio-group">
+          <label class="radio-label"><input type="radio" name="counterSigs" value="No" checked onchange="toggleCond('counterSigDetail',false)"> No</label>
+          <label class="radio-label"><input type="radio" name="counterSigs" value="Yes" onchange="toggleCond('counterSigDetail',true)"> Yes</label>
+        </div>
+      </div>
+      <div class="cond-hide" id="counterSigDetail">
+        <div style="background: var(--panel); border-radius: 8px; padding: 16px; margin-bottom: 16px;">
+          <p style="font-size: 14px; color: var(--ink); line-height: 1.6;">Our support team will reach out to capture the details of your counter signature requirements and configure them for your account.</p>
+        </div>
+      </div>
+
+      <hr class="divider">
+
+      <div class="field">
+        <label class="field-label">Do you have additional contracts beyond the standard Sublynk subcontractor agreement?</label>
+        <div class="radio-group">
+          <label class="radio-label"><input type="radio" name="additionalContracts" value="No" checked onchange="toggleCond('contractUploadArea',false)"> No</label>
+          <label class="radio-label"><input type="radio" name="additionalContracts" value="Yes" onchange="toggleCond('contractUploadArea',true)"> Yes</label>
+        </div>
+      </div>
+
+      <div class="cond-hide" id="contractUploadArea">
+        <div class="field">
+          <label class="field-label">Upload Contract Templates</label>
+          <div class="upload-zone" id="zone_contracts" ondragover="dzOver(event)" ondragleave="dzLeave(event)" ondrop="dzDropMulti(event)">
+            <input type="file" accept=".doc,.docx" multiple onchange="handleFileMulti(event)">
+            <div class="upload-icon"><svg width="32" height="32" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M12 16V4m0 0l-4 4m4-4l4 4M4 17v2a1 1 0 001 1h14a1 1 0 001-1v-2"/></svg></div>
+            <div class="upload-text">Drop files here or <strong>click to browse</strong></div>
+            <div class="upload-hint">.doc or .docx only &mdash; multiple files allowed</div>
+          </div>
+          <div id="preview_contracts"></div>
+        </div>
+      </div>
+
+      <hr class="divider">
+      <p class="card-desc" style="margin-bottom:16px;">Who signs contracts on behalf of your organization?</p>
+      <div class="field">
+        <label class="field-label">Signatory Name</label>
+        <input type="text" id="sigName" placeholder="Full name">
+      </div>
+      <div class="field-row">
+        <div class="field">
+          <label class="field-label">Signatory Title</label>
+          <input type="text" id="sigTitle" placeholder="e.g. Owner, CEO">
+        </div>
+        <div class="field">
+          <label class="field-label">Signatory Email</label>
+          <input type="email" id="sigEmail" placeholder="email@company.com">
+        </div>
+      </div>
+
+      <div class="btn-row">
+        <button class="btn btn-secondary" onclick="goPrev()"><svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M15 18l-6-6 6-6"/></svg> Back</button>
+        <button class="btn btn-primary" onclick="goNext()">Review &amp; Submit <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M9 18l6-6-6-6"/></svg></button>
+      </div>
+    </div>
+  </div>
+
+  <!-- STEP 7: Review & Submit -->
+  <div class="step-content" data-step="7">
+    <div class="card" id="reviewCard">
+      <h2 class="card-title">Review &amp; Submit</h2>
+      <p class="card-desc">Please review your information before submitting.</p>
+      <div id="reviewContent"></div>
+      <div class="btn-row">
+        <button class="btn btn-secondary" onclick="goPrev()"><svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M15 18l-6-6 6-6"/></svg> Back</button>
+        <div style="display:flex;gap:10px;">
+          <button class="btn btn-secondary" onclick="downloadCSV()"><svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 4v12m0 0l-4-4m4 4l4-4M4 17v2a1 1 0 001 1h14a1 1 0 001-1v-2"/></svg> Download Excel</button>
+          <button class="btn btn-green" onclick="submitForm()"><svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M5 13l4 4L19 7"/></svg> Submit</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Success overlay -->
+<div class="success-overlay" id="successOverlay">
+  <div class="success-card">
+    <div class="success-icon"><svg width="32" height="32" fill="none" stroke="#16A34A" stroke-width="2.5" viewBox="0 0 24 24"><path d="M5 13l4 4L19 7"/></svg></div>
+    <h3 class="success-title">Intake Submitted!</h3>
+    <p class="success-text">Your onboarding data has been downloaded as an Excel file. A member of the Sublynk team will reach out within 1 business day to get you started.</p>
+    <p style="font-size:13px; color:#6B7280; margin-top:8px;">Check your downloads folder for the Excel file.</p>
+    <div style="display:flex; gap:12px; margin-top:24px; justify-content:center;">
+      <button class="btn btn-secondary" onclick="downloadCSV()">Download Excel Again</button>
+      <button class="btn btn-primary" onclick="localStorage.removeItem('sublynk_gc_intake'); location.reload()">Start New Intake</button>
+    </div>
+  </div>
+</div>
+
+<canvas id="confetti-canvas"></canvas>
 
 <script>
-const $=id=>document.getElementById(id);
-// This page posts to the Cloudflare Worker (first-party), not directly to Supabase. That avoids
-// ad-blockers that block supabase.co, and the Worker owns the canonical $500 agreement terms + text
-// and pings #gtm on success.
-const WORKER='https://sublynk-consent-worker.zen-426.workers.dev';
+// ─── US States ───
+const US_STATES = ["AL","AK","AZ","AR","CA","CO","CT","DE","FL","GA","HI","ID","IL","IN","IA","KS","KY","LA","ME","MD","MA","MI","MN","MS","MO","MT","NE","NV","NH","NJ","NM","NY","NC","ND","OH","OK","OR","PA","RI","SC","SD","TN","TX","UT","VT","VA","WA","WV","WI","WY","DC"];
+const STATE_NAMES = {"AL":"Alabama","AK":"Alaska","AZ":"Arizona","AR":"Arkansas","CA":"California","CO":"Colorado","CT":"Connecticut","DE":"Delaware","FL":"Florida","GA":"Georgia","HI":"Hawaii","ID":"Idaho","IL":"Illinois","IN":"Indiana","IA":"Iowa","KS":"Kansas","KY":"Kentucky","LA":"Louisiana","ME":"Maine","MD":"Maryland","MA":"Massachusetts","MI":"Michigan","MN":"Minnesota","MS":"Mississippi","MO":"Missouri","MT":"Montana","NE":"Nebraska","NV":"Nevada","NH":"New Hampshire","NJ":"New Jersey","NM":"New Mexico","NY":"New York","NC":"North Carolina","ND":"North Dakota","OH":"Ohio","OK":"Oklahoma","OR":"Oregon","PA":"Pennsylvania","RI":"Rhode Island","SC":"South Carolina","SD":"South Dakota","TN":"Tennessee","TX":"Texas","UT":"Utah","VT":"Vermont","VA":"Virginia","WA":"Washington","WV":"West Virginia","WI":"Wisconsin","WY":"Wyoming","DC":"District of Columbia"};
+const stateSel = document.getElementById('state');
+US_STATES.forEach(s => { const o = document.createElement('option'); o.value = s; o.textContent = STATE_NAMES[s]; stateSel.appendChild(o); });
 
-$('consent-text').innerHTML =
-  'I would like to move forward with the <b>Sublynk network setup and evaluation</b> above, and I authorize Sublynk to '
-+ 'collect the <b>one-time $500 consulting fee</b> by the method I select below (charge the card on file, or send an invoice). '
-+ 'Full terms come with the receipt or invoice. By checking this box I am agreeing electronically.';
-$('fine').textContent = 'No card details are entered on this page. If you choose card on file, Sublynk charges the card already on record; otherwise we email an invoice.';
+// ─── Insurance Config ───
+const LIMIT_OPTIONS = ['$100,000','$250,000','$500,000','$1,000,000','$2,000,000','$4,000,000','$5,000,000','Custom'];
 
-const fullName=$('full_name'), company=$('company'), email=$('email'), phone=$('phone'), consent=$('consent'), submit=$('submit'), err=$('err');
-const emailOK=()=>/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email.value.trim());
-function refresh(){ submit.disabled = !(fullName.value.trim() && company.value.trim() && emailOK() && consent.checked); }
-[fullName,company,email,phone].forEach(el=>el.addEventListener('input', refresh));
-consent.addEventListener('change', refresh);
-
-// Billing method. Chris: default to charging the card on file; invoice stays as a fallback.
-const billingEls = [...document.querySelectorAll('input[name=billing]')];
-const billing = () => (billingEls.find(x=>x.checked)||{}).value || 'card';
-function markBilling(){ billingEls.forEach(x=>x.closest('label.radio').classList.toggle('sel', x.checked)); }
-billingEls.forEach(x=>x.addEventListener('change', markBilling));
-markBilling();
-
-// Personalized links prefill: /setup?e=<email>&name=<name>&company=<company>&c=<ref>
-const params=new URLSearchParams(location.search);
-const CONTACT_REF=params.get('c')||null;
-if(params.get('e')) email.value=params.get('e');
-if(params.get('name')) fullName.value=params.get('name');
-if(params.get('company')) company.value=params.get('company');
-refresh();
-
-$('optin').addEventListener('submit', async (ev)=>{
-  ev.preventDefault();
-  err.style.display='none';
-  if($('website').value){ return; }                       // honeypot
-  if(!fullName.value.trim()){ err.textContent='Please enter your full name.'; err.style.display='block'; return; }
-  if(!company.value.trim()){ err.textContent='Please enter your company or network name.'; err.style.display='block'; return; }
-  if(!emailOK()){ err.textContent='Please enter a valid email address.'; err.style.display='block'; return; }
-  if(!consent.checked){ err.textContent='Please check the box to confirm.'; err.style.display='block'; return; }
-
-  submit.disabled=true; submit.textContent='Submitting...';
-
-  const payload={
-    full_name:fullName.value.trim(), company:company.value.trim(), email:email.value.trim(),
-    phone:phone.value.trim()||null, agreed:true, billing_method:billing(), contact_ref:CONTACT_REF
-  };
-
-  try {
-    let ok=false, lastErr=null;
-    for(let attempt=0; attempt<3 && !ok; attempt++){
-      if(attempt) await new Promise(r=>setTimeout(r, 800*attempt));
-      try {
-        const resp = await fetch(WORKER+'/api/agreement', {
-          method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify(payload)
-        });
-        if(resp.ok){ ok=true; break; }
-        lastErr = new Error('server '+resp.status);
-      } catch(e){ lastErr=e; }
-    }
-    if(!ok) throw lastErr || new Error('submit failed');
-    $('done-msg').textContent = billing()==='card'
-      ? 'Thanks. We will charge the one-time $500 fee to the card on file and start your audit right away. We will be in touch shortly.'
-      : 'Thanks. We will email your invoice for the one-time $500 fee and start your audit right away. We will be in touch shortly.';
-    $('form-view').style.display='none';
-    $('done-view').style.display='block';
-    window.scrollTo({top:0,behavior:'smooth'});
-  } catch(e){
-    submit.disabled=false; submit.textContent='Agree and get started';
-    err.textContent='Could not save that. Check your connection and try again.';
-    err.style.display='block';
-    console.error('Submission error:', e && e.message);
+const INSURANCE_TYPES = [
+  {
+    key: 'cgl', title: 'Commercial General Liability',
+    limits: [
+      { id: 'cgl_occ', label: 'Each Occurrence', default: '$1,000,000' },
+      { id: 'cgl_agg', label: 'Aggregate', default: '$2,000,000' },
+      { id: 'cgl_pai', label: 'Personal & Advertising Injury', default: '$1,000,000' },
+      { id: 'cgl_coagg', label: 'Completed Ops Aggregate', default: '$2,000,000' }
+    ],
+    endorsements: [
+      { id: 'cgl_e_ai', label: 'Additional Insured CG2010 (or equivalent)' },
+      { id: 'cgl_e_co', label: 'Additional Insured Completed Ops CG2037 (or equivalent)' },
+      { id: 'cgl_e_ws', label: 'Waiver of Subrogation CG2404 (or equivalent)' },
+      { id: 'cgl_e_pnc', label: 'Primary & Non-Contributory' },
+      { id: 'cgl_e_ppa', label: 'Per-Project Aggregate (CG2503 or equivalent)' }
+    ]
+  },
+  {
+    key: 'cpl', title: 'Commercial Pollution Liability (required for pollution, mold & abatement work)',
+    limits: [
+      { id: 'cpl_occ', label: 'Each Occurrence', default: '$1,000,000' }
+    ],
+    endorsements: [
+      { id: 'cpl_e_ai', label: 'Additional Insured' },
+      { id: 'cpl_e_co', label: 'Additional Insured Completed Ops' },
+      { id: 'cpl_e_ws', label: 'Waiver of Subrogation' },
+      { id: 'cpl_e_pnc', label: 'Primary & Non-Contributory' }
+    ]
+  },
+  {
+    key: 'auto', title: 'Commercial Auto Liability',
+    limits: [
+      { id: 'auto_csl', label: 'Combined Single Limit', default: '$1,000,000' }
+    ],
+    endorsements: [
+      { id: 'auto_e_ai', label: 'Additional Insured' },
+      { id: 'auto_e_ws', label: 'Waiver of Subrogation' }
+    ]
+  },
+  {
+    key: 'wc', title: 'Workers Comp / Employer\'s Liability',
+    limits: [
+      { id: 'wc_ea', label: "Employer's Liability - Each Accident", default: '$1,000,000' },
+      { id: 'wc_emp', label: "Employer's Liability - Each Employee", default: '$1,000,000' },
+      { id: 'wc_pol', label: "Employer's Liability - Policy Limit", default: '$1,000,000' }
+    ],
+    endorsements: [
+      { id: 'wc_e_ai', label: 'Additional Insured' },
+      { id: 'wc_e_ws', label: 'Waiver of Subrogation' }
+    ]
+  },
+  {
+    key: 'umb', title: 'Umbrella / Excess Liability',
+    limits: [
+      { id: 'umb_occ', label: 'Each Occurrence', default: '$5,000,000' },
+      { id: 'umb_agg', label: 'Aggregate', default: '$5,000,000' }
+    ],
+    endorsements: [
+      { id: 'umb_e_ai', label: 'Additional Insured' },
+      { id: 'umb_e_ws', label: 'Waiver of Subrogation' }
+    ]
+  },
+  {
+    key: 'prof', title: 'Professional Liability / E&O (required for inspection, estimating & engineering work)',
+    limits: [
+      { id: 'prof_occ', label: 'Each Occurrence', default: '$1,000,000' },
+      { id: 'prof_agg', label: 'Aggregate', default: '$2,000,000' }
+    ],
+    endorsements: [
+      { id: 'prof_e_ai', label: 'Additional Insured' },
+      { id: 'prof_e_co', label: 'Additional Insured Completed Ops' },
+      { id: 'prof_e_ws', label: 'Waiver of Subrogation' },
+      { id: 'prof_e_pnc', label: 'Primary & Non-Contributory' }
+    ]
+  },
+  {
+    key: 'bail', title: 'Bailees',
+    limits: [
+      { id: 'bail_occ', label: 'Each Occurrence', default: '$250,000' }
+    ],
+    endorsements: []
   }
+];
+
+function buildLimitSelect(id, defaultVal) {
+  let html = `<select id="${id}" onchange="toggleCustomLimit('${id}')">`;
+  LIMIT_OPTIONS.forEach(opt => {
+    const selected = opt === defaultVal ? ' selected' : '';
+    html += `<option value="${opt}"${selected}>${opt}</option>`;
+  });
+  html += `</select>`;
+  html += `<input type="text" id="${id}_custom" class="custom-limit" placeholder="Enter custom amount, e.g. $3,000,000">`;
+  return html;
+}
+
+function buildInsuranceToggles() {
+  const container = document.getElementById('insuranceToggles');
+  let html = '';
+  INSURANCE_TYPES.forEach(ins => {
+    html += `<div class="ins-coverage" id="ins_${ins.key}">`;
+    html += `<div class="ins-header">`;
+    html += `<div class="toggle-info"><div class="toggle-title">${ins.title}</div></div>`;
+    html += `<label class="toggle-switch"><input type="checkbox" id="tog_${ins.key}" onchange="toggleInsurance('${ins.key}')"><span class="toggle-track"></span></label>`;
+    html += `</div>`;
+    html += `<div class="ins-body" id="body_${ins.key}">`;
+
+    // Limits
+    if (ins.limits.length > 1) {
+      html += `<div class="field-row">`;
+      ins.limits.forEach(lim => {
+        html += `<div class="field"><label class="field-label">${lim.label}</label>${buildLimitSelect(lim.id, lim.default)}</div>`;
+      });
+      // If odd number of limits in a row, we might need to close differently
+      html += `</div>`;
+    } else {
+      ins.limits.forEach(lim => {
+        html += `<div class="field"><label class="field-label">${lim.label}</label>${buildLimitSelect(lim.id, lim.default)}</div>`;
+      });
+    }
+
+    // Endorsements
+    if (ins.endorsements.length > 0) {
+      html += `<div class="ins-endorsements">`;
+      html += `<div class="ins-endorsements-label">Endorsements</div>`;
+      html += `<div class="checkbox-group">`;
+      ins.endorsements.forEach(end => {
+        html += `<label class="cb-label"><input type="checkbox" id="${end.id}"> ${end.label}</label>`;
+      });
+      html += `</div></div>`;
+    }
+
+    html += `</div></div>`;
+  });
+  container.innerHTML = html;
+}
+
+function toggleInsurance(key) {
+  const cb = document.getElementById('tog_' + key);
+  const body = document.getElementById('body_' + key);
+  const card = document.getElementById('ins_' + key);
+  if (cb.checked) {
+    body.classList.add('open');
+    card.classList.add('active');
+  } else {
+    body.classList.remove('open');
+    card.classList.remove('active');
+  }
+}
+
+function toggleCustomLimit(id) {
+  const sel = document.getElementById(id);
+  const custom = document.getElementById(id + '_custom');
+  if (sel.value === 'Custom') {
+    custom.classList.add('show');
+    custom.focus();
+  } else {
+    custom.classList.remove('show');
+    custom.value = '';
+  }
+}
+
+// ─── Step Management ───
+const STEPS = [
+  { num: 1, label: 'Organization' },
+  { num: 2, label: 'Cert Holder' },
+  { num: 3, label: 'Insurance' },
+  { num: 4, label: 'Programs' },
+  { num: 5, label: 'Background' },
+  { num: 6, label: 'Contracts' },
+  { num: 7, label: 'Review' }
+];
+let currentStep = 1;
+const completedSteps = new Set();
+const uploadedFiles = [];
+
+function buildProgressBar() {
+  const bar = document.getElementById('progressBar');
+  bar.innerHTML = '';
+  STEPS.forEach((s, i) => {
+    const wrap = document.createElement('div');
+    wrap.className = 'step-ind-wrap';
+    const ind = document.createElement('div');
+    ind.className = 'step-ind';
+    if (s.num === currentStep) ind.classList.add('active');
+    if (completedSteps.has(s.num)) ind.classList.add('done');
+    ind.onclick = () => { if (completedSteps.has(s.num) || s.num === currentStep) goToStep(s.num); };
+
+    const circle = document.createElement('div');
+    circle.className = 'step-circle';
+    circle.innerHTML = `<span>${s.num}</span><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M5 13l4 4L19 7"/></svg>`;
+    const label = document.createElement('div');
+    label.className = 'step-label';
+    label.textContent = s.label;
+
+    ind.appendChild(circle);
+    ind.setAttribute('data-step-num', s.num);
+    wrap.appendChild(ind);
+    wrap.appendChild(label);
+
+    // Hide step 4 (Programs) indicator and its preceding connector when not enabled
+    if (s.num === 4 && !programsEnabled) {
+      wrap.style.display = 'none';
+    }
+
+    bar.appendChild(wrap);
+
+    if (i < STEPS.length - 1) {
+      const conn = document.createElement('div');
+      conn.className = 'step-connector';
+      conn.setAttribute('data-conn-after', s.num);
+      if (completedSteps.has(s.num)) conn.classList.add('done');
+      // Hide connector after step 3 leading to step 4 when programs not enabled
+      if (s.num === 3 && !programsEnabled) {
+        conn.style.display = 'none';
+      }
+      bar.appendChild(conn);
+    }
+  });
+}
+
+function goToStep(n) {
+  document.querySelectorAll('.step-content').forEach(el => el.classList.remove('active'));
+  document.querySelector(`.step-content[data-step="${n}"]`).classList.add('active');
+  currentStep = n;
+  if (n === 7) buildReview();
+  buildProgressBar();
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function goNext() {
+  if (!validateStep(currentStep)) return;
+  completedSteps.add(currentStep);
+  var next = currentStep + 1;
+  // Skip Programs step if not enabled
+  if (currentStep === 3 && !programsEnabled) next = 5;
+  goToStep(next);
+  saveToStorage();
+}
+
+function goPrev() {
+  if (currentStep > 1) {
+    var prev = currentStep - 1;
+    // Skip Programs step if not enabled
+    if (currentStep === 5 && !programsEnabled) prev = 3;
+    goToStep(prev);
+  }
+}
+
+// ─── Validation ───
+function validateStep(step) {
+  const container = document.querySelector(`[data-step="${step}"]`);
+  if (step === 1) {
+    let valid = validateFields(container);
+    // Also validate tax classification radio
+    const taxChecked = document.querySelector('input[name="taxClass"]:checked');
+    if (!taxChecked) {
+      document.getElementById('taxClassError').style.display = 'block';
+      valid = false;
+    } else {
+      document.getElementById('taxClassError').style.display = 'none';
+    }
+    return valid;
+  }
+  if (step === 2) {
+    return validateFields(container);
+  }
+  if (step === 4) {
+    // Only validate programs if the step is enabled
+    if (!programsEnabled) return true;
+    // At least one service category must be added
+    if (serviceCategories.length === 0) {
+      document.getElementById('progError').style.display = 'block';
+      return false;
+    }
+    document.getElementById('progError').style.display = 'none';
+    return true;
+  }
+  return true;
+}
+
+function validateFields(container) {
+  let valid = true;
+  container.querySelectorAll('[data-required="true"]').forEach(el => {
+    const field = el.closest('.field');
+    if (!field) return;
+    let ok = true;
+    if (el.type === 'email') {
+      ok = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(el.value.trim());
+    } else {
+      ok = el.value.trim() !== '';
+    }
+    field.classList.toggle('has-error', !ok);
+    if (!ok) valid = false;
+  });
+  if (!valid) {
+    const first = container.querySelector('.has-error');
+    if (first) first.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  }
+  return valid;
+}
+
+// Clear validation on input
+document.querySelectorAll('[data-required]').forEach(el => {
+  el.addEventListener('input', () => { const f = el.closest('.field'); if (f) f.classList.remove('has-error'); });
+  el.addEventListener('change', () => { const f = el.closest('.field'); if (f) f.classList.remove('has-error'); });
 });
+
+// Clear radio validation
+document.querySelectorAll('input[name="taxClass"]').forEach(r => {
+  r.addEventListener('change', () => { document.getElementById('taxClassError').style.display = 'none'; });
+});
+
+// Program validation cleared dynamically via toggleProgram()
+
+// ─── Tax ID formatting ───
+document.getElementById('taxId').addEventListener('input', function(e) {
+  let v = e.target.value.replace(/\D/g, '').slice(0, 9);
+  if (v.length > 2) v = v.slice(0, 2) + '-' + v.slice(2);
+  e.target.value = v;
+});
+
+// ─── Toggle helpers ───
+function toggleExpand(key) {
+  const cb = document.getElementById('tog_' + key);
+  const exp = document.getElementById('exp_' + key);
+  exp.classList.toggle('open', cb.checked);
+}
+
+function toggleCond(id, show) {
+  const el = document.getElementById(id);
+  el.classList.toggle('show', show);
+}
+
+// ─── File Upload (multi-file) ───
+function handleFileMulti(e) {
+  const files = Array.from(e.target.files);
+  files.forEach(file => addUploadedFile(file));
+  e.target.value = '';
+}
+
+function dzOver(e) { e.preventDefault(); e.currentTarget.classList.add('drag-over'); }
+function dzLeave(e) { e.currentTarget.classList.remove('drag-over'); }
+function dzDropMulti(e) {
+  e.preventDefault();
+  e.currentTarget.classList.remove('drag-over');
+  const files = Array.from(e.dataTransfer.files);
+  files.forEach(file => addUploadedFile(file));
+}
+
+function addUploadedFile(file) {
+  if (!file.name.match(/\.(doc|docx)$/i)) {
+    alert('Please upload .doc or .docx files only: ' + file.name);
+    return;
+  }
+  const reader = new FileReader();
+  reader.onload = function(ev) {
+    uploadedFiles.push({ name: file.name, size: file.size, data: ev.target.result });
+    renderFilePreviews();
+  };
+  reader.readAsDataURL(file);
+}
+
+function renderFilePreviews() {
+  const container = document.getElementById('preview_contracts');
+  if (!container) return;
+  let html = '';
+  uploadedFiles.forEach((f, i) => {
+    const sizeStr = f.size < 1024 ? f.size + ' B' : (f.size / 1024).toFixed(1) + ' KB';
+    html += `<div class="file-preview"><svg width="18" height="18" fill="none" stroke="var(--navy)" stroke-width="1.5" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg><span class="file-name">${f.name}</span><span class="file-size">${sizeStr}</span><button class="file-remove" onclick="removeUploadedFile(${i})">&times;</button></div>`;
+  });
+  container.innerHTML = html;
+}
+
+function removeUploadedFile(index) {
+  uploadedFiles.splice(index, 1);
+  renderFilePreviews();
+}
+
+// ─── COI Upload (multi-file) ───
+var coiFiles = [];
+
+function handleCoiUploadMulti(e) {
+  var files = e.target.files;
+  for (var i = 0; i < files.length; i++) addCoiFile(files[i]);
+  e.target.value = '';  // Reset so same files can be re-added and onchange fires on next pick
+}
+
+function dzDropCoiMulti(e) {
+  e.preventDefault();
+  e.currentTarget.classList.remove('drag-over');
+  var files = e.dataTransfer.files;
+  for (var i = 0; i < files.length; i++) addCoiFile(files[i]);
+}
+
+function addCoiFile(file) {
+  var reader = new FileReader();
+  reader.onload = function(ev) {
+    coiFiles.push({ name: file.name, size: file.size, data: ev.target.result });
+    renderCoiPreviews();
+  };
+  reader.readAsDataURL(file);
+}
+
+function renderCoiPreviews() {
+  var container = document.getElementById('preview_coi');
+  if (!container) return;
+  var html = '';
+  coiFiles.forEach(function(f, i) {
+    var sizeStr = f.size < 1024 ? f.size + ' B' : (f.size / 1024).toFixed(1) + ' KB';
+    html += '<div class="file-preview"><svg width="18" height="18" fill="none" stroke="var(--navy)" stroke-width="1.5" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg><span class="file-name">' + f.name + '</span><span class="file-size">' + sizeStr + '</span><button class="file-remove" onclick="removeCoiFile(' + i + ')">&times;</button></div>';
+  });
+  container.innerHTML = html;
+}
+
+function removeCoiFile(index) {
+  coiFiles.splice(index, 1);
+  renderCoiPreviews();
+}
+
+// ─── Programs Toggle ───
+var programsEnabled = false;
+function togglePrograms() {
+  programsEnabled = !programsEnabled;
+  var btn = document.getElementById('programsToggleBtn');
+  btn.textContent = programsEnabled ? 'Hide Programs' : 'Show Programs';
+  buildProgressBar();
+}
+
+// ─── Programs Data (from CNetwork Setup Requirements template) ───
+var PROGRAMS = [
+  { name: 'Mitigation & Emergency Response', categories: ['Board Up & Tarping', 'Commercial Mitigation', 'Fire Mitigation', 'Tree Removal', 'Water Mitigation'] },
+  { name: 'Environmental & Hazardous Materials', categories: ['Asbestos Abatement', 'Lead Abatement', 'Mold Remediation', 'Trauma & Biohazard'] },
+  { name: 'Cleaning & Specialized Cleaning', categories: ['Cleaning'] },
+  { name: 'Contents', categories: ['Contents Off-site', 'Contents On-site'] },
+  { name: 'Professional Services & Assessment', categories: ['Adjusting', 'Engineering', 'Inspection & Estimation', 'Testing'] },
+  { name: 'General Contracting', categories: ['Commercial Reconstruction', 'Demolition', 'General Contracting', 'Reconstruction', 'Remodeling'] },
+  { name: 'Reconstruction', categories: ['Commercial Reconstruction', 'Demolition', 'Reconstruction', 'Remodeling'] },
+  { name: 'MEP (Mechanical, Electrical, Plumbing)', categories: ['Electrical', 'HVAC', 'Plumbing'] },
+  { name: 'Carpentry/Drywall/Interior Finishes', categories: ['Cabinetry', 'Carpentry (Finish)', 'Carpentry (Rough)', 'Drywalling', 'Insulation'] },
+  { name: 'Painting', categories: ['Painting'] },
+  { name: 'Flooring', categories: ['Flooring'] },
+  { name: 'Roofing', categories: ['Commercial Roofing', 'Residential Roofing'] },
+  { name: 'Exterior & Structural Trades', categories: ['Masonry (Veneer)', 'Masonry (Structural)', 'Stucco & Plaster', 'Window Install & Repair'] },
+  { name: 'Trade Employers or Partners', categories: ['Designer', 'Real Estate Agent', 'Investor or Broker', 'Property Manager', 'Insurance Agent', 'Labor Only'] }
+];
+
+var selectedProgramIndices = {};
+var serviceCategories = [];
+var catIdCounter = 0;
+var catInsConfig = {};
+
+var INS_LINES = [
+  { key: 'cgl', label: 'Commercial General Liability (CGL)' },
+  { key: 'cpl', label: 'Commercial Pollution Liability' },
+  { key: 'auto', label: 'Commercial Auto Liability' },
+  { key: 'wc', label: 'Workers Comp' },
+  { key: 'umb', label: 'Umbrella / Excess Liability' },
+  { key: 'prof', label: 'Professional Liability' },
+  { key: 'bail', label: 'Bailees' }
+];
+
+function toggleProgram(idx) {
+  selectedProgramIndices[idx] = !selectedProgramIndices[idx];
+  rebuildServiceCategories();
+  renderProgramToggles();
+  renderCategories();
+  document.getElementById('progError').style.display = 'none';
+}
+
+function toggleServiceCat(progIdx, catIdx) {
+  var catName = PROGRAMS[progIdx].categories[catIdx];
+  var existing = serviceCategories.find(function(c) { return c.name === catName; });
+  if (existing) {
+    catInsConfig[catName] = { insRequired: existing.insRequired, insurance: Object.assign({}, existing.insurance), credentials: existing.credentials };
+    serviceCategories = serviceCategories.filter(function(c) { return c.name !== catName; });
+  } else {
+    addServiceCat(catName);
+  }
+  renderProgramToggles();
+  renderCategories();
+}
+
+function addServiceCat(name) {
+  catIdCounter++;
+  var saved = catInsConfig[name];
+  var cat = {
+    id: catIdCounter,
+    name: name,
+    insurance: saved ? Object.assign({}, saved.insurance) : {},
+    credentials: saved ? saved.credentials : '',
+    insRequired: saved ? saved.insRequired : 'same',
+    expanded: false
+  };
+  if (!saved) {
+    INS_LINES.forEach(function(line) { cat.insurance[line.key] = 'global'; });
+  }
+  serviceCategories.push(cat);
+}
+
+function rebuildServiceCategories() {
+  serviceCategories.forEach(function(cat) {
+    catInsConfig[cat.name] = { insRequired: cat.insRequired, insurance: Object.assign({}, cat.insurance), credentials: cat.credentials };
+  });
+  var neededCategories = {};
+  Object.keys(selectedProgramIndices).forEach(function(idx) {
+    if (!selectedProgramIndices[idx]) return;
+    PROGRAMS[idx].categories.forEach(function(catName) {
+      neededCategories[catName] = true;
+    });
+  });
+  serviceCategories = serviceCategories.filter(function(cat) {
+    return neededCategories[cat.name];
+  });
+  var existingNames = {};
+  serviceCategories.forEach(function(cat) { existingNames[cat.name] = true; });
+  Object.keys(neededCategories).forEach(function(catName) {
+    if (!existingNames[catName]) {
+      addServiceCat(catName);
+    }
+  });
+}
+
+function renderProgramToggles() {
+  var container = document.getElementById('programToggles');
+  var html = '';
+  PROGRAMS.forEach(function(prog, idx) {
+    var isOn = !!selectedProgramIndices[idx];
+    var catCount = 0;
+    if (isOn) {
+      prog.categories.forEach(function(catName) {
+        if (serviceCategories.some(function(c) { return c.name === catName; })) catCount++;
+      });
+    }
+    html += '<div style="border:2px solid ' + (isOn ? 'var(--orange)' : 'var(--border-light)') + '; border-radius:10px; padding:14px 16px; margin-bottom:10px; background:' + (isOn ? 'linear-gradient(135deg,#FFF3EF,#fff8f5)' : 'var(--card-bg)') + '; transition:all .2s;">';
+    html += '<div style="display:flex; align-items:center; gap:10px; cursor:pointer;" onclick="toggleProgram(' + idx + ')">';
+    html += '<div style="width:22px; height:22px; border-radius:5px; border:2px solid ' + (isOn ? 'var(--orange)' : '#CBD5E1') + '; background:' + (isOn ? 'var(--orange)' : '#fff') + '; display:flex; align-items:center; justify-content:center; flex-shrink:0;">';
+    if (isOn) html += '<svg width="13" height="13" fill="none" stroke="#fff" stroke-width="3" viewBox="0 0 24 24"><path d="M5 13l4 4L19 7"/></svg>';
+    html += '</div>';
+    html += '<div style="flex:1;"><span style="font-weight:600; font-size:14px; color:var(--navy);">' + escHtml(prog.name) + '</span>';
+    if (isOn) html += ' <span style="font-size:11px; color:var(--text-muted);">(' + catCount + '/' + prog.categories.length + ' categories)</span>';
+    html += '</div></div>';
+    if (isOn) {
+      html += '<div style="margin-top:10px; padding-top:10px; border-top:1px solid rgba(221,100,56,.15); display:grid; grid-template-columns:repeat(auto-fill,minmax(200px,1fr)); gap:4px 16px;">';
+      prog.categories.forEach(function(catName, ci) {
+        var isChecked = serviceCategories.some(function(c) { return c.name === catName; });
+        html += '<label style="display:flex; align-items:center; gap:6px; padding:4px 0; font-size:13px; cursor:pointer;">';
+        html += '<input type="checkbox"' + (isChecked ? ' checked' : '') + ' onchange="toggleServiceCat(' + idx + ',' + ci + ')" style="width:16px; height:16px; accent-color:var(--orange); cursor:pointer;">';
+        html += escHtml(catName) + '</label>';
+      });
+      html += '</div>';
+    }
+    html += '</div>';
+  });
+  container.innerHTML = html;
+}
+
+function toggleCategoryExpand(id) {
+  var cat = serviceCategories.find(function(c) { return c.id === id; });
+  if (cat) { cat.expanded = !cat.expanded; renderCategories(); }
+}
+
+function setCatInsMode(id, mode) {
+  var cat = serviceCategories.find(function(c) { return c.id === id; });
+  if (!cat) return;
+  cat.insRequired = mode;
+  if (mode === 'same') {
+    INS_LINES.forEach(function(line) { cat.insurance[line.key] = 'global'; });
+  }
+  renderCategories();
+}
+
+function toggleCatIns(catId, insKey) {
+  var cat = serviceCategories.find(function(c) { return c.id === catId; });
+  if (!cat) return;
+  if (cat.insurance[insKey] === 'required') cat.insurance[insKey] = 'waived';
+  else if (cat.insurance[insKey] === 'waived') cat.insurance[insKey] = 'required';
+  else cat.insurance[insKey] = 'required';
+  renderCategories();
+}
+
+function updateCatCredentials(id) {
+  var cat = serviceCategories.find(function(c) { return c.id === id; });
+  if (!cat) return;
+  var el = document.getElementById('cat_creds_' + id);
+  if (el) cat.credentials = el.value;
+}
+
+function renderCategories() {
+  var container = document.getElementById('categoriesContainer');
+  if (serviceCategories.length === 0) {
+    container.innerHTML = '<div style="text-align:center; padding: 24px; color: var(--text-muted); font-size: 13px; border: 2px dashed var(--border-light); border-radius: 10px; margin-top: 12px;">Select programs above to add service categories.</div>';
+    return;
+  }
+
+  var html = '<h3 style="font-size:15px; font-weight:700; color:var(--navy); margin:20px 0 12px;">Per-Category Insurance &amp; Credentials</h3>';
+  html += '<p style="font-size:13px; color:var(--text-muted); margin-bottom:16px;">Configure insurance requirements and credentials for each selected service category. Click a category to expand.</p>';
+  serviceCategories.forEach(function(cat, idx) {
+    var exp = cat.expanded ? ' expanded' : '';
+    html += '<div class="cat-card' + exp + '" id="cat_' + cat.id + '">';
+    html += '<div class="cat-header">';
+    html += '<div class="cat-header-left">';
+    html += '<span class="cat-name">' + escHtml(cat.name) + '</span>';
+    html += '<span class="cat-badge">' + (cat.insRequired === 'custom' ? 'Custom Insurance' : 'Global Insurance') + '</span>';
+    html += '</div>';
+    html += '<div class="cat-actions">';
+    html += '<button class="cat-toggle-btn" onclick="toggleCategoryExpand(' + cat.id + ')">' + (cat.expanded ? 'Collapse' : 'Configure') + '</button>';
+    html += '</div></div>';
+
+    html += '<div class="cat-body">';
+
+    html += '<div class="cat-section-label">Insurance Requirements</div>';
+    html += '<div class="radio-group" style="margin-bottom: 12px;">';
+    html += '<label class="radio-label"><input type="radio" name="catIns_' + cat.id + '" value="same"' + (cat.insRequired === 'same' ? ' checked' : '') + ' onchange="setCatInsMode(' + cat.id + ',\'same\')"> Same as global insurance settings</label>';
+    html += '<label class="radio-label"><input type="radio" name="catIns_' + cat.id + '" value="custom"' + (cat.insRequired === 'custom' ? ' checked' : '') + ' onchange="setCatInsMode(' + cat.id + ',\'custom\')"> Custom for this category</label>';
+    html += '</div>';
+
+    if (cat.insRequired === 'custom') {
+      html += '<div class="checkbox-group" style="padding-left: 4px;">';
+      INS_LINES.forEach(function(line) {
+        var status = cat.insurance[line.key] || 'required';
+        var isReq = status === 'required';
+        var isWaived = status === 'waived';
+        html += '<div style="display:flex; align-items:center; gap:8px; padding:6px 0;">';
+        html += '<label style="display:flex; align-items:center; gap:6px; font-size:13px; cursor:pointer; flex:1;">';
+        html += '<input type="checkbox"' + (isReq ? ' checked' : '') + ' onchange="toggleCatIns(' + cat.id + ',\'' + line.key + '\')" style="width:18px; height:18px; accent-color:var(--orange); cursor:pointer;">';
+        html += '<span style="' + (isWaived ? 'text-decoration:line-through; color:var(--text-muted);' : '') + '">' + line.label + '</span>';
+        html += '</label>';
+        if (isWaived) html += '<span style="font-size:11px; color:var(--text-muted); background:var(--panel); padding:1px 6px; border-radius:4px;">Waived</span>';
+        if (isReq) html += '<span style="font-size:11px; color:var(--green); background:rgba(22,163,74,.06); padding:1px 6px; border-radius:4px;">Required</span>';
+        html += '</div>';
+      });
+      html += '</div>';
+    }
+
+    html += '<div class="cat-section-label" style="margin-top:18px;">Required Credentials / Licenses</div>';
+    html += '<textarea id="cat_creds_' + cat.id + '" placeholder="e.g. State roofing license, EPA Lead-Safe certification, IICRC WRT..." style="min-height:60px; font-size:13px;" onblur="updateCatCredentials(' + cat.id + ')">' + escHtml(cat.credentials) + '</textarea>';
+    html += '<div class="field-hint">List any certifications, licenses, or credentials subs need for this category.</div>';
+
+    html += '</div></div>';
+  });
+  container.innerHTML = html;
+}
+
+function escHtml(str) {
+  var div = document.createElement('div');
+  div.textContent = str;
+  return div.innerHTML;
+}
+
+// ─── Gather Data ───
+function gatherData() {
+  const v = id => (document.getElementById(id)?.value || '').trim();
+  const c = id => document.getElementById(id)?.checked || false;
+  const radio = name => { const r = document.querySelector(`input[name="${name}"]:checked`); return r ? r.value : ''; };
+  const yn = bool => bool ? 'Yes' : 'No';
+
+  // Limit value helper
+  function limitVal(id) {
+    const sel = document.getElementById(id);
+    if (!sel) return '';
+    if (sel.value === 'Custom') {
+      const custom = document.getElementById(id + '_custom');
+      return custom ? custom.value.trim() || 'Custom' : 'Custom';
+    }
+    return sel.value;
+  }
+
+  const fileNames = uploadedFiles.map(f => f.name);
+
+  // Legacy flat format for review screen (unchanged)
+  const coverages = [];
+  INSURANCE_TYPES.forEach(ins => {
+    if (!c('tog_' + ins.key)) return;
+    const limParts = ins.limits.map(l => `${l.label}: ${limitVal(l.id)}`).join(', ');
+    const endParts = ins.endorsements.filter(e => c(e.id)).map(e => e.label);
+    let line = `${ins.title}: ${limParts}`;
+    if (endParts.length) line += ` [Endorsements: ${endParts.join(', ')}]`;
+    coverages.push(line);
+  });
+  var selectedProgNames = [];
+  Object.keys(selectedProgramIndices).forEach(function(idx) {
+    if (selectedProgramIndices[idx]) selectedProgNames.push(PROGRAMS[idx].name);
+  });
+  const programs = serviceCategories.map(function(cat) { return cat.name; });
+  const bgWho = [];
+  if (c('bg_owners')) bgWho.push('All owners');
+  if (c('bg_creds')) bgWho.push('All credential holders');
+  if (c('bg_employees')) bgWho.push('All employees');
+  if (c('bg_one')) bgWho.push('Only one person regardless of role');
+  const screenTypes = [];
+  if (c('scr_ssn')) screenTypes.push('SSN Trace');
+  if (c('scr_sex')) screenTypes.push('Sex Offender Search');
+  if (c('scr_ofac')) screenTypes.push('Global Watchlist (OFAC)');
+  if (c('scr_natcrim')) screenTypes.push('National Criminal Search');
+  if (c('scr_fedcrim')) screenTypes.push('Federal Criminal Search');
+  if (c('scr_county')) screenTypes.push('County Criminal Search');
+  if (c('scr_mvr')) screenTypes.push('Motor Vehicle Report');
+  if (c('scr_countycivil')) screenTypes.push('County Civil Search');
+  if (c('scr_fedcivil')) screenTypes.push('Federal Civil Search');
+  if (c('scr_credit')) screenTypes.push('Credit Report');
+  if (c('scr_edu')) screenTypes.push('Education Verification');
+  if (c('scr_emp')) screenTypes.push('Employment Verification');
+  if (c('scr_drug')) screenTypes.push('Drug Screening');
+  const drugSubs = [];
+  if (c('drug_cocaine')) drugSubs.push('Cocaine');
+  if (c('drug_amphet')) drugSubs.push('Amphetamines');
+  if (c('drug_opiates')) drugSubs.push('Opiates');
+  if (c('drug_pcp')) drugSubs.push('PCP');
+  if (c('drug_barb')) drugSubs.push('Barbiturates');
+  if (c('drug_benzo')) drugSubs.push('Benzodiazepines');
+  if (c('drug_meth')) drugSubs.push('Methadone');
+
+  return {
+    'Legal Business Name': v('legalName'),
+    'DBA': v('dba') || v('legalName'),
+    'Tax ID': v('taxId'),
+    'Tax Classification': radio('taxClass'),
+    'Website URL': v('website'),
+    'Address Line 1': v('address1'),
+    'Address Line 2': v('address2'),
+    'City': v('city'),
+    'State': v('state'),
+    'Zipcode': v('zip'),
+    'Primary Email': v('primaryEmail'),
+    'Certificate Holder': v('certHolder'),
+    'Description of Operations': v('descOps'),
+    'Insurance Coverages': coverages.join('; '),
+    'Other Insurance': radio('otherInsurance') === 'Yes' ? v('otherInsText') : 'No',
+    'Sample COI': radio('sampleCoi'),
+    'COI Files': coiFiles.map(function(f){return f.name}).join(', '),
+    'Selected Programs': selectedProgNames.join('; '),
+    'Program Types': programs.join('; '),
+    'Extra Certifications Required': radio('extraCerts'),
+    'Extra Certifications Detail': radio('extraCerts') === 'Yes' ? v('extraCertsText') : '',
+    'Background Checks': c('tog_bgcheck') ? 'Yes' : 'No',
+    'BG Check Who': bgWho.join('; '),
+    'BG Check Validity': c('tog_bgcheck') ? radio('bgValidity') : '',
+    'Screening Types': screenTypes.join('; '),
+    'Drug Substances': drugSubs.join('; '),
+    'Counter Signatures': radio('counterSigs') || 'No',
+    'Additional Contracts': radio('additionalContracts'),
+    'Uploaded Contracts': fileNames.join('; '),
+    'Signatory Name': v('sigName'),
+    'Signatory Title': v('sigTitle'),
+    'Signatory Email': v('sigEmail')
+  };
+}
+
+// ─── Structured Excel Export Data ───
+// Matches CNetwork Setup Requirements template tabs
+function gatherExcelData() {
+  // Emits the CTO "Network Setup Requirements" workbook structure exactly:
+  // tabs Template, Demographic Info, FileLocations, Contracts, Programs, Insurance,
+  // Insurance Detail, Background Checks, Credentials. Each tab is an array-of-arrays (AOA)
+  // so column headers, Field Name mapping columns, and numeric cells match the CTO format.
+  const v = id => (document.getElementById(id)?.value || '').trim();
+  const c = id => document.getElementById(id)?.checked || false;
+  const radio = name => { const r = document.querySelector('input[name="' + name + '"]:checked'); return r ? r.value : ''; };
+
+  // Parse a limit dropdown/custom into a NUMBER (e.g. "$1,000,000" -> 1000000). Returns the raw string if not numeric.
+  function limitNum(id) {
+    var sel = document.getElementById(id);
+    if (!sel) return '';
+    var raw = sel.value;
+    if (raw === 'Custom') { var cu = document.getElementById(id + '_custom'); raw = cu ? cu.value : ''; }
+    if (!raw) return '';
+    var digits = String(raw).replace(/[^0-9.]/g, '');
+    if (digits === '') return String(raw).trim();
+    var n = parseFloat(digits);
+    return isNaN(n) ? String(raw).trim() : n;
+  }
+  function num(str) { var d = String(str || '').replace(/[^0-9]/g, ''); return d === '' ? '' : parseFloat(d); }
+  // Not-required coverages are left blank (Jesse's format), NOT "Not req.".
+  function lim(tog, id) { return c(tog) ? limitNum(id) : ''; }
+
+  // CTO canonical service categories (rows in Programs / Insurance Detail / Credentials).
+  // Order + names mirror ServiceMaster's Programs tab (Jesse's canonical set). Parser keys on the name.
+  var CTO_CATEGORIES = ['Board Up & Tarping','Tree Removal','Asbestos Abatement','Lead Abatement','Mold Remediation','Trauma & Biohazard','Cleaning','Contents Off-site','Contents On-site','Adjusting','Engineering','Inspection & Estimation','Testing','Demolition','General Contracting','Remodeling - Full Service','Commercial Reconstruction','Reconstruction','Electrical','HVAC','Plumbing','Cabinetry','Carpentry - Finish & Punch List','Carpentry - Rough','Drywalling','Insulation','Painting','Flooring','Commercial Roofing','Residential Roofing','Verneer & Flatwork Masonry','Structural Masonry','Stucco & Plaster','Window Install & Repair','Labor Only','Commercial Mitigation','Fire Mitigation','Water Mitigation','Designer','Real Estate Agent','Investor or Broker','Property Manager','Insurance Agent','Temporary Housing'];
+  // Map this form's category labels to the CTO canonical names.
+  var CAT_MAP = {
+    'Remodeling':'Remodeling - Full Service',
+    'Carpentry (Finish)':'Carpentry - Finish & Punch List',
+    'Carpentry (Rough)':'Carpentry - Rough',
+    'Masonry (Veneer)':'Verneer & Flatwork Masonry',
+    'Masonry (Structural)':'Structural Masonry'
+  };
+  function canon(n) { return CAT_MAP[n] || n; }
+
+  // Selected programs (become Programs columns) and selected categories (canonical -> form cat object).
+  var selectedProgs = [];
+  Object.keys(selectedProgramIndices).forEach(function(idx) { if (selectedProgramIndices[idx]) selectedProgs.push(PROGRAMS[idx]); });
+  var selCanon = {};
+  serviceCategories.forEach(function(sc) { selCanon[canon(sc.name)] = sc; });
+
+  // Is a given insurance line required for a category (honors global toggles + per-category custom overrides)?
+  function lineRequired(catObj, key) {
+    if (!catObj) return false;
+    if (catObj.insRequired === 'same') return c('tog_' + key);
+    return catObj.insurance[key] === 'required';
+  }
+
+  // ── Tab: Template (static CTO network-setup dev checklist) ──
+  var template = [
+    [null, '0/30 completed  '],
+    [null, 'Subfloor Network Setup Checklist'],
+    ['✓', 'Task'],
+    ['General'],
+    [false, 'Add organization ID to NETWORK_ORGANIZATION_IDS constant (core/programs/__init__.py)'],
+    [false, 'Add organization demographic information (core/programs/[org_name].py)'],
+    [false, 'Update auto-approval with organization ID (programs/models/network_invitation.py -> is_auto_approved)'],
+    [false, 'Add network domain to whitelist in develop for email message (core/email_message.py -> valid_develop_email_domains)'],
+    [false, 'Add network domain to whitelist in develop for network invitation (programs/models/network_invitation.py -> email_precheck)'],
+    ['Contracts'],
+    [false, 'Create required templates in Pandadoc "Sublynk [Develop]" workspace'],
+    [false, 'Share required templates with Pandadoc "Sublynk" production workspace'],
+    [false, 'Add Contract objects (core/programs/[org_name].py -> [ORG_NAME]_CONTRACTS)'],
+    [false, 'Add W9 form to the shared document extraction constant (contracts/constants.py -> DOCUMENTS_TO_EXTRACT)'],
+    ['Programs'],
+    [false, 'Add Program objects (core/programs/[org_name].py -> [ORG_NAME]_PROGRAMS)'],
+    ['Insurance'],
+    [false, 'Add Required Certholder Text (core/programs/[org_name].py)'],
+    [false, 'Add Required Desciption of Operations (core/programs/[org_name].py)'],
+    [false, 'Add Cert Holder object (core/programs/[org_name].py -> [ORG_NAME]_CERTHOLDERS)'],
+    [false, 'Create Sample COI PDF and upload to Django admin'],
+    [false, 'Make Sample COI Public in S3 Bucket'],
+    [false, 'Add COI Upload Request template (templates/insurance/invitations/email/[ORG_NAME]/network_requirements.txt)'],
+    [false, 'Add Commercial General Liabilty Limits (core/programs/[org_name].py -> CGL_LIMITS)'],
+    [false, 'Add Pollution Liabilty Limits (core/programs/[org_name].py -> POLLUTION_LIMITS)'],
+    [false, 'Add Auto Liabilty Limits (core/programs/[org_name].py -> AUTOMOBILE_LIMITS)'],
+    [false, "Add Worker's Comp Liabilty Limits (core/programs/[org_name].py -> WC_LIMITS)"],
+    [false, 'Add Bailees Liabilty Limits (core/programs/[org_name].py -> BAILEES_LIMITS)'],
+    [false, 'Add Umbrella Liabilty Limits (core/programs/[org_name].py -> UMBRELLA_LIMITS)'],
+    [false, 'Add Professional Liabilty Limits (core/programs/[org_name].py -> PROFESSIONAL_LIABILITY_LIMITS)'],
+    [false, 'Add InsuranceRequirement objects (core/programs/[org_name].py -> [ORG_NAME]_INSURANCE_REQUIREMENTS)'],
+    ['Background Checks'],
+    [false, 'Add BackgroundCheckRequirementTuple objects (core/programs/[org_name].py -> [ORG_NAME]_BACKGROUND_CHECK_REQUIREMENTS)'],
+    [false, 'Update sync_requirements method of BackgroundCheckRequirement model to include network '],
+    [false, 'Update sync_packages method of Package model to include network'],
+    ['Credentials'],
+    [false, 'Create credential requirements file (credentials/requirements/[org_name].py)'],
+    [false, 'Update sync_credential_requirements method of CredentialRequirement model to include network '],
+    ['Seed Data'],
+    [false, 'Update the seed database script to sync the network (core/management/commands/seed_database.py)']
+  ];
+
+  // ── Tab: Demographic Info ──
+  var demographics = [
+    ['Name', 'Value', 'Field Name'],
+    ['Org ID', '', '[ORG_NAME]_ORGANIZATION_ID'],
+    ['Legal Name', v('legalName'), 'business_legal_name'],
+    ['DBA Name', v('dba'), 'doing_business_as_name'],
+    ['Tax ID', num(v('taxId')), 'tax_id_number'],
+    ['Tax ID Type', 'EIN', 'tax_id_type'],
+    ['Tax Classification', radio('taxClass'), 'tax_classification'],
+    ['Website URL', v('website'), 'website'],
+    ['Address Line 1', v('address1'), 'line1'],
+    ['Address Line 2', v('address2'), 'line2'],
+    ['Address City', v('city'), 'city'],
+    ['Address State', v('state'), 'state_code'],
+    ['Address Zipcode', num(v('zip')), 'zip_code'],
+    ['Primary Email', v('primaryEmail'), ''],
+    ['Public Join Requests', false, ''],
+    ['Credentialing Email', v('primaryEmail'), '']
+  ];
+
+  // ── Tab: FileLocations ──
+  var coiNames = coiFiles.map(function(f) { return f.name; }).join(', ');
+  var fileLocations = [
+    ['Name', 'Value', 'Field Name'],
+    ['Network Requirements PDF', '', ''],
+    ['Network Example COI ', coiNames, '']
+  ];
+
+  // ── Tab: Contracts ──
+  var contracts = [
+    ['Contract Name', 'Contract Type', 'Pandadoc Template ID', 'Contract Order']
+  ];
+  uploadedFiles.forEach(function(f, i) {
+    contracts.push([f.name.replace(/\.(docx?|pdf)$/i, ''), 'Base Agreement', '', i + 1]);
+  });
+  contracts.push(['W9 Form 2024', 'W9 Form', '', 99]);
+
+  // ── Tab: Programs (matrix: program columns x canonical category rows) ──
+  var programs = [];
+  programs.push(['Program Name'].concat(selectedProgs.map(function(p) { return p.name; })));
+  programs.push(['Program Description'].concat(selectedProgs.map(function() { return ''; })));
+  programs.push(['Program Order'].concat(selectedProgs.map(function(_, i) { return i + 1; })));
+  programs.push(['Required Contract Types'].concat(selectedProgs.map(function() { return 'W9 Form, Base Agreement'; })));
+  programs.push(['Service Category']);
+  CTO_CATEGORIES.forEach(function(cc) {
+    var row = [cc];
+    selectedProgs.forEach(function(p) {
+      var progCanon = p.categories.map(canon);
+      row.push((progCanon.indexOf(cc) >= 0 && selCanon[cc]) ? true : false);
+    });
+    programs.push(row);
+  });
+
+  // ── Tab: Insurance ──
+  // Endorsement labels mirror Jesse's reference style: Title Case, no CG form codes.
+  function endo(parts) { return parts.filter(Boolean).join(', '); }
+  var cglEndo = endo([c('cgl_e_ai') && 'Additional Insured', c('cgl_e_co') && 'Additional Insured - Completed Operations', c('cgl_e_ws') && 'Waiver of Subrogation', c('cgl_e_pnc') && 'Primary & Non-Contributory', c('cgl_e_ppa') && 'Per-Project Aggregate']);
+  var cplEndo = endo([c('cpl_e_ai') && 'Additional Insured', c('cpl_e_co') && 'Additional Insured - Completed Operations', c('cpl_e_ws') && 'Waiver of Subrogation', c('cpl_e_pnc') && 'Primary & Non-Contributory']);
+  var autoEndo = endo([c('auto_e_ai') && 'Additional Insured', c('auto_e_ws') && 'Waiver of Subrogation']);
+  var umbEndo = endo([c('umb_e_ai') && 'Additional Insured', c('umb_e_ws') && 'Waiver of Subrogation']);
+  var profEndo = endo([c('prof_e_ai') && 'Additional Insured', c('prof_e_co') && 'Additional Insured - Completed Operations', c('prof_e_ws') && 'Waiver of Subrogation', c('prof_e_pnc') && 'Primary & Non-Contributory']);
+  function limStr(id){ var sel=document.getElementById(id); if(!sel) return ''; var val=sel.value; if(val==='Custom'){var cu=document.getElementById(id+'_custom'); val=cu?cu.value.trim():'';} return val; }
+  // WC endorsements = the checkbox endorsements only. Employer's Liability each-employee/policy-limit
+  // detail is NOT in Jesse's format; it goes in the additive "Sublynk Detail" tab instead.
+  var wcEndo = endo([c('wc_e_ai') && 'Additional Insured', c('wc_e_ws') && 'Waiver of Subrogation']);
+  var insurance = [
+    ['Name', 'Value', 'Field Name', 'Endorsements'],
+    ['Required Certholder Text', v('certHolder'), '[ORG_NAME]_REQUIRED_TEXT', ''],
+    ['Required Description of Operations', v('descOps'), '[ORG_NAME]_DESCRIPTION_OF_OPS', ''],
+    ['CGL Each Occurence', lim('tog_cgl', 'cgl_occ'), 'CGL_LIMITS.commercial_general_liability_limits_each_occurrence', cglEndo],
+    ['CGL General Aggregate', lim('tog_cgl', 'cgl_agg'), 'CGL_LIMITS.commercial_general_liability_limits_general_aggregate', ''],
+    ['CGL Personal & Advertising Injury', lim('tog_cgl', 'cgl_pai'), 'CGL_LIMITS.commercial_general_liability_limits_personal_and_advertising_injury', ''],
+    ['CGL Completed Ops Aggregate', lim('tog_cgl', 'cgl_coagg'), 'CGL_LIMITS.commercial_general_liability_products_completed_operations_aggregate', ''],
+    ['CPL Each Occurence', lim('tog_cpl', 'cpl_occ'), 'POLLUTION_LIMITS.pollution_limits_each_occurrence', cplEndo],
+    ['Auto Combined Single Limit', lim('tog_auto', 'auto_csl'), 'AUTOMOBILE_LIMITS.automobile_liability_limits_combined_single_limit', autoEndo],
+    ["Worker's Comp Each Accident", lim('tog_wc', 'wc_ea'), 'WC_LIMITS.workers_compensation_and_employers_liability_limits_each_accident', wcEndo],
+    ['Bailees Each Occurence', lim('tog_bail', 'bail_occ'), 'BAILEES_LIMITS.bailees_limits_each_occurrence', ''],
+    ['Umbrella Each Occurence', lim('tog_umb', 'umb_occ'), 'UMBRELLA_LIMITS.excess_or_umbrella_liability_limits_each_occurrence', umbEndo],
+    ['Umbrella Aggregate', lim('tog_umb', 'umb_agg'), 'UMBRELLA_LIMITS.excess_or_umbrella_liability_limits_aggregate', ''],
+    ['Professional Each Occurence', lim('tog_prof', 'prof_occ'), 'PROFESSIONAL_LIABILITY_LIMITS.professional_limits_each_occurrence', profEndo],
+    ['Professional Aggregate', lim('tog_prof', 'prof_agg'), 'PROFESSIONAL_LIABILITY_LIMITS.professional_limits_general_aggregate', ''],
+    ['Email Copy for broker request email', '', '', '']
+  ];
+
+  // ── Tab: Insurance Detail (matrix: category rows x 7 coverage columns, 'x' = required) ──
+  var idCols = ['CGL', 'CPL', 'Auto', "Worker's Comp", 'Bailees', 'Umbrella', 'Professional'];
+  var insuranceDetail = [['Service Category'].concat(idCols)];
+  CTO_CATEGORIES.forEach(function(cc) {
+    var catObj = selCanon[cc];
+    var row = [cc];
+    if (!catObj) { idCols.forEach(function() { row.push(''); }); insuranceDetail.push(row); return; }
+    var cgl = lineRequired(catObj, 'cgl'), cpl = lineRequired(catObj, 'cpl'), auto = lineRequired(catObj, 'auto'), wc = lineRequired(catObj, 'wc'), bail = lineRequired(catObj, 'bail'), umb = lineRequired(catObj, 'umb'), prof = lineRequired(catObj, 'prof');
+    [cgl, cpl, auto, wc, bail, umb, prof].forEach(function(m) { row.push(m ? 'x' : ''); });
+    insuranceDetail.push(row);
+  });
+
+  // ── Tab: Background Checks (Jesse's 2-column format; Tier levels are his to assign) ──
+  var bgEnabled = c('tog_bgcheck');
+  var validYears = '';
+  if (bgEnabled) { var vy = (radio('bgValidity') || '').replace(/[^0-9]/g, ''); validYears = vy ? parseFloat(vy) : ''; }
+  var backgroundChecks = [
+    ['BGC Requirement Type', 'BGC Valid Years'],
+    ['Minimum One Clear Check Required', validYears],
+    ['Role Type', 'Required Level'],
+    ['Employee', ''],
+    ['Owner', ''],
+    ['Subcontractor', ''],
+    ['Other', '']
+  ];
+  // Screening + drug detail the form captures (Jesse's format omits it) -> additive "Sublynk Detail" tab.
+  var drugOn = c('scr_drug');
+  var SCREEN_LABELS = [['scr_county','County Criminal Search'],['scr_countycivil','County Civil Search'],['scr_fedcrim','Federal Criminal Search'],['scr_fedcivil','Federal Civil Search'],['scr_ofac','Global Watchlist Search'],['scr_natcrim','National Criminal Search'],['scr_sex','Sex Offender Search'],['scr_ssn','Ssn Trace'],['scr_mvr','Motor Vehicle Report'],['scr_credit','Credit Report'],['scr_edu','Education Verification'],['scr_emp','Employment Verification']];
+  var screenings = SCREEN_LABELS.filter(function(s) { return c(s[0]); }).map(function(s) { return s[1]; });
+  if (drugOn) {
+    var subs = [['drug_cocaine','Cocaine'],['drug_amphet','Amphetamines'],['drug_opiates','Opiates'],['drug_pcp','PCP'],['drug_barb','Barbiturates'],['drug_benzo','Benzodiazepines'],['drug_meth','Methadone']].filter(function(s){return c(s[0]);}).map(function(s){return s[1];});
+    screenings.push('Drug Screening' + (subs.length ? ' (' + subs.join(', ') + ')' : ''));
+  }
+
+  // ── Tab: Credentials (category rows; each credential in its own column, mirroring Jesse) ──
+  var credentials = [['Service Category', 'Credential Requirements']];
+  CTO_CATEGORIES.forEach(function(cc) {
+    var catObj = selCanon[cc];
+    var credText = (catObj && catObj.credentials) ? catObj.credentials : '';
+    var creds = credText.split(/[\n,]+/).map(function(s) { return s.trim(); }).filter(Boolean);
+    credentials.push([cc].concat(creds));
+  });
+
+  // ── Tab: Sublynk Detail (ADDITIVE, not part of Jesse's network-setup format; safe to delete) ──
+  // Captures intake data Jesse's template omits: background-check screening detail + WC Employer's Liability.
+  var sublynkDetail = [
+    ['Sublynk Detail', 'Value'],
+    ['Note', 'Additive tab, not part of the network setup format. Safe to delete.'],
+    ['Background check applies to', [c('bg_owners') && 'Owners', c('bg_creds') && 'Credential holders', c('bg_employees') && 'Employees'].filter(Boolean).join(', ')],
+    ['Background check valid years', validYears],
+    ['Background check screenings', screenings.join(', ')],
+    ['Drug screening', drugOn ? 'Yes' : 'No'],
+    ["WC Employer's Liability - each employee", c('tog_wc') ? limStr('wc_emp') : ''],
+    ["WC Employer's Liability - policy limit", c('tog_wc') ? limStr('wc_pol') : '']
+  ];
+
+  return { template: template, demographics: demographics, fileLocations: fileLocations, contracts: contracts, programs: programs, insurance: insurance, insuranceDetail: insuranceDetail, backgroundChecks: backgroundChecks, credentials: credentials, sublynkDetail: sublynkDetail };
+}
+
+// ─── Build Review ───
+function buildReview() {
+  const data = gatherData();
+  const sections = [
+    { title: 'Organization Info', step: 1, fields: ['Legal Business Name','DBA','Tax ID','Tax Classification','Website URL','Address Line 1','Address Line 2','City','State','Zipcode','Primary Email'] },
+    { title: 'Certificate Holder & Description', step: 2, fields: ['Certificate Holder','Description of Operations'] },
+    { title: 'Insurance Requirements', step: 3, fields: ['Insurance Coverages','Other Insurance','Sample COI','COI Files'] },
+    { title: 'Service Categories & Programs', step: 4, fields: ['Selected Programs','Program Types','Extra Certifications Required','Extra Certifications Detail'], showIf: function() { return programsEnabled; } },
+    { title: 'Background Checks', step: 5, fields: ['Background Checks','BG Check Who','BG Check Validity','Screening Types','Drug Substances'] },
+    { title: 'Contracts', step: 6, fields: ['Counter Signatures','Additional Contracts','Uploaded Contracts','Signatory Name','Signatory Title','Signatory Email'] }
+  ];
+
+  let html = '';
+  sections.forEach(sec => {
+    // Skip section if showIf is defined and returns false
+    if (sec.showIf && !sec.showIf()) return;
+    html += `<div class="review-section"><div class="review-section-header"><span class="review-section-title">${sec.title}</span><button class="btn btn-secondary btn-sm" onclick="goToStep(${sec.step})">Edit</button></div><div class="review-grid">`;
+    sec.fields.forEach(f => {
+      let val = data[f] || '';
+      // Mask tax ID in review
+      if (f === 'Tax ID' && val.length > 4) {
+        val = '***-***' + val.slice(-4);
+      }
+      const display = val || '<span style="color:var(--text-muted);">--</span>';
+      html += `<div class="review-label">${f}</div><div class="review-value">${display}</div>`;
+    });
+    html += '</div></div>';
+  });
+  document.getElementById('reviewContent').innerHTML = html;
+}
+
+// ─── Apps Script API Bridge ───
+// Detects if running inside Apps Script or standalone (GitHub Pages)
+// If standalone, calls the deployed web app via fetch()
+var IS_APPSCRIPT = (typeof google !== 'undefined' && google.script && google.script.run);
+var APPS_SCRIPT_URL = 'https://script.google.com/a/macros/sublynk.com/s/AKfycbwg4vlFSqvXprpU5eTqvIpxCmf7dt9Nk4osdeo9MuKU72npfQtDKEmURPHPONfV1qiITA/exec';
+
+// #gtm alert relay (Cloudflare Worker). Fire-and-forget: it never blocks or fails the submission,
+// and it does not touch the Apps Script pipeline above. If it can't reach the Worker, the intake
+// still saves to Sheets/Drive/Notion as normal -- only the Slack heads-up is skipped.
+var ALERT_WORKER_URL = 'https://sublynk-consent-worker.zen-426.workers.dev';
+function notifyIntakeAlert(p) {
+  try {
+    fetch(ALERT_WORKER_URL + '/api/intake', {
+      method: 'POST',
+      // No Content-Type header keeps this a "simple" CORS request, matching the Apps Script call.
+      body: JSON.stringify({
+        company: p.legalName || p.dba || '',
+        contact_name: p.signatoryName || '',
+        email: p.signatoryEmail || p.email || '',
+        city: p.city || '', state: p.state || '',
+        programs: ((p.selectedPrograms && p.selectedPrograms.length ? p.selectedPrograms : p.programs) || []).join(', ')
+      })
+    }).catch(function(){});
+  } catch (e) {}
+}
+
+function callBackend(action, data, onSuccess, onFailure) {
+  if (IS_APPSCRIPT) {
+    // Running inside Apps Script — use google.script.run directly
+    var runner = google.script.run
+      .withSuccessHandler(onSuccess || function(){})
+      .withFailureHandler(onFailure || function(e){ console.warn('Backend error:', e); });
+
+    switch (action) {
+      case 'processSubmission':
+        runner.processSubmission(data.payload); break;
+      case 'createOnboardingFolder':
+        runner.createOnboardingFolder(data.companyName, data.dateStr, data.xlsxBase64, data.fileName); break;
+      case 'uploadContractFile':
+        runner.uploadContractFile(data.base64Data, data.fileName, data.companyName); break;
+      case 'uploadCoiSample':
+        runner.uploadCoiSample(data.base64Data, data.fileName, data.companyName, data.contactName); break;
+    }
+  } else {
+    // Running standalone (GitHub Pages) -- POST to Apps Script web app
+    // Apps Script handles CORS for simple POST requests (no Content-Type header)
+    fetch(APPS_SCRIPT_URL, {
+      method: 'POST',
+      redirect: 'follow',
+      body: JSON.stringify(Object.assign({ action: action }, data))
+    })
+    .then(function(resp) {
+      if (!resp.ok) throw new Error('Backend returned ' + resp.status);
+      return resp.text();
+    })
+    .then(function(text) {
+      console.log('Backend response (' + action + '):', text);
+      try { var json = JSON.parse(text); (onSuccess || function(){})(json); }
+      catch(e) { (onSuccess || function(){})({ raw: text }); }
+    })
+    .catch(function(err) {
+      console.error('Backend call failed (' + action + '):', err);
+      (onFailure || console.warn)(err);
+    });
+  }
+}
+
+// ─── Excel Download (multi-sheet XLSX) ───
+function downloadCSV() {
+  const x = gatherExcelData();
+  const wb = XLSX.utils.book_new();
+  function aoa(name, rows, widths) {
+    var ws = XLSX.utils.aoa_to_sheet(rows);
+    if (widths) ws['!cols'] = widths;
+    XLSX.utils.book_append_sheet(wb, ws, name);
+  }
+  // Tab order matches the CTO "Network Setup Requirements" template exactly.
+  aoa('Template', x.template, [{ wch: 6 }, { wch: 95 }]);
+  aoa('Demographic Info', x.demographics, [{ wch: 22 }, { wch: 42 }, { wch: 26 }]);
+  aoa('FileLocations', x.fileLocations, [{ wch: 24 }, { wch: 60 }, { wch: 18 }]);
+  aoa('Contracts', x.contracts, [{ wch: 30 }, { wch: 16 }, { wch: 24 }, { wch: 14 }]);
+  aoa('Programs', x.programs, x.programs[0].map(function () { return { wch: 26 }; }));
+  aoa('Insurance', x.insurance, [{ wch: 34 }, { wch: 40 }, { wch: 64 }, { wch: 60 }]);
+  aoa('Insurance Detail', x.insuranceDetail, x.insuranceDetail[0].map(function () { return { wch: 22 }; }));
+  aoa('Background Checks', x.backgroundChecks, [{ wch: 30 }, { wch: 16 }, { wch: 60 }]);
+  aoa('Credentials', x.credentials, [{ wch: 30 }, { wch: 34 }, { wch: 34 }, { wch: 34 }, { wch: 34 }, { wch: 34 }, { wch: 34 }, { wch: 34 }]);
+  aoa('Sublynk Detail', x.sublynkDetail, [{ wch: 42 }, { wch: 72 }]);
+
+  const companyName = (document.getElementById('legalName')?.value || 'Unknown').trim() || 'Unknown';
+  const dateStr = new Date().toISOString().slice(0, 10);
+  const fileName = `Network Setup Requirements ${companyName} ${dateStr}.xlsx`;
+
+  // Local download as backup
+  XLSX.writeFile(wb, fileName);
+
+  // Upload to Google Drive (company folder + subfolders + this XLSX)
+  const xlsxData = XLSX.write(wb, { bookType: 'xlsx', type: 'base64' });
+  callBackend('createOnboardingFolder',
+    { companyName: companyName, dateStr: dateStr, xlsxBase64: xlsxData, fileName: fileName },
+    function (result) { console.log('Drive folder created:', result); },
+    function (err) { console.error('Drive upload failed:', err); }
+  );
+}
+
+// ─── Submit ───
+function submitForm() {
+  // Auto-download Excel first so data is never lost
+  downloadCSV();
+
+  // Collect form data
+  var payload = collectFormData();
+
+  // Ping #gtm that an intake was submitted (fire-and-forget; does not gate the pipeline below).
+  notifyIntakeAlert(payload);
+
+  // Upload contract files first (if any), then process submission
+  if (uploadedFiles.length > 0) {
+    var filesUploaded = 0;
+    var fileIds = [];
+    var fileNames = [];
+
+    uploadedFiles.forEach(function(f) {
+      var byteString = atob(f.data.split(',')[1]);
+      var ab = new ArrayBuffer(byteString.length);
+      var ia = new Uint8Array(ab);
+      for (var i = 0; i < byteString.length; i++) ia[i] = byteString.charCodeAt(i);
+      var blob = new Blob([ab], {type: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'});
+
+      var reader = new FileReader();
+      reader.onload = function(e) {
+        var base64Only = e.target.result.split(',')[1];
+        callBackend('uploadContractFile',
+          { base64Data: base64Only, fileName: f.name, companyName: payload.legalName },
+          function(result) {
+            fileIds.push(result.fileId || result);
+            fileNames.push(f.name);
+            filesUploaded++;
+            if (filesUploaded === uploadedFiles.length) {
+              payload.driveFileIds = fileIds;
+              payload.driveFileNames = fileNames;
+              callBackend('processSubmission', { payload: payload },
+                function() { console.log('Full pipeline complete'); },
+                function(err) { console.warn('Submission failed:', err); }
+              );
+            }
+          },
+          function(err) {
+            console.warn('File upload failed:', err);
+            filesUploaded++;
+            if (filesUploaded === uploadedFiles.length) {
+              payload.driveFileIds = fileIds;
+              payload.driveFileNames = fileNames;
+              callBackend('processSubmission', { payload: payload },
+                function() { console.log('Pipeline complete (some files failed)'); },
+                function(err2) { console.warn('Submission failed:', err2); }
+              );
+            }
+          }
+        );
+      };
+      reader.readAsDataURL(blob);
+    });
+  } else {
+    // No files -- just process submission
+    callBackend('processSubmission', { payload: payload },
+      function() { console.log('Saved to Drive + Sheets + Notion'); },
+      function(err) { console.warn('Save failed:', err); }
+    );
+  }
+
+  // Upload all COI samples
+  if (coiFiles.length > 0) {
+    coiFiles.forEach(function(cf) {
+      var coiBase64 = cf.data.split(',')[1];
+      callBackend('uploadCoiSample',
+        { base64Data: coiBase64, fileName: cf.name, companyName: payload.legalName, contactName: payload.signatoryName || payload.legalName },
+        function(url) { console.log('COI uploaded:', url); },
+        function(err) { console.warn('COI upload failed:', err); }
+      );
+    });
+  }
+
+  document.getElementById('successOverlay').classList.add('show');
+  launchConfetti();
+  // Don't clear localStorage -- keep until "Start New" is clicked
+}
+
+function collectFormData() {
+  const g = id => { const el = document.getElementById(id); return el ? el.value || '' : ''; };
+  const checked = name => [...document.querySelectorAll('input[name="' + name + '"]:checked')].map(c => c.value);
+  const toggled = id => { const el = document.getElementById(id); return el ? el.checked : false; };
+
+  return {
+    legalName: g('legalName'), dba: g('dba') || g('legalName'), taxId: g('taxId'),
+    taxClassification: document.querySelector('input[name="taxClass"]:checked')?.value || '',
+    website: g('website'), address1: g('address1'), address2: g('address2'),
+    city: g('city'), state: g('state'), zip: g('zip'), email: g('primaryEmail'),
+    certHolder: g('certHolder'), descOps: g('descOps'),
+    cglEnabled: toggled('tog_cgl'),
+    cglEachOccurrence: g('cgl_each_occurrence'), cglAggregate: g('cgl_aggregate'),
+    cglPersonalInjury: g('cgl_personal_injury'), cglCompletedOps: g('cgl_completed_ops'),
+    pollutionEnabled: toggled('tog_cpl'), pollutionLimit: g('pollution_each_occurrence'),
+    autoEnabled: toggled('tog_auto'), autoCsl: g('auto_csl'),
+    wcEnabled: toggled('tog_wc'), wcEachAccident: g('wc_each_accident'),
+    umbrellaEnabled: toggled('tog_umb'),
+    umbrellaEachOccurrence: g('umbrella_each_occurrence'), umbrellaAggregate: g('umbrella_aggregate'),
+    plEnabled: toggled('tog_prof'),
+    plEachOccurrence: g('pl_each_occurrence'), plAggregate: g('pl_aggregate'),
+    baileesEnabled: toggled('tog_bail'), baileesLimit: g('bailees_each_occurrence'),
+    endorsements: checked('endorsements'),
+    otherInsuranceNotes: g('otherInsuranceNotes'),
+    hasSampleCoi: document.querySelector('input[name="sampleCoi"]:checked')?.value || '',
+    programs: serviceCategories.map(function(c) { return c.name; }),
+    selectedPrograms: Object.keys(selectedProgramIndices).filter(function(idx) { return selectedProgramIndices[idx]; }).map(function(idx) { return PROGRAMS[idx].name; }),
+    extraCertsRequired: document.querySelector('input[name="extraCerts"]:checked')?.value || '',
+    extraCertsDetails: g('extraCertsDetails'),
+    bgChecksRequired: toggled('tog_bgcheck'),
+    bgWho: checked('bgWho'), bgValidity: document.querySelector('input[name="bgValidity"]:checked')?.value || '',
+    bgScreenings: checked('bgScreenings'), drugSubstances: checked('drugSubstances'),
+    counterSigs: document.querySelector('input[name="counterSigs"]:checked')?.value || 'No',
+    hasAdditionalContracts: document.querySelector('input[name="additionalContracts"]:checked')?.value || '',
+    contractFiles: [...document.querySelectorAll('.file-item .file-name')].map(el => el.textContent),
+    signatoryName: g('sigName'), signatoryTitle: g('sigTitle'), signatoryEmail: g('sigEmail'),
+    coiFiles: coiFiles.map(function(f){return f.name}).join(', ')
+  };
+}
+
+// ─── Confetti ───
+function launchConfetti() {
+  const canvas = document.getElementById('confetti-canvas');
+  const ctx = canvas.getContext('2d');
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+  const colors = ['#DD6438','#16A34A','#0C152B','#FDBA74','#93C5FD','#F59E0B'];
+  const pieces = [];
+  for (let i = 0; i < 150; i++) {
+    pieces.push({
+      x: Math.random() * canvas.width,
+      y: Math.random() * canvas.height - canvas.height,
+      w: Math.random() * 10 + 5,
+      h: Math.random() * 6 + 3,
+      color: colors[Math.floor(Math.random() * colors.length)],
+      vy: Math.random() * 3 + 2,
+      vx: (Math.random() - .5) * 4,
+      rot: Math.random() * 360,
+      rv: (Math.random() - .5) * 10,
+      opacity: 1
+    });
+  }
+  let frame = 0;
+  function draw() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    let alive = false;
+    pieces.forEach(p => {
+      p.x += p.vx;
+      p.y += p.vy;
+      p.rot += p.rv;
+      p.vy += .05;
+      if (frame > 120) p.opacity -= .01;
+      if (p.opacity <= 0) return;
+      alive = true;
+      ctx.save();
+      ctx.translate(p.x, p.y);
+      ctx.rotate(p.rot * Math.PI / 180);
+      ctx.globalAlpha = Math.max(0, p.opacity);
+      ctx.fillStyle = p.color;
+      ctx.fillRect(-p.w / 2, -p.h / 2, p.w, p.h);
+      ctx.restore();
+    });
+    frame++;
+    if (alive) requestAnimationFrame(draw);
+    else ctx.clearRect(0, 0, canvas.width, canvas.height);
+  }
+  draw();
+}
+
+// ─── LocalStorage ───
+const STORAGE_KEY = 'sublynk_gc_intake';
+
+function saveToStorage() {
+  const inputs = {};
+  document.querySelectorAll('input[type="text"], input[type="email"], input[type="tel"], input[type="url"], input[type="date"], input[type="number"], textarea, select').forEach(el => {
+    if (el.id) inputs[el.id] = el.value;
+  });
+  document.querySelectorAll('input[type="checkbox"]').forEach(el => {
+    if (el.id) inputs[el.id] = el.checked;
+  });
+  document.querySelectorAll('input[type="radio"]:checked').forEach(el => {
+    if (el.name) inputs['radio_' + el.name] = el.value;
+  });
+  const payload = { inputs, currentStep, completedSteps: Array.from(completedSteps), ts: Date.now() };
+  try { localStorage.setItem(STORAGE_KEY, JSON.stringify(payload)); } catch(e) {}
+}
+
+function checkSaved() {
+  try {
+    const raw = localStorage.getItem(STORAGE_KEY);
+    if (!raw) return;
+    const data = JSON.parse(raw);
+    if (!data.inputs || Object.keys(data.inputs).length < 2) return;
+    document.getElementById('resumeBanner').style.display = 'flex';
+  } catch(e) {}
+}
+
+function restoreSaved() {
+  try {
+    const raw = localStorage.getItem(STORAGE_KEY);
+    if (!raw) return;
+    const data = JSON.parse(raw);
+    if (data.inputs) {
+      Object.keys(data.inputs).forEach(key => {
+        if (key.startsWith('radio_')) {
+          const name = key.slice(6);
+          const val = data.inputs[key];
+          const radio = document.querySelector(`input[name="${name}"][value="${val}"]`);
+          if (radio) { radio.checked = true; radio.dispatchEvent(new Event('change')); }
+          return;
+        }
+        const el = document.getElementById(key);
+        if (!el) return;
+        if (el.type === 'checkbox') { el.checked = data.inputs[key]; el.dispatchEvent(new Event('change')); }
+        else el.value = data.inputs[key];
+      });
+    }
+    if (data.completedSteps) data.completedSteps.forEach(s => completedSteps.add(s));
+    if (data.currentStep) goToStep(data.currentStep);
+  } catch(e) {}
+  document.getElementById('resumeBanner').style.display = 'none';
+}
+
+function clearSaved() {
+  localStorage.removeItem(STORAGE_KEY);
+  document.getElementById('resumeBanner').style.display = 'none';
+}
+
+// Auto-save every 30 seconds
+setInterval(saveToStorage, 30000);
+
+// ─── Init ───
+buildInsuranceToggles();
+renderProgramToggles();
+renderCategories();
+buildProgressBar();
+checkSaved();
+</script>
+<div id="programsToggleBtn" onclick="togglePrograms()" style="position:fixed; bottom:24px; left:24px; z-index:60; font-size:11px; padding:5px 12px; background:#fff; border:1px solid #d6d3d1; color:#6b7280; border-radius:6px; cursor:pointer; box-shadow:0 1px 4px rgba(0,0,0,.08); user-select:none; transition: opacity .2s;">Show Programs</div>
+
+<!-- Call Guide Panel -->
+<button class="call-guide-fab" id="callGuideFab" onclick="toggleCallGuide()">
+  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 013 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
+  <span id="callGuideLabel">Call Guide</span>
+</button>
+
+<div class="call-guide-panel" id="callGuidePanel">
+  <div class="call-guide-body" id="callGuideBody"></div>
+</div>
+
+<script>
+// ─── Call Guide ───
+var callGuideOpen = false;
+var CALL_GUIDE = [
+  {
+    step: 1, title: 'Organization Info',
+    tips: [
+      { type: 'ask', text: 'What is the full legal entity name as it appears on your W-9?' },
+      { type: 'ask', text: 'Do you operate under a DBA or trade name?' },
+      { type: 'ask', text: 'What is your EIN? We use this for tax ID verification only.' },
+      { type: 'note', text: 'Tax classification determines 1099 reporting. Most GCs are C-Corp or S-Corp.' },
+      { type: 'ask', text: 'What is the best email for compliance notifications?' }
+    ]
+  },
+  {
+    step: 2, title: 'Certificate Holder',
+    tips: [
+      { type: 'ask', text: 'Who should be listed as the certificate holder on your subs\' COIs?' },
+      { type: 'note', text: 'Typically the GC legal name + address. Some add "and its affiliates."' },
+      { type: 'ask', text: 'Is there a standard Description of Operations you require on every COI?' },
+      { type: 'note', text: 'If you are unsure, suggest: "All operations performed on behalf of [GC name]."' }
+    ]
+  },
+  {
+    step: 3, title: 'Insurance Requirements',
+    tips: [
+      { type: 'label', text: 'Walk-through' },
+      { type: 'note', text: 'Go line by line. Toggle on each coverage you require, then set limits.' },
+      { type: 'ask', text: 'Do you require CGL? What are your minimum limits per occurrence and aggregate?' },
+      { type: 'ask', text: 'Do you need Additional Insured, Waiver of Sub, or Primary & Non-Contributory endorsements?' },
+      { type: 'label', text: 'Common patterns' },
+      { type: 'note', text: 'Most GCs require CGL + Auto + WC at minimum. Umbrella is common for larger projects.' },
+      { type: 'note', text: 'Pollution is typical for restoration, mold, or environmental work.' },
+      { type: 'note', text: 'Bailees applies when subs handle customer property (contents, pack-outs).' },
+      { type: 'label', text: 'COI sample' },
+      { type: 'ask', text: 'Do you have a sample COI you can share? This helps us match your exact format.' }
+    ]
+  },
+  {
+    step: 4, title: 'Service Categories & Programs',
+    tips: [
+      { type: 'label', text: 'Programs' },
+      { type: 'ask', text: 'Which programs do your subs perform? Toggle on each program that applies.' },
+      { type: 'note', text: 'Programs include Mitigation, Environmental, Contents, General Contracting, MEP, Roofing, and more. Each program has predefined service categories.' },
+      { type: 'note', text: 'When you toggle a program on, all its service categories are selected by default. Uncheck any that don\'t apply.' },
+      { type: 'label', text: 'Per-category insurance' },
+      { type: 'ask', text: 'Do all categories require the same insurance, or do some need different coverage?' },
+      { type: 'note', text: '"Same as global" uses the insurance from Step 3. "Custom" lets you require or waive specific lines per category.' },
+      { type: 'note', text: 'Example: Mold Remediation may require Pollution Liability, but Inspection may waive it.' },
+      { type: 'label', text: 'Credentials' },
+      { type: 'ask', text: 'Are there specific licenses or certifications required for each category?' },
+      { type: 'note', text: 'Examples: State roofing license, EPA Lead-Safe cert, IICRC WRT, HOG inspector cert, asbestos abatement license.' }
+    ]
+  },
+  {
+    step: 5, title: 'Background Checks',
+    tips: [
+      { type: 'ask', text: 'Do you require background checks on sub personnel?' },
+      { type: 'ask', text: 'Who needs to be screened - all employees, owners only, or just one representative?' },
+      { type: 'label', text: 'Screening types' },
+      { type: 'note', text: 'SSN Trace, Sex Offender, and National Criminal are the most common baseline.' },
+      { type: 'ask', text: 'Do you require MVR for anyone driving to job sites?' },
+      { type: 'ask', text: 'Do you require drug screening? If so, which panel?' },
+      { type: 'label', text: 'Validity' },
+      { type: 'ask', text: 'How often should background checks be renewed? Annual is most common.' }
+    ]
+  },
+  {
+    step: 6, title: 'Contracts & Signatures',
+    tips: [
+      { type: 'ask', text: 'Do you require counter-signatures on your MSA or subcontractor agreement?' },
+      { type: 'ask', text: 'Are there additional contracts beyond the MSA that subs need to sign?' },
+      { type: 'note', text: 'Upload any contracts here. We will present them for e-signature during sub onboarding.' },
+      { type: 'label', text: 'Signatory' },
+      { type: 'ask', text: 'Who is authorized to sign on behalf of your organization?' }
+    ]
+  }
+];
+
+function toggleCallGuide() {
+  callGuideOpen = !callGuideOpen;
+  var fab = document.getElementById('callGuideFab');
+  var panel = document.getElementById('callGuidePanel');
+  var label = document.getElementById('callGuideLabel');
+
+  if (callGuideOpen) {
+    fab.classList.add('open');
+    panel.classList.add('open');
+    label.textContent = 'Close Guide';
+    renderCallGuide();
+  } else {
+    fab.classList.remove('open');
+    panel.classList.remove('open');
+    label.textContent = 'Call Guide';
+  }
+}
+
+function renderCallGuide() {
+  var body = document.getElementById('callGuideBody');
+  var html = '';
+  CALL_GUIDE.forEach(function(sec) {
+    var isActive = sec.step === currentStep;
+    var isExpanded = isActive;
+    html += '<div class="cg-section' + (isActive ? ' active expanded' : '') + '" data-cg-step="' + sec.step + '">';
+    html += '<div class="cg-section-header" onclick="toggleCgSection(this)">';
+    html += '<span class="cg-section-step">' + sec.step + '</span>';
+    html += '<span class="cg-section-title">' + sec.title + '</span>';
+    html += '<svg class="cg-chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>';
+    html += '</div>';
+    html += '<div class="cg-section-body">';
+    sec.tips.forEach(function(tip) {
+      if (tip.type === 'label') {
+        html += '<div class="cg-tip-label">' + tip.text + '</div>';
+      } else {
+        var icon = tip.type === 'ask'
+          ? '<svg class="cg-tip-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 015.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>'
+          : '<svg class="cg-tip-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>';
+        html += '<div class="cg-tip">' + icon + '<span>' + tip.text + '</span></div>';
+      }
+    });
+    html += '</div></div>';
+  });
+  body.innerHTML = html;
+}
+
+function toggleCgSection(headerEl) {
+  var section = headerEl.parentElement;
+  section.classList.toggle('expanded');
+}
+
+// Update guide when step changes
+var _origGoToStep = goToStep;
+goToStep = function(n) {
+  _origGoToStep(n);
+  if (callGuideOpen) renderCallGuide();
+};
+</script>
+<script>
+/* Setup gate: posts the $500 agreement to the first-party Worker, then reveals
+   the untouched intake and prefills the org name + email. Fully namespaced so it
+   cannot touch any intake field id or global. */
+(function(){
+  var $ = function(id){ return document.getElementById(id); };
+  var WORKER = 'https://sublynk-consent-worker.zen-426.workers.dev';
+  var fullName=$('g_full_name'), company=$('g_company'), email=$('g_email'),
+      phone=$('g_phone'), consent=$('g_consent'), submit=$('g_submit'), err=$('g_err');
+
+  $('g_consent_text').innerHTML =
+    'I would like to move forward with the <b>Sublynk network setup</b> above. I authorize Sublynk to collect the '
+  + '<b>one-time $500 setup fee</b> by the method I select above (charge the card on file, or send an invoice), and to '
+  + 'begin my <b>$50/month Sublynk subscription</b> on the card Sublynk has on file. I can cancel the subscription anytime. '
+  + 'Full terms come with the receipt or invoice. By checking this box I am agreeing electronically.';
+  $('g_fine').textContent = 'No card details are entered on this page. The one-time $500 is charged to the card on file (or invoiced if you choose), and the $50/month subscription is charged to the card on file. Cancel anytime.';
+
+  var emailOK = function(){ return /^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email.value.trim()); };
+  function refresh(){ submit.disabled = !(fullName.value.trim() && company.value.trim() && emailOK() && consent.checked); }
+  [fullName,company,email,phone].forEach(function(el){ el.addEventListener('input', refresh); });
+  consent.addEventListener('change', refresh);
+
+  var billingEls = [].slice.call(document.querySelectorAll('input[name=g_billing]'));
+  var billing = function(){ var b=billingEls.find(function(x){return x.checked;}); return b?b.value:'card'; };
+  function markBilling(){ billingEls.forEach(function(x){ x.closest('label.radio').classList.toggle('sel', x.checked); }); }
+  billingEls.forEach(function(x){ x.addEventListener('change', markBilling); });
+  markBilling();
+
+  // Personalized links: /setup?e=&name=&company=&c=<ref>
+  var params = new URLSearchParams(location.search);
+  var CONTACT_REF = params.get('c') || null;
+  if(params.get('e')) email.value = params.get('e');
+  if(params.get('name')) fullName.value = params.get('name');
+  if(params.get('company')) company.value = params.get('company');
+  refresh();
+
+  function beginIntake(){
+    document.body.classList.add('intake-active');
+    // Prefill the intake's Organization Info without altering any field id/name.
+    try {
+      var ln = document.getElementById('legalName');
+      if(ln && !ln.value) { ln.value = company.value.trim(); }
+      var pe = document.getElementById('primaryEmail');
+      if(pe && !pe.value) { pe.value = email.value.trim(); }
+    } catch(e){}
+    window.scrollTo({top:0, behavior:'smooth'});
+  }
+
+  $('g_form').addEventListener('submit', function(ev){
+    ev.preventDefault();
+    err.style.display='none';
+    if($('g_website').value){ return; }                        // honeypot
+    if(!fullName.value.trim()){ err.textContent='Please enter your full name.'; err.style.display='block'; return; }
+    if(!company.value.trim()){ err.textContent='Please enter your company or network name.'; err.style.display='block'; return; }
+    if(!emailOK()){ err.textContent='Please enter a valid email address.'; err.style.display='block'; return; }
+    if(!consent.checked){ err.textContent='Please check the box to confirm.'; err.style.display='block'; return; }
+
+    submit.disabled=true; submit.textContent='Submitting...';
+    var payload = {
+      full_name:fullName.value.trim(), company:company.value.trim(), email:email.value.trim(),
+      phone:phone.value.trim()||null, agreed:true, billing_method:billing(), contact_ref:CONTACT_REF
+    };
+    (async function(){
+      try {
+        var ok=false, lastErr=null;
+        for(var attempt=0; attempt<3 && !ok; attempt++){
+          if(attempt) await new Promise(function(r){ setTimeout(r, 800*attempt); });
+          try {
+            var resp = await fetch(WORKER+'/api/agreement', {
+              method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify(payload)
+            });
+            if(resp.ok){ ok=true; break; }
+            lastErr = new Error('server '+resp.status);
+          } catch(e){ lastErr=e; }
+        }
+        if(!ok) throw lastErr || new Error('submit failed');
+        beginIntake();
+      } catch(e){
+        submit.disabled=false; submit.textContent='Agree and start onboarding \u2192';
+        err.textContent='Could not save that. Check your connection and try again.';
+        err.style.display='block';
+        console.error('Setup agreement error:', e && e.message);
+      }
+    })();
+  });
+})();
 </script>
 </body>
 </html>
