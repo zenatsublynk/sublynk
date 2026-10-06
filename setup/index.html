@@ -4,9 +4,197 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Sublynk network setup &amp; onboarding</title>
-<link rel="preconnect" href="https://rsms.me/">
-<link rel="stylesheet" href="https://rsms.me/inter/inter.css">
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <script src="https://cdn.sheetjs.com/xlsx-0.20.3/package/dist/xlsx.full.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+<style id="wk-shell">
+:root{--orange:#dd6336;--orange-deep:#b44a22;--orange-soft:#f7dfd5;--navy:#0d142a;--ink:#0c0a09;
+ --muted:#6e6862;--faint:#938c84;--paper:#faf8f5;--surface:#fff;--surface-2:#f3efe9;--border:#e8e3dc;
+ --green:#2f7d54;--green-soft:#e6f1e9;--danger:#b42318;--radius-md:18px;--font:Inter,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
+html,body{margin:0;min-height:100%;background:var(--paper);color:var(--ink)}
+body{font-family:var(--font);-webkit-font-smoothing:antialiased}
+.wk-shell{min-height:100svh;display:grid;grid-template-columns:minmax(380px,42%) minmax(0,1fr);overflow:hidden}
+/* left value rail */
+.wk-rail{min-height:100svh;position:relative;display:flex;flex-direction:column;overflow:hidden;padding:clamp(28px,4vw,58px);background:var(--navy);color:#fff}
+.wk-rail .glow{position:absolute;top:-10%;left:50%;transform:translateX(-50%);width:120%;height:460px;background:var(--orange);opacity:.14;filter:blur(150px);border-radius:50%;pointer-events:none}
+.wk-rail>*{position:relative;z-index:1}
+.wk-rail-top{display:flex;align-items:center;justify-content:space-between;gap:20px}
+.wk-rail-logo{display:block;width:142px;max-width:46%;height:auto}
+.wk-pill{display:inline-flex;align-items:center;gap:7px;min-height:34px;padding:7px 11px;border:1px solid rgba(255,255,255,.18);border-radius:999px;color:rgba(255,255,255,.82);font-size:11px;font-weight:700;letter-spacing:.04em;white-space:nowrap}
+.wk-dot{width:7px;height:7px;border-radius:50%;background:#71d09b;box-shadow:0 0 0 4px rgba(113,208,155,.12)}
+.wk-rail-copy{margin-top:auto;padding-top:64px;max-width:620px}
+.wk-eyebrow{color:#f3a587;font-size:12px;font-weight:800;letter-spacing:.14em;text-transform:uppercase}
+.wk-rail-copy h1{margin:14px 0 18px;max-width:14ch;font-size:clamp(38px,4.2vw,64px);line-height:.98;letter-spacing:-.045em;font-weight:700;text-wrap:balance}
+.wk-rail-copy p{margin:0;max-width:52ch;color:rgba(255,255,255,.7);font-size:clamp(15px,1.25vw,19px);line-height:1.65}
+.wk-cred{margin-top:clamp(28px,4vh,44px);max-width:540px;padding:20px;border:1px solid rgba(255,255,255,.14);border-radius:22px;background:rgba(255,255,255,.075)}
+.wk-cred-head{display:flex;align-items:center;gap:13px}
+.wk-cred-icon{width:44px;height:44px;border-radius:13px;display:grid;place-items:center;background:#fff;overflow:hidden;flex:0 0 auto;color:var(--orange);font-size:22px;font-weight:800}
+.wk-cred-head strong{display:block;font-size:14px}
+.wk-cred-head span{display:block;margin-top:3px;color:rgba(255,255,255,.58);font-size:12px}
+.wk-cred-list{margin-top:18px;display:grid;grid-template-columns:1fr 1fr;gap:9px}
+.wk-cred-item{display:flex;align-items:center;gap:8px;color:rgba(255,255,255,.82);font-size:12px}
+.wk-chk{width:18px;height:18px;border-radius:50%;display:grid;place-items:center;background:rgba(113,208,155,.14);color:#8ee0b2;font-size:11px;font-weight:900;flex:0 0 auto}
+.wk-need{margin-top:26px}
+.wk-need-hdr{font-size:12px;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:rgba(255,255,255,.5);margin-bottom:12px}
+.wk-need-item{display:flex;align-items:center;gap:11px;margin:10px 0;font-size:13.5px;color:rgba(255,255,255,.65)}
+.wk-need-box{width:22px;height:22px;border-radius:7px;border:1.5px solid rgba(255,255,255,.25);display:grid;place-items:center;color:transparent;font-size:12px;font-weight:900;flex:0 0 auto;transition:all .18s}
+.wk-need-item.done{color:#fff}
+.wk-need-item.done .wk-need-box{background:#71d09b;border-color:#71d09b;color:#0d142a}
+.wk-proof{display:flex;flex-wrap:wrap;gap:8px;margin-top:22px}
+.wk-proof span{padding:9px 12px;border-radius:999px;background:rgba(255,255,255,.07);color:rgba(255,255,255,.67);font-size:11px}
+.wk-proof b{color:#fff}
+/* right side */
+.wk-side{min-height:100svh;display:flex;flex-direction:column;background:var(--paper);overflow:hidden}
+.wk-header{flex:0 0 auto;display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:center;gap:24px;min-height:92px;padding:22px clamp(24px,5vw,72px) 18px;border-bottom:1px solid rgba(232,227,220,.75);background:rgba(250,248,245,.9)}
+.wk-mbrand{display:none}
+.wk-pmeta{display:flex;align-items:center;justify-content:space-between;gap:18px;margin-bottom:10px;color:var(--muted);font-size:12px;font-weight:650}
+.wk-ptrack{width:100%;height:6px;overflow:hidden;border-radius:999px;background:#e9e4dc}
+.wk-pbar{width:8%;height:100%;border-radius:inherit;background:var(--orange);transition:width .4s cubic-bezier(.22,.61,.36,1)}
+.wk-stage{min-height:0;flex:1 1 auto;display:flex;overflow:auto}
+.wk-wrap{width:min(760px,calc(100% - 48px));margin:auto;padding:clamp(34px,6vh,72px) 0 clamp(30px,6vh,64px)}
+/* gate question screens */
+.wk-q{display:none;animation:wkEnter .34s ease both}
+.wk-q.active{display:block}
+@keyframes wkEnter{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+.addr-wrap{position:relative}
+.addr-ac{position:absolute;z-index:60;left:0;right:0;top:calc(100% + 4px);background:#fff;border:1px solid var(--line);border-radius:10px;box-shadow:0 10px 30px rgba(13,20,42,.14);overflow:hidden;display:none;max-height:260px;overflow-y:auto}
+.addr-ac.open{display:block}
+.addr-ac-item{padding:10px 14px;font-size:14px;color:var(--navy);cursor:pointer;border-bottom:1px solid var(--panel);line-height:1.3}
+.addr-ac-item:last-child{border-bottom:none}
+.addr-ac-item:hover,.addr-ac-item.active{background:var(--panel)}
+.addr-ac-item small{display:block;color:var(--muted);font-size:12px;margin-top:2px}
+.subs-tpl-btn{display:inline-flex;align-items:center;gap:7px;margin:0 0 12px;padding:8px 14px;border:1.5px solid var(--line);border-radius:9px;background:var(--panel);color:var(--navy);font-size:13px;font-weight:650;text-decoration:none;cursor:pointer;transition:all .15s}
+.subs-tpl-btn:hover{border-color:var(--accent);color:var(--accent)}
+.docs-spin{width:14px;height:14px;border-radius:50%;border:2px solid rgba(221,99,54,.25);border-top-color:var(--accent);display:inline-block;animation:docsSpin .7s linear infinite}
+@keyframes docsSpin{to{transform:rotate(360deg)}}
+@media (prefers-reduced-motion:reduce){.docs-spin{animation:none}}
+.wk-kicker{margin-bottom:12px;color:var(--orange-deep);font-size:12px;font-weight:800;letter-spacing:.11em;text-transform:uppercase}
+.wk-q h2{margin:0;color:var(--navy);font-size:clamp(30px,3.6vw,48px);line-height:1.07;letter-spacing:-.035em;font-weight:700;text-wrap:balance}
+.wk-sub{margin:16px 0 0;color:var(--muted);font-size:16px;line-height:1.6;max-width:52ch}
+.wk-fcard{margin-top:30px;padding:24px;border:1px solid var(--border);border-radius:var(--radius-md);background:#fff;box-shadow:0 8px 30px rgba(13,20,42,.045)}
+.wk-fcard-title{font-size:13px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);margin-bottom:16px}
+.wk-getlist{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:18px}
+.wk-getlist li{display:flex;gap:13px;align-items:flex-start}
+.wk-getlist .c{flex:0 0 auto;width:24px;height:24px;border-radius:50%;display:grid;place-items:center;background:rgba(47,125,84,.12);color:var(--green);font-size:13px;font-weight:900;margin-top:1px}
+.wk-getlist .b{font-size:14.5px;color:var(--ink);line-height:1.5}
+.wk-getlist .b b{color:var(--navy)}
+.wk-gold{margin-top:18px;display:flex;gap:13px;align-items:flex-start;padding:18px 20px;border-radius:var(--radius-md);background:linear-gradient(180deg,#fff6ef,#fdeee2);border:1px solid #f3d9c7}
+.wk-gold .star{flex:0 0 auto;width:28px;height:28px;border-radius:50%;display:grid;place-items:center;background:var(--orange);color:#fff;font-size:15px}
+.wk-gold .gt{font-size:13px;font-weight:800;letter-spacing:.04em;text-transform:uppercase;color:var(--orange);margin-bottom:4px}
+.wk-gold .gb{font-size:14.5px;color:var(--ink);line-height:1.5}
+.wk-gold .gb b{color:var(--navy)}
+.wk-field{margin-top:30px}
+.wk-label{display:block;margin-bottom:8px;color:var(--navy);font-size:13px;font-weight:700}
+.wk-label .opt{color:var(--faint);font-weight:400}
+.wk-input{width:100%;height:58px;border:1px solid var(--border);border-radius:14px;padding:0 16px;background:#fff;color:var(--ink);outline:none;font:inherit;font-size:16px;transition:border-color .16s,box-shadow .16s}
+.wk-input:focus{border-color:var(--orange);box-shadow:0 0 0 4px rgba(221,99,54,.11)}
+.wk-input::placeholder{color:#aaa39c}
+.wk-blabel{display:block;font-size:12.5px;font-weight:700;color:var(--navy);margin:26px 0 8px}
+.wk-radio{display:flex;gap:10px;align-items:flex-start;font-size:14px;color:var(--ink);background:var(--surface-2);border:1.5px solid var(--border);border-radius:12px;padding:14px 15px;margin-top:9px;cursor:pointer;transition:border-color .15s,box-shadow .15s}
+.wk-radio input{margin-top:2px;width:18px;height:18px;accent-color:var(--orange);flex:0 0 auto;cursor:pointer}
+.wk-radio.sel{border-color:var(--orange);box-shadow:0 0 0 3px rgba(221,99,54,.12)}
+.wk-checkrow{display:flex;gap:10px;align-items:center;margin-top:18px;font-size:13.5px;font-weight:600;color:var(--ink);cursor:pointer}
+.wk-checkrow input{width:18px;height:18px;accent-color:var(--orange);flex:0 0 auto;cursor:pointer}
+.wk-cond{display:none}
+.wk-cond.show{display:block;margin-top:4px}
+.wk-hp{position:absolute;left:-9999px;height:0;overflow:hidden}
+.wk-consent{display:flex;gap:11px;align-items:flex-start;margin-top:24px;background:var(--surface-2);border:1.5px solid var(--border);border-radius:14px;padding:16px 16px}
+.wk-consent input{margin-top:3px;width:18px;height:18px;accent-color:var(--orange);flex:0 0 auto;cursor:pointer}
+.wk-consent label{font-size:13px;color:var(--ink);line-height:1.55}
+.wk-err{color:var(--danger);font-size:13px;margin-top:12px;font-weight:600;display:none}
+.wk-fine{font-size:12px;color:var(--faint);margin-top:14px;line-height:1.5}
+.wk-actions{display:flex;align-items:center;gap:12px;margin-top:30px}
+.wk-btn{min-height:54px;display:inline-flex;align-items:center;justify-content:center;border-radius:999px;padding:0 26px;font:inherit;font-weight:750;line-height:1.2;cursor:pointer;transition:transform .16s,background .16s,border-color .16s}
+.wk-primary{min-width:180px;border:1px solid var(--orange);background:var(--orange);color:#fff;box-shadow:0 8px 22px rgba(221,99,54,.2)}
+.wk-primary:hover{background:var(--orange-deep);border-color:var(--orange-deep);transform:translateY(-1px)}
+.wk-primary:disabled{opacity:.42;cursor:not-allowed;transform:none;box-shadow:none}
+.wk-ghost{border:1px solid var(--border);background:transparent;color:var(--muted)}
+.wk-ghost:hover{border-color:#cfc6bc;color:var(--ink)}
+.wk-footer{flex:0 0 auto;padding:16px clamp(24px,5vw,72px) 20px;color:var(--faint);font-size:10.5px;line-height:1.55;text-align:center}
+.wk-footer a{color:var(--muted)}
+/* intake portion: strip its own header/stepper, let the shell drive it */
+body:not(.wk-intake) #programsToggleBtn,
+body:not(.wk-intake) .call-guide-fab,
+body:not(.wk-intake) .call-guide-panel{display:none !important}
+#intakeRoot.hidden{display:none}
+#intakeRoot .progress-wrap{display:none}
+#intakeRoot .container{max-width:none;margin:0;padding:0}
+#intakeRoot .card{box-shadow:none;padding:0;background:transparent}
+#intakeRoot .card-title{font-size:clamp(28px,3.4vw,44px);line-height:1.07;letter-spacing:-.035em;color:var(--navy);font-weight:700}
+#intakeRoot .card-desc{font-size:16px;color:var(--muted)}
+/* enforcement selection cards */
+.wk-enf-list{margin-top:30px;display:flex;flex-direction:column;gap:12px}
+.wk-enf{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:18px 20px;border:1.5px solid var(--border);border-radius:14px;background:#fff;cursor:pointer;transition:border-color .15s,box-shadow .15s}
+.wk-enf:hover{border-color:#cfc6bc}
+.wk-enf.sel{border-color:var(--orange);box-shadow:0 0 0 3px rgba(221,99,54,.1)}
+.wk-enf strong{display:block;font-size:15px;color:var(--navy)}
+.wk-enf small{display:block;margin-top:3px;font-size:12.5px;color:var(--muted);line-height:1.45}
+.wk-enf .sw{position:relative;width:46px;height:26px;flex:0 0 auto}
+.wk-enf .sw input{opacity:0;width:0;height:0;position:absolute}
+.wk-enf .sw .tr{position:absolute;inset:0;background:#d8d1c9;border-radius:999px;transition:background .2s;cursor:pointer}
+.wk-enf .sw .tr::after{content:'';position:absolute;top:3px;left:3px;width:20px;height:20px;background:#fff;border-radius:50%;transition:transform .2s;box-shadow:0 1px 3px rgba(0,0,0,.2)}
+.wk-enf .sw input:checked + .tr{background:var(--orange)}
+.wk-enf .sw input:checked + .tr::after{transform:translateX(20px)}
+/* enforce page governs trades now; retire the stray toggle */
+#programsToggleBtn{display:none !important}
+/* read-only gold-standard boxes (cert holder / description) */
+.gold-box{background:var(--surface-2) !important;color:var(--navy) !important;border:1px solid var(--border) !important;border-radius:12px !important;cursor:default;resize:none;width:100%;padding:14px 16px;font:inherit;font-size:13.5px;line-height:1.55;white-space:pre-wrap}
+.gold-box:focus{outline:none;box-shadow:none !important}
+/* trades note */
+.trade-note{margin-top:20px;padding:15px 17px;border-radius:12px;background:var(--surface-2);border:1px solid var(--border);font-size:13px;color:var(--muted);line-height:1.6}
+.trade-note strong{color:var(--navy);font-weight:700}
+.trade-note a{color:#b44a22;font-weight:700}
+/* trade multi-select chips */
+.trade-hdr{font-size:12.5px;font-weight:800;letter-spacing:.05em;text-transform:uppercase;color:var(--muted);margin:24px 0 10px}
+.trade-hdr.found{color:var(--green)}
+.trade-hdr .sub{display:block;margin-top:4px;font-size:12px;font-weight:500;letter-spacing:0;text-transform:none;color:var(--faint)}
+.trade-select{display:flex;flex-wrap:wrap;gap:10px;margin-top:6px}
+.trade-chip{font:inherit;font-size:13.5px;font-weight:600;color:var(--navy);background:#fff;border:1.5px solid var(--border);border-radius:999px;padding:10px 16px;cursor:pointer;transition:background .14s,border-color .14s,color .14s,box-shadow .14s}
+.trade-chip:hover{border-color:#cfc6bc}
+.trade-chip.on{background:var(--orange);border-color:var(--orange);color:#fff;box-shadow:0 6px 16px rgba(221,99,54,.22)}
+.trade-chip.on::before{content:'\2713  ';font-weight:900}
+/* background-check package picker */
+.pkg-list{margin-top:10px;display:flex;flex-direction:column;gap:12px}
+.pkg{display:block;position:relative;padding:18px 20px;border:1.5px solid var(--border);border-radius:14px;background:#fff;cursor:pointer;transition:border-color .15s,box-shadow .15s}
+.pkg:hover{border-color:#cfc6bc}
+.pkg.sel{border-color:var(--orange);box-shadow:0 0 0 3px rgba(221,99,54,.1)}
+.pkg input{position:absolute;opacity:0;pointer-events:none}
+.pkg-head{display:flex;align-items:baseline;justify-content:space-between;gap:12px}
+.pkg-name{font-size:15px;font-weight:800;color:var(--navy)}
+.pkg-price{font-size:15px;font-weight:800;color:var(--orange);white-space:nowrap}
+.pkg-blurb{margin-top:6px;font-size:12.5px;color:var(--muted);line-height:1.5}
+.pkg-checks{margin-top:11px;font-size:12px;color:var(--ink)}
+.pkg-checks b{color:var(--navy)}
+.pkg-chips{margin-top:7px}
+.pkg-chips span{display:inline-block;margin:0 6px 6px 0;padding:3px 9px;border-radius:999px;background:var(--surface-2);color:var(--muted);font-size:11px}
+/* signature pad (counter-signature) */
+.sigpad-box{position:relative;border:1.5px solid var(--border);border-radius:12px;background:#fff;overflow:hidden}
+.sigpad-canvas{display:block;width:100%;height:180px;touch-action:none;cursor:crosshair;background:#fff}
+.sigpad-clear{position:absolute;top:8px;right:8px;font:inherit;font-size:12px;font-weight:650;color:var(--muted);background:var(--surface-2);border:1px solid var(--border);border-radius:8px;padding:5px 10px;cursor:pointer}
+.sigpad-clear:hover{color:var(--ink);border-color:#cfc6bc}
+.sig-baseline{position:absolute;left:18px;right:18px;bottom:46px;border-bottom:1px dashed #cfc6bc;pointer-events:none}
+.sig-baseline::after{content:'Sign here';position:absolute;left:0;bottom:4px;font-size:11px;color:var(--faint)}
+.sig-accept{display:flex;gap:10px;align-items:flex-start;margin-top:16px;font-size:13.5px;color:var(--ink);line-height:1.5;opacity:.5;pointer-events:none;transition:opacity .2s}
+.sig-accept input{margin-top:2px;width:18px;height:18px;accent-color:var(--orange);flex:0 0 auto;cursor:pointer}
+.sig-error{display:none;margin-top:10px;color:var(--danger);font-size:13px;font-weight:600}
+/* mobile */
+@media (max-width:860px){
+ .wk-shell{display:block}
+ .wk-rail{display:none}
+ .wk-side{min-height:100svh;overflow:visible}
+ .wk-header{position:sticky;top:0;z-index:10;min-height:72px;grid-template-columns:110px minmax(0,1fr);padding:14px 18px 13px}
+ .wk-mbrand{display:block;width:104px;height:auto}
+ .wk-stage{overflow:visible}
+ .wk-wrap{width:100%;margin:0;padding:28px 18px 40px}
+ .wk-q h2{font-size:clamp(27px,8vw,34px)}
+ .wk-sub{font-size:14px}
+ .wk-actions{margin-top:26px}
+ .wk-primary{flex:1;min-width:0}
+}
+</style>
 <style>
 :root {
   --orange: #DD6438;
@@ -298,137 +486,151 @@ select { cursor: pointer; appearance: none; background-image: url("data:image/sv
   .radio-group { flex-direction: column; }
 }
 </style>
-<style id="gate-css">
-/* ---- $500 setup gate: a consent-style walkthrough, hidden once onboarding begins ---- */
-body:not(.intake-active) .progress-wrap,
-body:not(.intake-active) .container:not(#setupGate) { display:none; }
-body.intake-active #setupGate { display:none; }
-/* hide intake's floating helpers until onboarding begins */
-body:not(.intake-active) .call-guide-fab,
-body:not(.intake-active) .call-guide-panel,
-body:not(.intake-active) #programsToggleBtn { display:none !important; }
-
-/* consent design tokens, scoped to the gate */
-#setupGate{ --g-radius-md:18px; --g-shadow:0 8px 30px rgba(13,20,42,.045); position:relative; max-width:640px; padding-top:40px; padding-bottom:72px; }
-#setupGate .glow{ position:absolute; top:-30px; left:50%; transform:translateX(-50%); width:620px; height:280px; max-width:96%; background:var(--orange); opacity:.07; filter:blur(120px); border-radius:50%; pointer-events:none; z-index:0; }
-#setupGate > :not(.glow){ position:relative; z-index:1; }
-#setupGate .kicker{ margin-bottom:12px; color:#b44a22; font-size:12px; font-weight:800; letter-spacing:.11em; text-transform:uppercase; }
-#setupGate h1{ margin:0; color:var(--navy); font-size:clamp(30px,5.2vw,44px); line-height:1.07; letter-spacing:-.035em; font-weight:700; text-wrap:balance; }
-#setupGate .sub{ margin:16px 0 0; color:var(--text-muted); font-size:16px; line-height:1.6; max-width:52ch; }
-#setupGate .price-row{ display:flex; flex-wrap:wrap; gap:8px; margin-top:18px; }
-#setupGate .chip{ display:inline-flex; align-items:center; gap:7px; padding:8px 13px; border-radius:999px; background:#fff; border:1px solid var(--border-light); font-size:12.5px; font-weight:700; color:var(--navy); box-shadow:var(--g-shadow); }
-#setupGate .chip b{ color:var(--orange); }
-
-#setupGate .fcard{ margin-top:30px; padding:24px; border:1px solid var(--border-light); border-radius:var(--g-radius-md); background:#fff; box-shadow:var(--g-shadow); }
-#setupGate .fcard-title{ font-size:13px; font-weight:800; letter-spacing:.06em; text-transform:uppercase; color:var(--text-muted); margin-bottom:16px; }
-#setupGate .getlist{ list-style:none; display:flex; flex-direction:column; gap:18px; }
-#setupGate .getlist li{ display:flex; gap:13px; align-items:flex-start; }
-#setupGate .check{ flex:0 0 auto; width:24px; height:24px; border-radius:50%; display:grid; place-items:center; background:rgba(47,125,84,.12); color:var(--green); font-size:13px; font-weight:900; margin-top:1px; }
-#setupGate .gl-body{ font-size:14.5px; color:var(--ink); line-height:1.5; }
-#setupGate .gl-body b{ color:var(--navy); }
-
-#setupGate .gold{ margin-top:18px; display:flex; gap:13px; align-items:flex-start; padding:18px 20px; border-radius:var(--g-radius-md); background:linear-gradient(180deg,#fff6ef,#fdeee2); border:1px solid #f3d9c7; }
-#setupGate .gold .star{ flex:0 0 auto; width:28px; height:28px; border-radius:50%; display:grid; place-items:center; background:var(--orange); color:#fff; font-size:15px; }
-#setupGate .gold .gtitle{ font-size:13px; font-weight:800; letter-spacing:.04em; text-transform:uppercase; color:var(--orange); margin-bottom:4px; }
-#setupGate .gold .gbody{ font-size:14.5px; color:var(--ink); line-height:1.5; }
-#setupGate .gold .gbody b{ color:var(--navy); }
-
-#setupGate .field{ margin-bottom:16px; }
-#setupGate .blabel{ display:block; font-size:12.5px; font-weight:700; color:var(--navy); margin:18px 0 6px; }
-#setupGate label.radio{ display:flex; gap:10px; align-items:flex-start; font-size:13.5px; color:var(--ink); background:var(--panel); border:1.5px solid var(--border-light); border-radius:12px; padding:12px 13px; margin-top:8px; cursor:pointer; transition:border-color .15s, box-shadow .15s; }
-#setupGate label.radio input{ margin-top:2px; width:17px; height:17px; accent-color:var(--orange); flex:0 0 auto; cursor:pointer; }
-#setupGate label.radio.sel{ border-color:var(--orange); box-shadow:0 0 0 3px rgba(221,100,56,.12); }
-#setupGate .hp{ position:absolute; left:-9999px; height:0; overflow:hidden; }
-#setupGate .consent{ display:flex; gap:11px; align-items:flex-start; margin-top:20px; background:var(--panel); border:1.5px solid var(--border-light); border-radius:12px; padding:14px 15px; }
-#setupGate .consent input{ margin-top:3px; width:18px; height:18px; accent-color:var(--orange); flex:0 0 auto; cursor:pointer; }
-#setupGate .consent label{ font-size:13px; color:var(--ink); line-height:1.55; }
-#setupGate button.cta{ width:100%; margin-top:22px; min-height:54px; font:inherit; font-size:16px; font-weight:750; color:#fff; background:var(--orange); border:1px solid var(--orange); border-radius:999px; padding:0 24px; cursor:pointer; transition:transform .16s, background .16s; box-shadow:0 8px 22px rgba(221,99,54,.2); }
-#setupGate button.cta:hover{ background:#b44a22; border-color:#b44a22; transform:translateY(-1px); }
-#setupGate button.cta:disabled{ opacity:.42; cursor:not-allowed; transform:none; box-shadow:none; }
-#setupGate .fine{ font-size:12px; color:var(--text-muted); margin-top:14px; line-height:1.5; }
-#setupGate .err{ color:var(--red); font-size:13px; margin-top:10px; font-weight:600; display:none; }
-</style>
 </head>
 <body>
-
-<div class="header">
-  <div class="header-logo">Sub<span>lynk</span></div>
-  <div class="header-sub">GC Onboarding Intake</div>
-</div>
-
-<div id="setupGate" class="container">
-  <span class="glow" aria-hidden="true"></span>
-  <div class="kicker">Network setup</div>
-  <h1>Build your bench and put subs to work.</h1>
-  <p class="sub">We stand up your network in Sublynk, credential your subs at scale, then connect you to contractors nationwide who already want the work.</p>
-
-  <div class="price-row">
-    <span class="chip"><b>$500</b> one-time setup</span>
-    <span class="chip"><b>$50</b>/mo subscription</span>
-  </div>
-
-  <div class="fcard">
-    <div class="fcard-title">What you get</div>
-    <ul class="getlist">
-      <li>
-        <span class="check">&#10003;</span>
-        <span class="gl-body"><b>Your rules, enforced.</b> Custom rulesets for COI, background checks, business verification, agreements, and licenses &amp; certs, verified at the state and federal level, never county.</span>
-      </li>
-      <li>
-        <span class="check">&#10003;</span>
-        <span class="gl-body"><b>A bench built to scale.</b> Your one-time $500 puts our engineers on your bench, so subs credential themselves and get verified automatically.</span>
-      </li>
-      <li>
-        <span class="check">&#10003;</span>
-        <span class="gl-body"><b>Recruit nationwide, every trade.</b> Your $50/mo recruits and attracts subs across the country and automates every verification.</span>
-      </li>
-    </ul>
-    <div class="gold">
-      <span class="star">&#9733;</span>
-      <div>
-        <div class="gtitle">The best part</div>
-        <div class="gbody">Connect instantly with <b>opt-in subs who already raised their hand</b>, ready to say yes to assignments and join your network. No cold recruiting.</div>
+<main class="wk-shell">
+    <aside class="wk-rail" aria-label="About Sublynk network setup">
+      <span class="glow" aria-hidden="true"></span>
+      <div class="wk-rail-top">
+        <img class="wk-rail-logo" src="https://app.sublynk.com/assets/logo-white-D7N9haAe.png" alt="Sublynk" />
+        <div class="wk-pill"><span class="wk-dot"></span> Certified Network</div>
       </div>
-    </div>
-  </div>
-
-  <div class="fcard">
-    <div class="fcard-title">Confirm and start onboarding</div>
-    <form id="g_form" autocomplete="on" novalidate>
-      <div class="field"><label class="field-label" for="g_full_name">Full name</label><input type="text" id="g_full_name" autocomplete="name"></div>
-      <div class="field"><label class="field-label" for="g_company">Company / network name</label><input type="text" id="g_company" autocomplete="organization"></div>
-      <div class="field"><label class="field-label" for="g_email">Email</label><input type="email" id="g_email" autocomplete="email"></div>
-      <div class="field"><label class="field-label" for="g_phone">Phone <span class="opt">(optional)</span></label><input type="tel" id="g_phone" autocomplete="tel" inputmode="tel"></div>
-      <div class="hp" aria-hidden="true"><label>Do not fill<input type="text" id="g_website" tabindex="-1" autocomplete="off"></label></div>
-
-      <span class="blabel">How should we handle the $500 setup fee?</span>
-      <label class="radio"><input type="radio" name="g_billing" value="card" checked> Charge the $500 to the card Sublynk has on file</label>
-      <label class="radio"><input type="radio" name="g_billing" value="invoice"> Email me an invoice for the $500 instead</label>
-
-      <div class="consent">
-        <input type="checkbox" id="g_consent">
-        <label for="g_consent" id="g_consent_text"></label>
+      <div class="wk-rail-copy">
+        <div class="wk-eyebrow">Network setup</div>
+        <h1>Build your bench. Put subs to work.</h1>
+        <p>Stand up your network in Sublynk, credential your subs at scale, then connect with contractors nationwide who already want the work.</p>
       </div>
-
-      <div class="err" id="g_err"></div>
-      <button type="submit" class="cta" id="g_submit" disabled>Agree and start onboarding &rarr;</button>
-      <p class="fine" id="g_fine"></p>
-    </form>
-  </div>
-</div>
-
+      <section class="wk-cred" aria-label="What Sublynk sets up">
+        <div class="wk-cred-head">
+          <div class="wk-cred-icon">S</div>
+          <div><strong>Your credentialed bench</strong><span>Vetted subs, ready to dispatch.</span></div>
+        </div>
+        <div class="wk-cred-list">
+          <div class="wk-cred-item"><span class="wk-chk">&#10003;</span> Custom rulesets</div>
+          <div class="wk-cred-item"><span class="wk-chk">&#10003;</span> Verified at source</div>
+          <div class="wk-cred-item"><span class="wk-chk">&#10003;</span> Nationwide recruiting</div>
+          <div class="wk-cred-item"><span class="wk-chk">&#10003;</span> Opt-in subs</div>
+        </div>
+      </section>
+      <div class="wk-need" aria-label="What you'll need">
+        <div class="wk-need-hdr">What you&rsquo;ll need</div>
+        <div class="wk-need-item" id="need-coi"><span class="wk-need-box">&#10003;</span>Sample COI</div>
+        <div class="wk-need-item" id="need-agreement"><span class="wk-need-box">&#10003;</span>Template agreement (.docx)</div>
+        <div class="wk-need-item" id="need-subs"><span class="wk-need-box">&#10003;</span>List of subs to credential (CSV/Excel)</div>
+      </div>
+      <div class="wk-proof" aria-label="Sublynk proof points">
+        <span><b>$500</b> setup + <b>$50</b>/mo</span>
+        <span><b>SOC 2</b> Type II</span>
+        <span><b>6,000+</b> credentialed pros</span>
+        <span><b>97%</b> get work after credentialing</span>
+      </div>
+    </aside>
+  <section class="wk-side">
+    <header class="wk-header">
+      <img class="wk-mbrand" src="https://app.sublynk.com/assets/logo-white-D7N9haAe.png" alt="Sublynk">
+      <div class="header-progress">
+        <div class="wk-pmeta"><span id="wkLabel">Step 1 of 13</span><span id="wkPercent">8%</span></div>
+        <div class="wk-ptrack" aria-hidden="true"><div id="wkBar" class="wk-pbar"></div></div>
+      </div>
+    </header>
+    <div class="wk-stage">
+      <div class="wk-wrap">
+        <div id="gatePhase">
+          <!-- 1: value intro -->
+          <section class="wk-q active" data-g="0">
+            <div class="wk-kicker">Network setup</div>
+            <h2>Build your bench and put subs to work.</h2>
+            <p class="wk-sub">A few quick questions, then your full onboarding. Here is what you are setting up.</p>
+            <div class="wk-fcard">
+              <div class="wk-fcard-title">What you get</div>
+              <ul class="wk-getlist">
+                <li><span class="c">&#10003;</span><span class="b"><b>Your rules, enforced.</b> Custom rulesets for COI, background checks, business verification, agreements, and licenses &amp; certs, verified at the state and federal level, never county.</span></li>
+                <li><span class="c">&#10003;</span><span class="b"><b>A bench built to scale.</b> Your one-time $500 puts our engineers on your bench, so subs credential themselves and get verified automatically.</span></li>
+                <li><span class="c">&#10003;</span><span class="b"><b>Recruit nationwide, every trade.</b> Your $50/mo recruits and attracts subs across the country and automates every verification.</span></li>
+              </ul>
+              <div class="wk-gold">
+                <span class="star">&#9733;</span>
+                <div><div class="gt">The best part</div>
+                <div class="gb"><b>Subs near you already raised their hand for work.</b> We connect them to your bench and credential them to your rules. No cold recruiting.</div></div>
+              </div>
+            </div>
+            <div class="wk-actions"><button type="button" class="wk-btn wk-primary" data-gnext>Let&rsquo;s go &rarr;</button></div>
+          </section>
+          <!-- 2: name -->
+          <section class="wk-q" data-g="1">
+            <div class="wk-kicker">Your contact</div>
+            <h2>First, what&rsquo;s your name?</h2>
+            <p class="wk-sub">So we know who we are setting up and who to reach.</p>
+            <div class="wk-field"><label class="wk-label" for="g_full_name">Full name</label>
+              <input class="wk-input" type="text" id="g_full_name" autocomplete="name" placeholder="Jane Smith"></div>
+            <div class="wk-err" data-gerr></div>
+            <div class="wk-actions"><button type="button" class="wk-btn wk-ghost" data-gback>Back</button><button type="button" class="wk-btn wk-primary" data-gnext>Continue</button></div>
+          </section>
+          <!-- 3: company -->
+          <section class="wk-q" data-g="2">
+            <div class="wk-kicker">Your business</div>
+            <h2>What network are you setting up?</h2>
+            <p class="wk-sub">Your company or network name, as you want it credentialed.</p>
+            <div class="wk-field"><label class="wk-label" for="g_company">Company Legal Business name / network name</label>
+              <input class="wk-input" type="text" id="g_company" autocomplete="organization" placeholder="ABC Restoration LLC"></div>
+            <div class="wk-err" data-gerr></div>
+            <div class="wk-actions"><button type="button" class="wk-btn wk-ghost" data-gback>Back</button><button type="button" class="wk-btn wk-primary" data-gnext>Continue</button></div>
+          </section>
+          <!-- 4: email (credentialing + optional recruiting) -->
+          <section class="wk-q" data-g="3">
+            <div class="wk-kicker">Account details</div>
+            <h2>Where should we send updates?</h2>
+            <p class="wk-sub">Credentialing and account updates go here. We use the same address for recruiting updates, unless you add a separate one.</p>
+            <div class="wk-field"><label class="wk-label" for="g_email">Credentialing email</label>
+              <input class="wk-input" type="email" id="g_email" autocomplete="email" placeholder="credentialing@company.com"></div>
+            <label class="wk-checkrow"><input type="checkbox" id="g_diff_recruit"> Use a different email for recruiting updates</label>
+            <div class="wk-cond" id="g_recruit_wrap">
+              <div class="wk-field"><label class="wk-label" for="g_recruit_email">Recruiting email</label>
+                <input class="wk-input" type="email" id="g_recruit_email" autocomplete="email" placeholder="recruiting@company.com"></div>
+            </div>
+            <div class="wk-err" data-gerr></div>
+            <div class="wk-actions"><button type="button" class="wk-btn wk-ghost" data-gback>Back</button><button type="button" class="wk-btn wk-primary" data-gnext>Continue</button></div>
+          </section>
+          <!-- 5: phone -->
+          <section class="wk-q" data-g="4">
+            <div class="wk-kicker">Your contact</div>
+            <h2>Best number to reach you?</h2>
+            <p class="wk-sub">Optional, but it helps us get you live faster.</p>
+            <div class="wk-field"><label class="wk-label" for="g_phone">Phone <span class="opt">(optional)</span></label>
+              <input class="wk-input" type="tel" id="g_phone" autocomplete="tel" inputmode="tel" maxlength="14" placeholder="(555) 555-5555"></div>
+            <div class="wk-hp" aria-hidden="true"><label>Do not fill<input type="text" id="g_website" tabindex="-1" autocomplete="off"></label></div>
+            <div class="wk-actions"><button type="button" class="wk-btn wk-ghost" data-gback>Back</button><button type="button" class="wk-btn wk-primary" data-gnext>Continue</button></div>
+          </section>
+          <!-- 6: billing + agree -->
+          <section class="wk-q" data-g="5">
+            <div class="wk-kicker">Confirm</div>
+            <h2>Confirm and start onboarding</h2>
+            <p class="wk-sub">$500 one-time setup and your $50/month subscription. Cancel anytime.</p>
+            <div class="wk-consent"><input type="checkbox" id="g_consent"><label for="g_consent" id="g_consent_text"></label></div>
+            <div class="wk-err" data-gerr></div>
+            <div class="wk-actions"><button type="button" class="wk-btn wk-ghost" data-gback>Back</button><button type="button" class="wk-btn wk-primary" id="g_submit" data-gsubmit disabled>Agree and start onboarding &rarr;</button></div>
+            <p class="wk-fine" id="g_fine"></p>
+          </section>
+        </div>
+        <section id="enforceScreen" class="wk-q" style="display:none">
+          <div class="wk-kicker">Your requirements</div>
+          <h2>What do you enforce today?</h2>
+          <p class="wk-sub">Turn on what you require from your subs. We only set up the sections you turn on, so skip anything you do not enforce.</p>
+          <div class="wk-enf-list">
+            <label class="wk-enf sel"><div><strong>Trades/Service categories</strong><small>The categories of work your subs perform</small></div><span class="sw"><input type="checkbox" id="enf_trades" checked><span class="tr"></span></span></label>
+            <label class="wk-enf sel"><div><strong>Insurance &amp; COI</strong><small>Certificate of insurance, coverages and limits</small></div><span class="sw"><input type="checkbox" id="enf_insurance" checked><span class="tr"></span></span></label>
+            <label class="wk-enf sel"><div><strong>Background checks</strong><small>Screening on your subs and their crews</small></div><span class="sw"><input type="checkbox" id="enf_background" checked><span class="tr"></span></span></label>
+            <label class="wk-enf sel"><div><strong>Licenses &amp; certs</strong><small>State and federal licenses and certifications</small></div><span class="sw"><input type="checkbox" id="enf_licenses" checked><span class="tr"></span></span></label>
+            <label class="wk-enf sel"><div><strong>Agreements</strong><small>Contracts your subs must sign</small></div><span class="sw"><input type="checkbox" id="enf_agreements" checked><span class="tr"></span></span></label>
+          </div>
+          <div class="wk-actions"><button type="button" class="wk-btn wk-ghost" id="enf_back">Back</button><button type="button" class="wk-btn wk-primary" id="enf_next">Continue</button></div>
+        </section>
+        <div id="intakeRoot" class="hidden">
 <div class="progress-wrap">
   <div class="progress-bar" id="progressBar"></div>
 </div>
 
 <div class="container">
-  <div id="resumeBanner" class="resume-banner" style="display:none;">
-    <span>You have a saved draft. Resume where you left off?</span>
-    <div style="display:flex;gap:8px;">
-      <button class="btn btn-primary btn-sm" onclick="restoreSaved()">Resume</button>
-      <button class="btn btn-secondary btn-sm" onclick="clearSaved()">Start Fresh</button>
-    </div>
-  </div>
 
   <!-- STEP 1: Organization Info -->
   <div class="step-content active" data-step="1">
@@ -457,8 +659,9 @@ body:not(.intake-active) #programsToggleBtn { display:none !important; }
           <div class="field-error">Tax ID is required.</div>
         </div>
         <div class="field">
-          <label class="field-label">Website URL <span class="opt">(optional)</span></label>
-          <input type="url" id="website" placeholder="https://yourcompany.com">
+          <label class="field-label">Website URL <span class="req">*</span></label>
+          <input type="url" id="website" data-required="true" placeholder="https://yourcompany.com">
+        <div class="field-hint">We check your site to pre-select the trades you offer.</div>
         </div>
       </div>
 
@@ -484,7 +687,7 @@ body:not(.intake-active) #programsToggleBtn { display:none !important; }
 
       <div class="field">
         <label class="field-label">Address Line 1 <span class="req">*</span></label>
-        <input type="text" id="address1" data-required="true" placeholder="123 Main Street">
+        <div class="addr-wrap"><input type="text" id="address1" data-required="true" autocomplete="off" placeholder="Start typing your address&hellip;"><div class="addr-ac" id="addr_ac" role="listbox"></div></div>
         <div class="field-error">Address is required.</div>
       </div>
       <div class="field">
@@ -523,22 +726,21 @@ body:not(.intake-active) #programsToggleBtn { display:none !important; }
   </div>
 
   <!-- STEP 2: Certificate Holder & Description -->
-  <div class="step-content" data-step="2">
+  <div class="step-content" data-step="3">
     <div class="card">
       <h2 class="card-title">Insurance &mdash; Certificate Holder &amp; Description</h2>
-      <p class="card-desc">Tell us who should appear on Certificates of Insurance and what description of operations language is required.</p>
+      <p class="card-desc">This is the Sublynk gold-standard language we apply to your subcontractors&rsquo; certificates of insurance. Review and approve it to continue.</p>
 
       <div class="field">
-        <label class="field-label">Required Certificate Holder <span class="req">*</span></label>
-        <textarea id="certHolder" data-required="true" placeholder="Enter the full name, address, and any specific language that must appear in the Certificate Holder field on your subcontractors' COIs." rows="4"></textarea>
-        <div class="field-error">Certificate holder information is required.</div>
+        <label class="field-label">Required Certificate Holder</label>
+        <textarea id="certHolder" data-required="true" readonly rows="5" class="gold-box"></textarea>
       </div>
-
       <div class="field">
-        <label class="field-label">Required Description of Operations <span class="req">*</span></label>
-        <textarea id="descOps" data-required="true" placeholder="Enter any specific language or requirements that must appear in the Description of Operations field on the COI." rows="4"></textarea>
-        <div class="field-error">Description of operations is required.</div>
+        <label class="field-label">Required Description of Operations</label>
+        <textarea id="descOps" data-required="true" readonly rows="6" class="gold-box"></textarea>
       </div>
+      <label class="wk-consent" id="certApproveRow"><input type="checkbox" id="certApprove"> I approve this certificate holder and description of operations language for my subcontractors&rsquo; COIs.</label>
+      <div class="sig-error" id="certError">Please approve the language to continue.</div>
 
       <div class="btn-row">
         <button class="btn btn-secondary" onclick="goPrev()"><svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M15 18l-6-6 6-6"/></svg> Back</button>
@@ -548,48 +750,31 @@ body:not(.intake-active) #programsToggleBtn { display:none !important; }
   </div>
 
   <!-- STEP 3: Insurance Requirements -->
-  <div class="step-content" data-step="3">
+  <div class="step-content" data-step="2">
     <div class="card">
       <h2 class="card-title">Insurance Requirements</h2>
-      <p class="card-desc">Toggle on the insurance types you require from subcontractors, then set the minimum limits and endorsements for each.</p>
+      <p class="card-desc">Upload a sample Certificate of Insurance and we pre-fill your requirements. Review and adjust below.</p>
 
-      <div id="insuranceToggles"></div>
+      <div class="field">
+        <label class="field-label">Upload a sample COI <span class="opt">(optional, PDF works best)</span></label>
+        <div class="upload-zone" id="zone_coi" ondragover="dzOver(event)" ondragleave="dzLeave(event)" ondrop="dzDropCoiMulti(event)">
+          <input type="file" accept=".pdf,.png,.jpg,.jpeg,.doc,.docx" multiple onchange="handleCoiUploadMulti(event)">
+          <div class="upload-icon"><svg width="32" height="32" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M12 16V4m0 0l-4 4m4-4l4 4M4 17v2a1 1 0 001 1h14a1 1 0 001-1v-2"/></svg></div>
+          <div class="upload-text">Drop your COI here or <strong>click to browse</strong></div>
+          <div class="upload-hint">PDF, image, or Word &mdash; we pre-fill your requirements from a PDF</div>
+        </div>
+        <div id="preview_coi"></div>
+        <div class="trade-note" id="coiNote" style="display:none"><strong>We pre-filled the standard requirements from your COI.</strong> Review and adjust the coverages below. Our team verifies the exact coverages against your COI.</div>
+      </div>
 
       <hr class="divider">
 
-      <div class="field">
-        <label class="field-label">Do you have any other lines of insurance not mentioned above?</label>
-        <div class="radio-group">
-          <label class="radio-label"><input type="radio" name="otherInsurance" value="No" checked onchange="toggleCond('otherInsDetail',false)"> No</label>
-          <label class="radio-label"><input type="radio" name="otherInsurance" value="Yes" onchange="toggleCond('otherInsDetail',true)"> Yes</label>
-        </div>
-      </div>
-      <div class="cond-hide" id="otherInsDetail">
-        <div class="field">
-          <label class="field-label">Please describe</label>
-          <textarea id="otherInsText" placeholder="Describe additional insurance requirements..."></textarea>
-        </div>
-      </div>
+      <div id="insuranceToggles"></div>
 
-      <div class="field">
-        <label class="field-label">Do you have a Sample COI to share?</label>
-        <div class="radio-group">
-          <label class="radio-label"><input type="radio" name="sampleCoi" value="No" checked onchange="toggleCond('coiUploadArea',false)"> No</label>
-          <label class="radio-label"><input type="radio" name="sampleCoi" value="Yes" onchange="toggleCond('coiUploadArea',true)"> Yes</label>
-          <label class="radio-label"><input type="radio" name="sampleCoi" value="Maybe" onchange="toggleCond('coiUploadArea',true)"> Maybe</label>
-        </div>
-      </div>
-      <div class="cond-hide" id="coiUploadArea">
-        <div class="field">
-          <label class="field-label">Upload Sample COI</label>
-          <div class="upload-zone" id="zone_coi" ondragover="dzOver(event)" ondragleave="dzLeave(event)" ondrop="dzDropCoiMulti(event)">
-            <input type="file" accept=".pdf,.png,.jpg,.jpeg,.doc,.docx" multiple onchange="handleCoiUploadMulti(event)">
-            <div class="upload-icon"><svg width="32" height="32" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M12 16V4m0 0l-4 4m4-4l4 4M4 17v2a1 1 0 001 1h14a1 1 0 001-1v-2"/></svg></div>
-            <div class="upload-text">Drop COI here or <strong>click to browse</strong></div>
-            <div class="upload-hint">PDF, image, or Word document &mdash; multiple files allowed</div>
-          </div>
-          <div id="preview_coi"></div>
-        </div>
+      <div style="display:none" aria-hidden="true">
+        <input type="radio" name="otherInsurance" value="No" checked><input type="radio" name="otherInsurance" value="Yes">
+        <textarea id="otherInsText"></textarea>
+        <input type="radio" name="sampleCoi" value="No" checked><input type="radio" name="sampleCoi" value="Yes"><input type="radio" name="sampleCoi" value="Maybe">
       </div>
 
       <div class="btn-row">
@@ -602,41 +787,27 @@ body:not(.intake-active) #programsToggleBtn { display:none !important; }
   <!-- STEP 4: Programs & Certifications -->
   <div class="step-content" data-step="4">
     <div class="card">
-      <h2 class="card-title">Service Categories &amp; Programs</h2>
-      <p class="card-desc">Define the service categories your subs perform. Each category can have its own insurance requirements and credentials.</p>
+      <h2 class="card-title">Trades to credential</h2>
+      <p class="card-desc">Select every trade you want to credential your subs for. These are the only trades we will credential them for.</p>
 
-      <div style="background: linear-gradient(135deg, #FFF3EF, #fff8f5); border: 2px solid #DD6438; border-radius: 12px; padding: 20px 24px; margin-bottom: 24px;">
-        <div style="display:flex; align-items:flex-start; gap:12px;">
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#DD6438" stroke-width="2" style="flex-shrink:0; margin-top:2px;"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
-          <div>
-            <p style="font-weight:700; color:#0C152B; font-size:15px; margin-bottom:4px;">Select Programs</p>
-            <p style="color:#374151; font-size:14px; line-height:1.6;">Toggle on the programs your subs perform. Each program expands to show its service categories. Selected categories get their own insurance and credential requirements below.</p>
-          </div>
-        </div>
+      <div id="tradeFoundSection" style="display:none">
+        <div class="trade-hdr found" id="tradeFoundHdr">Standard service categories from your website<span class="sub">We scanned your site and pre-selected these. Uncheck any that do not apply.</span></div>
+        <div id="tradeFound" class="trade-select"></div>
+      </div>
+      <div class="trade-hdr" id="tradeOtherHdr">All service categories<span class="sub">Select every trade you want to credential your subs for.</span></div>
+      <div id="tradeGrid" class="trade-select"></div>
+      <div class="field-error" id="progError" style="display:none;">Please select at least one trade.</div>
+
+      <div class="trade-note">
+        <strong>Sublynk automatically requires the state and federal legal requirements for every trade you select, at a minimum.</strong>
+        Have additional custom requirements? Email them to <a href="mailto:zen@sublynk.com">zen@sublynk.com</a>.
       </div>
 
-      <!-- Program Toggles -->
-      <div id="programToggles"></div>
-      <div class="field-error" id="progError" style="display:none;">Please select at least one program and service category.</div>
-
-      <!-- Category Cards Container -->
-      <div id="categoriesContainer"></div>
-
-      <hr class="divider" style="margin: 24px 0;">
-
-      <div class="field">
-        <label class="field-label">Do you require any certifications beyond what's legally required?</label>
-        <div class="radio-group">
-          <label class="radio-label"><input type="radio" name="extraCerts" value="No" checked onchange="toggleCond('extraCertsDetail',false)"> No</label>
-          <label class="radio-label"><input type="radio" name="extraCerts" value="Yes" onchange="toggleCond('extraCertsDetail',true)"> Yes</label>
-          <label class="radio-label"><input type="radio" name="extraCerts" value="Maybe" onchange="toggleCond('extraCertsDetail',false)"> Maybe</label>
-        </div>
-      </div>
-      <div class="cond-hide" id="extraCertsDetail">
-        <div class="field">
-          <label class="field-label">Please explain what certifications are required</label>
-          <textarea id="extraCertsText" placeholder="Describe additional certification requirements..."></textarea>
-        </div>
+      <div style="display:none" aria-hidden="true" id="tradeLegacy">
+        <div id="programToggles"></div>
+        <div id="categoriesContainer"></div>
+        <input type="radio" name="extraCerts" value="No" checked><input type="radio" name="extraCerts" value="Yes"><input type="radio" name="extraCerts" value="Maybe">
+        <textarea id="extraCertsText"></textarea>
       </div>
 
       <div class="btn-row">
@@ -661,66 +832,18 @@ body:not(.intake-active) #programsToggleBtn { display:none !important; }
         </div>
       </div>
 
-      <p class="card-desc">Configure additional screening requirements beyond the Sublynk minimum.</p>
+      <p class="card-desc">Choose a background check package to order. Some networks require more thorough checks than others, so pick the one that fits.</p>
 
-      <div class="toggle-row" id="bgToggleRow" style="border:none;padding:14px 0;margin-bottom:0;">
-        <div class="toggle-info"><div class="toggle-title">Do you want to enforce additional background check requirements?</div></div>
-        <label class="toggle-switch"><input type="checkbox" id="tog_bgcheck" onchange="toggleExpand('bgcheck')"><span class="toggle-track"></span></label>
-      </div>
-      <div class="toggle-expand" id="exp_bgcheck">
+      <div class="pkg-list" id="bgPackages"></div>
+      <input type="hidden" id="bgPackage">
+      <div class="sig-error" id="bgPkgError">Please choose a package to continue.</div>
 
-        <div class="field">
-          <label class="field-label">Who must have a background check?</label>
-          <div class="checkbox-group">
-            <label class="cb-label"><input type="checkbox" id="bg_owners"> All owners</label>
-            <label class="cb-label"><input type="checkbox" id="bg_creds"> All credential holders</label>
-            <label class="cb-label"><input type="checkbox" id="bg_employees"> All employees</label>
-          </div>
-        </div>
-
-        <div class="field">
-          <label class="field-label">How long is a background check valid?</label>
-          <div class="radio-group">
-            <label class="radio-label"><input type="radio" name="bgValidity" value="1 year"> 1 year</label>
-            <label class="radio-label"><input type="radio" name="bgValidity" value="2 years"> 2 years</label>
-            <label class="radio-label"><input type="radio" name="bgValidity" value="3 years" checked> 3 years</label>
-          </div>
-        </div>
-
-        <div class="field">
-          <label class="field-label">Screening Requirements</label>
-          <div class="checkbox-group grid">
-            <label class="cb-label"><input type="checkbox" id="scr_ssn"> SSN Trace</label>
-            <label class="cb-label"><input type="checkbox" id="scr_sex"> Sex Offender Search</label>
-            <label class="cb-label"><input type="checkbox" id="scr_ofac"> Global Watchlist (OFAC)</label>
-            <label class="cb-label"><input type="checkbox" id="scr_natcrim"> National Criminal Search</label>
-            <label class="cb-label"><input type="checkbox" id="scr_fedcrim"> Federal Criminal Search</label>
-            <label class="cb-label"><input type="checkbox" id="scr_county"> County Criminal Search</label>
-            <label class="cb-label"><input type="checkbox" id="scr_mvr"> Motor Vehicle Report</label>
-            <label class="cb-label"><input type="checkbox" id="scr_countycivil"> County Civil Search</label>
-            <label class="cb-label"><input type="checkbox" id="scr_fedcivil"> Federal Civil Search</label>
-            <label class="cb-label"><input type="checkbox" id="scr_credit"> Credit Report</label>
-            <label class="cb-label"><input type="checkbox" id="scr_edu"> Education Verification</label>
-            <label class="cb-label"><input type="checkbox" id="scr_emp"> Employment Verification</label>
-            <label class="cb-label"><input type="checkbox" id="scr_drug" onchange="toggleCond('drugSubstances',this.checked)"> Drug Screening</label>
-          </div>
-        </div>
-
-        <div class="cond-hide" id="drugSubstances">
-          <div class="field">
-            <label class="field-label">Drug Screening &mdash; Select Substances</label>
-            <div class="checkbox-group grid-3">
-              <label class="cb-label"><input type="checkbox" id="drug_cocaine"> Cocaine</label>
-              <label class="cb-label"><input type="checkbox" id="drug_amphet"> Amphetamines</label>
-              <label class="cb-label"><input type="checkbox" id="drug_opiates"> Opiates</label>
-              <label class="cb-label"><input type="checkbox" id="drug_pcp"> PCP</label>
-              <label class="cb-label"><input type="checkbox" id="drug_barb"> Barbiturates</label>
-              <label class="cb-label"><input type="checkbox" id="drug_benzo"> Benzodiazepines</label>
-              <label class="cb-label"><input type="checkbox" id="drug_meth"> Methadone</label>
-            </div>
-          </div>
-        </div>
-
+      <div style="display:none" aria-hidden="true" id="bgHidden">
+        <input type="checkbox" id="tog_bgcheck">
+        <input type="radio" name="bgValidity" value="1 year"><input type="radio" name="bgValidity" value="2 years"><input type="radio" name="bgValidity" value="3 years" checked>
+        <input type="checkbox" id="bg_owners"><input type="checkbox" id="bg_creds"><input type="checkbox" id="bg_employees">
+        <input type="checkbox" id="scr_ssn"><input type="checkbox" id="scr_sex"><input type="checkbox" id="scr_ofac"><input type="checkbox" id="scr_natcrim"><input type="checkbox" id="scr_fedcrim"><input type="checkbox" id="scr_county"><input type="checkbox" id="scr_mvr"><input type="checkbox" id="scr_countycivil"><input type="checkbox" id="scr_fedcivil"><input type="checkbox" id="scr_credit"><input type="checkbox" id="scr_edu"><input type="checkbox" id="scr_emp"><input type="checkbox" id="scr_drug">
+        <input type="checkbox" id="drug_cocaine"><input type="checkbox" id="drug_amphet"><input type="checkbox" id="drug_opiates"><input type="checkbox" id="drug_pcp"><input type="checkbox" id="drug_barb"><input type="checkbox" id="drug_benzo"><input type="checkbox" id="drug_meth">
       </div>
 
       <div class="btn-row">
@@ -734,12 +857,26 @@ body:not(.intake-active) #programsToggleBtn { display:none !important; }
   <div class="step-content" data-step="6">
     <div class="card">
       <h2 class="card-title">Contracts</h2>
-      <p class="card-desc">Upload your contract templates in Word format (.doc/.docx) so we can build signable templates in PandaDoc.</p>
+      <p class="card-desc">Upload the blank agreement your subs or franchisees sign, and set who signs on your behalf. We digitize it into a signable template.</p>
 
       <div class="callout">
         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#9A3412" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
         <span><strong>Please upload Word documents, not PDFs.</strong> This allows us to templatize contracts for electronic signing.</span>
       </div>
+
+      <div class="field" id="contractUploadArea">
+        <label class="field-label">Upload your agreement template</label>
+        <p class="field-hint">Drag and drop or upload the <strong>blank</strong> agreement between your organization and your subs, or between your network and your franchisees. We digitize it into a signable template. Word (.docx) only.</p>
+        <div class="upload-zone" id="zone_contracts" ondragover="dzOver(event)" ondragleave="dzLeave(event)" ondrop="dzDropMulti(event)">
+          <input type="file" accept=".docx" multiple onchange="handleFileMulti(event)">
+          <div class="upload-icon"><svg width="32" height="32" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M12 16V4m0 0l-4 4m4-4l4 4M4 17v2a1 1 0 001 1h14a1 1 0 001-1v-2"/></svg></div>
+          <div class="upload-text">Drop your agreement here or <strong>click to browse</strong></div>
+          <div class="upload-hint">.docx only &mdash; blank template, multiple files allowed</div>
+        </div>
+        <div id="preview_contracts"></div>
+      </div>
+
+      <hr class="divider">
 
       <div class="field">
         <label class="field-label">Do you require counter signatures?</label>
@@ -749,33 +886,19 @@ body:not(.intake-active) #programsToggleBtn { display:none !important; }
         </div>
       </div>
       <div class="cond-hide" id="counterSigDetail">
-        <div style="background: var(--panel); border-radius: 8px; padding: 16px; margin-bottom: 16px;">
-          <p style="font-size: 14px; color: var(--ink); line-height: 1.6;">Our support team will reach out to capture the details of your counter signature requirements and configure them for your account.</p>
+        <label class="field-label">Draw your counter-signature</label>
+        <p class="field-hint">This signature is applied to your subcontractor agreements. Sign with your mouse or finger.</p>
+        <div class="sigpad-box">
+          <canvas id="sigCanvas" class="sigpad-canvas"></canvas>
+          <div class="sig-baseline" aria-hidden="true"></div>
+          <button type="button" class="sigpad-clear" id="sigClear">Clear</button>
         </div>
+        <input type="hidden" id="counterSigImage">
+        <label class="sig-accept" id="sigAcceptRow"><input type="checkbox" id="counterSigAccept"> I accept this agreement and authorize this signature to be applied to my subcontractor agreements.</label>
+        <div class="sig-error" id="sigError">Please sign above and check the box to continue.</div>
       </div>
 
-      <hr class="divider">
 
-      <div class="field">
-        <label class="field-label">Do you have additional contracts beyond the standard Sublynk subcontractor agreement?</label>
-        <div class="radio-group">
-          <label class="radio-label"><input type="radio" name="additionalContracts" value="No" checked onchange="toggleCond('contractUploadArea',false)"> No</label>
-          <label class="radio-label"><input type="radio" name="additionalContracts" value="Yes" onchange="toggleCond('contractUploadArea',true)"> Yes</label>
-        </div>
-      </div>
-
-      <div class="cond-hide" id="contractUploadArea">
-        <div class="field">
-          <label class="field-label">Upload Contract Templates</label>
-          <div class="upload-zone" id="zone_contracts" ondragover="dzOver(event)" ondragleave="dzLeave(event)" ondrop="dzDropMulti(event)">
-            <input type="file" accept=".doc,.docx" multiple onchange="handleFileMulti(event)">
-            <div class="upload-icon"><svg width="32" height="32" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M12 16V4m0 0l-4 4m4-4l4 4M4 17v2a1 1 0 001 1h14a1 1 0 001-1v-2"/></svg></div>
-            <div class="upload-text">Drop files here or <strong>click to browse</strong></div>
-            <div class="upload-hint">.doc or .docx only &mdash; multiple files allowed</div>
-          </div>
-          <div id="preview_contracts"></div>
-        </div>
-      </div>
 
       <hr class="divider">
       <p class="card-desc" style="margin-bottom:16px;">Who signs contracts on behalf of your organization?</p>
@@ -794,6 +917,21 @@ body:not(.intake-active) #programsToggleBtn { display:none !important; }
         </div>
       </div>
 
+
+      <hr class="divider">
+      <div class="field">
+        <label class="field-label">Upload your list of subs to credential <span class="opt">(CSV or Excel)</span></label>
+        <p class="field-hint">We need three things for each sub: <strong>Name</strong>, <strong>Email</strong>, and their <strong>Legal Business Name</strong>. The legal business name is what we verify, so it matters most. Not sure of the format? Download the template, fill it in, and upload it back.</p>
+        <a href="#" onclick="downloadSubsTemplate(event)" class="subs-tpl-btn"><svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 4v12m0 0l-4-4m4 4l4-4M4 17v2a1 1 0 001 1h14a1 1 0 001-1v-2"/></svg> Download the template</a>
+        <div class="upload-zone" id="zone_subs" ondragover="dzOver(event)" ondragleave="dzLeave(event)" ondrop="dzDropSubs(event)">
+          <input type="file" accept=".csv,.xlsx,.xls" onchange="handleSubsUpload(event)">
+          <div class="upload-icon"><svg width="32" height="32" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M12 16V4m0 0l-4 4m4-4l4 4M4 17v2a1 1 0 001 1h14a1 1 0 001-1v-2"/></svg></div>
+          <div class="upload-text">Drop your list here or <strong>click to browse</strong></div>
+          <div class="upload-hint">.csv, .xlsx or .xls</div>
+        </div>
+        <div id="preview_subs"></div>
+      </div>
+
       <div class="btn-row">
         <button class="btn btn-secondary" onclick="goPrev()"><svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M15 18l-6-6 6-6"/></svg> Back</button>
         <button class="btn btn-primary" onclick="goNext()">Review &amp; Submit <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M9 18l6-6-6-6"/></svg></button>
@@ -810,7 +948,7 @@ body:not(.intake-active) #programsToggleBtn { display:none !important; }
       <div class="btn-row">
         <button class="btn btn-secondary" onclick="goPrev()"><svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M15 18l-6-6 6-6"/></svg> Back</button>
         <div style="display:flex;gap:10px;">
-          <button class="btn btn-secondary" onclick="downloadCSV()"><svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 4v12m0 0l-4-4m4 4l4-4M4 17v2a1 1 0 001 1h14a1 1 0 001-1v-2"/></svg> Download Excel</button>
+          
           <button class="btn btn-green" onclick="submitForm()"><svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M5 13l4 4L19 7"/></svg> Submit</button>
         </div>
       </div>
@@ -823,10 +961,15 @@ body:not(.intake-active) #programsToggleBtn { display:none !important; }
   <div class="success-card">
     <div class="success-icon"><svg width="32" height="32" fill="none" stroke="#16A34A" stroke-width="2.5" viewBox="0 0 24 24"><path d="M5 13l4 4L19 7"/></svg></div>
     <h3 class="success-title">Intake Submitted!</h3>
-    <p class="success-text">Your onboarding data has been downloaded as an Excel file. A member of the Sublynk team will reach out within 1 business day to get you started.</p>
-    <p style="font-size:13px; color:#6B7280; margin-top:8px;">Check your downloads folder for the Excel file.</p>
+    <p class="success-text">We are building your network documents now: the Network Requirements workbook, the Onboarding &amp; Compliance Requirements, and a sample ACORD COI, all filled to your rules. A member of the Sublynk team will reach out within 1 business day.</p>
+    <div id="docsReady" style="margin-top:18px;">
+      <div id="docsPending" style="font-size:13px; color:#6B7280; display:flex; align-items:center; justify-content:center; gap:8px;">
+        <span class="docs-spin" aria-hidden="true"></span> Preparing your documents&hellip;
+      </div>
+      <a id="docsLink" href="#" target="_blank" rel="noopener" style="display:none; font-size:14px; font-weight:600; color:var(--accent); text-decoration:none;">&#128193; Open your documents in Google Drive &rarr;</a>
+    </div>
     <div style="display:flex; gap:12px; margin-top:24px; justify-content:center;">
-      <button class="btn btn-secondary" onclick="downloadCSV()">Download Excel Again</button>
+      
       <button class="btn btn-primary" onclick="localStorage.removeItem('sublynk_gc_intake'); location.reload()">Start New Intake</button>
     </div>
   </div>
@@ -834,6 +977,13 @@ body:not(.intake-active) #programsToggleBtn { display:none !important; }
 
 <canvas id="confetti-canvas"></canvas>
 
+
+        </div>
+      </div>
+    </div>
+    <footer class="wk-footer">Sublynk, the vetted contractor network. This page confirms you would like to proceed; full terms are provided with your receipt or invoice. &nbsp; <a href="https://www.sublynk.com/privacypolicy">Privacy</a> &middot; <a href="https://www.sublynk.com/terms-of-service">Terms</a></footer>
+  </section>
+</main>
 <script>
 // ─── US States ───
 const US_STATES = ["AL","AK","AZ","AR","CA","CO","CT","DE","FL","GA","HI","ID","IL","IN","IA","KS","KY","LA","ME","MD","MA","MI","MN","MS","MO","MT","NE","NV","NH","NJ","NM","NY","NC","ND","OH","OK","OR","PA","RI","SC","SD","TN","TX","UT","VT","VA","WA","WV","WI","WY","DC"];
@@ -2157,15 +2307,7 @@ function saveToStorage() {
   try { localStorage.setItem(STORAGE_KEY, JSON.stringify(payload)); } catch(e) {}
 }
 
-function checkSaved() {
-  try {
-    const raw = localStorage.getItem(STORAGE_KEY);
-    if (!raw) return;
-    const data = JSON.parse(raw);
-    if (!data.inputs || Object.keys(data.inputs).length < 2) return;
-    document.getElementById('resumeBanner').style.display = 'flex';
-  } catch(e) {}
-}
+function checkSaved() { /* resume handled silently by walkthrough controller */ }
 
 function restoreSaved() {
   try {
@@ -2190,12 +2332,10 @@ function restoreSaved() {
     if (data.completedSteps) data.completedSteps.forEach(s => completedSteps.add(s));
     if (data.currentStep) goToStep(data.currentStep);
   } catch(e) {}
-  document.getElementById('resumeBanner').style.display = 'none';
 }
 
 function clearSaved() {
   localStorage.removeItem(STORAGE_KEY);
-  document.getElementById('resumeBanner').style.display = 'none';
 }
 
 // Auto-save every 30 seconds
@@ -2212,8 +2352,8 @@ checkSaved();
 
 <!-- Call Guide Panel -->
 <button class="call-guide-fab" id="callGuideFab" onclick="toggleCallGuide()">
-  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 013 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
-  <span id="callGuideLabel">Call Guide</span>
+  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18h6"/><path d="M10 22h4"/><path d="M12 2a7 7 0 00-4 12.7c.6.5 1 1.2 1 2V17h6v-.3c0-.8.4-1.5 1-2A7 7 0 0012 2z"/></svg>
+  <span id="callGuideLabel">Tips</span>
 </button>
 
 <div class="call-guide-panel" id="callGuidePanel">
@@ -2224,79 +2364,27 @@ checkSaved();
 // ─── Call Guide ───
 var callGuideOpen = false;
 var CALL_GUIDE = [
-  {
-    step: 1, title: 'Organization Info',
-    tips: [
-      { type: 'ask', text: 'What is the full legal entity name as it appears on your W-9?' },
-      { type: 'ask', text: 'Do you operate under a DBA or trade name?' },
-      { type: 'ask', text: 'What is your EIN? We use this for tax ID verification only.' },
-      { type: 'note', text: 'Tax classification determines 1099 reporting. Most GCs are C-Corp or S-Corp.' },
-      { type: 'ask', text: 'What is the best email for compliance notifications?' }
-    ]
-  },
-  {
-    step: 2, title: 'Certificate Holder',
-    tips: [
-      { type: 'ask', text: 'Who should be listed as the certificate holder on your subs\' COIs?' },
-      { type: 'note', text: 'Typically the GC legal name + address. Some add "and its affiliates."' },
-      { type: 'ask', text: 'Is there a standard Description of Operations you require on every COI?' },
-      { type: 'note', text: 'If you are unsure, suggest: "All operations performed on behalf of [GC name]."' }
-    ]
-  },
-  {
-    step: 3, title: 'Insurance Requirements',
-    tips: [
-      { type: 'label', text: 'Walk-through' },
-      { type: 'note', text: 'Go line by line. Toggle on each coverage you require, then set limits.' },
-      { type: 'ask', text: 'Do you require CGL? What are your minimum limits per occurrence and aggregate?' },
-      { type: 'ask', text: 'Do you need Additional Insured, Waiver of Sub, or Primary & Non-Contributory endorsements?' },
-      { type: 'label', text: 'Common patterns' },
-      { type: 'note', text: 'Most GCs require CGL + Auto + WC at minimum. Umbrella is common for larger projects.' },
-      { type: 'note', text: 'Pollution is typical for restoration, mold, or environmental work.' },
-      { type: 'note', text: 'Bailees applies when subs handle customer property (contents, pack-outs).' },
-      { type: 'label', text: 'COI sample' },
-      { type: 'ask', text: 'Do you have a sample COI you can share? This helps us match your exact format.' }
-    ]
-  },
-  {
-    step: 4, title: 'Service Categories & Programs',
-    tips: [
-      { type: 'label', text: 'Programs' },
-      { type: 'ask', text: 'Which programs do your subs perform? Toggle on each program that applies.' },
-      { type: 'note', text: 'Programs include Mitigation, Environmental, Contents, General Contracting, MEP, Roofing, and more. Each program has predefined service categories.' },
-      { type: 'note', text: 'When you toggle a program on, all its service categories are selected by default. Uncheck any that don\'t apply.' },
-      { type: 'label', text: 'Per-category insurance' },
-      { type: 'ask', text: 'Do all categories require the same insurance, or do some need different coverage?' },
-      { type: 'note', text: '"Same as global" uses the insurance from Step 3. "Custom" lets you require or waive specific lines per category.' },
-      { type: 'note', text: 'Example: Mold Remediation may require Pollution Liability, but Inspection may waive it.' },
-      { type: 'label', text: 'Credentials' },
-      { type: 'ask', text: 'Are there specific licenses or certifications required for each category?' },
-      { type: 'note', text: 'Examples: State roofing license, EPA Lead-Safe cert, IICRC WRT, HOG inspector cert, asbestos abatement license.' }
-    ]
-  },
-  {
-    step: 5, title: 'Background Checks',
-    tips: [
-      { type: 'ask', text: 'Do you require background checks on sub personnel?' },
-      { type: 'ask', text: 'Who needs to be screened - all employees, owners only, or just one representative?' },
-      { type: 'label', text: 'Screening types' },
-      { type: 'note', text: 'SSN Trace, Sex Offender, and National Criminal are the most common baseline.' },
-      { type: 'ask', text: 'Do you require MVR for anyone driving to job sites?' },
-      { type: 'ask', text: 'Do you require drug screening? If so, which panel?' },
-      { type: 'label', text: 'Validity' },
-      { type: 'ask', text: 'How often should background checks be renewed? Annual is most common.' }
-    ]
-  },
-  {
-    step: 6, title: 'Contracts & Signatures',
-    tips: [
-      { type: 'ask', text: 'Do you require counter-signatures on your MSA or subcontractor agreement?' },
-      { type: 'ask', text: 'Are there additional contracts beyond the MSA that subs need to sign?' },
-      { type: 'note', text: 'Upload any contracts here. We will present them for e-signature during sub onboarding.' },
-      { type: 'label', text: 'Signatory' },
-      { type: 'ask', text: 'Who is authorized to sign on behalf of your organization?' }
-    ]
-  }
+  { step: 1, title: 'Organization info', tips: [
+    { type: 'note', text: 'Tell us who you are. Use your exact legal business name, as it appears on your W-9 or EIN letter.' },
+    { type: 'note', text: 'Add a DBA only if you operate under a different trade name.' },
+    { type: 'note', text: 'Your EIN is used for tax verification only and is never shared.' } ] },
+  { step: 2, title: 'Insurance requirements', tips: [
+    { type: 'note', text: 'Upload a sample COI at the top and we pre-fill your requirements for you. A PDF works best.' },
+    { type: 'note', text: 'Then review the coverages below and adjust anything. Most networks require General Liability, Auto, and Workers Comp.' } ] },
+  { step: 3, title: 'Certificate holder', tips: [
+    { type: 'note', text: 'This is the Sublynk gold-standard language your subs carry on their insurance certificate (COI). Just review and approve it.' },
+    { type: 'note', text: 'We pull the address from the sample COI you just uploaded and use your legal business name. Need a change? Email zen@sublynk.com.' } ] },
+  { step: 4, title: 'Trades to credential', tips: [
+    { type: 'note', text: 'Tap every trade you want to credential your subs for. We only credential your subs for the trades you select here.' },
+    { type: 'note', text: 'Licenses and certifications for each trade are handled for you, so you just pick the trades.' } ] },
+  { step: 5, title: 'Background checks', tips: [
+    { type: 'note', text: 'Pick one background check package. Sublynk always runs at least one check on an owner of every sub.' },
+    { type: 'note', text: 'Tier 2 and up meets most managed repair networks. Higher tiers add civil, credit and business checks.' } ] },
+  { step: 6, title: 'Contracts & signatures', tips: [
+    { type: 'note', text: 'Upload any agreements your subs must sign, like your MSA. We present them for e-signature during onboarding.' },
+    { type: 'note', text: 'Tell us who is authorized to sign on behalf of your company.' } ] },
+  { step: 7, title: 'Review & submit', tips: [
+    { type: 'note', text: 'Double-check everything, then submit. We build your setup and reach out within one business day.' } ] }
 ];
 
 function toggleCallGuide() {
@@ -2308,40 +2396,25 @@ function toggleCallGuide() {
   if (callGuideOpen) {
     fab.classList.add('open');
     panel.classList.add('open');
-    label.textContent = 'Close Guide';
+    label.textContent = 'Close';
     renderCallGuide();
   } else {
     fab.classList.remove('open');
     panel.classList.remove('open');
-    label.textContent = 'Call Guide';
+    label.textContent = 'Tips';
   }
 }
 
 function renderCallGuide() {
   var body = document.getElementById('callGuideBody');
-  var html = '';
-  CALL_GUIDE.forEach(function(sec) {
-    var isActive = sec.step === currentStep;
-    var isExpanded = isActive;
-    html += '<div class="cg-section' + (isActive ? ' active expanded' : '') + '" data-cg-step="' + sec.step + '">';
-    html += '<div class="cg-section-header" onclick="toggleCgSection(this)">';
-    html += '<span class="cg-section-step">' + sec.step + '</span>';
-    html += '<span class="cg-section-title">' + sec.title + '</span>';
-    html += '<svg class="cg-chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>';
-    html += '</div>';
-    html += '<div class="cg-section-body">';
-    sec.tips.forEach(function(tip) {
-      if (tip.type === 'label') {
-        html += '<div class="cg-tip-label">' + tip.text + '</div>';
-      } else {
-        var icon = tip.type === 'ask'
-          ? '<svg class="cg-tip-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 015.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>'
-          : '<svg class="cg-tip-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>';
-        html += '<div class="cg-tip">' + icon + '<span>' + tip.text + '</span></div>';
-      }
-    });
-    html += '</div></div>';
+  var sec = CALL_GUIDE.filter(function(s){ return s.step === currentStep; })[0];
+  if (!sec) { body.innerHTML = '<div class="cg-tip"><span>You are all set. Review and submit.</span></div>'; return; }
+  var html = '<div class="cg-section active expanded"><div class="cg-section-header"><span class="cg-section-title">' + sec.title + '</span></div><div class="cg-section-body">';
+  sec.tips.forEach(function(tip) {
+    if (tip.type === 'label') html += '<div class="cg-tip-label">' + tip.text + '</div>';
+    else html += '<div class="cg-tip"><span>' + tip.text + '</span></div>';
   });
+  html += '</div></div>';
   body.innerHTML = html;
 }
 
@@ -2357,91 +2430,645 @@ goToStep = function(n) {
   if (callGuideOpen) renderCallGuide();
 };
 </script>
+
 <script>
-/* Setup gate: posts the $500 agreement to the first-party Worker, then reveals
-   the untouched intake and prefills the org name + email. Fully namespaced so it
-   cannot touch any intake field id or global. */
+/* Unified walkthrough controller: drives the gate screens, fires the $500+$50/mo
+   agreement, then reveals intake and unifies the progress bar. Namespaced. */
 (function(){
-  var $ = function(id){ return document.getElementById(id); };
-  var WORKER = 'https://sublynk-consent-worker.zen-426.workers.dev';
-  var fullName=$('g_full_name'), company=$('g_company'), email=$('g_email'),
-      phone=$('g_phone'), consent=$('g_consent'), submit=$('g_submit'), err=$('g_err');
+  var $=function(id){return document.getElementById(id);};
+  var qa=function(s,r){return [].slice.call((r||document).querySelectorAll(s));};
+  // On localhost, never hit the Worker (no #gtm Slack post, no test rows). Live site posts normally.
+  // Localhost normally skips the live POST (no #gtm spam while building). Append ?live=1 to force a
+  // real end-to-end from localhost: the intake POSTs to the Worker and the doc pipeline runs for real.
+  var FORCE_LIVE=/[?&]live=1\b/.test(location.search);
+  var TEST_MODE=(!FORCE_LIVE) && /^(localhost|127\.0\.0\.1|\[::1\]|.*\.local)$/.test(location.hostname);
+  var GATE=qa('#gatePhase .wk-q');
+  var gi=0, inIntake=false;
+  var bar=$('wkBar'), lab=$('wkLabel'), pct=$('wkPercent');
 
-  $('g_consent_text').innerHTML =
-    'I would like to move forward with the <b>Sublynk network setup</b> above. I authorize Sublynk to collect the '
-  + '<b>one-time $500 setup fee</b> by the method I select above (charge the card on file, or send an invoice), and to '
-  + 'begin my <b>$50/month Sublynk subscription</b> on the card Sublynk has on file. I can cancel the subscription anytime. '
-  + 'Full terms come with the receipt or invoice. By checking this box I am agreeing electronically.';
-  $('g_fine').textContent = 'No card details are entered on this page. The one-time $500 is charged to the card on file (or invoiced if you choose), and the $50/month subscription is charged to the card on file. Cancel anytime.';
+  // consent + fine copy (authorizes $500 one-time + $50/mo recurring)
+  $('g_consent_text').innerHTML='I would like to move forward with the <b>Sublynk network setup</b> above. I authorize Sublynk to collect the <b>one-time $500 setup fee</b> by the method I select above (charge the card on file, or send an invoice), and to begin my <b>$50/month Sublynk subscription</b> on the card Sublynk has on file. I can cancel the subscription anytime. Full terms come with the receipt or invoice. By checking this box I am agreeing electronically.';
+  $('g_fine').textContent='No card details are entered on this page. The one-time $500 is charged to the card on file (or invoiced if you choose), and the $50/month subscription is charged to the card on file. Cancel anytime.';
 
-  var emailOK = function(){ return /^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email.value.trim()); };
-  function refresh(){ submit.disabled = !(fullName.value.trim() && company.value.trim() && emailOK() && consent.checked); }
-  [fullName,company,email,phone].forEach(function(el){ el.addEventListener('input', refresh); });
-  consent.addEventListener('change', refresh);
+  // what the network enforces (chosen on the "What do you enforce today?" screen).
+  // Drives which intake steps are shown/skipped.
+  var ENFORCE={trades:true,insurance:true,background:true,licenses:true,agreements:true};
+  var enforceVisible=false;
+  function stepEnabled(n){ if(n===2||n===3) return !!ENFORCE.insurance; if(n===4) return !!ENFORCE.trades; if(n===5) return !!ENFORCE.background; if(n===6) return !!ENFORCE.agreements; return true; }
+  function contentSteps(){ var a=[]; [2,3,4,5,6].forEach(function(n){ if(stepEnabled(n)) a.push(n); }); return a; }
+  function screenList(){ return [1,'enforce'].concat(contentSteps()).concat([7]); } // intake-side screens, in order
+  function totalScreens(){ return GATE.length + screenList().length; }
+  function setBar(pos){ var t=totalScreens(); var p=Math.round(pos/t*100); if(bar)bar.style.width=p+'%'; if(pct)pct.textContent=p+'%'; if(lab)lab.textContent='Step '+pos+' of '+t; }
+  function setBarIntake(){ var list=screenList(); var key=enforceVisible?'enforce':currentStep; var idx=list.indexOf(key); if(idx<0) idx=0; setBar(GATE.length+idx+1); }
 
-  var billingEls = [].slice.call(document.querySelectorAll('input[name=g_billing]'));
-  var billing = function(){ var b=billingEls.find(function(x){return x.checked;}); return b?b.value:'card'; };
-  function markBilling(){ billingEls.forEach(function(x){ x.closest('label.radio').classList.toggle('sel', x.checked); }); }
-  billingEls.forEach(function(x){ x.addEventListener('change', markBilling); });
-  markBilling();
+  function showGate(n){
+    gi=n; GATE.forEach(function(s,i){ s.classList.toggle('active', i===n); });
+    setBar(n+1);
+    document.querySelector('.wk-stage').scrollTop=0; window.scrollTo({top:0,behavior:'smooth'});
+  }
+  function gerr(msg){ var e=GATE[gi].querySelector('[data-gerr]'); if(e){ e.textContent=msg; e.style.display='block'; } }
+  function clearErr(){ var e=GATE[gi].querySelector('[data-gerr]'); if(e) e.style.display='none'; }
+  var emailOK=function(v){ return /^[^@\s]+@[^@\s]+\.[^@\s]+$/.test((v||'').trim()); };
 
-  // Personalized links: /setup?e=&name=&company=&c=<ref>
-  var params = new URLSearchParams(location.search);
-  var CONTACT_REF = params.get('c') || null;
-  if(params.get('e')) email.value = params.get('e');
-  if(params.get('name')) fullName.value = params.get('name');
-  if(params.get('company')) company.value = params.get('company');
-  refresh();
+  // recruiting-email toggle: reveal a separate field only when they want one
+  var diffRecruit=$('g_diff_recruit'), recruitWrap=$('g_recruit_wrap');
+  diffRecruit.addEventListener('change', function(){ recruitWrap.classList.toggle('show', diffRecruit.checked); });
+  var recruitingEmail=function(){ return diffRecruit.checked ? $('g_recruit_email').value.trim() : $('g_email').value.trim(); };
 
-  function beginIntake(){
-    document.body.classList.add('intake-active');
-    // Prefill the intake's Organization Info without altering any field id/name.
-    try {
-      var ln = document.getElementById('legalName');
-      if(ln && !ln.value) { ln.value = company.value.trim(); }
-      var pe = document.getElementById('primaryEmail');
-      if(pe && !pe.value) { pe.value = email.value.trim(); }
-    } catch(e){}
-    window.scrollTo({top:0, behavior:'smooth'});
+  function validGate(n){
+    if(n===1 && !$('g_full_name').value.trim()){ gerr('Please enter your full name.'); return false; }
+    if(n===2 && !$('g_company').value.trim()){ gerr('Please enter your company or network name.'); return false; }
+    if(n===3){
+      if(!emailOK($('g_email').value)){ gerr('Please enter a valid credentialing email.'); return false; }
+      if(diffRecruit.checked && !emailOK($('g_recruit_email').value)){ gerr('Please enter a valid recruiting email, or uncheck the box.'); return false; }
+    }
+    return true;
   }
 
-  $('g_form').addEventListener('submit', function(ev){
-    ev.preventDefault();
-    err.style.display='none';
-    if($('g_website').value){ return; }                        // honeypot
-    if(!fullName.value.trim()){ err.textContent='Please enter your full name.'; err.style.display='block'; return; }
-    if(!company.value.trim()){ err.textContent='Please enter your company or network name.'; err.style.display='block'; return; }
-    if(!emailOK()){ err.textContent='Please enter a valid email address.'; err.style.display='block'; return; }
-    if(!consent.checked){ err.textContent='Please check the box to confirm.'; err.style.display='block'; return; }
+  qa('[data-gnext]').forEach(function(b){ b.addEventListener('click', function(){ clearErr(); if(!validGate(gi)) return; showGate(gi+1); try{ if(typeof saveToStorage==='function') saveToStorage(); }catch(e){} }); });
+  qa('[data-gback]').forEach(function(b){ b.addEventListener('click', function(){ clearErr(); if(gi>0) showGate(gi-1); }); });
 
-    submit.disabled=true; submit.textContent='Submitting...';
-    var payload = {
-      full_name:fullName.value.trim(), company:company.value.trim(), email:email.value.trim(),
-      phone:phone.value.trim()||null, agreed:true, billing_method:billing(), contact_ref:CONTACT_REF
-    };
-    (async function(){
-      try {
-        var ok=false, lastErr=null;
-        for(var attempt=0; attempt<3 && !ok; attempt++){
-          if(attempt) await new Promise(function(r){ setTimeout(r, 800*attempt); });
-          try {
-            var resp = await fetch(WORKER+'/api/agreement', {
-              method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify(payload)
-            });
-            if(resp.ok){ ok=true; break; }
-            lastErr = new Error('server '+resp.status);
-          } catch(e){ lastErr=e; }
+  // billing selection styling
+  var bills=qa('input[name=g_billing]');
+  function markBill(){ bills.forEach(function(x){ x.closest('.wk-radio').classList.toggle('sel', x.checked); }); }
+  bills.forEach(function(x){ x.addEventListener('change', markBill); }); markBill();
+  var billing=function(){ var b=bills.find(function(x){return x.checked;}); return b?b.value:'card'; };
+
+  // enable submit only when consent is checked
+  var consent=$('g_consent'), submit=$('g_submit');
+  consent.addEventListener('change', function(){ submit.disabled=!consent.checked; });
+
+  // prefill from personalized link
+  var params=new URLSearchParams(location.search);
+  var CONTACT_REF=params.get('c')||null;
+  if(params.get('e')) $('g_email').value=params.get('e');
+  if(params.get('name')) $('g_full_name').value=params.get('name');
+  if(params.get('company')) $('g_company').value=params.get('company');
+
+  var _navWrapped=false;
+  function installProgressOverride(){
+    if(_navWrapped) return; _navWrapped=true;
+    try{
+      var _goToStep=window.goToStep, _goNext=window.goNext, _goPrev=window.goPrev;
+      // unify the progress bar
+      window.buildProgressBar=function(){ setBarIntake(); };
+      // any jump to a real intake step hides the enforce screen + shows the intake
+      window.goToStep=function(n){ enforceVisible=false; var es=document.getElementById('enforceScreen'); if(es) es.style.display='none'; document.getElementById('intakeRoot').classList.remove('hidden'); _goToStep(n); if(n===3) autofillCert(true); try{ if(typeof updateChecklist==='function') updateChecklist(); }catch(e){} };
+      window.showEnforce=function(){ enforceVisible=true; document.getElementById('intakeRoot').classList.add('hidden'); document.getElementById('enforceScreen').style.display='block'; setBarIntake(); try{ if(window.callGuideOpen && typeof renderCallGuide==='function') renderCallGuide(); }catch(e){} window.scrollTo({top:0,behavior:'smooth'}); };
+      // Org Info -> enforce; then skip the steps they do not enforce
+      window.goNext=function(){ if(enforceVisible) return;
+        if(currentStep===1){ if(!validateStep(1)) return; completedSteps.add(1); try{saveToStorage();}catch(e){} try{ if(typeof scanWebsite==='function') scanWebsite(); }catch(e){} window.showEnforce(); return; }
+        if(currentStep===3){ var ca=$('certApprove'); if(ca && !ca.checked){ var e2=$('certError'); if(e2) e2.style.display='block'; return; } }
+        if(currentStep===5 && !$('bgPackage').value){ var e5=$('bgPkgError'); if(e5) e5.style.display='block'; return; }
+        if(currentStep===6){ var csr=document.querySelector('input[name=counterSigs]:checked');
+          if(csr && csr.value==='Yes' && (!$('counterSigImage').value || !$('counterSigAccept').checked)){ var er=$('sigError'); if(er) er.style.display='block'; return; } }
+        if(!validateStep(currentStep)) return; completedSteps.add(currentStep);
+        var n=currentStep+1; while(n<7 && !stepEnabled(n)) n++; goToStep(n); try{saveToStorage();}catch(e){} };
+      window.goPrev=function(){ if(enforceVisible){ goToStep(1); return; }
+        var cs=contentSteps(); if(cs.length && currentStep===cs[0]){ window.showEnforce(); return; }
+        if(currentStep<=1) return; var p=currentStep-1; while(p>1 && !stepEnabled(p)) p--; goToStep(p); };
+      // Review: show only enforced sections and only the fields they actually filled/selected
+      window.buildReview=function(){
+        var data=gatherData();
+        function row(label,val){ if(!val||val==='--'||val==='No') return ''; return '<div class="review-label">'+label+'</div><div class="review-value">'+val+'</div>'; }
+        function maskTax(v){ return (v&&v.length>4)?'***-***'+v.slice(-4):v; }
+        var out='';
+        function sec(title,step,rows){ var inner=rows.filter(Boolean).join(''); if(!inner) return;
+          out+='<div class="review-section"><div class="review-section-header"><span class="review-section-title">'+title+'</span><button class="btn btn-secondary btn-sm" onclick="goToStep('+step+')">Edit</button></div><div class="review-grid">'+inner+'</div></div>'; }
+        sec('Organization info',1,[ row('Legal Business Name',data['Legal Business Name']), row('DBA',data['DBA']), row('Tax ID',maskTax(data['Tax ID'])), row('Tax Classification',data['Tax Classification']), row('Website',data['Website URL']), row('Address',[data['Address Line 1'],data['Address Line 2'],data['City'],data['State'],data['Zipcode']].filter(Boolean).join(', ')), row('Primary Email',data['Primary Email']) ]);
+        if(ENFORCE.insurance){
+          sec('Insurance requirements',2,[ row('Coverages',data['Insurance Coverages']), row('Sample COI',data['Sample COI']), row('COI Files',data['COI Files']) ]);
+          sec('Certificate holder',3,[ row('Certificate Holder',data['Certificate Holder']), row('Description of Operations',data['Description of Operations']) ]);
         }
-        if(!ok) throw lastErr || new Error('submit failed');
-        beginIntake();
-      } catch(e){
-        submit.disabled=false; submit.textContent='Agree and start onboarding \u2192';
-        err.textContent='Could not save that. Check your connection and try again.';
-        err.style.display='block';
-        console.error('Setup agreement error:', e && e.message);
-      }
+        if(programsEnabled){ var trades=''; try{ trades=serviceCategories.map(function(c){return c.name;}).join(', '); }catch(e){} sec('Trades to credential',4,[ row('Trades',trades) ]); }
+        if(ENFORCE.background){ var pkg=($('bgPackage')||{}).value||''; sec('Background checks',5,[ row('Package',pkg), row('Valid for',data['BG Check Validity']) ]); }
+        if(ENFORCE.agreements){
+          var sig=($('counterSigImage')&&$('counterSigImage').value)?'Yes, signature captured':'';
+          var files=''; try{ files=uploadedFiles.map(function(f){return f.name;}).join(', '); }catch(e){}
+          sec('Agreement',6,[ row('Counter-signature',sig), row('Uploaded agreement',files), row('Signatory Name',data['Signatory Name']), row('Signatory Title',data['Signatory Title']), row('Signatory Email',data['Signatory Email']) ]);
+        }
+        document.getElementById('reviewContent').innerHTML=out;
+      };
+    }catch(e){ console.error('nav override:', e); }
+  }
+  function syncEnforceFromDOM(){ try{
+      ENFORCE={trades:$('enf_trades').checked,insurance:$('enf_insurance').checked,background:$('enf_background').checked,licenses:$('enf_licenses').checked,agreements:$('enf_agreements').checked};
+      if(ENFORCE.trades && !programsEnabled) togglePrograms(); else if(!ENFORCE.trades && programsEnabled) togglePrograms();
+      qa('#enforceScreen .wk-enf input').forEach(function(x){ x.closest('.wk-enf').classList.toggle('sel',x.checked); });
+    }catch(e){} }
+  // Chris's gold-standard Description of Operations + Certificate Holder auto-fill
+  var GOLD_DOO="Certificate Holder is an additional insured for General Liability per endorsements CG 20 10 07 04 and CG 20 37 07 04 (or their equivalents) on a primary / non-contributory basis, with completed-operations coverage maintained for 3 years after completion of the work. Waiver of subrogation in favor of Certificate Holder for General Liability and Workers' Compensation. Work performed by subcontractors is not excluded.";
+  var CERT_EMAIL='help@sublynk.com';   // top line on the certificate holder block (Zen 2026-10-02)
+  function autofillCert(force){ try{
+    var ch=$('certHolder'); if(!ch) return;
+    // The box is read-only gold standard, so always (re)build it. Legal name is captured from intake;
+    // the mailing ADDRESS is pulled from the uploaded sample COI, with the org address as a fallback.
+    // Legal name/DBA always come from the intake. The ADDRESS comes from the uploaded sample COI;
+    // only if no COI address is captured do we fall back to the intake org address.
+    var legal=(($('legalName')||{}).value||'').trim(), dba=(($('dba')||{}).value||'').trim();
+    var coiAddr=((window.__coiAddress)||'').trim();
+    if(!coiAddr){
+      var a1=(($('address1')||{}).value||'').trim(), a2=(($('address2')||{}).value||'').trim();
+      var city=(($('city')||{}).value||'').trim(), st=($('state')||{}).value||'', zip=(($('zip')||{}).value||'').trim();
+      coiAddr=[a1,a2,[city,[st,zip].filter(Boolean).join(' ')].filter(Boolean).join(', ')].filter(Boolean).join(', ');
+    }
+    var lines=[CERT_EMAIL]; if(legal) lines.push(legal); if(dba) lines.push('DBA: '+dba);
+    if(coiAddr) lines.push(coiAddr);
+    ch.value=lines.join('\n');
+    var d=$('descOps'); if(d && !d.value.trim()) d.value=GOLD_DOO;
+    try{ if(typeof saveToStorage==='function') saveToStorage(); }catch(e){}
+  }catch(e){ console.error('autofillCert:', e); } }
+  function prefillIntake(){
+    // Auto-fill anything we already captured; only empty fields are touched.
+    try{
+      var map=[['legalName',$('g_company').value.trim()],['primaryEmail',$('g_email').value.trim()],
+               ['sigName',$('g_full_name').value.trim()],['sigEmail',$('g_email').value.trim()]];
+      map.forEach(function(p){ var el=$(p[0]); if(el && !el.value && p[1]) el.value=p[1]; });
+    }catch(e){}
+  }
+  function revealIntake(){
+    inIntake=true;
+    document.body.classList.add('wk-intake');
+    $('gatePhase').style.display='none';
+    $('intakeRoot').classList.remove('hidden');
+    prefillIntake();
+    installProgressOverride();
+    try{ if(typeof goToStep==='function'){ goToStep(1); } buildProgressBar(); }catch(e){ console.error('intake handoff:', e); }
+    try{ localStorage.setItem('sublynk_gate_done','1'); if(typeof saveToStorage==='function') saveToStorage(); }catch(e){}
+    window.scrollTo({top:0,behavior:'smooth'});
+  }
+
+  // Silent resume: a returning user who already agreed skips the gate and picks up
+  // where they left off (auto-saved), no "resume?" prompt.
+  function tryResume(){
+    try{
+      if(localStorage.getItem('sublynk_gate_done')!=='1') return false;
+      var raw=localStorage.getItem('sublynk_gc_intake'); if(!raw) return false;
+      var data=JSON.parse(raw); if(!data.inputs || Object.keys(data.inputs).length<2) return false;
+      inIntake=true; document.body.classList.add('wk-intake');
+      $('gatePhase').style.display='none'; $('intakeRoot').classList.remove('hidden');
+      installProgressOverride();
+      if(typeof restoreSaved==='function') restoreSaved(); // restores values + goes to saved step
+      syncEnforceFromDOM();
+      try{ restoreTrades(); }catch(e){}
+      buildProgressBar();
+      return true;
+    }catch(e){ return false; }
+  }
+
+  submit.addEventListener('click', function(){
+    clearErr();
+    if($('g_website').value) return;                 // honeypot
+    if(!consent.checked){ gerr('Please check the box to confirm.'); return; }
+    if(!$('g_full_name').value.trim()||!$('g_company').value.trim()||!emailOK($('g_email').value)){ gerr('Please complete your name, company and a valid email.'); return; }
+    submit.disabled=true; submit.textContent='Submitting...';
+    var payload={ full_name:$('g_full_name').value.trim(), company:$('g_company').value.trim(), email:$('g_email').value.trim(),
+      credentialing_email:$('g_email').value.trim(), recruiting_email:recruitingEmail(),
+      phone:$('g_phone').value.trim()||null, agreed:true, billing_method:billing(), contact_ref:CONTACT_REF };
+    if(TEST_MODE){ console.log('[setup] localhost test mode: skipping /api/agreement (no #gtm post)'); revealIntake(); return; }
+    (async function(){
+      try{
+        var ok=false,last=null;
+        for(var a=0;a<3&&!ok;a++){ if(a) await new Promise(function(r){setTimeout(r,800*a);});
+          try{ var r=await fetch('https://sublynk-consent-worker.zen-426.workers.dev/api/agreement',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)}); if(r.ok){ok=true;break;} last=new Error('server '+r.status); }catch(e){ last=e; } }
+        if(!ok) throw last||new Error('failed');
+        revealIntake();
+      }catch(e){ submit.disabled=false; submit.textContent='Agree and start onboarding \u2192'; gerr('Could not save that. Check your connection and try again.'); console.error('agreement:', e&&e.message); }
     })();
   });
+
+  // enforcement screen behavior
+  function applyEnforce(){
+    ENFORCE={trades:$('enf_trades').checked,insurance:$('enf_insurance').checked,background:$('enf_background').checked,licenses:$('enf_licenses').checked,agreements:$('enf_agreements').checked};
+    try{ if(ENFORCE.trades && !programsEnabled) togglePrograms(); else if(!ENFORCE.trades && programsEnabled) togglePrograms(); }catch(e){}
+    try{ if(!ENFORCE.trades){ serviceCategories.length=0; localStorage.removeItem('sublynk_trades'); if(typeof renderTradeGrid==='function') renderTradeGrid(); } }catch(e){}
+    try{ if(typeof saveToStorage==='function') saveToStorage(); }catch(e){}
+    var cs=contentSteps(); goToStep(cs.length?cs[0]:7);
+  }
+  qa('#enforceScreen .wk-enf input').forEach(function(x){ x.addEventListener('change', function(){ x.closest('.wk-enf').classList.toggle('sel', x.checked); }); });
+  (function(){ var n=$('enf_next'), b=$('enf_back'); if(n) n.addEventListener('click', applyEnforce); if(b) b.addEventListener('click', function(){ goToStep(1); }); })();
+
+  // ---- counter-signature pad: draw -> capture as JPEG -> enable "I accept" ----
+  function initSig(){
+    var c=$('sigCanvas'); if(!c || c._init) return; c._init=true;
+    c.width=600; c.height=180;
+    var ctx=c.getContext('2d'); ctx.lineWidth=2.4; ctx.lineCap='round'; ctx.lineJoin='round'; ctx.strokeStyle='#0d142a';
+    var drawing=false, has=false, last=null;
+    function P(e){ var r=c.getBoundingClientRect(); var t=(e.touches&&e.touches[0])||e; return {x:(t.clientX-r.left)*(c.width/r.width), y:(t.clientY-r.top)*(c.height/r.height)}; }
+    function commit(){
+      var out=document.createElement('canvas'); out.width=c.width; out.height=c.height; var o=out.getContext('2d');
+      o.fillStyle='#fff'; o.fillRect(0,0,out.width,out.height); o.drawImage(c,0,0);
+      $('counterSigImage').value=out.toDataURL('image/jpeg',0.92);
+      var row=$('sigAcceptRow'); row.style.opacity='1'; row.style.pointerEvents='auto';
+    }
+    function start(e){ e.preventDefault(); drawing=true; last=P(e); }
+    function move(e){ if(!drawing) return; e.preventDefault(); var p=P(e); ctx.beginPath(); ctx.moveTo(last.x,last.y); ctx.lineTo(p.x,p.y); ctx.stroke(); last=p; has=true; }
+    function end(){ if(!drawing) return; drawing=false; if(has) commit(); }
+    c.addEventListener('mousedown',start); window.addEventListener('mousemove',move); window.addEventListener('mouseup',end);
+    c.addEventListener('touchstart',start,{passive:false}); c.addEventListener('touchmove',move,{passive:false}); c.addEventListener('touchend',end);
+    $('sigClear').addEventListener('click',function(){ ctx.clearRect(0,0,c.width,c.height); has=false; $('counterSigImage').value=''; var cb=$('counterSigAccept'); cb.checked=false; var row=$('sigAcceptRow'); row.style.opacity='.5'; row.style.pointerEvents='none'; var er=$('sigError'); if(er) er.style.display='none'; try{if(typeof saveToStorage==='function')saveToStorage();}catch(e){} });
+    $('counterSigAccept').addEventListener('change',function(){ var er=$('sigError'); if(er&&this.checked) er.style.display='none'; try{if(typeof saveToStorage==='function')saveToStorage();}catch(e){} });
+  }
+  initSig();
+
+  // ---- background-check package picker (single choice) ----
+  var BG_PACKAGES=[
+    {id:'t1',name:'Tier 1',price:'$35',count:5,blurb:'Subcontractor-only. Works for subs credentialing for a GC or property manager that authorized Tier 1. Does not satisfy a network vendor requirement.',checks:['scr_county','scr_ofac','scr_natcrim','scr_sex','scr_ssn'],list:['County Criminal','Global Watchlist','National Criminal','Sex Offender','SSN Trace']},
+    {id:'t2',name:'Tier 2',price:'$55',count:7,blurb:'Meets the requirements of most managed repair networks. About 1 business day.',checks:['scr_county','scr_fedcrim','scr_ofac','scr_natcrim','scr_sex','scr_ssn','scr_mvr'],list:['County Criminal','Federal Criminal','Global Watchlist','National Criminal','Sex Offender','SSN Trace','Motor Vehicle Report']},
+    {id:'t3',name:'Tier 3',price:'$95',count:9,blurb:'Best for the Alacrity Managed Repair Network. Expanded check including civil court records. About 1 to 3 business days.',checks:['scr_countycivil','scr_county','scr_fedcivil','scr_fedcrim','scr_ofac','scr_natcrim','scr_sex','scr_ssn','scr_mvr'],list:['County Civil','County Criminal','Federal Civil','Federal Criminal','Global Watchlist','National Criminal','Sex Offender','SSN Trace','Motor Vehicle Report']},
+    {id:'t3c',name:'Tier 3 + Credit',price:'$102',count:11,blurb:'Tier 3 plus a personal credit report. Required for Owners Only on the Accuserve network. About 3 to 5 business days.',checks:['scr_countycivil','scr_county','scr_fedcivil','scr_fedcrim','scr_ofac','scr_natcrim','scr_sex','scr_ssn','scr_mvr','scr_credit'],list:['County Civil','County Criminal','Federal Civil','Federal Criminal','Global Watchlist','National Criminal','Sex Offender','SSN Trace','State Criminal','Motor Vehicle Report','Credit Report']},
+    {id:'t4',name:'Tier 4 (2 Reports)',price:'$145',count:11,blurb:'Best for owners in the Accuserve, Altimeter or Sedgwick networks. Most comprehensive, adds a credit report and business affiliation search. About 3 business days.',checks:['scr_countycivil','scr_county','scr_fedcivil','scr_fedcrim','scr_ofac','scr_natcrim','scr_sex','scr_ssn','scr_mvr','scr_credit'],list:['County Civil','County Criminal','Federal Civil','Federal Criminal','Global Watchlist','National Criminal','Sex Offender','SSN Trace','Motor Vehicle Report','Credit Report','Business Affiliation']}
+  ];
+  var ALL_SCR=['scr_ssn','scr_sex','scr_ofac','scr_natcrim','scr_fedcrim','scr_county','scr_mvr','scr_countycivil','scr_fedcivil','scr_credit','scr_edu','scr_emp','scr_drug'];
+  function applyBgPackage(p){
+    try{ $('tog_bgcheck').checked=true; ALL_SCR.forEach(function(id){ var e=$(id); if(e) e.checked=false; });
+      p.checks.forEach(function(id){ var e=$(id); if(e) e.checked=true; });
+      $('bg_owners').checked=true; $('bgPackage').value=p.name+' Package ('+p.price+')';
+      var er=$('bgPkgError'); if(er) er.style.display='none';
+      if(typeof saveToStorage==='function') saveToStorage();
+    }catch(e){ console.error('bg pkg:', e); }
+  }
+  function initBgPackages(){
+    var host=$('bgPackages'); if(!host || host._init) return; host._init=true;
+    host.innerHTML=BG_PACKAGES.map(function(p){
+      var chips=p.list.map(function(x){return '<span>'+x+'</span>';}).join('');
+      return '<label class="pkg" data-pkg="'+p.id+'"><input type="radio" name="bgPkg" value="'+p.id+'">'
+        +'<div class="pkg-head"><span class="pkg-name">'+p.name+' Package</span><span class="pkg-price">'+p.price+'</span></div>'
+        +'<div class="pkg-blurb">'+p.blurb+'</div>'
+        +'<div class="pkg-checks"><b>'+p.count+' included checks</b><div class="pkg-chips">'+chips+'</div></div></label>';
+    }).join('');
+    qa('#bgPackages input[name=bgPkg]').forEach(function(r){ r.addEventListener('change', function(){
+      qa('#bgPackages .pkg').forEach(function(c){ c.classList.toggle('sel', c.getAttribute('data-pkg')===r.value); });
+      var p=BG_PACKAGES.filter(function(x){return x.id===r.value;})[0]; if(p) applyBgPackage(p);
+    }); });
+  }
+  initBgPackages();
+
+  // ---- Sample COI upload -> pre-fill insurance coverages ----
+  try{ if(window.pdfjsLib) pdfjsLib.GlobalWorkerOptions.workerSrc='https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js'; }catch(e){}
+  function enableIns(key, ends){ try{ var cb=$('tog_'+key); if(cb && !cb.checked){ cb.checked=true; if(typeof toggleInsurance==='function') toggleInsurance(key); } (ends||[]).forEach(function(id){ var e=$(id); if(e) e.checked=true; }); }catch(e){} }
+  function applyBaselineInsurance(){ // Sublynk standard: CGL + Auto + WC with standard endorsements
+    enableIns('cgl',['cgl_e_ai','cgl_e_co','cgl_e_ws','cgl_e_pnc']);
+    enableIns('auto',['auto_e_ai','auto_e_ws']);
+    enableIns('wc',['wc_e_ai','wc_e_ws']);
+  }
+  function fmtAmt(n){ return '$'+Number(n).toLocaleString('en-US'); }
+  function setLimit(id,n){ var sel=$(id); if(!sel||!n) return; var s=fmtAmt(n), found=false;
+    for(var i=0;i<sel.options.length;i++){ if(sel.options[i].value===s){ found=true; break; } }
+    if(found){ sel.value=s; } else { sel.value='Custom'; try{ if(typeof toggleCustomLimit==='function') toggleCustomLimit(id); }catch(e){} var cu=$(id+'_custom'); if(cu) cu.value=s; }
+  }
+  // Reconstruct ACORD layout rows from pdf.js text items (group by y, order by x)
+  async function coiLines(file){ var buf=await file.arrayBuffer(); var pdf=await pdfjsLib.getDocument({data:buf}).promise; var lines=[];
+    for(var p=1;p<=pdf.numPages;p++){ var pg=await pdf.getPage(p); var tc=await pg.getTextContent(); var rows={};
+      tc.items.forEach(function(it){ var y=Math.round(it.transform[5]); (rows[y]=rows[y]||[]).push({x:it.transform[4],s:it.str}); });
+      Object.keys(rows).map(Number).sort(function(a,b){return b-a;}).forEach(function(y){ rows[y].sort(function(a,b){return a.x-b.x;}); lines.push(rows[y].map(function(o){return o.s;}).join(' ')); });
+    }
+    return lines;   // top-to-bottom reading order
+  }
+  // Only comma-grouped numbers are real COI limits (filters out dates / policy numbers)
+  function amountsIn(line){ var m=line.match(/\d{1,3}(?:,\d{3})+/g); return m? m.map(function(x){return parseInt(x.replace(/,/g,''),10);}) : []; }
+  async function parseCoi(file){
+    var items; try{ var buf=await file.arrayBuffer(); var pdf=await pdfjsLib.getDocument({data:buf}).promise; items=[];
+      for(var p=1;p<=pdf.numPages;p++){ var pg=await pdf.getPage(p); var tc=await pg.getTextContent(); tc.items.forEach(function(it){ items.push({s:it.str, x:it.transform[4], y:it.transform[5]}); }); }
+    }catch(e){ items=null; }
+    if(!items || !items.length){ applyBaselineInsurance(); return 'baseline'; }
+    // Capture the INSURED's mailing address from the ACORD left column (below the "INSURED" label,
+    // above COVERAGES/INSURER). We keep the network's legal name from intake, but take the ADDRESS
+    // from the COI so the certificate holder block is contextual to this network.
+    try{
+      var left=items.filter(function(it){ return it.x<300 && (it.s||'').trim(); });
+      var lrows={}; left.forEach(function(it){ var y=Math.round(it.y); (lrows[y]=lrows[y]||[]).push(it); });
+      var lls=Object.keys(lrows).map(Number).sort(function(a,b){return b-a;}).map(function(y){
+        var r=lrows[y].slice().sort(function(a,b){return a.x-b.x;}); return r.map(function(o){return o.s;}).join(' ').replace(/\s+/g,' ').trim(); });
+      var gi=-1; for(var gk=0;gk<lls.length;gk++){ if(/^INSURED\b/i.test(lls[gk])){ gi=gk; break; } }
+      var addr=[];
+      if(gi>=0){ for(var gj=gi+1; gj<lls.length && addr.length<4; gj++){ var tt=lls[gj];
+        if(!tt) continue;
+        if(/^(COVERAGES|INSURER\b|NAIC|CERTIFICATE|THIS CERTIFICATE|POLICY|TYPE OF INSURANCE)/i.test(tt)) break;
+        addr.push(tt); } }
+      // addr[0] is the insured name (we already have legal name); the rest is the mailing address
+      window.__coiAddress = (addr.length>=2 ? addr.slice(1).join(', ') : (addr[0]||'')).trim();
+    }catch(e){ }
+    // amounts = comma-grouped numbers (real COI limits), with positions
+    var amounts=[]; items.forEach(function(it){ var m=(it.s||'').match(/\d{1,3}(?:,\d{3})+/); if(m) amounts.push({v:parseInt(m[0].replace(/,/g,''),10), x:it.x, y:it.y}); });
+    // rows = text grouped by y, read top-to-bottom
+    var rows={}; items.forEach(function(it){ var y=Math.round(it.y); (rows[y]=rows[y]||[]).push(it); });
+    var lineObjs=Object.keys(rows).map(Number).sort(function(a,b){return b-a;}).map(function(y){ var r=rows[y].slice().sort(function(a,b){return a.x-b.x;}); return {y:y, text:r.map(function(o){return o.s;}).join(' ')}; });
+    // nearest amount to a label's y, in the limits column
+    function nearest(y){ var best=null,bd=7; amounts.forEach(function(a){ var d=Math.abs(a.y-y); if(d<bd && a.x>420){ bd=d; best=a.v; } }); return best; }
+    var seenUmb=false, cglOcc=false, got=false, CGL_E=['cgl_e_ai','cgl_e_co','cgl_e_ws','cgl_e_pnc'];
+    lineObjs.forEach(function(ln){ var L=ln.text.toUpperCase();
+      if(/UMBRELLA|EXCESS LIAB/.test(L)) seenUmb=true;
+      if(/POLLUTION/.test(L)) enableIns('cpl',['cpl_e_ai','cpl_e_co','cpl_e_ws','cpl_e_pnc']);
+      if(/PROFESSIONAL LIAB|ERRORS AND OMISSIONS|ERRORS & OMISSIONS|E&O/.test(L)) enableIns('prof',['prof_e_ai','prof_e_co','prof_e_ws','prof_e_pnc']);
+      if(/BAILEE/.test(L)) enableIns('bail',[]);
+      var inRow=amountsIn(ln.text); var v = inRow.length? inRow[inRow.length-1] : nearest(ln.y); if(!v) return;
+      if(/EACH OCCURRENCE/.test(L)){ if(seenUmb){ setLimit('umb_occ',v); enableIns('umb',['umb_e_ai','umb_e_ws']); } else if(!cglOcc){ setLimit('cgl_occ',v); enableIns('cgl',CGL_E); cglOcc=true; } got=true; }
+      else if(/GENERAL AGGREGATE/.test(L)){ setLimit('cgl_agg',v); enableIns('cgl',CGL_E); got=true; }
+      else if(/PERSONAL (&|AND) ADV/.test(L)){ setLimit('cgl_pai',v); enableIns('cgl',CGL_E); got=true; }
+      else if(/COMP\/OP AGG|PRODUCTS/.test(L)){ setLimit('cgl_coagg',v); got=true; }
+      else if(/COMBINED SINGLE LIMIT/.test(L)){ setLimit('auto_csl',v); enableIns('auto',['auto_e_ai','auto_e_ws']); got=true; }
+      else if(/AGGREGATE/.test(L) && seenUmb){ setLimit('umb_agg',v); enableIns('umb',['umb_e_ai','umb_e_ws']); got=true; }
+      else if(/E\.L\. EACH ACCIDENT/.test(L)){ setLimit('wc_ea',v); enableIns('wc',['wc_e_ai','wc_e_ws']); got=true; }
+      else if(/E\.L\. DISEASE.*EA EMPLOYEE/.test(L)){ setLimit('wc_emp',v); enableIns('wc',['wc_e_ai','wc_e_ws']); got=true; }
+      else if(/E\.L\. DISEASE.*POLICY LIMIT/.test(L)){ setLimit('wc_pol',v); enableIns('wc',['wc_e_ai','wc_e_ws']); got=true; }
+    });
+    try{ if(typeof autofillCert==='function') autofillCert(true); }catch(e){}   // refresh cert holder with COI address
+    if(!got){ applyBaselineInsurance(); return 'baseline'; }
+    try{ if(typeof saveToStorage==='function') saveToStorage(); }catch(e){}
+    return 'parsed';
+  }
+  window.__coiParse=parseCoi; window.__coiLines=coiLines;   // test hooks
+  // Pre-fill runs for BOTH click-upload and drag-drop. We capture the File objects BEFORE the
+  // original handlers run (handleCoiUploadMulti resets the input value, which would lose them).
+  function onCoiFiles(files){
+    var yes=document.querySelector('input[name=sampleCoi][value="Yes"]'); if(yes) yes.checked=true;
+    var note=$('coiNote'); if(note) note.style.display='block';
+    var pdf=files.filter(function(f){return /\.pdf$/i.test(f.name)||(f.type||'')==='application/pdf';})[0];
+    if(pdf && window.pdfjsLib){ parseCoi(pdf).catch(function(){ applyBaselineInsurance(); }); }
+    else { applyBaselineInsurance(); }
+    try{ if(typeof scheduleChecklist==='function') scheduleChecklist(); else if(typeof updateChecklist==='function') updateChecklist(); }catch(x){}
+    try{ if(typeof saveToStorage==='function') saveToStorage(); }catch(x){}
+  }
+  if(typeof window.handleCoiUploadMulti==='function'){ var _hc=window.handleCoiUploadMulti;
+    window.handleCoiUploadMulti=function(e){ var files=[].slice.call((e.target&&e.target.files)||[]); _hc(e); onCoiFiles(files); }; }
+  if(typeof window.dzDropCoiMulti==='function'){ var _dc=window.dzDropCoiMulti;
+    window.dzDropCoiMulti=function(e){ var files=[].slice.call((e.dataTransfer&&e.dataTransfer.files)||[]); _dc(e); onCoiFiles(files); }; }
+
+  // ---- "What you'll need" checklist (left rail) auto-checks as they upload ----
+  function updateChecklist(){
+    function set(id,on){ var e=document.getElementById(id); if(e) e.classList.toggle('done', !!on); }
+    // coiFiles is a top-level `var` (on window); uploadedFiles is a top-level `const` (NOT on window),
+    // so reference the bare bindings from the shared global scope, not window.*
+    function len(v){ try{ return (v && v.length)||0; }catch(e){ return 0; } }
+    var coi=0, agr=0, subs=0;
+    try{ coi=len(typeof coiFiles!=='undefined'?coiFiles:window.coiFiles); }catch(e){}
+    try{ agr=len(typeof uploadedFiles!=='undefined'?uploadedFiles:window.uploadedFiles); }catch(e){}
+    try{ subs=len(window.subsFiles); }catch(e){}
+    set('need-coi', coi>0); set('need-agreement', agr>0); set('need-subs', subs>0);
+  }
+  window.updateChecklist=updateChecklist;
+  // Upload handlers read files with FileReader (async), so the arrays fill a tick LATER.
+  // Re-run the checklist a few times after an upload so the item checks once the file lands.
+  function scheduleChecklist(){ updateChecklist(); [60,250,700,1500].forEach(function(ms){ setTimeout(updateChecklist, ms); }); }
+  window.scheduleChecklist=scheduleChecklist;
+  // contract (template agreement) uploads -> check the agreement item
+  if(typeof window.handleFileMulti==='function'){ var _hf=window.handleFileMulti; window.handleFileMulti=function(e){ _hf(e); scheduleChecklist(); }; }
+  if(typeof window.dzDropMulti==='function'){ var _dm=window.dzDropMulti; window.dzDropMulti=function(e){ _dm(e); scheduleChecklist(); }; }
+
+  // ---- Address Line 1 autocomplete (free, no key: OpenStreetMap Photon geocoder) ----
+  (function(){
+    var inp=document.getElementById('address1'), box=document.getElementById('addr_ac');
+    if(!inp||!box) return;
+    var NAME2ABBR={}; try{ Object.keys(STATE_NAMES).forEach(function(k){ NAME2ABBR[STATE_NAMES[k].toLowerCase()]=k; }); }catch(e){}
+    var t=null, feats=[], active=-1;
+    function close(){ box.classList.remove('open'); box.innerHTML=''; feats=[]; active=-1; }
+    function line1(p){ return [p.housenumber,p.street||p.name].filter(Boolean).join(' ')||p.name||''; }
+    function line2(p){ return [p.city||p.town||p.village||p.county,p.state,p.postcode].filter(Boolean).join(', '); }
+    function pick(p){
+      inp.value=line1(p);
+      var city=p.city||p.town||p.village||p.county||''; var c=$('city'); if(c) c.value=city;
+      var z=$('zip'); if(z) z.value=p.postcode||'';
+      var abbr=NAME2ABBR[(p.state||'').toLowerCase()]||''; var s=$('state'); if(s&&abbr) s.value=abbr;
+      // clear any "required" error states now that the fields are filled
+      [inp,c,z,s].forEach(function(el){ if(el){ var f=el.closest('.field'); if(f) f.classList.remove('error'); } });
+      close(); try{ if(typeof saveToStorage==='function') saveToStorage(); }catch(e){}
+    }
+    function render(){ active=-1;
+      box.innerHTML=feats.map(function(f,i){ var p=f.properties; return '<div class="addr-ac-item" data-i="'+i+'" role="option">'+line1(p)+'<small>'+line2(p)+'</small></div>'; }).join('');
+      box.classList.add('open'); }
+    function search(q){
+      fetch('https://photon.komoot.io/api/?limit=6&lang=en&q='+encodeURIComponent(q))
+        .then(function(r){ return r.json(); })
+        .then(function(j){ feats=(j.features||[]).filter(function(f){ var p=f.properties||{}; return (!p.countrycode||p.countrycode==='US') && (p.housenumber||p.street||p.name); }); if(feats.length) render(); else close(); })
+        .catch(function(){ close(); });
+    }
+    inp.addEventListener('input', function(){ var q=inp.value.trim(); clearTimeout(t); if(q.length<4){ close(); return; } t=setTimeout(function(){ search(q); }, 300); });
+    box.addEventListener('mousedown', function(e){ var it=e.target.closest('.addr-ac-item'); if(it){ e.preventDefault(); pick(feats[parseInt(it.getAttribute('data-i'),10)].properties); } });
+    inp.addEventListener('keydown', function(e){ if(!box.classList.contains('open')||!feats.length) return;
+      if(e.key==='ArrowDown'){ e.preventDefault(); active=Math.min(active+1,feats.length-1); upd(); }
+      else if(e.key==='ArrowUp'){ e.preventDefault(); active=Math.max(active-1,0); upd(); }
+      else if(e.key==='Enter'){ if(active>=0){ e.preventDefault(); pick(feats[active].properties); } }
+      else if(e.key==='Escape'){ close(); } });
+    function upd(){ Array.prototype.forEach.call(box.children,function(c,i){ c.classList.toggle('active',i===active); if(i===active) c.scrollIntoView({block:'nearest'}); }); }
+    document.addEventListener('click', function(e){ if(!box.contains(e.target)&&e.target!==inp) close(); });
+  })();
+
+  // ---- list of subs to credential (CSV/Excel) ----
+  window.subsFiles = window.subsFiles || [];
+  // Blank fill-in template so they return the exact columns we verify. Legal Business Name is the key field.
+  window.downloadSubsTemplate=function(e){ if(e) e.preventDefault();
+    var rows=['Name,Email,Legal Business Name',
+              'Jane Smith,jane@acmeroofing.com,Acme Roofing LLC',
+              'John Doe,john@summitexteriors.com,Summit Exteriors Inc'];
+    var blob=new Blob([rows.join('\r\n')+'\r\n'], {type:'text/csv;charset=utf-8;'});
+    var a=document.createElement('a'); a.href=URL.createObjectURL(blob);
+    a.download='Subs to credential - template.csv'; document.body.appendChild(a); a.click();
+    setTimeout(function(){ document.body.removeChild(a); URL.revokeObjectURL(a.href); }, 0);
+  };
+  function addSubsFile(file){ var r=new FileReader(); r.onload=function(ev){ window.subsFiles.push({name:file.name,size:file.size,data:ev.target.result}); renderSubsPreviews(); updateChecklist(); try{if(typeof saveToStorage==='function')saveToStorage();}catch(e){} }; r.readAsDataURL(file); }
+  function renderSubsPreviews(){ var c=$('preview_subs'); if(!c) return;
+    c.innerHTML=(window.subsFiles||[]).map(function(f,i){ var s=f.size<1024?f.size+' B':(f.size/1024).toFixed(1)+' KB';
+      return '<div class="file-preview"><svg width="18" height="18" fill="none" stroke="var(--navy)" stroke-width="1.5" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg><span class="file-name">'+f.name+'</span><span class="file-size">'+s+'</span><button class="file-remove" data-i="'+i+'">&times;</button></div>'; }).join(''); }
+  window.handleSubsUpload=function(e){ var fs=e.target.files; for(var i=0;i<fs.length;i++) addSubsFile(fs[i]); e.target.value=''; };
+  window.dzDropSubs=function(e){ e.preventDefault(); e.currentTarget.classList.remove('drag-over'); var fs=e.dataTransfer.files; for(var i=0;i<fs.length;i++) addSubsFile(fs[i]); };
+  (function(){ var p=$('preview_subs'); if(p) p.addEventListener('click', function(e){ var b=e.target.closest('.file-remove'); if(b){ window.subsFiles.splice(parseInt(b.getAttribute('data-i'),10),1); renderSubsPreviews(); updateChecklist(); } }); })();
+  updateChecklist();
+  // storage/restore may repopulate the file arrays after this init pass -- re-sync shortly after load
+  setTimeout(updateChecklist, 300); setTimeout(updateChecklist, 1200);
+  // also catch the intake's own file-remove clicks (agreement/COI previews) so unchecking works
+  document.addEventListener('click', function(e){ if(e.target && e.target.closest && e.target.closest('.file-remove')){ setTimeout(updateChecklist, 0); } });
+
+  // cert-holder approval: hide the error once approved
+  (function(){ var ca=$('certApprove'); if(ca) ca.addEventListener('change', function(){ var e=$('certError'); if(e&&ca.checked) e.style.display='none'; try{if(typeof saveToStorage==='function')saveToStorage();}catch(x){} }); })();
+
+  // ---- trades multi-select (drives serviceCategories; global insurance + backend certs) ----
+  function allTrades(){ var seen={}, out=[]; try{ PROGRAMS.forEach(function(p){ p.categories.forEach(function(c){ if(!seen[c]){ seen[c]=1; out.push(c); } }); }); }catch(e){} return out; }
+  function chipHtml(name){ var on=false; try{ on=serviceCategories.some(function(c){return c.name===name;}); }catch(e){}
+    return '<button type="button" class="trade-chip'+(on?' on':'')+'" data-trade="'+name.replace(/"/g,'&quot;')+'">'+name+'</button>'; }
+  function renderTradeGrid(){
+    var all=allTrades(); var scanned=window.__scannedTrades||[];
+    var found=all.filter(function(n){return scanned.indexOf(n)>=0;});
+    var others=all.filter(function(n){return scanned.indexOf(n)<0;});
+    var fs=$('tradeFoundSection'), fg=$('tradeFound'), g=$('tradeGrid'), hdr=$('tradeFoundHdr'), oh=$('tradeOtherHdr');
+    if(found.length && fg){ fs.style.display='block'; fg.innerHTML=found.map(chipHtml).join('');
+      if(hdr){ var dom=window.__scanDomain||'your website'; hdr.innerHTML='Standard service categories from '+dom+'<span class="sub">We scanned your site and pre-selected these. Uncheck any that do not apply.</span>'; }
+      if(oh) oh.innerHTML='Add other trades your subs offer<span class="sub">Select any additional trades to credential, beyond what we found.</span>';
+    } else { if(fs) fs.style.display='none'; if(oh) oh.innerHTML='All service categories<span class="sub">Select every trade you want to credential your subs for.</span>'; }
+    if(g) g.innerHTML=others.map(chipHtml).join('');
+  }
+  function saveTrades(){ try{ localStorage.setItem('sublynk_trades', JSON.stringify(serviceCategories.map(function(c){return c.name;}))); }catch(e){} }
+  function toggleTrade(name){
+    try{ var i=-1; serviceCategories.forEach(function(c,idx){ if(c.name===name) i=idx; });
+      if(i>=0) serviceCategories.splice(i,1); else addServiceCat(name);
+    }catch(e){ console.error('toggleTrade:', e); }
+    renderTradeGrid(); var er=$('progError'); if(er) er.style.display='none';
+    saveTrades(); try{ if(typeof saveToStorage==='function') saveToStorage(); }catch(e){}
+  }
+  function restoreTrades(){ try{ var raw=localStorage.getItem('sublynk_trades'); if(!raw) return; var names=JSON.parse(raw)||[];
+      names.forEach(function(n){ if(!serviceCategories.some(function(c){return c.name===n;})) addServiceCat(n); }); renderTradeGrid(); }catch(e){} }
+  (function(){ var h=function(e){ var b=e.target.closest('.trade-chip'); if(b) toggleTrade(b.getAttribute('data-trade')); };
+    var g=$('tradeGrid'); if(g) g.addEventListener('click', h); var f=$('tradeFound'); if(f) f.addEventListener('click', h); })();
+  renderTradeGrid();
+
+  // ---- smart website -> pre-select trades ----
+  var TRADE_KEYWORDS={
+    'Water Mitigation':['water damage','water mitigation','water extraction','water removal','flood','drying'],
+    'Fire Mitigation':['fire damage','fire restoration','smoke damage','soot'],
+    'Mold Remediation':['mold remediation','mold removal','mold'],
+    'Board Up & Tarping':['board up','board-up','tarping','emergency board'],
+    'Tree Removal':['tree removal','tree service'],
+    'Asbestos Abatement':['asbestos'],
+    'Lead Abatement':['lead abatement','lead paint','lead-safe','lead rrp'],
+    'Trauma & Biohazard':['biohazard','trauma clean','crime scene','hoarding'],
+    'Cleaning':['janitorial','deep cleaning','sanitiz'],
+    'Contents On-site':['contents cleaning','contents restoration'],
+    'Contents Off-site':['pack-out','pack out','packout','contents storage'],
+    'General Contracting':['general contractor','general contracting'],
+    'Reconstruction':['reconstruction','rebuild'],
+    'Remodeling':['remodel','renovation','renovate'],
+    'Demolition':['demolition'],
+    'Electrical':['electrical','electrician'],
+    'HVAC':['hvac','heating and air','air conditioning','furnace'],
+    'Plumbing':['plumbing','plumber'],
+    'Drywalling':['drywall','sheetrock'],
+    'Insulation':['insulation'],
+    'Carpentry (Finish)':['finish carpentry','trim carpentry','trim work'],
+    'Carpentry (Rough)':['framing','rough carpentry'],
+    'Cabinetry':['cabinet'],
+    'Painting':['painting','painter'],
+    'Flooring':['flooring','hardwood floor','tile floor','carpet install'],
+    'Commercial Roofing':['commercial roof'],
+    'Residential Roofing':['residential roof','roof replacement','roofing','roofer'],
+    'Masonry (Veneer)':['brick','stone veneer','masonry'],
+    'Stucco & Plaster':['stucco','plaster'],
+    'Window Install & Repair':['window install','window replacement'],
+    'Inspection & Estimation':['inspection','estimating','estimate'],
+    'Engineering':['structural engineer','engineering'],
+    'Adjusting':['public adjuster','claims adjusting']
+  };
+  var _scanned='';
+  function domainOf(u){ try{ return (new URL(/^https?:\/\//i.test(u)?u:'https://'+u)).hostname.replace(/^www\./,''); }catch(e){ return u; } }
+  function scanWebsite(){
+    var u=val('website'); if(!u || _scanned===u) return; _scanned=u;
+    window.__scanDomain=domainOf(u);
+    try{
+      fetch('https://sublynk-consent-worker.zen-426.workers.dev/api/scan-website', {method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({url:u})})
+        .then(function(r){return r.json();})
+        .then(function(j){ var t=(j&&j.text)||''; var found=[];
+          Object.keys(TRADE_KEYWORDS).forEach(function(cat){
+            if(TRADE_KEYWORDS[cat].some(function(k){return t.indexOf(k)>=0;})) found.push(cat);
+          });
+          window.__scannedTrades=found;
+          found.forEach(function(cat){ try{ if(!serviceCategories.some(function(c){return c.name===cat;})) addServiceCat(cat); }catch(e){} });
+          try{renderTradeGrid();}catch(e){} try{saveTrades();}catch(e){}
+        }).catch(function(e){ console.error('scan:', e); _scanned=''; });
+    }catch(e){ _scanned=''; }
+  }
+  window.__scanWebsite=scanWebsite;  // test hook
+  (function(){ var w=$('website'); if(w){ w.addEventListener('blur', function(){ scanWebsite(); }); w.addEventListener('change', function(){ _scanned=''; }); } })();
+
+  // ---- emit the generator JSON + queue the submission for template fill + Drive upload ----
+  function val(id){ var e=$(id); return e ? (e.value||'').trim() : ''; }
+  function money(id){ var s=$(id); if(!s) return null; var v=s.value; if(v==='Custom'){ var c=$(id+'_custom'); v=c?c.value:''; } var n=parseInt((v||'').replace(/[^0-9]/g,''),10); return isNaN(n)?null:n; }
+  function covOn(k){ var t=$('tog_'+k); return !!(t&&t.checked); }
+  function endo(id){ var e=$(id); return !!(e&&e.checked); }
+  function buildGeneratorPayload(){
+    var taxClass=(document.querySelector('input[name=taxClass]:checked')||{}).value||'';
+    var trades=[]; try{ trades=serviceCategories.map(function(c){return c.name;}); }catch(e){}
+    var tierMap={t1:1,t2:2,t3:3,t3c:'3c',t4:4};
+    var pkg=(document.querySelector('#bgPackages input[name=bgPkg]:checked')||{}).value;
+    var tier=tierMap[pkg]||3;
+    var years=parseInt(((document.querySelector('input[name=bgValidity]:checked')||{}).value||'3').replace(/[^0-9]/g,''),10)||3;
+    return {
+      legal_name:val('legalName'), dba:val('dba'), tax_id:val('taxId'), tax_type:'EIN',
+      tax_classification:taxClass, website:val('website'),
+      address1:val('address1'), address2:val('address2'), city:val('city'), state:val('state'), zip:val('zip'),
+      primary_email:val('primaryEmail'),
+      credentialing_email:(($('g_email')&&$('g_email').value.trim())||val('primaryEmail')),
+      recruiting_email:(typeof recruitingEmail==='function'?recruitingEmail():''),
+      certholder_text:val('certHolder'), description_of_operations:val('descOps'),
+      coi_email:'help@sublynk.com', network_folder_name:(val('dba')||val('legalName')),
+      insurance:{
+        cgl:{on:covOn('cgl'),occ:money('cgl_occ'),agg:money('cgl_agg'),pai:money('cgl_pai'),coagg:money('cgl_coagg'),ai:endo('cgl_e_ai'),co:endo('cgl_e_co'),wos:endo('cgl_e_ws'),pnc:endo('cgl_e_pnc')},
+        cpl:{on:covOn('cpl'),occ:money('cpl_occ'),ai:endo('cpl_e_ai'),co:endo('cpl_e_co'),wos:endo('cpl_e_ws'),pnc:endo('cpl_e_pnc')},
+        auto:{on:covOn('auto'),csl:money('auto_csl'),ai:endo('auto_e_ai'),wos:endo('auto_e_ws')},
+        wc:{on:covOn('wc'),ea:money('wc_ea'),emp:money('wc_emp'),pol:money('wc_pol'),wos:endo('wc_e_ws')},
+        umb:{on:covOn('umb'),occ:money('umb_occ'),agg:money('umb_agg')},
+        prof:{on:covOn('prof'),occ:money('prof_occ'),agg:money('prof_agg')},
+        bail:{on:covOn('bail'),occ:money('bail_occ')}
+      },
+      trades:trades, background:{tier:tier, valid_years:years}
+    };
+  }
+  function collectForms(){
+    var out=[]; function add(arr){ try{ (arr||[]).forEach(function(f){ var d=f.data||''; var i=d.indexOf(','); out.push({name:f.name, b64:(i>=0?d.slice(i+1):d)}); }); }catch(e){} }
+    try{ add(window.coiFiles); }catch(e){} try{ add(window.uploadedFiles); }catch(e){} try{ add(window.subsFiles); }catch(e){}
+    // counter-signature image (drawn on the agreements page) -> saved into the network folder
+    try{ var sig=$('counterSigImage'); if(sig && sig.value && sig.value.indexOf(',')>=0){ out.push({name:'Counter-Signature.jpg', b64:sig.value.split(',')[1]}); } }catch(e){}
+    return out;
+  }
+  window.__networkPayload=buildGeneratorPayload;  // test hook
+  function showDocsLink(url){
+    try{
+      var p=document.getElementById('docsPending'), a=document.getElementById('docsLink');
+      if(p) p.style.display='none';
+      if(a){ a.href=url; a.style.display='inline-block'; }
+    }catch(e){}
+  }
+  function pollDocs(id, tries){
+    tries=tries||0;
+    if(!id || tries>40) return;   // ~10 min at 15s; the folder is also emailed by the team
+    fetch('https://sublynk-consent-worker.zen-426.workers.dev/api/network-intake-status?id='+encodeURIComponent(id))
+      .then(function(r){ return r.json(); })
+      .then(function(j){
+        if(j && j.status==='ready' && j.folder_url){ showDocsLink(j.folder_url); return; }
+        setTimeout(function(){ pollDocs(id, tries+1); }, 15000);
+      })
+      .catch(function(){ setTimeout(function(){ pollDocs(id, tries+1); }, 15000); });
+  }
+  function postNetworkIntake(){
+    if(TEST_MODE){ console.log('[setup] localhost: skipping network-intake POST', buildGeneratorPayload()); return; }
+    try{
+      var body=JSON.stringify({data:buildGeneratorPayload(), forms:collectForms()});
+      fetch('https://sublynk-consent-worker.zen-426.workers.dev/api/network-intake', {method:'POST', headers:{'Content-Type':'application/json'}, body:body})
+        .then(function(r){ return r.json(); })
+        .then(function(j){ if(j && j.id) pollDocs(j.id, 0); })
+        .catch(function(e){ console.error('network-intake:', e&&e.message); });
+    }catch(e){ console.error('network-intake build:', e); }
+  }
+  // Submit = our pipeline ONLY (fill Chris's exact templates server-side). We do NOT call intake's
+  // submitForm (it rebuilds Chris's xlsx via SheetJS + Apps Script -- never do that).
+  if(typeof window.submitForm==='function'){
+    window.submitForm=function(){
+      try{ postNetworkIntake(); }catch(e){}
+      try{ var ov=document.getElementById('successOverlay'); if(ov) ov.classList.add('active'); }catch(e){}
+      try{ if(typeof launchConfetti==='function') launchConfetti(); }catch(e){}
+      try{ localStorage.removeItem('sublynk_gate_done'); localStorage.removeItem('sublynk_gc_intake'); localStorage.removeItem('sublynk_trades'); }catch(e){}
+    };
+  }
+
+  // Tips must follow the ACTUAL screen -- incl. the enforce screen (not a numbered step)
+  window.renderCallGuide=function(){
+    var body=document.getElementById('callGuideBody'); if(!body) return;
+    var sec=null;
+    if(enforceVisible){
+      sec={title:'Your requirements', tips:[
+        'Turn on only what you require from your subs. We set up just the sections you enable, so skip anything you do not enforce.',
+        'Trades/Service categories = the work your subs do. Insurance & COI = coverages and limits. Background checks = screening. Licenses & certs = state and federal credentials. Agreements = the contracts they sign.',
+        'Not sure? Leave it on. You can always adjust later or email zen@sublynk.com.'
+      ]};
+    } else {
+      try{ var c=CALL_GUIDE.filter(function(s){return s.step===currentStep;})[0];
+        if(c) sec={title:c.title, tips:c.tips.map(function(t){return t.text||t;})}; }catch(e){}
+    }
+    if(!sec){ body.innerHTML='<div class="cg-tip"><span>You are all set. Review and submit.</span></div>'; return; }
+    var html='<div class="cg-section active expanded"><div class="cg-section-header"><span class="cg-section-title">'+sec.title+'</span></div><div class="cg-section-body">';
+    sec.tips.forEach(function(t){ html+='<div class="cg-tip"><span>'+t+'</span></div>'; });
+    body.innerHTML=html+'</div></div>';
+  };
+
+  if(!tryResume()) showGate(0);
 })();
 </script>
 </body>
