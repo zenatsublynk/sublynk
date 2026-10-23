@@ -1,0 +1,116 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Protect Your Home</title>
+<meta name="description" content="Ask your property manager to verify every vendor who enters your home. We will help you send the message.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+  :root{--navy:#0D142A;--navy-2:#111a37;--orange:#DD6336;--orange-2:#f0875a;
+    --paper:#ffffff;--ink:#0D142A;--muted:#5d6681;--line:#e9ebf2;--warn:#ff5a46;--good:#36c08a;--bg:#f5f6fa;}
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;background:var(--bg);}
+  body{font-family:"Inter",system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;color:var(--ink);-webkit-font-smoothing:antialiased;}
+  .wrap{max-width:560px;margin:0 auto;padding:0 16px 56px;}
+  .top{background:radial-gradient(120% 120% at 90% -10%,rgba(221,99,54,.3),transparent 55%),linear-gradient(180deg,#0c1227,#111a37);
+    color:#fff;margin:0 -16px;padding:22px 24px 34px;border-bottom-left-radius:22px;border-bottom-right-radius:22px;}
+  .top .logo{height:24px;display:block;margin-bottom:26px;}
+  .eyebrow{font-size:11px;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:var(--orange-2);margin:0 0 12px;}
+  h1{font-size:34px;line-height:1.04;font-weight:900;letter-spacing:-.02em;margin:0;text-wrap:balance;}
+  h1 .hl{color:var(--orange-2);}
+  .lede{font-size:15.5px;line-height:1.55;color:#c7cde0;margin:16px 0 0;}
+  .statcard{display:flex;gap:12px;margin:20px 0 0;}
+  .st{flex:1;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);border-radius:12px;padding:14px 14px 13px;}
+  .st .n{font-size:30px;font-weight:900;color:var(--warn);line-height:1;font-variant-numeric:tabular-nums;}
+  .st .t{font-size:11.5px;line-height:1.35;color:#d4d9ea;margin:7px 0 0;font-weight:500;}
+
+  .card{background:#fff;border:1px solid var(--line);border-radius:16px;padding:22px;margin:18px 0 0;box-shadow:0 2px 16px rgba(13,20,42,.04);}
+  .kick{display:flex;align-items:center;gap:10px;font-size:12px;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:var(--orange);margin:0 0 12px;}
+  .kick .num{width:24px;height:24px;border-radius:50%;background:var(--orange);color:#fff;display:flex;align-items:center;justify-content:center;font-size:13px;}
+  .card h2{font-size:19px;font-weight:800;margin:0 0 6px;letter-spacing:-.01em;}
+  .card p.d{font-size:14.5px;line-height:1.55;color:var(--muted);margin:0 0 16px;}
+  .msg{background:#f6f7fb;border:1px solid var(--line);border-radius:12px;padding:15px 16px;font-size:14px;line-height:1.55;color:#2b3350;}
+  .btnrow{display:flex;gap:10px;margin-top:14px;flex-wrap:wrap;}
+  .btn{flex:1;min-width:150px;text-align:center;border:0;cursor:pointer;font-family:inherit;font-weight:800;font-size:15px;
+    padding:14px 16px;border-radius:11px;text-decoration:none;display:inline-flex;align-items:center;justify-content:center;gap:8px;}
+  .btn.primary{background:var(--orange);color:#fff;}
+  .btn.ghost{background:#fff;border:2px solid var(--navy);color:var(--navy);}
+  .btn:active{transform:translateY(1px);}
+
+  label{display:block;font-size:12.5px;font-weight:700;color:var(--navy);margin:0 0 6px;}
+  .field{margin-bottom:13px;}
+  input{width:100%;font-family:inherit;font-size:15px;padding:12px 13px;border:1.5px solid var(--line);border-radius:10px;color:var(--ink);background:#fff;}
+  input:focus{outline:none;border-color:var(--orange);}
+  .send{background:var(--navy);color:#fff;width:100%;border:0;cursor:pointer;font-family:inherit;font-weight:800;font-size:16px;padding:15px;border-radius:12px;margin-top:4px;}
+  .ok{display:none;text-align:center;padding:14px 0 2px;}
+  .ok.show{display:block;}
+  .ok .chk{width:46px;height:46px;border-radius:50%;background:rgba(54,192,138,.14);display:inline-flex;align-items:center;justify-content:center;margin-bottom:10px;}
+  .ok h2{color:var(--good);}
+  .foot{font-size:11px;line-height:1.55;color:#9aa1b5;margin:22px 4px 0;text-align:center;}
+  .foot b{color:#6b7288;}
+</style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="top">
+      <img class="logo" src="https://cdn.prod.website-files.com/66b4ce93806f21c9d05dc302/66bf8dfb6b8fef22f0d060ff_Sublynk%20Logo%20Hort%20White%403x.png" alt="Sublynk">
+      <p class="eyebrow">Resident safety</p>
+      <h1>Protect your home in <span class="hl">10 seconds.</span></h1>
+      <p class="lede">Dozens of vendors enter your apartment every year, and most were never background checked. You did not choose them. Your property manager did. Here is how to change that.</p>
+      <div class="statcard">
+        <div class="st"><div class="n">98%</div><div class="t">chance one of 30 unscreened vendors has a felony record</div></div>
+        <div class="st"><div class="n">14%</div><div class="t">chance one is a registered sex offender</div></div>
+      </div>
+    </div>
+
+    <div class="card">
+      <p class="kick"><span class="num">1</span> Send your property manager this</p>
+      <h2>A ready-to-send message</h2>
+      <p class="d">Copy it, or send it straight from your phone. It is polite, clear, and gets an answer.</p>
+      <div class="msg" id="msg">Hi, I am a resident and I want to be sure every vendor who enters my home is background checked, licensed, and insured. Can you confirm your vendors are verified? If not, please look into Sublynk, which verifies vendors at the source at no cost to residents. Thank you.</div>
+      <div class="btnrow">
+        <button class="btn primary" id="copyBtn">Copy message</button>
+        <a class="btn ghost" id="mailBtn" href="#">Email my manager</a>
+      </div>
+    </div>
+
+    <div class="card">
+      <p class="kick"><span class="num">2</span> Or let us reach them for you</p>
+      <h2>We will contact your property manager</h2>
+      <p class="d">Tell us where you live. We will reach out to your property manager directly and offer to verify their vendors, at no cost to you. Your name is never shared without your okay.</p>
+      <form id="form">
+        <div class="field"><label>Your building or community name</label><input id="bldg" required placeholder="e.g. The Maple at Riverside"></div>
+        <div class="field"><label>City and state</label><input id="city" required placeholder="e.g. Portland, OR"></div>
+        <div class="field"><label>Property manager or company <span style="color:#9aa1b5;font-weight:500">(if you know it)</span></label><input id="pm" placeholder="e.g. Hudson Property Management"></div>
+        <div class="field"><label>Your email <span style="color:#9aa1b5;font-weight:500">(so we can update you)</span></label><input id="email" type="email" placeholder="you@email.com"></div>
+        <button class="send" type="submit">Reach my property manager</button>
+      </form>
+      <div class="ok" id="ok">
+        <span class="chk"><svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="m5 12 4 4 10-10" stroke="#36c08a" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+        <h2>Thank you. We are on it.</h2>
+        <p class="d" style="margin-top:6px">We will reach out to your property manager and let you know what they say.</p>
+      </div>
+    </div>
+
+    <p class="foot"><b>About these numbers:</b> figures reflect an unscreened, predominantly male vendor pool, based on national felony and registered sex offender rates across roughly 30 vendor visits a year. Sources available on request.</p>
+  </div>
+
+<script>
+  var msg = document.getElementById('msg').textContent.trim();
+  document.getElementById('mailBtn').href =
+    'mailto:?subject=' + encodeURIComponent('Are the vendors entering my home verified?') + '&body=' + encodeURIComponent(msg);
+  document.getElementById('copyBtn').addEventListener('click', function(){
+    var b=this; navigator.clipboard.writeText(msg).then(function(){ b.textContent='Copied'; setTimeout(function(){b.textContent='Copy message';},1600); });
+  });
+  document.getElementById('form').addEventListener('submit', function(e){
+    e.preventDefault();
+    // TODO: POST to the Sublynk consent worker (/api/contact) to open a PM lead.
+    this.style.display='none';
+    document.getElementById('ok').classList.add('show');
+  });
+</script>
+</body>
+</html>
