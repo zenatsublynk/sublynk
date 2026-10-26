@@ -49,6 +49,16 @@
   .final .cta-primary{box-shadow:0 10px 26px rgba(221,99,54,.3);}
   .who{display:flex;align-items:center;justify-content:center;gap:9px;margin-top:16px;font-size:13px;color:#aeb6d6;}
   .who b{color:#fff;font-weight:700;}
+  .proofd{font-size:14px;line-height:1.55;color:var(--muted);margin:0 0 15px;}
+  .embed{display:block;text-decoration:none;color:inherit;border:1px solid var(--line);border-radius:14px;overflow:hidden;background:#fff;transition:box-shadow .16s ease,transform .16s ease;}
+  .embed:hover{box-shadow:0 14px 34px rgba(13,20,42,.16);transform:translateY(-2px);}
+  .embed-top{display:flex;align-items:center;gap:8px;font-size:11.5px;font-weight:700;letter-spacing:.03em;color:var(--muted);padding:10px 14px;border-bottom:1px solid var(--line);background:#fafbfe;}
+  .dotlive{width:8px;height:8px;border-radius:50%;background:var(--good);box-shadow:0 0 0 3px rgba(54,192,138,.18);flex:none;}
+  .embed-stage{position:relative;height:330px;overflow:hidden;background:#fff;}
+  .embed-scaler{position:absolute;top:0;left:0;width:1000px;transform:scale(.52);transform-origin:top left;}
+  .embed-scaler iframe{width:1000px;height:1300px;border:0;pointer-events:none;display:block;background:#fff;}
+  .embed-stage::after{content:"";position:absolute;left:0;right:0;bottom:0;height:90px;background:linear-gradient(rgba(255,255,255,0),#fff);pointer-events:none;}
+  .embed-cta{text-align:center;font-weight:800;font-size:15px;color:var(--orange);padding:14px;border-top:1px solid var(--line);}
   .foot{font-size:11px;line-height:1.55;color:#9aa1b5;margin:22px 4px 0;text-align:center;}
   .foot b{color:#6b7288;}
 </style>
@@ -79,6 +89,18 @@
       <div class="r"><span class="ic"><svg viewBox="0 0 24 24" fill="none"><path d="m5 12 4 4 10-10" stroke="#36c08a" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg></span><div><b>Gives you proof.</b> Show residents and owners that every vendor is verified. <span class="free">At no cost to your residents.</span></div></div>
     </div>
 
+    <div class="sec">
+      <h2>This is what verified looks like</h2>
+      <p class="proofd">A live Sublynk Certified profile. Every license, insurance policy, and background check shown here is verified at the source. Ask the next vendor you hire to show you the same.</p>
+      <a class="embed" href="https://app.sublynk.com/profiles/ati-restoration-anaheim-ca" target="_blank" rel="noopener">
+        <div class="embed-top"><span class="dotlive"></span>Live profile &middot; app.sublynk.com</div>
+        <div class="embed-stage">
+          <div class="embed-scaler"><iframe src="https://app.sublynk.com/profiles/ati-restoration-anaheim-ca" title="ATI Restoration verified Sublynk profile" loading="lazy" tabindex="-1" scrolling="no" sandbox="allow-scripts allow-same-origin allow-popups"></iframe></div>
+        </div>
+        <div class="embed-cta">Open the full profile &rarr;</div>
+      </a>
+    </div>
+
     <div class="final">
       <h2>See it on your properties.</h2>
       <p>A 15 minute call. We will show you exactly how vendor verification works for your portfolio.</p>
@@ -88,5 +110,22 @@
 
     <p class="foot"><b>About these numbers:</b> figures reflect an unscreened, predominantly male vendor pool, based on national felony and registered sex offender rates across roughly 30 vendor visits a year. Sources available on request.</p>
   </div>
+<script>
+  // Fit the embedded profile to the card width, showing the desktop layout (so the verified-documentation row stays visible) on any screen.
+  (function(){
+    function fit(){
+      document.querySelectorAll('.embed').forEach(function(e){
+        var stage=e.querySelector('.embed-stage'), sc=e.querySelector('.embed-scaler');
+        if(!stage||!sc) return;
+        var k=stage.clientWidth/1000;
+        sc.style.transformOrigin='top left';
+        sc.style.transform='scale('+k+')';
+        stage.style.height=Math.round(640*k)+'px';
+      });
+    }
+    window.addEventListener('resize',fit); fit();
+    setTimeout(fit,300); setTimeout(fit,1200);
+  })();
+</script>
 </body>
 </html>
