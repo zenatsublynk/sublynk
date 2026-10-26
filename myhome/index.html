@@ -58,6 +58,23 @@
   .embed-scaler iframe{width:1000px;height:1300px;border:0;pointer-events:none;display:block;background:#fff;}
   .embed-stage::after{content:"";position:absolute;left:0;right:0;bottom:0;height:90px;background:linear-gradient(rgba(255,255,255,0),#fff);pointer-events:none;}
   .embed-cta{text-align:center;font-weight:800;font-size:15px;color:var(--orange);padding:14px;border-top:1px solid var(--line);}
+  /* cases carousel */
+  .cx{position:relative;margin-top:2px;}
+  .cx-stage{position:relative;min-height:150px;}
+  .cx-slide{display:none;}
+  .cx-slide.is-active{display:block;animation:cxfade .5s ease;}
+  @keyframes cxfade{from{opacity:0;transform:translateY(7px)}to{opacity:1;transform:none}}
+  .cx-meta{font-size:11px;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:var(--orange);margin:0 0 8px;}
+  .cx-what{font-size:15.5px;line-height:1.55;color:var(--ink);margin:0 0 14px;}
+  .cx-result{display:inline-flex;align-items:baseline;gap:9px;flex-wrap:wrap;background:#fff5f1;border:1px solid #f6d7ca;color:var(--navy);border-radius:11px;padding:11px 15px;font-size:22px;font-weight:900;letter-spacing:-.01em;}
+  .cx-result span{font-size:12.5px;font-weight:600;color:var(--muted);letter-spacing:0;}
+  .cx-ctrls{display:flex;align-items:center;gap:14px;margin-top:18px;}
+  .cx-btn{flex:none;width:38px;height:38px;border-radius:50%;border:1.5px solid var(--line);background:#fff;color:var(--navy);font-size:19px;cursor:pointer;display:flex;align-items:center;justify-content:center;line-height:1;transition:border-color .15s,color .15s;font-family:inherit;}
+  .cx-btn:hover{border-color:var(--orange);color:var(--orange);}
+  .cx-dots{display:flex;gap:7px;flex:1;flex-wrap:wrap;}
+  .cx-dot{width:8px;height:8px;border-radius:50%;border:0;padding:0;background:#d6dae6;cursor:pointer;transition:background .15s,transform .15s;}
+  .cx-dot.on{background:var(--orange);transform:scale(1.3);}
+  .cx-count{font-size:12px;font-weight:700;color:var(--muted);font-variant-numeric:tabular-nums;flex:none;}
   .foot{font-size:11px;line-height:1.55;color:#9aa1b5;margin:22px 4px 0;text-align:center;}
   .foot b{color:#6b7288;}
 </style>
@@ -105,6 +122,66 @@
     </div>
 
     <div class="card">
+      <h2>This has really happened.</h2>
+      <p class="d">Real, documented cases where an unscreened worker was let into a home. It plays on its own, or use the arrows.</p>
+      <div class="cx" aria-roledescription="carousel">
+        <div class="cx-stage">
+        <div class="cx-slide is-active">
+          <p class="cx-meta">Baltimore, MD &middot; 2023</p>
+          <p class="cx-what">An on-site maintenance worker with a sex-offense record and no background check forced his way into two residents' homes and attacked them.</p>
+          <div class="cx-result">$21.5M <span>jury verdict against the owners</span></div>
+        </div>
+        <div class="cx-slide">
+          <p class="cx-meta">Texas &middot; 2019</p>
+          <p class="cx-what">A technician finished a service call at an 83-year-old customer's home, returned the next day in uniform, and robbed and murdered her.</p>
+          <div class="cx-result">$1.1B <span>judgment, after reduction</span></div>
+        </div>
+        <div class="cx-slide">
+          <p class="cx-meta">Missouri &middot; 2024</p>
+          <p class="cx-what">A maintenance tech used a master key to break into a resident's home. A background check would have shown a prior stalking and abuse restraining order.</p>
+          <div class="cx-result">$14M <span>confidential settlement</span></div>
+        </div>
+        <div class="cx-slide">
+          <p class="cx-meta">Georgia &middot; 2003</p>
+          <p class="cx-what">An apartment company gave a convicted felon access to every resident's keys. He let himself in and killed a tenant. The manager had written “N/A” for a background check.</p>
+          <div class="cx-result">$13M <span>jury award, upheld on appeal</span></div>
+        </div>
+        <div class="cx-slide">
+          <p class="cx-meta">Orlando, FL &middot; 2021</p>
+          <p class="cx-what">A maintenance worker used a master key to enter 19-year-old Miya Marcano's apartment and murdered her.</p>
+          <div class="cx-result">Miya's Law <span>a new Florida state law in response</span></div>
+        </div>
+        <div class="cx-slide">
+          <p class="cx-meta">Phoenix, AZ &middot; 2005</p>
+          <p class="cx-what">A subcontracted installer with a hidden 16-year record for armed robbery broke into a customer's home and killed a 20-year-old resident.</p>
+          <div class="cx-result">Death sentence <span>for the installer; the company was sued for negligent hiring</span></div>
+        </div>
+        <div class="cx-slide">
+          <p class="cx-meta">New York &middot; 2010</p>
+          <p class="cx-what">A landlord employed a registered sex offender as building superintendent. He harassed female tenants and withheld repairs over their refusals.</p>
+          <div class="cx-result">$2M+ <span>Fair Housing settlement, plus penalties</span></div>
+        </div>
+        <div class="cx-slide">
+          <p class="cx-meta">Minnesota &middot; 1983</p>
+          <p class="cx-what">A resident manager with a hidden criminal history used a passkey to enter a tenant's unit and attack her. The landmark negligent-hiring duty comes from this case.</p>
+          <div class="cx-result">Landmark <span>negligent-hiring verdict for the tenant</span></div>
+        </div>
+        <div class="cx-slide">
+          <p class="cx-meta">California &middot; 2026</p>
+          <p class="cx-what">A contracted cleaning crew was arrested for burglarizing the very rental they were hired to clean.</p>
+          <div class="cx-result">Arrested <span>cleaning crew charged with burglary</span></div>
+        </div>
+        </div>
+        <div class="cx-ctrls">
+          <button class="cx-btn cx-prev" type="button" aria-label="Previous case">&lsaquo;</button>
+          <div class="cx-dots"></div>
+          <span class="cx-count"></span>
+          <button class="cx-btn cx-next" type="button" aria-label="Next case">&rsaquo;</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
       <h2>This is what &ldquo;verified&rdquo; looks like</h2>
       <p class="d">When Sublynk checks a vendor, this is the proof. A real, live profile showing their licenses, insurance, and background check confirmed at the source. This is what you deserve for everyone who enters your home.</p>
       <a class="embed" href="https://app.sublynk.com/profiles/ati-restoration-anaheim-ca" target="_blank" rel="noopener">
@@ -146,6 +223,40 @@
     }
     window.addEventListener('resize',fit); fit();
     setTimeout(fit,300); setTimeout(fit,1200);
+  })();
+</script>
+<script>
+  // Cases carousel: auto-advances every 5.55s, pauses on hover/focus or when the reader takes control.
+  (function(){
+    document.querySelectorAll('.cx').forEach(function(cx){
+      var slides=[].slice.call(cx.querySelectorAll('.cx-slide'));
+      if(!slides.length) return;
+      var dotsWrap=cx.querySelector('.cx-dots'), count=cx.querySelector('.cx-count');
+      var i=0, timer=null, DUR=5550;
+      var reduce=window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      slides.forEach(function(_,n){
+        var b=document.createElement('button');b.type='button';b.className='cx-dot';
+        b.setAttribute('aria-label','Case '+(n+1));
+        b.addEventListener('click',function(){go(n,true);});
+        dotsWrap.appendChild(b);
+      });
+      var dots=[].slice.call(dotsWrap.children);
+      function render(){
+        slides.forEach(function(s,n){s.classList.toggle('is-active',n===i);});
+        dots.forEach(function(d,n){d.classList.toggle('on',n===i);});
+        if(count) count.textContent=(i+1)+' / '+slides.length;
+      }
+      function go(n,manual){i=(n+slides.length)%slides.length;render();if(manual)restart();}
+      function next(){go(i+1);}
+      function start(){if(reduce)return;stop();timer=setInterval(next,DUR);}
+      function stop(){if(timer){clearInterval(timer);timer=null;}}
+      function restart(){stop();start();}
+      cx.querySelector('.cx-next').addEventListener('click',function(){go(i+1,true);});
+      cx.querySelector('.cx-prev').addEventListener('click',function(){go(i-1,true);});
+      cx.addEventListener('mouseenter',stop); cx.addEventListener('mouseleave',start);
+      cx.addEventListener('focusin',stop); cx.addEventListener('focusout',start);
+      render(); start();
+    });
   })();
 </script>
 </body>
